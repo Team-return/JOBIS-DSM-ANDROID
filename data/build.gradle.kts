@@ -1,7 +1,11 @@
+import java.util.Properties
+
 plugins {
     id(BuildPlugins.ANDROID_APPLICATION_PLUGIN)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
 }
+val properties = Properties()
+properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = ProjectProperties.NAME_SPACE_DATA
@@ -15,6 +19,8 @@ android {
         versionName = ProjectProperties.VERSION_NAME
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
+
+        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
     }
 
     buildTypes {
