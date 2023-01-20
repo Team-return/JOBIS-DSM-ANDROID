@@ -6,7 +6,8 @@ plugins {
 
 android {
     namespace = ProjectProperties.NAME_SPACE
-    compileSdk = ProjectProperties.COMPILE_SDK
+    compileSdk = 33
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = ProjectProperties.NAME_SPACE
@@ -26,8 +27,8 @@ android {
                 ProjectProperties.PROGUARD_RULES
             )
         }
-
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,6 +42,9 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(Dependency.HILT.HILT)
 

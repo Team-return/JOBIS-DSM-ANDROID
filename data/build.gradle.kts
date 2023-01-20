@@ -1,7 +1,7 @@
 import java.util.Properties
 
 plugins {
-    id(BuildPlugins.ANDROID_APPLICATION_PLUGIN)
+    id(BuildPlugins.ANDROID_LIBRARY)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
 }
 val properties = Properties()
@@ -9,14 +9,12 @@ properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = ProjectProperties.NAME_SPACE_DATA
-    compileSdk = ProjectProperties.COMPILE_SDK
+    compileSdk = 33
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = ProjectProperties.NAME_SPACE_DATA
         minSdk = ProjectProperties.COMPILE_SDK
         targetSdk = ProjectProperties.COMPILE_SDK
-        versionCode = ProjectProperties.VERSION_CODE
-        versionName = ProjectProperties.VERSION_NAME
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
 
@@ -32,6 +30,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -43,9 +42,12 @@ android {
 
 dependencies {
 
+    implementation(project(":domain"))
+
     implementation(Dependency.HILT.HILT)
 
     implementation(Dependency.OKHTTP.OKHTTP)
+    implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)

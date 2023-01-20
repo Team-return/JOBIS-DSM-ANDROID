@@ -1,20 +1,26 @@
+import java.util.Properties
+
 plugins {
-    id(BuildPlugins.ANDROID_APPLICATION_PLUGIN)
+    id(BuildPlugins.ANDROID_LIBRARY)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
+    id(BuildPlugins.HILT_PLUGIN)
+    id(BuildPlugins.KOTLIN_KAPT)
 }
+
+val properties = Properties()
+properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = ProjectProperties.NAME_SPACE_DI
-    compileSdk = ProjectProperties.COMPILE_SDK
+    compileSdk = 33
 
     defaultConfig {
-        applicationId = ProjectProperties.NAME_SPACE_DI
         minSdk = ProjectProperties.COMPILE_SDK
         targetSdk = ProjectProperties.COMPILE_SDK
-        versionCode = ProjectProperties.VERSION_CODE
-        versionName = ProjectProperties.VERSION_NAME
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
+
+        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
     }
 
     buildTypes {
@@ -26,6 +32,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -37,7 +44,13 @@ android {
 
 dependencies {
 
+    implementation(project(":data"))
+
     implementation(Dependency.HILT.HILT)
+    kapt(BuildPlugins.HILT_COMPILER)
+
+    implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
+    implementation(Dependency.RETROFIT.GSON_CONVERTER)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)

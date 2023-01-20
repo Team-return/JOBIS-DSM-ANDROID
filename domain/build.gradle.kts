@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id(BuildPlugins.ANDROID_LIBRARY)
+    id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
 }
 
 android {
@@ -8,11 +8,8 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.jobis.domain"
         minSdk = 33
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
