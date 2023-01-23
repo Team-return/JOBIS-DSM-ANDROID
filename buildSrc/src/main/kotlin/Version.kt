@@ -1,0 +1,22 @@
+object Version {
+    const val ANDROID_CORE = "1.7.0"
+    const val APPCOMMPAT = "1.6.0"
+    const val CONSTRAINT = "2.1.4"
+
+    const val JUNIT = "4.13.2"
+    const val EXT_JUNIT = "1.1.5"
+    const val ESPRESSO = "3.5.1"
+
+    const val RETROFIT = "2.9.0"
+    const val OKHTTP = "4.10.0"
+
+    const val HILT = "2.44.2"
+
+    const val GLIDE = "4.14.2"
+
+    const val ANDROID_GRADLE = "7.2.1"
+    const val KOTLIN_GRADLE = "1.6.10"
+    const val HILT_GRADLE = "2.28-alpha"
+    const val LIBRARY = "7.3.0"
+
+}

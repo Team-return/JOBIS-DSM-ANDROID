@@ -1,25 +1,29 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id(BuildPlugins.ANDROID_LIBRARY)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
+    id(BuildPlugins.HILT_PLUGIN)
+    id(BuildPlugins.KOTLIN_KAPT)
 }
 
 android {
-    namespace = "com.jobis.domain"
-    compileSdk = 33
+    namespace = ProjectProperties.NAME_SPACE_DOMAIN
+    compileSdk = ProjectProperties.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 33
-        targetSdk = 33
+        minSdk = ProjectProperties.COMPILE_SDK
+        targetSdk = ProjectProperties.COMPILE_SDK
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = ProjectProperties.TEST_RUNNER
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile(ProjectProperties.PROGUARD),
+                ProjectProperties.PROGUARD_RULES
             )
         }
     }
@@ -28,16 +32,19 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = ProjectProperties.JVM_VERSION
     }
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.6.0")
-    implementation("com.google.android.material:material:1.7.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(Dependency.HILT.HILT)
+    kapt(Dependency.HILT.HILT_COMPILER)
+
+    implementation(Dependency.Android.ANDROIDX_CORE)
+    implementation(Dependency.Android.APPCOMMPAT)
+    implementation(Dependency.Android.MATERIAL)
+    testImplementation(Dependency.TEST.JUNIT)
+    androidTestImplementation(Dependency.TEST.EXT_JUNIT)
+    androidTestImplementation(Dependency.TEST.ESPRESSO)
 }

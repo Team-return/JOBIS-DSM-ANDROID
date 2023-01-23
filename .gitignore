@@ -244,7 +244,6 @@ buildSrc/build/kotlin/compileKotlin/last-build.bin
 buildSrc/build/kotlin/compileKotlin/localstate/build-history.bin
 
 buildSrc/build/libs/buildSrc.jar
+buildSrc/build/classes/kotlin/main/Dependency$GLIDE.class
 
-buildSrc/src/main/kotlin/BuildPlugins.kt
-
-buildSrc/src/main/kotlin/Version.kt
+buildSrc/build/classes/kotlin/main/Dependency$HILT.class

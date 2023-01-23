@@ -47,7 +47,7 @@ dependencies {
     implementation(project(":data"))
 
     implementation(Dependency.HILT.HILT)
-    kapt(BuildPlugins.HILT_COMPILER)
+    kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
     implementation(Dependency.RETROFIT.GSON_CONVERTER)
