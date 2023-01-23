@@ -10,8 +10,10 @@ interface UserDataStorage {
     )
 
     fun fetchAccessToken(): String
-
     fun fetchRefreshToken(): String
+
+    fun fetchUserId(): String
+    fun fetchPassword(): String
 
     fun putUserData(
         accountId: String,
