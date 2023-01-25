@@ -48,6 +48,7 @@ dependencies {
 
     implementation(Dependency.OKHTTP.OKHTTP)
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
+    implementation(Dependency.RETROFIT.GSON_CONVERTER)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)
