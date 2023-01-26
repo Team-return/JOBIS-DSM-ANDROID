@@ -10,7 +10,7 @@ abstract class BaseActivity<B: ViewDataBinding>(
     @LayoutRes private val layoutId: Int,
 ) : AppCompatActivity(){
 
-    private val binding: B by lazy {
+    protected val binding: B by lazy {
         DataBindingUtil.setContentView(
             this,
             layoutId,
@@ -21,9 +21,9 @@ abstract class BaseActivity<B: ViewDataBinding>(
         super.onCreate(savedInstanceState)
         binding.lifecycleOwner = this
         initView()
-        observeEvent()
+        collectEvent()
     }
 
     abstract fun initView()
-    open fun observeEvent() {}
+    open fun collectEvent() {}
 }

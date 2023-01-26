@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 
-fun startActivity(
+fun <T>startActivity(
     context: Context,
-    to: Activity,
+    to: Class<T>,
 ){
     context.startActivity(
-        Intent(context, to::class.java)
+        Intent(context, to)
     )
 }
