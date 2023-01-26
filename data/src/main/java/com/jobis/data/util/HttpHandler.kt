@@ -1,6 +1,9 @@
 package com.jobis.data.util
 
-import com.jobis.domain.exception.*
+import com.jobis.domain.exception.BadRequestException
+import com.jobis.domain.exception.ConflictException
+import com.jobis.domain.exception.NotFoundException
+import com.jobis.domain.exception.OtherException
 import retrofit2.HttpException
 
 class HttpHandler<T> {
@@ -12,9 +15,8 @@ class HttpHandler<T> {
     private val onOtherException: (code: Int, message: String) -> Throwable =
         { _, _ -> OtherException() }
 
-    fun httpRequest(httpRequest: suspend () -> T) {
-        this.httpRequest = httpRequest
-    }
+    fun httpRequest(httpRequest: suspend () -> T) =
+        this.apply { this.httpRequest = httpRequest }
 
     suspend fun sendRequest(): T =
         try {
