@@ -2,12 +2,12 @@ plugins {
     id(BuildPlugins.ANDROID_APPLICATION_PLUGIN)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
     id(BuildPlugins.KOTLIN_KAPT)
+    id(BuildPlugins.HILT_PLUGIN)
 }
 
 android {
     namespace = ProjectProperties.NAME_SPACE
     compileSdk = 33
-    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = ProjectProperties.NAME_SPACE
@@ -43,10 +43,10 @@ android {
 
 dependencies {
 
+    implementation(project(":di"))
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    implementation(Dependency.HILT.HILT)
 
     implementation(Dependency.GLIDE.GLIDE)
 
@@ -54,9 +54,15 @@ dependencies {
     implementation(Dependency.RETROFIT.GSON_CONVERTER)
     implementation(Dependency.OKHTTP.OKHTTP)
 
+    implementation(Dependency.HILT.HILT)
+    kapt(Dependency.HILT.HILT_COMPILER)
+
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)
     implementation(Dependency.Android.MATERIAL)
+    implementation(Dependency.Android.ACTIVITY)
+    implementation(Dependency.Android.FRAGMENT)
+
     implementation(Dependency.Android.CONSTRAINT)
     testImplementation(Dependency.TEST.JUNIT)
     androidTestImplementation(Dependency.TEST.EXT_JUNIT)

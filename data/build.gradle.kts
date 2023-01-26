@@ -3,14 +3,15 @@ import java.util.Properties
 plugins {
     id(BuildPlugins.ANDROID_LIBRARY)
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
+    id(BuildPlugins.KOTLIN_KAPT)
 }
+
 val properties = Properties()
 properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = ProjectProperties.NAME_SPACE_DATA
     compileSdk = 33
-    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         minSdk = ProjectProperties.COMPILE_SDK
@@ -45,6 +46,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(Dependency.HILT.HILT)
+    kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.OKHTTP.OKHTTP)
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)

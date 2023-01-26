@@ -2,6 +2,8 @@ object Version {
     const val ANDROID_CORE = "1.7.0"
     const val APPCOMMPAT = "1.6.0"
     const val CONSTRAINT = "2.1.4"
+    const val ACTIVITY = "1.6.1"
+    const val FRAGMENT = "1.5.5"
 
     const val JUNIT = "4.13.2"
     const val EXT_JUNIT = "1.1.5"
