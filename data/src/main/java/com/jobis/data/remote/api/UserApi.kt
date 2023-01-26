@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface UserApi {
     @POST(JobisUrl.USER.login)
-    fun postLogin(
+    suspend fun postLogin(
         @Body loginRequest: LoginRequest,
     ): LoginResponse
 }
