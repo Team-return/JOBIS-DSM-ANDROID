@@ -46,7 +46,6 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":design-system"))
 
     implementation(Dependency.GLIDE.GLIDE)
 
