@@ -247,3 +247,5 @@ buildSrc/build/libs/buildSrc.jar
 buildSrc/build/classes/kotlin/main/Dependency$GLIDE.class
 
 buildSrc/build/classes/kotlin/main/Dependency$HILT.class
+
+local.properties

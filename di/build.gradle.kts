@@ -1,4 +1,4 @@
-import java.util.Properties
+import java.util.*
 
 plugins {
     id(BuildPlugins.ANDROID_LIBRARY)
@@ -45,6 +45,7 @@ android {
 dependencies {
 
     implementation(project(":data"))
+    implementation(project(":domain"))
 
     implementation(Dependency.HILT.HILT)
     kapt(Dependency.HILT.HILT_COMPILER)
