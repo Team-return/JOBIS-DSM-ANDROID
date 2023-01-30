@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="JobisLightButtonGray300_16" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_300_radius_16</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonGray400_16" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_16</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightDisableButtonGray300_16" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_16</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonLightBlue16" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_light_blue_radius_16</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonGray300_8" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_300_radius_8</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonGray400_8" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_8</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightDisableButtonGray300_8" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_8</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonLightBlue8" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_light_blue_radius_8</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonGray300_4" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_300_radius_4</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonGray400_4" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/light_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_4</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightDisableButtonGray300_4" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_gray_400_radius_4</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="JobisLightButtonLightBlue4" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_light_button_light_blue_radius_4</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+</resources>
