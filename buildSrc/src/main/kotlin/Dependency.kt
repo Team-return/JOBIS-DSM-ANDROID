@@ -33,4 +33,15 @@ object Dependency {
         const val GLIDE = "com.github.bumptech.glide:glide:${Version.GLIDE}"
     }
 
+    object COMPOSE{
+        const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.COMPOSE_LIFECYCLE}"
+        const val ACTIVITY = "androidx.activity:activity-compose:${Version.COMPOSE_ACTIVITY}"
+        const val UI = "androidx.compose.ui:ui:${Version.COMPOSE_UI}"
+        const val PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE_UI}"
+        const val MATERIAL = "androidx.compose.material:material:${Version.COMPOSE_MATERIAL}"
+        const val JUNIT = "androidx.compose.ui:ui-test-junit4:${Version.COMPOSE_UI}"
+        const val UI_TOOLING = "androidx.compose.ui:ui-tooling:${Version.COMPOSE_UI}"
+        const val UI_TEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE_UI}"
+    }
+
 }

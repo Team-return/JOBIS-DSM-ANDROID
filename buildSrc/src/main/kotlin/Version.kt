@@ -21,4 +21,9 @@ object Version {
     const val HILT_GRADLE = "2.28-alpha"
     const val LIBRARY = "7.3.0"
 
+    const val COMPOSE_LIFECYCLE = "2.5.1"
+    const val COMPOSE_ACTIVITY = "1.6.1"
+    const val COMPOSE_UI = "1.3.3"
+    const val COMPOSE_MATERIAL = "1.3.1"
+
 }
