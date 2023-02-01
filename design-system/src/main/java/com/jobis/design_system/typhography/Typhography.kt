@@ -1,4 +1,4 @@
-package com.jobis.design_system
+package com.jobis.design_system.typhography
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
