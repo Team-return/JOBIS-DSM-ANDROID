@@ -1,9 +1,8 @@
-package com.jobis.design_system
+package com.jobis.design_system.color
 
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 
-object Color{
+object color{
 
     val LightBlue = Color(color = 0xFF135C9D)
 
