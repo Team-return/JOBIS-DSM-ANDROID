@@ -17,6 +17,9 @@ android {
         versionName = ProjectProperties.VERSION_NAME
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -34,10 +37,19 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = ProjectProperties.JVM_VERSION
+        jvmTarget = "1.8"
     }
     buildFeatures {
         dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -57,6 +69,15 @@ dependencies {
     debugImplementation(Dependency.COMPOSE.UI_TOOLING)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
+    implementation(Dependency.COMPOSE.VIEWMODEL)
+    implementation(Dependency.COMPOSE.ACTIVITY)
+    implementation(Dependency.COMPOSE.UI)
+    implementation(Dependency.COMPOSE.PREVIEW)
+    implementation(Dependency.COMPOSE.MATERIAL)
+    androidTestImplementation(Dependency.COMPOSE.JUNIT)
+    debugImplementation(Dependency.COMPOSE.UI_TOOLING)
+    debugImplementation(Dependency.COMPOSE.UI_TEST)
+
     implementation(Dependency.GLIDE.GLIDE)
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
@@ -64,6 +85,8 @@ dependencies {
     implementation(Dependency.OKHTTP.OKHTTP)
 
     implementation(Dependency.HILT.HILT)
+    debugImplementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_ui_version"]}")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_ui_version"]}")
     kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.Android.ANDROIDX_CORE)

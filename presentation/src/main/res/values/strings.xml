@@ -3,4 +3,5 @@
 
     <string name="login_unauthorization">잘못된 비밀번호 입니다</string>
     <string name="login_not_found">존재하지 않는 유저입니다</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
 </resources>
