@@ -30,7 +30,6 @@ fun SmallSolidButton(
 @Composable
 fun SmallOutLineButton(
     onClick: () -> Unit,
-    backgroundColor: Color,
     textColor: Color,
     text: String,
     disable: Boolean,
@@ -42,7 +41,6 @@ fun SmallOutLineButton(
         height = 32,
         roundSize = 16,
         textStyle = typography.body2,
-        backgroundColor = backgroundColor,
         textColor = textColor,
         disable = disable,
     )

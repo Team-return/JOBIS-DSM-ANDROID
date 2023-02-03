@@ -30,7 +30,6 @@ fun LargeSolidButton(
 @Composable
 fun LargeOutLineButton(
     onClick: ()->Unit,
-    backgroundColor: Color,
     textColor: Color,
     text: String,
     disable: Boolean,
@@ -42,7 +41,6 @@ fun LargeOutLineButton(
         height = 48,
         roundSize = 12,
         textStyle = typography.heading6,
-        backgroundColor = backgroundColor,
         textColor = textColor,
         disable = disable,
     )

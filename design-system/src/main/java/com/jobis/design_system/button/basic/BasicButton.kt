@@ -63,7 +63,6 @@ fun BasicOutLineButton(
     height: Int,
     roundSize: Int,
     textStyle: TextStyle,
-    backgroundColor: Color,
     textColor: Color,
     disable: Boolean,
 ) {
@@ -83,13 +82,13 @@ fun BasicOutLineButton(
             .border(
                 border = BorderStroke(
                     width = 1.5.dp,
-                    color = if(disable) color.Gray400
+                    color = if (disable) color.Gray400
                     else color.LightBlue
                 ),
                 shape = RoundedCornerShape(roundSize.dp)
             )
             .background(
-                color = backgroundColor,
+                color = color.Gray100,
             ),
         contentAlignment = Alignment.Center,
     ) {

@@ -30,7 +30,6 @@ fun MediumSolidButton(
 @Composable
 fun MediumOutLineButton(
     onClick: () -> Unit,
-    backgroundColor: Color,
     textColor: Color,
     text: String,
     disable: Boolean,
@@ -42,7 +41,6 @@ fun MediumOutLineButton(
         height = 44,
         roundSize = 8,
         textStyle = typography.heading6,
-        backgroundColor = backgroundColor,
         textColor = textColor,
         disable = disable,
     )
