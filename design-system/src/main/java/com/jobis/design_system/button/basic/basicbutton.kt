@@ -99,6 +99,13 @@ fun BasicButton(
                     ),
                     contentDescription = null,
                 )
+            } else{
+                Text(
+                    text = text,
+                    color = textColor,
+                    style = textStyle,
+                    modifier = Modifier.padding(bottom = 2.dp)
+                )
             }
         }
     }
