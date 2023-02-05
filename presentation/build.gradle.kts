@@ -17,6 +17,9 @@ android {
         versionName = ProjectProperties.VERSION_NAME
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -34,10 +37,19 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = ProjectProperties.JVM_VERSION
+        jvmTarget = "1.8"
     }
     buildFeatures {
         dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -46,7 +58,17 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":design-system"))
 
+    implementation(Dependency.COMPOSE.VIEWMODEL)
+    implementation(Dependency.COMPOSE.ACTIVITY)
+    implementation(Dependency.COMPOSE.UI)
+    implementation(Dependency.COMPOSE.PREVIEW)
+    implementation(Dependency.COMPOSE.MATERIAL)
+    implementation(Dependency.COMPOSE.NAVIGATION)
+    androidTestImplementation(Dependency.COMPOSE.JUNIT)
+    debugImplementation(Dependency.COMPOSE.UI_TOOLING)
+    debugImplementation(Dependency.COMPOSE.UI_TEST)
 
     implementation(Dependency.GLIDE.GLIDE)
 
@@ -56,6 +78,8 @@ dependencies {
 
     implementation(Dependency.HILT.HILT)
     kapt(Dependency.HILT.HILT_COMPILER)
+
+    implementation(Dependency.SPLASH.SPLASH_SCREEN)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)
