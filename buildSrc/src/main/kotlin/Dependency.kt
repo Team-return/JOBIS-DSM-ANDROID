@@ -42,6 +42,7 @@ object Dependency {
         const val JUNIT = "androidx.compose.ui:ui-test-junit4:${Version.COMPOSE_UI}"
         const val UI_TOOLING = "androidx.compose.ui:ui-tooling:${Version.COMPOSE_UI}"
         const val UI_TEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE_UI}"
+        const val NAVIGATION = "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATON}"
     }
 
     object SPLASH{
