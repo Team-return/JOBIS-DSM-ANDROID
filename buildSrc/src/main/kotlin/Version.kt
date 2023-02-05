@@ -26,4 +26,6 @@ object Version {
     const val COMPOSE_UI = "1.3.3"
     const val COMPOSE_MATERIAL = "1.3.1"
 
+    const val SPLASH_SCREEN = "1.0.0"
+
 }

@@ -85,9 +85,9 @@ dependencies {
     implementation(Dependency.OKHTTP.OKHTTP)
 
     implementation(Dependency.HILT.HILT)
-    debugImplementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_ui_version"]}")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${rootProject.extra["compose_ui_version"]}")
     kapt(Dependency.HILT.HILT_COMPILER)
+
+    implementation(Dependency.SPLASH.SPLASH_SCREEN)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)

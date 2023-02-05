@@ -44,4 +44,8 @@ object Dependency {
         const val UI_TEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE_UI}"
     }
 
+    object SPLASH{
+        const val SPLASH_SCREEN = "androidx.core:core-splashscreen:${Version.SPLASH_SCREEN}"
+    }
+
 }
