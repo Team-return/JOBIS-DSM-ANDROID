@@ -19,15 +19,15 @@ import com.jobis.design_system.typography.typography
 @Composable
 fun BasicBoxTextField(
     hint: String,
-    stateValue: String = "",
+    value: String = "",
     isError: Boolean = false,
     helperText: String = "",
+    onValueChanged: (String) -> Unit,
     drawable: Int = 0,
     fieldText: String,
     disable: Boolean = false
 ) {
 
-    var value by remember { mutableStateOf(stateValue) }
     var isFocused by remember { mutableStateOf(false) }
 
     Column() {
@@ -40,7 +40,7 @@ fun BasicBoxTextField(
         Spacer(modifier = Modifier.height(8.dp))
         BasicTextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = onValueChanged,
             modifier = Modifier
                 .size(
                     width = 376.dp,
@@ -103,15 +103,15 @@ fun BasicBoxTextField(
 @Composable
 fun BasicUnderLineTextField(
     hint: String,
-    stateValue: String = "",
+    value: String = "",
     isError: Boolean = false,
     helperText: String = "",
+    onValueChanged: (String) -> Unit,
     drawable: Int = 0,
     fieldText: String,
     disable: Boolean = false,
 ) {
 
-    var value by remember { mutableStateOf(stateValue) }
     var isFocused by remember { mutableStateOf(false) }
 
     Column() {
@@ -123,7 +123,7 @@ fun BasicUnderLineTextField(
         )
         BasicTextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = onValueChanged,
             enabled = !disable,
             singleLine = true,
             modifier = Modifier.onFocusChanged {
