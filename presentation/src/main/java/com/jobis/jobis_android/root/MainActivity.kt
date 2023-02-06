@@ -11,12 +11,10 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.design_system.color.color
-import com.jobis.jobis_android.JobisScreen
-import com.jobis.jobis_android.feature.SplashScreen
-import com.jobis.jobis_android.feature.auth.login.LoginScreen
+import com.jobis.jobis_android.root.navigation.JobisRoute
+import com.jobis.jobis_android.root.navigation.authNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,28 +27,17 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = JobisScreen.SPLASH.route,
-            ){
-                composable(
-                    route = JobisScreen.SPLASH.route,
-                ){
-                    SplashScreen(
-                        navController = navController,
-                    )
-                }
-                composable(
-                    route = JobisScreen.LOGIN.route,
-                ){
-                    LoginScreen(
-                        navController = navController
-                    )
-                }
+                startDestination = JobisRoute.Auth.route
+            ) {
+                authNavigation(
+                    navController = navController,
+                )
             }
         }
     }
 
     @Composable
-    fun SetWindowStatus(){
+    fun SetWindowStatus() {
         window.statusBarColor = color.Gray100.toArgb()
         window.navigationBarColor = color.Gray100.toArgb()
 

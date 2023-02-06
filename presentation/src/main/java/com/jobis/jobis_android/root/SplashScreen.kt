@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.jobis.jobis_android.JobisScreen
 import com.jobis.jobis_android.R
+import com.jobis.jobis_android.root.navigation.JobisScreen
 import kotlinx.coroutines.delay
 
 @Preview(
@@ -54,7 +54,7 @@ fun SplashScreen(
     ) {
         delay(3000)
         navController.navigate(
-            route = JobisScreen.LOGIN.route,
+            route = JobisScreen.Auth.LOGIN
         )
     }
 }
