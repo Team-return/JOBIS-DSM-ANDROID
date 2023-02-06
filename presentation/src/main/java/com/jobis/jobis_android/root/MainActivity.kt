@@ -15,7 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.jobis.design_system.color.color
 import com.jobis.jobis_android.root.navigation.JobisRoute
 import com.jobis.jobis_android.root.navigation.authNavigation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
