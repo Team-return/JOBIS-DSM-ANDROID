@@ -1,4 +1,4 @@
-package com.jobis.jobis_android.feature
+package com.jobis.jobis_android.root
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

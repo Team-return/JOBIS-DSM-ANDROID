@@ -6,6 +6,7 @@ import com.jobis.domain.exception.NotFoundException
 import com.jobis.domain.exception.UnAuthorizationException
 import com.jobis.domain.param.LoginParam
 import com.jobis.domain.usecase.LoginUseCase
+import com.jobis.jobis_android.event.LoginEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,7 +18,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
 
-    private val _loginEvent = MutableSharedFlow<Event>()
+    private val _loginEvent = MutableSharedFlow<LoginEvent>()
     val loginEvent
         get() = _loginEvent.asSharedFlow()
 
@@ -34,20 +35,14 @@ class LoginViewModel @Inject constructor(
                     )
                 )
             }.onSuccess {
-                _loginEvent.emit(Event.MoveToMainActivity)
+                _loginEvent.emit(LoginEvent.MoveToMainActivity)
             }.onFailure {
                 println(it.toString())
                 when (it) {
-                    is UnAuthorizationException -> _loginEvent.emit(Event.UnAuthorization)
-                    is NotFoundException -> _loginEvent.emit(Event.NotFound)
+                    is UnAuthorizationException -> _loginEvent.emit(LoginEvent.UnAuthorization)
+                    is NotFoundException -> _loginEvent.emit(LoginEvent.NotFound)
                 }
             }
         }
-    }
-
-    sealed class Event {
-        object MoveToMainActivity : Event()
-        object UnAuthorization : Event()
-        object NotFound : Event()
     }
 }

@@ -249,3 +249,9 @@ buildSrc/build/classes/kotlin/main/Dependency$GLIDE.class
 buildSrc/build/classes/kotlin/main/Dependency$HILT.class
 
 local.properties
+
+buildSrc/build/kotlin/buildSrcjar-classes.txt
+
+buildSrc/build/classes/kotlin/main/Dependency$COMPOSE.class
+
+buildSrc/build/classes/kotlin/main/Dependency$SPLASH.class
