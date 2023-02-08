@@ -1,7 +1,6 @@
 package com.jobis.design_system.util
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,9 +39,4 @@ val LargeButtonSize = Modifier.size(
 val DrawableSize = Modifier.size(
     width = 24.dp,
     height = 24.dp,
-)
-
-@Stable
-val MediumSpacer = Modifier.width(
-    width = 8.dp,
 )
