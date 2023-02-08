@@ -1,9 +1,6 @@
 package com.jobis.data.util
 
-import com.jobis.domain.exception.BadRequestException
-import com.jobis.domain.exception.ConflictException
-import com.jobis.domain.exception.NotFoundException
-import com.jobis.domain.exception.OtherException
+import com.jobis.domain.exception.*
 import retrofit2.HttpException
 
 class HttpHandler<T> {
@@ -12,6 +9,7 @@ class HttpHandler<T> {
     private val onBadRequest: (message: String) -> Throwable = { BadRequestException() }
     private val onNotFound: (message: String) -> Throwable = { NotFoundException() }
     private val onConflict: (message: String) -> Throwable = { ConflictException() }
+    private val onServerError: (message: String) -> Throwable = {OnServerException()}
     private val onOtherException: (code: Int, message: String) -> Throwable =
         { _, _ -> OtherException() }
 
@@ -28,6 +26,7 @@ class HttpHandler<T> {
                 400 -> onBadRequest(message)
                 404 -> onNotFound(message)
                 409 -> onConflict(message)
+                in 500..599 -> onServerError(message)
                 else -> onOtherException(code, message)
             }
         }
