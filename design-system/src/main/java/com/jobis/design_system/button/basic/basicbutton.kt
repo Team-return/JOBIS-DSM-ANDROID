@@ -19,12 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.jobis.design_system.color.BasicButtonColor
 import com.jobis.design_system.util.Direction.DRAWABLE_CENTER
 import com.jobis.design_system.util.Direction.DRAWABLE_END
 import com.jobis.design_system.util.Direction.DRAWABLE_START
 import com.jobis.design_system.typography.typography
 import com.jobis.design_system.util.DrawableSize
-import com.jobis.design_system.util.MediumSpacer
+import com.jobis.design_system.util.MediumWidthSpacer
 import com.jobis.design_system.util.click
 
 @Stable
@@ -91,7 +92,7 @@ fun BasicButton(
                         modifier = DrawableSize,
                         contentDescription = null,
                     )
-                    Spacer(modifier = MediumSpacer)
+                    Spacer(modifier = MediumWidthSpacer)
                     Text(
                         text = text,
                         color = textColor,
@@ -106,7 +107,7 @@ fun BasicButton(
                         style = textStyle,
                         modifier = Modifier.padding(bottom = 2.dp),
                     )
-                    Spacer(modifier = MediumSpacer)
+                    Spacer(modifier = MediumWidthSpacer)
                     Image(
                         painter = painterResource(id = drawable),
                         modifier = DrawableSize,

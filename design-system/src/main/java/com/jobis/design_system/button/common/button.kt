@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.design_system.R
 import com.jobis.design_system.button.basic.BasicButton
-import com.jobis.design_system.button.basic.BasicButtonColor
-import com.jobis.design_system.button.basic.ButtonColor
+import com.jobis.design_system.color.BasicButtonColor
+import com.jobis.design_system.color.ButtonColor
 import com.jobis.design_system.typography.typography
 import com.jobis.design_system.util.*
 import com.jobis.design_system.util.Direction.DRAWABLE_CENTER

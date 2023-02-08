@@ -1,7 +1,6 @@
-package com.jobis.design_system.button.basic
+package com.jobis.design_system.color
 
 import androidx.compose.ui.graphics.Color
-import com.jobis.design_system.color.color
 
 
 data class BasicButtonColor(
@@ -17,44 +16,44 @@ object ButtonColor {
         backgroundColor = color.LightBlue,
         outLineColor = color.LightBlue,
         textColor = color.Gray100,
-        pressedColor = PressedColor.SolidDefaultPressedColor,
-        disabledColor = DisabledColor.SolidDisableButtonColor,
+        pressedColor = ButtonPressedColor.SolidDefaultPressedColor,
+        disabledColor = ButtonDisabledColor.SolidDisableButtonColor,
     )
 
     val GhostDefaultButtonColor = BasicButtonColor(
         backgroundColor = color.Gray100,
         outLineColor = color.LightBlue,
         textColor = color.LightBlue,
-        pressedColor = PressedColor.GhostDefaultPressedColor,
-        disabledColor = DisabledColor.GhostDisableButtonColor,
+        pressedColor = ButtonPressedColor.GhostDefaultPressedColor,
+        disabledColor = ButtonDisabledColor.GhostDisableButtonColor,
     )
 
     val LightDefaultButtonColor = BasicButtonColor(
         backgroundColor = color.Gray300,
         outLineColor = color.Gray300,
         textColor = color.LightBlue,
-        pressedColor = PressedColor.LightDefaultPressedColor,
-        disabledColor = DisabledColor.LightDisableButtonColor,
+        pressedColor = ButtonPressedColor.LightDefaultPressedColor,
+        disabledColor = ButtonDisabledColor.LightDisableButtonColor,
     )
 
     val GrayDefaultButtonColor = BasicButtonColor(
         backgroundColor = color.Gray300,
         outLineColor = color.Gray300,
         textColor = color.Gray900,
-        pressedColor = PressedColor.GrayDefaultPressedColor,
-        disabledColor = DisabledColor.LightDisableButtonColor,
+        pressedColor = ButtonPressedColor.GrayDefaultPressedColor,
+        disabledColor = ButtonDisabledColor.LightDisableButtonColor,
     )
 
     val ShadowDefaultButtonColor = BasicButtonColor(
         backgroundColor = color.Gray100,
         outLineColor = color.Gray100,
         textColor = color.Gray900,
-        pressedColor = PressedColor.ShadowDefaultPressedColor,
-        disabledColor = DisabledColor.LightDisableButtonColor,
+        pressedColor = ButtonPressedColor.ShadowDefaultPressedColor,
+        disabledColor = ButtonDisabledColor.LightDisableButtonColor,
     )
 }
 
-object PressedColor {
+object ButtonPressedColor {
     val SolidDefaultPressedColor = BasicButtonColor(
         backgroundColor = color.DarkBlue,
         outLineColor = color.DarkBlue,
@@ -86,7 +85,7 @@ object PressedColor {
     )
 }
 
-object DisabledColor {
+object ButtonDisabledColor {
     val SolidDisableButtonColor = BasicButtonColor(
         backgroundColor = color.Gray500,
         outLineColor = color.Gray500,
