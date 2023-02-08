@@ -24,4 +24,6 @@ object color{
     val Red = Color(color = 0xFFE74C3C)
     val Green = Color(color = 0xFF2ECC71)
     val Yellow = Color(color = 0xFFF1C40F)
+
+    val Transparent = Color(color = 0)
 }
