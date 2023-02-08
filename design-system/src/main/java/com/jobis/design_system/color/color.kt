@@ -9,6 +9,8 @@ object color{
     val Blue = Color(color = 0xFF0F4C82)
     val DarkBlue = Color(color = 0xFF002C53)
 
+    val CheckBlue = Color(color = 0xFF0087FF)
+
     val Gray100 = Color(color = 0xFFFFFFFF)
     val Gray200 = Color(color = 0xFFFAFAFA)
     val Gray300 = Color(color = 0xFFF7F7F7)
@@ -22,4 +24,6 @@ object color{
     val Red = Color(color = 0xFFE74C3C)
     val Green = Color(color = 0xFF2ECC71)
     val Yellow = Color(color = 0xFFF1C40F)
+
+    val Transparent = Color(color = 0)
 }
