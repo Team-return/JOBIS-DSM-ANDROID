@@ -50,4 +50,10 @@ object Dependency {
         const val SPLASH_SCREEN = "androidx.core:core-splashscreen:${Version.SPLASH_SCREEN}"
     }
 
+    object ORBIT{
+        const val MVI = "org.orbit-mvi:orbit-core:${Version.ORBIT_MVI}"
+        const val VIEWMODEL = "org.orbit-mvi:orbit-viewmodel:${Version.ORBIT_MVI}"
+        const val COMPOSE = "org.orbit-mvi:orbit-compose:${Version.ORBIT_MVI}"
+        const val TEST = "org.orbit-mvi:orbit-test:${Version.ORBIT_MVI}"
+    }
 }

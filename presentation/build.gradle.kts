@@ -82,6 +82,11 @@ dependencies {
 
     implementation(Dependency.SPLASH.SPLASH_SCREEN)
 
+    implementation(Dependency.ORBIT.MVI)
+    implementation(Dependency.ORBIT.VIEWMODEL)
+    implementation(Dependency.ORBIT.COMPOSE)
+    testImplementation(Dependency.ORBIT.TEST)
+
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)
     implementation(Dependency.Android.MATERIAL)

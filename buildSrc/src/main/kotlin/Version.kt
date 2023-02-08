@@ -30,4 +30,5 @@ object Version {
 
     const val SPLASH_SCREEN = "1.0.0"
 
+    const val ORBIT_MVI = "4.5.0"
 }
