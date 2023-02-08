@@ -39,18 +39,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        dataBinding = true
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
@@ -61,6 +49,7 @@ dependencies {
     implementation(project(":design-system"))
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
+    implementation(Dependency.COMPOSE.LIFECYCLE)
     implementation(Dependency.COMPOSE.ACTIVITY)
     implementation(Dependency.COMPOSE.UI)
     implementation(Dependency.COMPOSE.PREVIEW)

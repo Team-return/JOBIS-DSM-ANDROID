@@ -35,6 +35,7 @@ object Dependency {
 
     object COMPOSE{
         const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.COMPOSE_LIFECYCLE}"
+        const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-compose:${Version.COMPOSE_LIFECYCLE_RUNTIME}"
         const val ACTIVITY = "androidx.activity:activity-compose:${Version.COMPOSE_ACTIVITY}"
         const val UI = "androidx.compose.ui:ui:${Version.COMPOSE_UI}"
         const val PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE_UI}"

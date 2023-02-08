@@ -22,6 +22,7 @@ object Version {
     const val LIBRARY = "7.3.0"
 
     const val COMPOSE_LIFECYCLE = "2.5.1"
+    const val COMPOSE_LIFECYCLE_RUNTIME = "2.6.0-alpha05"
     const val COMPOSE_ACTIVITY = "1.6.1"
     const val COMPOSE_UI = "1.3.3"
     const val COMPOSE_MATERIAL = "1.3.1"
