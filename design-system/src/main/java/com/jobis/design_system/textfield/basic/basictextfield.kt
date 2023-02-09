@@ -17,6 +17,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.design_system.R
+import com.jobis.design_system.button.size.DrawableSize
 import com.jobis.design_system.color.BasicBoxTextFieldColor
 import com.jobis.design_system.color.BasicUnderLineTextFieldColor
 import com.jobis.design_system.color.BoxTextFieldColor
@@ -24,7 +26,10 @@ import com.jobis.design_system.color.UnderLineTextFieldColor
 import com.jobis.design_system.textfield.size.DefaultBoxTextFieldSize
 import com.jobis.design_system.textfield.size.DefaultUnderLineTextFieldSize
 import com.jobis.design_system.typography.typography
-import com.jobis.design_system.util.*
+import com.jobis.design_system.util.MediumHeightSpacer
+import com.jobis.design_system.util.MediumWidthSpacer
+import com.jobis.design_system.util.SmallShape
+import com.jobis.design_system.util.click
 
 @Stable
 val TextFieldTextModifier = Modifier
@@ -39,18 +44,18 @@ fun BasicBoxTextField(
     hint: String,
     value: String,
     onValueChanged: (String) -> Unit,
-    drawable: Int = 0,
     color: BasicBoxTextFieldColor = BoxTextFieldColor.DefaultBoxTextFieldColor,
     textStyle: TextStyle = typography.body1,
     helperText: String = "",
     fieldText: String = "",
     isError: Boolean = false,
+    isPassword: Boolean = false,
     disable: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var isFocused by remember { mutableStateOf(false) }
 
-    var isPassword by remember { mutableStateOf(false) }
+    var isVisible by remember { mutableStateOf(false) }
 
     val fieldTextColor = if (disable) color.disabledColor!!.fieldTextColor
     else if (isError) color.errorColor
@@ -70,13 +75,18 @@ fun BasicBoxTextField(
     val helperTextColor = if (isError) color.errorColor
     else color.helperTextColor
 
+    val drawable = if (isPassword && isVisible) R.drawable.ic_visible_on
+    else R.drawable.ic_visible_off
+
     Column {
-        Text(
-            text = fieldText,
-            color = fieldTextColor!!,
-            style = typography.body4,
-        )
-        Spacer(modifier = MediumHeightSpacer)
+        if (fieldText.isNotBlank()) {
+            Text(
+                text = fieldText,
+                color = fieldTextColor!!,
+                style = typography.body4,
+            )
+            Spacer(modifier = MediumHeightSpacer)
+        }
         Box(
             modifier = DefaultBoxTextFieldSize
                 .border(
@@ -100,7 +110,7 @@ fun BasicBoxTextField(
                     value = value,
                     onValueChange = onValueChanged,
                     singleLine = true,
-                    visualTransformation = if (isPassword) PasswordVisualTransformation()
+                    visualTransformation = if (isVisible) PasswordVisualTransformation()
                     else VisualTransformation.None,
                     textStyle = textStyle.copy(
                         color = textColor,
@@ -117,21 +127,23 @@ fun BasicBoxTextField(
                         innerTextField()
                     }
                 )
-                Spacer(modifier = MediumWidthSpacer)
-                Image(
-                    painterResource(id = drawable),
-                    contentDescription = null,
-                    modifier = DrawableSize
-                        .click(
-                            onClick = { isPassword = !isPassword },
-                            disable = disable,
-                            interactionSource = interactionSource,
-                        ),
-                )
+                if (isPassword) {
+                    Spacer(modifier = MediumWidthSpacer)
+                    Image(
+                        painterResource(id = drawable),
+                        contentDescription = null,
+                        modifier = DrawableSize
+                            .click(
+                                onClick = { isVisible = !isVisible },
+                                disable = disable,
+                                interactionSource = interactionSource,
+                            ),
+                    )
+                }
             }
         }
-        Spacer(modifier = MediumHeightSpacer)
-        if (!disable) {
+        if (disable || helperText.isNotBlank()) {
+            Spacer(modifier = MediumHeightSpacer)
             Text(
                 text = helperText,
                 color = helperTextColor!!,
@@ -146,19 +158,19 @@ fun BasicUnderLineTextField(
     hint: String,
     value: String,
     onValueChanged: (String) -> Unit,
-    drawable: Int = 0,
     color: BasicUnderLineTextFieldColor = UnderLineTextFieldColor.DefaultUnderLineTextFieldColor,
     textStyle: TextStyle = typography.body1,
     helperText: String = "",
     fieldText: String = "",
     isError: Boolean = false,
+    isPassword: Boolean = false,
     disable: Boolean = false,
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
     var isFocused by remember { mutableStateOf(false) }
 
-    var isPassword by remember { mutableStateOf(false) }
+    var isVisible by remember { mutableStateOf(false) }
 
     val fieldTextColor = if (disable) color.disabledColor!!.fieldTextColor
     else if (isError) color.errorColor
@@ -174,6 +186,9 @@ fun BasicUnderLineTextField(
 
     val helperTextColor = if (isError) color.errorColor
     else color.helperTextColor
+
+    val drawable = if (isPassword && isVisible) R.drawable.ic_visible_on
+    else R.drawable.ic_visible_off
 
     Column {
         Text(
@@ -214,22 +229,24 @@ fun BasicUnderLineTextField(
                         innerTextField()
                     }
                 )
-                Spacer(modifier = MediumWidthSpacer)
-                Image(
-                    painterResource(id = drawable),
-                    contentDescription = null,
-                    modifier = DrawableSize
-                        .click(
-                            onClick = { isPassword = !isPassword },
-                            disable = disable,
-                            interactionSource = interactionSource,
-                        ),
-                )
+                if (isPassword) {
+                    Spacer(modifier = MediumWidthSpacer)
+                    Image(
+                        painterResource(id = drawable),
+                        contentDescription = null,
+                        modifier = DrawableSize
+                            .click(
+                                onClick = { isVisible = !isVisible },
+                                disable = disable,
+                                interactionSource = interactionSource,
+                            ),
+                    )
+                }
             }
         }
         Column(modifier = DefaultUnderLineTextFieldSize.background(color = underLineColor!!)) {}
-        Spacer(modifier = MediumHeightSpacer)
-        if (!disable) {
+        if (disable || helperText.isNotBlank()) {
+            Spacer(modifier = MediumHeightSpacer)
             Text(
                 text = helperText,
                 color = helperTextColor!!,
@@ -261,6 +278,12 @@ fun Preview() {
             hint = "아이디",
             value = id,
             onValueChanged = { id = it },
+        )
+
+        BasicUnderLineTextField(
+            hint = "비밀번호",
+            value = password,
+            onValueChanged = { password = it },
         )
     }
 }

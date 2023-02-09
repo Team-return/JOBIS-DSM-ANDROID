@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,17 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.jobis.design_system.button.size.DrawableSize
 import com.jobis.design_system.color.BasicButtonColor
+import com.jobis.design_system.typography.typography
 import com.jobis.design_system.util.Direction.DRAWABLE_CENTER
 import com.jobis.design_system.util.Direction.DRAWABLE_END
 import com.jobis.design_system.util.Direction.DRAWABLE_START
-import com.jobis.design_system.typography.typography
-import com.jobis.design_system.util.DrawableSize
+import com.jobis.design_system.util.MediumBorder
 import com.jobis.design_system.util.MediumWidthSpacer
 import com.jobis.design_system.util.click
-
-@Stable
-val BorderWidth = 1.5.dp
 
 @Composable
 fun BasicButton(
@@ -76,7 +76,7 @@ fun BasicButton(
                 shape = shape,
             )
             .border(
-                width = BorderWidth,
+                width = MediumBorder,
                 color = outLineColor,
                 shape = shape,
             ),
@@ -85,7 +85,7 @@ fun BasicButton(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            when(direction) {
+            when (direction) {
                 DRAWABLE_START -> {
                     Image(
                         painter = painterResource(id = drawable),

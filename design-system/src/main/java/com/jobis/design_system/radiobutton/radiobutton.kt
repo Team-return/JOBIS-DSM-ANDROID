@@ -13,21 +13,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jobis.design_system.checkbox.size.CheckBoxSize
 import com.jobis.design_system.color.color
+import com.jobis.design_system.util.SmallBorder
 import com.jobis.design_system.util.click
 
 @Preview(
     showBackground = true,
 )
 @Composable
-fun RadioButtonPreview(){
+fun RadioButtonPreview() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         var check by remember { mutableStateOf(false) }
         RadioButton(
-            onCheck = {check = !check},
+            onCheck = { check = !check },
             isCheck = check,
             disabled = false,
         )
@@ -56,13 +58,9 @@ fun RadioButton(
     else color.Gray400
 
     Box(
-        modifier = Modifier
-            .size(
-                width = 20.dp,
-                height = 20.dp,
-            )
+        modifier = CheckBoxSize
             .border(
-                width = 1.dp,
+                width = SmallBorder,
                 color = outLineColor,
                 shape = CircleShape
             )
@@ -74,13 +72,15 @@ fun RadioButton(
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.size(
-                width = 10.dp,
-                height = 10.dp,
-            ).background(
-                color = background,
-                shape = CircleShape,
-            )
-        ){}
+            modifier = Modifier
+                .size(
+                    width = 10.dp,
+                    height = 10.dp,
+                )
+                .background(
+                    color = background,
+                    shape = CircleShape,
+                )
+        ) {}
     }
 }
