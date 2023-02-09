@@ -1,5 +1,5 @@
 object Version {
-    const val ANDROID_CORE = "1.7.0"
+    const val ANDROID_CORE = "1.8.0"
     const val APPCOMMPAT = "1.6.0"
     const val CONSTRAINT = "2.1.4"
     const val ACTIVITY = "1.6.1"

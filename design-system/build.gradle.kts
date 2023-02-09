@@ -52,7 +52,6 @@ dependencies {
     implementation(Dependency.COMPOSE.PREVIEW)
     implementation(Dependency.COMPOSE.MATERIAL)
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
-    debugImplementation(Dependency.COMPOSE.UI_TOOLING)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
     implementation(Dependency.Android.ANDROIDX_CORE)

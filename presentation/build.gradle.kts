@@ -39,6 +39,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures{
+        compose = true
+    }
 }
 
 dependencies {
@@ -49,7 +52,7 @@ dependencies {
     implementation(project(":design-system"))
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
-    implementation(Dependency.COMPOSE.LIFECYCLE)
+    //implementation(Dependency.COMPOSE.LIFECYCLE)
     implementation(Dependency.COMPOSE.ACTIVITY)
     implementation(Dependency.COMPOSE.UI)
     implementation(Dependency.COMPOSE.PREVIEW)
@@ -57,7 +60,6 @@ dependencies {
     implementation(Dependency.COMPOSE.NAVIGATION)
     implementation(Dependency.COMPOSE.NAVIGATION_HILT)
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
-    debugImplementation(Dependency.COMPOSE.UI_TOOLING)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
     implementation(Dependency.GLIDE.GLIDE)
