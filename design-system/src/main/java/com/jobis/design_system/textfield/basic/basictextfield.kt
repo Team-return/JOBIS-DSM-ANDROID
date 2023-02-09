@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.design_system.R
+import com.jobis.design_system.button.size.DrawableSize
 import com.jobis.design_system.color.BasicBoxTextFieldColor
 import com.jobis.design_system.color.BasicUnderLineTextFieldColor
 import com.jobis.design_system.color.BoxTextFieldColor
@@ -25,7 +26,10 @@ import com.jobis.design_system.color.UnderLineTextFieldColor
 import com.jobis.design_system.textfield.size.DefaultBoxTextFieldSize
 import com.jobis.design_system.textfield.size.DefaultUnderLineTextFieldSize
 import com.jobis.design_system.typography.typography
-import com.jobis.design_system.util.*
+import com.jobis.design_system.util.MediumHeightSpacer
+import com.jobis.design_system.util.MediumWidthSpacer
+import com.jobis.design_system.util.SmallShape
+import com.jobis.design_system.util.click
 
 @Stable
 val TextFieldTextModifier = Modifier
@@ -71,11 +75,11 @@ fun BasicBoxTextField(
     val helperTextColor = if (isError) color.errorColor
     else color.helperTextColor
 
-    val drawable = if(isPassword && isVisible) R.drawable.ic_visible_on
+    val drawable = if (isPassword && isVisible) R.drawable.ic_visible_on
     else R.drawable.ic_visible_off
 
     Column {
-        if(fieldText.isNotBlank()) {
+        if (fieldText.isNotBlank()) {
             Text(
                 text = fieldText,
                 color = fieldTextColor!!,
@@ -123,7 +127,7 @@ fun BasicBoxTextField(
                         innerTextField()
                     }
                 )
-                if(isPassword) {
+                if (isPassword) {
                     Spacer(modifier = MediumWidthSpacer)
                     Image(
                         painterResource(id = drawable),
@@ -183,7 +187,7 @@ fun BasicUnderLineTextField(
     val helperTextColor = if (isError) color.errorColor
     else color.helperTextColor
 
-    val drawable = if(isPassword && isVisible) R.drawable.ic_visible_on
+    val drawable = if (isPassword && isVisible) R.drawable.ic_visible_on
     else R.drawable.ic_visible_off
 
     Column {
@@ -225,7 +229,7 @@ fun BasicUnderLineTextField(
                         innerTextField()
                     }
                 )
-                if(isPassword) {
+                if (isPassword) {
                     Spacer(modifier = MediumWidthSpacer)
                     Image(
                         painterResource(id = drawable),
@@ -279,7 +283,7 @@ fun Preview() {
         BasicUnderLineTextField(
             hint = "비밀번호",
             value = password,
-            onValueChanged = {password = it},
+            onValueChanged = { password = it },
         )
     }
 }

@@ -42,7 +42,7 @@ fun DropDown(
     else color.Gray900
 
     val drawable = if (disable) R.drawable.ic_direction_disabled
-    else if(isExpanded) R.drawable.ic_direction_under_enabled
+    else if (isExpanded) R.drawable.ic_direction_under_enabled
     else R.drawable.ic_direction_enabled
 
     Column {
@@ -79,7 +79,7 @@ fun DropDown(
                 modifier = Modifier
                     .padding(top = 2.dp)
                     .click(
-                        onClick = { if(!disable) isExpanded = !isExpanded },
+                        onClick = { if (!disable) isExpanded = !isExpanded },
                         disable = false,
                         interactionSource = interactionSource,
                     ),

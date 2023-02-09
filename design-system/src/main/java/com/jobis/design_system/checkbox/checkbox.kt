@@ -6,17 +6,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.design_system.R
+import com.jobis.design_system.checkbox.size.CheckBoxSize
 import com.jobis.design_system.color.color
+import com.jobis.design_system.util.MediumBorder
 import com.jobis.design_system.util.SmallShape
 import com.jobis.design_system.util.click
-import com.example.design_system.R
 
 @Preview(
     showBackground = true,
@@ -30,7 +30,7 @@ fun CheckboxPreview() {
 
         var check by remember { mutableStateOf(false) }
         Checkbox(
-            onCheck = {check = !check},
+            onCheck = { check = !check },
             isCheck = check,
             disabled = false,
         )
@@ -59,13 +59,9 @@ fun Checkbox(
     else color.Gray400
 
     Box(
-        modifier = Modifier
-            .size(
-                width = 20.dp,
-                height = 20.dp,
-            )
+        modifier = CheckBoxSize
             .border(
-                width = 1.5.dp,
+                width = MediumBorder,
                 color = outLineColor,
                 shape = SmallShape
             )

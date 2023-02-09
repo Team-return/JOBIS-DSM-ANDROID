@@ -25,7 +25,7 @@ data class BasicUnderLineTextFieldColor(
     val disabledColor: BasicUnderLineTextFieldColor? = null,
 )
 
-object BoxTextFieldColor{
+object BoxTextFieldColor {
     val DefaultBoxTextFieldColor = BasicBoxTextFieldColor(
         outLineColor = color.Gray400,
         fieldTextColor = color.Gray700,
@@ -39,7 +39,7 @@ object BoxTextFieldColor{
     )
 }
 
-object UnderLineTextFieldColor{
+object UnderLineTextFieldColor {
     val DefaultUnderLineTextFieldColor = BasicUnderLineTextFieldColor(
         underLineColor = color.Gray400,
         fieldTextColor = color.Gray700,
@@ -52,7 +52,7 @@ object UnderLineTextFieldColor{
     )
 }
 
-object BoxDisabledTextFieldColor{
+object BoxDisabledTextFieldColor {
     val DefaultBoxDisabledTextFieldColor = BasicBoxTextFieldColor(
         outLineColor = color.Gray400,
         fieldTextColor = color.Gray500,
@@ -61,7 +61,7 @@ object BoxDisabledTextFieldColor{
     )
 }
 
-object UnderLineDisabledTextFieldColor{
+object UnderLineDisabledTextFieldColor {
     val DefaultUnderLineDisabledTextFieldColor = BasicUnderLineTextFieldColor(
         underLineColor = color.Gray400,
         fieldTextColor = color.Gray500,

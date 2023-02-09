@@ -24,7 +24,7 @@ val fontFamily = FontFamily(
 
 object typography {
 
-    val platformTextStyle = PlatformTextStyle(
+    private val platformTextStyle = PlatformTextStyle(
         includeFontPadding = false
     )
 

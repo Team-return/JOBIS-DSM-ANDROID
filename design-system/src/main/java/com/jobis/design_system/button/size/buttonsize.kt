@@ -1,4 +1,4 @@
-package com.jobis.design_system.util
+package com.jobis.design_system.button.size
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Stable
