@@ -17,6 +17,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -25,16 +26,16 @@ class LoginViewModel @Inject constructor(
 
     override val container = container<LoginState, LoginSideEffect>(LoginState())
 
-    internal fun postLogin(
-        accountId: String,
-        password: String,
-    ) = intent {
+    private val loginState = container.stateFlow.value
+
+    internal fun postLogin() = intent {
         viewModelScope.launch {
             kotlin.runCatching {
                 loginUseCase.execute(
                     data = LoginParam(
-                        accountId = accountId,
-                        password = password
+                        accountId = loginState.accountId,
+                        password = loginState.password,
+                        isAutoLogin = loginState.isAutoLogin,
                     )
                 )
             }.onSuccess {
@@ -48,20 +49,28 @@ class LoginViewModel @Inject constructor(
                         postSideEffect(LoginSideEffect.NotFound)
                     }
                     is OnServerException -> {
-                        setServerErrorMessage()
+                        // TODO handling server error
                     }
                 }
             }
         }
     }
 
-    internal fun setLoginErrorMessage(
-        message: String,
-    ) = intent {
-        reduce { state.copy(loginErrorMessage = message) }
+    internal fun setUserId(
+        id: String,
+    ) = intent{
+        reduce { container.stateFlow.value.copy(accountId = id) }
     }
 
-    private fun setServerErrorMessage() = intent {
-        reduce { state.copy(loginErrorMessage = "") }
+    internal fun setPassword(
+        password: String,
+    ) = intent{
+        reduce { container.stateFlow.value.copy(password = password)}
+    }
+
+    internal fun setAutoLogin(
+        isAutoLogin: Boolean,
+    ) = intent {
+        reduce { container.stateFlow.value.copy(isAutoLogin = isAutoLogin) }
     }
 }
