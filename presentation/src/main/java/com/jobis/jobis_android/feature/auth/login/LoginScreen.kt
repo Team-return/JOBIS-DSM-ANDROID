@@ -1,6 +1,6 @@
 package com.jobis.jobis_android.feature.auth.login
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.contract.LoginSideEffect
@@ -16,15 +16,13 @@ fun LoginScreen(
     val container = vm.container
     val sideEffectFlow = container.sideEffectFlow
 
-    var isError by remember { mutableStateOf(false) }
-
     CollectWithLifecycle {
         sideEffectFlow.collect {
             // TODO show error message
             when (it) {
-                is LoginSideEffect.Success -> { isError = true}
-                is LoginSideEffect.UnAuthorization -> { isError = true}
-                is LoginSideEffect.NotFound -> { isError = true }
+                is LoginSideEffect.Success -> {}
+                is LoginSideEffect.UnAuthorization -> {}
+                is LoginSideEffect.NotFound -> {}
             }
         }
     }
