@@ -1,9 +1,11 @@
 package com.jobis.design_system.dropdown
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,9 @@ fun DropDown(
 
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+    val rotateState by animateFloatAsState(
+        targetValue = if(isExpanded) 180f else 0f
+    )
 
     val outLineColor = if (disable) color.Gray400
     else color.Gray600
@@ -42,7 +48,6 @@ fun DropDown(
     else color.Gray900
 
     val drawable = if (disable) R.drawable.ic_direction_disabled
-    else if (isExpanded) R.drawable.ic_direction_under_enabled
     else R.drawable.ic_direction_enabled
 
     Column {
@@ -52,6 +57,7 @@ fun DropDown(
                     width = 168.dp,
                     height = 48.dp,
                 )
+                .clickable { isExpanded = !isExpanded }
                 .border(
                     width = 1.dp,
                     color = outLineColor,
@@ -82,7 +88,8 @@ fun DropDown(
                         onClick = { if (!disable) isExpanded = !isExpanded },
                         disable = false,
                         interactionSource = interactionSource,
-                    ),
+                    )
+                    .rotate(rotateState),
                 contentDescription = null,
             )
         }
@@ -110,9 +117,6 @@ fun DropDownItemList(
                 color = color.Gray600,
                 shape = SmallShape,
             )
-            .padding(
-                start = 10.dp,
-            )
     ) {
         AnimatedVisibility(isExpanded) {
             LazyColumn {
@@ -129,9 +133,15 @@ fun DropDownItem(
     text: String,
 ) {
     Column(
-        modifier = Modifier.padding(
-            top = 16.dp
-        )
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+
+            }
+            .padding(
+                start = 10.dp,
+                top = 16.dp
+            )
     ) {
         Text(
             text = text,
