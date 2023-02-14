@@ -38,6 +38,8 @@ fun DropDown(
         targetValue = if (isExpanded) 180f else 0f
     )
 
+    var dropDownTitle by remember { mutableStateOf(title) }
+
     val outLineColor = if (disable) color.Gray400
     else color.Gray600
 
@@ -72,7 +74,7 @@ fun DropDown(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = title,
+                text = dropDownTitle,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(bottom = 2.dp)
@@ -98,7 +100,8 @@ fun DropDown(
             list = list,
             isExpanded = isExpanded,
             onItemSelected = onItemSelected,
-            onExpanded = { isExpanded = it }
+            onExpanded = { isExpanded = it },
+            onTitleChange = { dropDownTitle = it }
         )
     }
 }
@@ -109,6 +112,7 @@ fun DropDownItemList(
     isExpanded: Boolean,
     onExpanded: (Boolean) -> Unit,
     onItemSelected: (Int) -> Unit,
+    onTitleChange: (String) -> Unit,
 ) {
 
     Column(
@@ -130,6 +134,7 @@ fun DropDownItemList(
                         index = index,
                         onItemSelected = onItemSelected,
                         onExpanded = onExpanded,
+                        onTitleChange = onTitleChange,
                     )
                 }
             }
@@ -143,12 +148,14 @@ fun DropDownItem(
     index: Int,
     onItemSelected: (Int) -> Unit,
     onExpanded: (Boolean) -> Unit,
+    onTitleChange: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
                 onItemSelected(index)
+                onTitleChange(text)
                 onExpanded(false)
             }
             .padding(
