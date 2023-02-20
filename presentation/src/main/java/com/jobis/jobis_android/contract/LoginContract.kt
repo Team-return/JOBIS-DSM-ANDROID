@@ -11,4 +11,5 @@ sealed class LoginSideEffect {
     object Success : LoginSideEffect()
     object UnAuthorization : LoginSideEffect()
     object NotFound : LoginSideEffect()
+    object OnServerError: LoginSideEffect()
 }

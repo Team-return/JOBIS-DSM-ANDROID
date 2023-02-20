@@ -1,4 +1,4 @@
-package com.jobis.jobis_android.viewmodel
+package com.jobis.jobis_android.viewmodel.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,6 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -49,7 +48,7 @@ class LoginViewModel @Inject constructor(
                         postSideEffect(LoginSideEffect.NotFound)
                     }
                     is OnServerException -> {
-                        // TODO handling server error
+                        postSideEffect(LoginSideEffect.OnServerError)
                     }
                 }
             }
