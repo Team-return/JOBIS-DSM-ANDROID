@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.contract.LoginSideEffect
+import com.jobis.jobis_android.root.navigation.JobisRoute
 import com.jobis.jobis_android.util.CollectWithLifecycle
-import com.jobis.jobis_android.viewmodel.LoginViewModel
+import com.jobis.jobis_android.viewmodel.login.LoginViewModel
 
 @Composable
 fun LoginScreen(
@@ -20,9 +21,12 @@ fun LoginScreen(
         sideEffectFlow.collect {
             // TODO show error message
             when (it) {
-                is LoginSideEffect.Success -> {}
+                is LoginSideEffect.Success -> {
+                    navController.navigate(JobisRoute.HOME.route)
+                }
                 is LoginSideEffect.UnAuthorization -> {}
                 is LoginSideEffect.NotFound -> {}
+                is LoginSideEffect.OnServerError -> {}
             }
         }
     }

@@ -11,5 +11,6 @@ sealed class JobisScreen() {
 sealed class JobisRoute(
     val route: String,
 ) {
-    object Auth : JobisRoute("auth")
+    object Auth : JobisRoute("Auth")
+    object HOME: JobisRoute("Home")
 }
