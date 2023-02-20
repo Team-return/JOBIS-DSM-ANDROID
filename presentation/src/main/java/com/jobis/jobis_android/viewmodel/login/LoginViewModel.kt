@@ -38,7 +38,7 @@ class LoginViewModel @Inject constructor(
                     )
                 )
             }.onSuccess {
-                postSideEffect(LoginSideEffect.Success)
+                postSideEffect(LoginSideEffect.MoveToMain)
             }.onFailure {
                 when (it) {
                     is UnAuthorizationException -> {

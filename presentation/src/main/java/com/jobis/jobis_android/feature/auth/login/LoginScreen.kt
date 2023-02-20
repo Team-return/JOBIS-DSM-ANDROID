@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.contract.LoginSideEffect
 import com.jobis.jobis_android.root.navigation.JobisRoute
+import com.jobis.jobis_android.root.navigation.JobisScreen
 import com.jobis.jobis_android.util.CollectWithLifecycle
 import com.jobis.jobis_android.viewmodel.login.LoginViewModel
 
@@ -21,12 +22,14 @@ fun LoginScreen(
         sideEffectFlow.collect {
             // TODO show error message
             when (it) {
-                is LoginSideEffect.Success -> {
-                    navController.navigate(JobisRoute.HOME.route)
+                is LoginSideEffect.MoveToMain -> {
+                    navController.navigate(JobisScreen.Home.HOME)
                 }
+                is LoginSideEffect.BadRequest -> {}
                 is LoginSideEffect.UnAuthorization -> {}
                 is LoginSideEffect.NotFound -> {}
                 is LoginSideEffect.OnServerError -> {}
+                is LoginSideEffect.MoveToLogin -> {}
             }
         }
     }

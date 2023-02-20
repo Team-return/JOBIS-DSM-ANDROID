@@ -8,8 +8,10 @@ data class LoginState(
 )
 
 sealed class LoginSideEffect {
-    object Success : LoginSideEffect()
+    object MoveToMain : LoginSideEffect()
+    object MoveToLogin : LoginSideEffect()
     object UnAuthorization : LoginSideEffect()
+    object BadRequest : LoginSideEffect()
     object NotFound : LoginSideEffect()
-    object OnServerError: LoginSideEffect()
+    object OnServerError : LoginSideEffect()
 }

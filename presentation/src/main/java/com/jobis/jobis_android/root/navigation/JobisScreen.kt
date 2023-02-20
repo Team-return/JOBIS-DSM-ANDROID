@@ -6,11 +6,14 @@ sealed class JobisScreen() {
         const val LOGIN = "Login"
         const val SPLASH = "Splash"
     }
+
+    object Home : JobisScreen(){
+        const val HOME = "Login"
+    }
 }
 
 sealed class JobisRoute(
     val route: String,
 ) {
     object Auth : JobisRoute("Auth")
-    object HOME: JobisRoute("Home")
 }

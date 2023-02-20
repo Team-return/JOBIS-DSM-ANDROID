@@ -1,7 +1,9 @@
 package com.jobis.jobis_android.viewmodel.splash
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jobis.domain.exception.BadRequestException
 import com.jobis.domain.exception.NotFoundException
 import com.jobis.domain.exception.OnServerException
 import com.jobis.domain.exception.UnAuthorizationException
@@ -32,17 +34,14 @@ class SplashViewModel @Inject constructor(
                     data = splashUseCase.execute(Unit)
                 )
             }.onSuccess {
-                postSideEffect(LoginSideEffect.Success)
+                postSideEffect(LoginSideEffect.MoveToMain)
             }.onFailure {
                 when (it) {
-                    is UnAuthorizationException -> {
-                        postSideEffect(LoginSideEffect.UnAuthorization)
-                    }
-                    is NotFoundException -> {
-                        postSideEffect(LoginSideEffect.NotFound)
-                    }
                     is OnServerException -> {
                         postSideEffect(LoginSideEffect.OnServerError)
+                    }
+                    else -> {
+                        postSideEffect(LoginSideEffect.MoveToLogin)
                     }
                 }
             }
