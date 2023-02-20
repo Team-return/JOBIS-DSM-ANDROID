@@ -12,16 +12,15 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun postLogin(param: LoginParam) {
         if(param.isAutoLogin){
-
+            userDataSource.setUserInfo(param)
         }
         userDataSource.postLogin(
             loginRequest = param.toRequest(),
         )
     }
 
-    private fun saveUserInfo(){
-
-    }
+    override suspend fun fetchUserInfo(): LoginParam =
+        userDataSource.fetchUserInfo()
 
     private fun LoginParam.toRequest(): LoginRequest =
         LoginRequest(

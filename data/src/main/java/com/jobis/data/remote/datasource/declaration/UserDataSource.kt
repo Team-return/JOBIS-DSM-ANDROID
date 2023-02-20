@@ -7,4 +7,5 @@ import com.jobis.domain.param.LoginParam
 interface UserDataSource {
     suspend fun postLogin(loginRequest: LoginRequest): LoginResponse
     suspend fun setUserInfo(loginParam: LoginParam)
+    suspend fun fetchUserInfo(): LoginParam
 }

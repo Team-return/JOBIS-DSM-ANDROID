@@ -22,9 +22,18 @@ class UserDataSourceImpl @Inject constructor(
             }.sendRequest()
 
     override suspend fun setUserInfo(loginParam: LoginParam) {
-        userDataStorage.putUserData(
+        userDataStorage.setUserInfo(
             accountId = loginParam.accountId,
             password = loginParam.password,
         )
     }
+
+    override suspend fun fetchUserInfo(): LoginParam =
+        userDataStorage.run {
+            LoginParam(
+                accountId = fetchUserId(),
+                password = fetchPassword(),
+                isAutoLogin = true,
+            )
+        }
 }

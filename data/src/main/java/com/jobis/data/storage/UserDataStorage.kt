@@ -15,7 +15,7 @@ interface UserDataStorage {
     fun fetchUserId(): String
     fun fetchPassword(): String
 
-    fun putUserData(
+    fun setUserInfo(
         accountId: String,
         password: String,
     )
