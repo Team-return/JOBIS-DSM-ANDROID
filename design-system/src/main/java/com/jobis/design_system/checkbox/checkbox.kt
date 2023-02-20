@@ -3,6 +3,7 @@ package com.jobis.design_system.checkbox
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +40,7 @@ fun CheckboxPreview() {
 
 @Composable
 fun Checkbox(
-    onCheck: () -> Unit,
+    onCheck: (Boolean) -> Unit,
     isCheck: Boolean,
     disabled: Boolean = false,
 ) {
@@ -69,11 +70,9 @@ fun Checkbox(
                 color = background,
                 shape = SmallShape
             )
-            .click(
-                onClick = onCheck,
-                interactionSource = interactionSource,
-                disable = disabled,
-            ),
+            .clickable {
+                onCheck(isCheck)
+            },
         contentAlignment = Alignment.Center,
     ) {
         Image(
