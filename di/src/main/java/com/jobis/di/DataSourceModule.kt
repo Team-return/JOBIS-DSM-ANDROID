@@ -14,5 +14,6 @@ abstract class DataSourceModule {
     @Binds
     abstract fun provideUserDataSource(
         userDataSourceImpl: UserDataSourceImpl,
+        userDataStorageImpl: UserDataSourceImpl,
     ): UserDataSource
 }
