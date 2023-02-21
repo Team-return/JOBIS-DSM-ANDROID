@@ -1,19 +1,21 @@
 package com.jobis.design_system.dropdown
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.design_system.R
 import com.jobis.design_system.color.color
@@ -27,10 +29,16 @@ fun DropDown(
     title: String,
     disable: Boolean = false,
     list: List<String>,
+    onItemSelected: (Int) -> Unit,
 ) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+    val rotateState by animateFloatAsState(
+        targetValue = if (isExpanded) 180f else 0f
+    )
+
+    var dropDownTitle by remember { mutableStateOf(title) }
 
     val outLineColor = if (disable) color.Gray400
     else color.Gray600
@@ -42,7 +50,6 @@ fun DropDown(
     else color.Gray900
 
     val drawable = if (disable) R.drawable.ic_direction_disabled
-    else if (isExpanded) R.drawable.ic_direction_under_enabled
     else R.drawable.ic_direction_enabled
 
     Column {
@@ -52,6 +59,7 @@ fun DropDown(
                     width = 168.dp,
                     height = 48.dp,
                 )
+                .clickable { isExpanded = !isExpanded }
                 .border(
                     width = 1.dp,
                     color = outLineColor,
@@ -66,7 +74,7 @@ fun DropDown(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = title,
+                text = dropDownTitle,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(bottom = 2.dp)
@@ -82,7 +90,8 @@ fun DropDown(
                         onClick = { if (!disable) isExpanded = !isExpanded },
                         disable = false,
                         interactionSource = interactionSource,
-                    ),
+                    )
+                    .rotate(rotateState),
                 contentDescription = null,
             )
         }
@@ -90,6 +99,9 @@ fun DropDown(
         DropDownItemList(
             list = list,
             isExpanded = isExpanded,
+            onItemSelected = onItemSelected,
+            onExpanded = { isExpanded = it },
+            onTitleChange = { dropDownTitle = it }
         )
     }
 }
@@ -98,6 +110,9 @@ fun DropDown(
 fun DropDownItemList(
     list: List<String>,
     isExpanded: Boolean,
+    onExpanded: (Boolean) -> Unit,
+    onItemSelected: (Int) -> Unit,
+    onTitleChange: (String) -> Unit,
 ) {
 
     Column(
@@ -110,14 +125,17 @@ fun DropDownItemList(
                 color = color.Gray600,
                 shape = SmallShape,
             )
-            .padding(
-                start = 10.dp,
-            )
     ) {
         AnimatedVisibility(isExpanded) {
             LazyColumn {
-                items(items = list) {
-                    DropDownItem(text = it)
+                itemsIndexed(items = list) { index, item ->
+                    DropDownItem(
+                        text = item,
+                        index = index,
+                        onItemSelected = onItemSelected,
+                        onExpanded = onExpanded,
+                        onTitleChange = onTitleChange,
+                    )
                 }
             }
         }
@@ -127,11 +145,23 @@ fun DropDownItemList(
 @Composable
 fun DropDownItem(
     text: String,
+    index: Int,
+    onItemSelected: (Int) -> Unit,
+    onExpanded: (Boolean) -> Unit,
+    onTitleChange: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(
-            top = 16.dp
-        )
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+                onItemSelected(index)
+                onTitleChange(text)
+                onExpanded(false)
+            }
+            .padding(
+                start = 10.dp,
+                top = 16.dp,
+            )
     ) {
         Text(
             text = text,
@@ -152,22 +182,5 @@ fun DropDownItem(
                     color = color.Gray500,
                 )
         ) {}
-    }
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-)
-@Composable
-fun DropDownPreview() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        DropDown(
-            title = "옵션",
-            list = listOf("sleifjs", "selfijsef"),
-        )
     }
 }

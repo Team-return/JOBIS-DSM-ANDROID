@@ -34,7 +34,10 @@ class UserDataStorageImpl @Inject constructor(
     override fun fetchPassword(): String =
         getPreference(PASSWORD).getString(PASSWORD, "").toString()
 
-    override fun putUserData(accountId: String, password: String) {
+    override fun setUserInfo(
+        accountId: String,
+        password: String,
+    ) {
         putString(ACCOUNT_ID, accountId)
         putString(PASSWORD, password)
     }

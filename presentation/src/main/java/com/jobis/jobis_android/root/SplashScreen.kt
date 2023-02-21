@@ -12,25 +12,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import com.jobis.jobis_android.contract.LoginSideEffect
 import com.jobis.jobis_android.root.navigation.JobisScreen
+import com.jobis.jobis_android.util.CollectWithLifecycle
+import com.jobis.jobis_android.viewmodel.splash.SplashViewModel
 import kotlinx.coroutines.delay
-
-@Preview(
-    showBackground = true,
-)
-@Composable
-fun SplashPreview() {
-
-}
 
 @Composable
 fun SplashScreen(
     navController: NavController,
+    vm: SplashViewModel = hiltViewModel(),
 ) {
+
+    val sideEffectFlow = vm.container.sideEffectFlow
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -42,19 +41,27 @@ fun SplashScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.app_logo),
-                contentDescription = "App logo",
+                contentDescription = null,
                 modifier = Modifier.padding(64.dp)
             )
         }
     }
 
+    LaunchedEffect(key1 = Unit){
+        vm.postLogin()
+    }
 
-    LaunchedEffect(
-        key1 = Unit,
-    ) {
-        delay(3000)
-        navController.navigate(
-            route = JobisScreen.Auth.LOGIN
-        )
+    CollectWithLifecycle {
+        sideEffectFlow.collect {
+            delay(3000)
+            when (it) {
+                is LoginSideEffect.MoveToMain -> {
+                    navController.navigate(route = JobisScreen.Home.HOME)
+                }
+                else -> {
+                    navController.navigate(route = JobisScreen.Auth.LOGIN)
+                }
+            }
+        }
     }
 }

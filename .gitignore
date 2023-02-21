@@ -255,3 +255,9 @@ buildSrc/build/kotlin/buildSrcjar-classes.txt
 buildSrc/build/classes/kotlin/main/Dependency$COMPOSE.class
 
 buildSrc/build/classes/kotlin/main/Dependency$SPLASH.class
+
+buildSrc/build/classes/kotlin/main/Dependency$Android.class
+
+buildSrc/build/classes/kotlin/main/Dependency$ORBIT.class
+
+buildSrc/build/classes/kotlin/main/Dependency.class

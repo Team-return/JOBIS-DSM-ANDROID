@@ -1,7 +1,9 @@
-package com.jobis.jobis_android.viewmodel
+package com.jobis.jobis_android.viewmodel.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jobis.domain.exception.BadRequestException
 import com.jobis.domain.exception.NotFoundException
 import com.jobis.domain.exception.OnServerException
 import com.jobis.domain.exception.UnAuthorizationException
@@ -25,20 +27,18 @@ class LoginViewModel @Inject constructor(
 
     override val container = container<LoginState, LoginSideEffect>(LoginState())
 
-    internal fun postLogin(
-        accountId: String,
-        password: String,
-    ) = intent {
+    internal fun postLogin() = intent {
         viewModelScope.launch {
             kotlin.runCatching {
                 loginUseCase.execute(
                     data = LoginParam(
-                        accountId = accountId,
-                        password = password
+                        accountId = state.accountId,
+                        password = state.password,
+                        isAutoLogin = state.isAutoLogin,
                     )
                 )
             }.onSuccess {
-                postSideEffect(LoginSideEffect.Success)
+                postSideEffect(LoginSideEffect.MoveToMain)
             }.onFailure {
                 when (it) {
                     is UnAuthorizationException -> {
@@ -48,20 +48,31 @@ class LoginViewModel @Inject constructor(
                         postSideEffect(LoginSideEffect.NotFound)
                     }
                     is OnServerException -> {
-                        setServerErrorMessage()
+                        postSideEffect(LoginSideEffect.OnServerError)
+                    }
+                    is BadRequestException -> {
+                        postSideEffect(LoginSideEffect.BadRequest)
                     }
                 }
             }
         }
     }
 
-    internal fun setLoginErrorMessage(
-        message: String,
-    ) = intent {
-        reduce { state.copy(loginErrorMessage = message) }
+    internal fun setUserId(
+        id: String,
+    ) = intent{
+        reduce { state.copy(accountId = id) }
     }
 
-    private fun setServerErrorMessage() = intent {
-        reduce { state.copy(loginErrorMessage = "") }
+    internal fun setPassword(
+        password: String,
+    ) = intent{
+        reduce { state.copy(password = password)}
+    }
+
+    internal fun setAutoLogin(
+        isAutoLogin: Boolean,
+    ) = intent {
+        reduce { state.copy(isAutoLogin = isAutoLogin) }
     }
 }
