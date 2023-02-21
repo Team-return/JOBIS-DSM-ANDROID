@@ -1,5 +1,6 @@
 package com.jobis.jobis_android.viewmodel.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jobis.domain.exception.BadRequestException
@@ -26,16 +27,14 @@ class LoginViewModel @Inject constructor(
 
     override val container = container<LoginState, LoginSideEffect>(LoginState())
 
-    private val loginState = container.stateFlow.value
-
     internal fun postLogin() = intent {
         viewModelScope.launch {
             kotlin.runCatching {
                 loginUseCase.execute(
                     data = LoginParam(
-                        accountId = loginState.accountId,
-                        password = loginState.password,
-                        isAutoLogin = loginState.isAutoLogin,
+                        accountId = state.accountId,
+                        password = state.password,
+                        isAutoLogin = state.isAutoLogin,
                     )
                 )
             }.onSuccess {
@@ -62,18 +61,18 @@ class LoginViewModel @Inject constructor(
     internal fun setUserId(
         id: String,
     ) = intent{
-        reduce { container.stateFlow.value.copy(accountId = id) }
+        reduce { state.copy(accountId = id) }
     }
 
     internal fun setPassword(
         password: String,
     ) = intent{
-        reduce { container.stateFlow.value.copy(password = password)}
+        reduce { state.copy(password = password)}
     }
 
     internal fun setAutoLogin(
         isAutoLogin: Boolean,
     ) = intent {
-        reduce { container.stateFlow.value.copy(isAutoLogin = isAutoLogin) }
+        reduce { state.copy(isAutoLogin = isAutoLogin) }
     }
 }
