@@ -1,6 +1,5 @@
 package com.jobis.jobis_android.root
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import com.jobis.jobis_android.contract.LoginSideEffect
-import com.jobis.jobis_android.root.navigation.JobisRoute
 import com.jobis.jobis_android.root.navigation.JobisScreen
 import com.jobis.jobis_android.util.CollectWithLifecycle
 import com.jobis.jobis_android.viewmodel.splash.SplashViewModel

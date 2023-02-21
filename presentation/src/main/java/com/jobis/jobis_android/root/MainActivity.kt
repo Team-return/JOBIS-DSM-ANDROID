@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jobis.design_system.color.color
 import com.jobis.jobis_android.root.navigation.JobisRoute
 import com.jobis.jobis_android.root.navigation.authNavigation
+import com.jobis.jobis_android.root.navigation.homeNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +33,10 @@ class MainActivity : ComponentActivity() {
                 startDestination = JobisRoute.Auth.route
             ) {
                 authNavigation(
+                    navController = navController,
+                )
+
+                homeNavigation(
                     navController = navController,
                 )
             }
