@@ -2,6 +2,7 @@ package com.jobis.jobis_android.viewmodel.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jobis.domain.exception.BadRequestException
 import com.jobis.domain.exception.NotFoundException
 import com.jobis.domain.exception.OnServerException
 import com.jobis.domain.exception.UnAuthorizationException
@@ -49,6 +50,9 @@ class LoginViewModel @Inject constructor(
                     }
                     is OnServerException -> {
                         postSideEffect(LoginSideEffect.OnServerError)
+                    }
+                    is BadRequestException -> {
+                        postSideEffect(LoginSideEffect.BadRequest)
                     }
                 }
             }
