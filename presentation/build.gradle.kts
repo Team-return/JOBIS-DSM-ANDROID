@@ -49,7 +49,8 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":design-system"))
+
+    implementation("com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:v0.0.1.1")
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
     //implementation(Dependency.COMPOSE.LIFECYCLE)
