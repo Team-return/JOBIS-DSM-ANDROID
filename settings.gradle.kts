@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }
 rootProject.name = "Jobis-Android"
@@ -17,4 +18,3 @@ include(":presentation")
 include(":data")
 include(":domain")
 include(":di")
-include(":design-system")
