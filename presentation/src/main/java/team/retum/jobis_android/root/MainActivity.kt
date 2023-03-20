@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.auth.login.LoginScreen
+import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.root.navigation.authNavigation
-import team.retum.jobis_android.root.navigation.homeNavigation
 import team.retum.jobisui.colors.JobisColor
 
 @AndroidEntryPoint
@@ -30,15 +30,23 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.Auth.route
+                startDestination = JobisRoute.Login,
             ) {
-                authNavigation(
-                    navController = navController,
-                )
+                composable(
+                    route = JobisRoute.Login,
+                ) {
+                    LoginScreen(
+                        navController = navController,
+                    )
+                }
 
-                homeNavigation(
-                    navController = navController,
-                )
+                composable(
+                    route = JobisRoute.Home,
+                ){
+                    HomeScreen(
+                        navController = navController,
+                    )
+                }
             }
         }
     }
