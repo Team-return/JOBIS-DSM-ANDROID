@@ -17,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.LoginSideEffect
-import team.retum.jobis_android.root.navigation.JobisScreen
 import team.retum.jobis_android.util.CollectWithLifecycle
 import team.retum.jobis_android.viewmodel.splash.SplashViewModel
 
@@ -48,20 +47,5 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = Unit) {
         vm.postLogin()
-    }
-
-    CollectWithLifecycle {
-        sideEffectFlow.collect {
-//            delay(3000)
-            when (it) {
-                is LoginSideEffect.MoveToMain -> {
-                    navController.navigate(route = JobisScreen.Home.HOME)
-                }
-
-                else -> {
-                    navController.navigate(route = JobisScreen.Auth.LOGIN)
-                }
-            }
-        }
     }
 }
