@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Jobis-Android</string>
+    <string name="jobis">JOBIS</string>
+
+    <string name="login_start_service">로그인하고 서비스를 사용하세요.</string>
+    <string name="login">로그인</string>
 
     <string name="login_unauthorization">잘못된 비밀번호 입니다</string>
     <string name="login_not_found">존재하지 않는 유저입니다</string>
     <string name="title_activity_login_screen">LoginScreen</string>
+
+    <string name="register">회원가입</string>
 </resources>
