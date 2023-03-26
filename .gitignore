@@ -407,3 +407,21 @@ buildSrc/build/kotlin/compileKotlin/caches-jvm/jvm/kotlin/source-to-classes.tab.
 .idea/modules/presentation/Jobis-Android.presentation.main.iml
 
 .idea/modules/presentation/Jobis-Android.presentation.unitTest.iml
+
+.idea/assetWizardSettings.xml
+
+.idea/deploymentTargetDropDown.xml
+
+buildSrc/.gradle/7.5/checksums/checksums.lock
+
+buildSrc/.gradle/7.5/checksums/sha1-checksums.bin
+
+buildSrc/.gradle/7.5/dependencies-accessors/dependencies-accessors.lock
+
+buildSrc/.gradle/7.5/dependencies-accessors/gc.properties
+
+buildSrc/.gradle/7.5/fileChanges/last-build.bin
+
+buildSrc/.gradle/7.5/fileHashes/fileHashes.lock
+
+buildSrc/.gradle/7.5/gc.properties
