@@ -7,14 +7,14 @@
     <string name="id">아이디</string>
     <string name="password">비밀번호</string>
 
-
-
-
     <string name="sign_in">Sign In</string>
     <string name="sign_in_start_service">로그인하고 서비스를 사용하세요.</string>
     <string name="sign_in_id_hint">\@dsm.hs.kr이 포함되어야합니다</string>
     <string name="sign_in_password_hint">최대 20자</string>
     <string name="sign_in_forget_password"><u>비밀번호를 잊으셨나요?</u></string>
+
+    <string name="sign_in_id_error">존재하지 않는 아이디입니다.</string>
+    <string name="sign_in_password_error">비밀번호가 일치하지 않습니다.</string>
 
     <string name="sign_in_unauthorized">잘못된 비밀번호 입니다</string>
     <string name="sign_in_not_found">존재하지 않는 유저입니다</string>

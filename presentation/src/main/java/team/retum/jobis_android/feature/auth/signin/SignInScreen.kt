@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
-import team.retum.jobis_android.util.Animated
 import team.retum.jobis_android.util.Next
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel.SignInEvent
@@ -45,9 +45,11 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.retum.jobisui.image.JobisImage
-import team.retum.jobisui.textfield.JobisUnderLineTextField
 import team.retum.jobisui.ui.theme.Body4
+import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.textfield.JobisUnderLineTextField
+import team.returm.jobisdesignsystem.util.Animated
 
 @Composable
 fun SplashScreen(
@@ -186,7 +188,13 @@ fun LoginSheet(
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .jobisClickable(
+                rippleEnabled = false,
+                interactionSource = remember { MutableInteractionSource() },
+            ) {
+                focusManager.clearFocus()
+            },
         verticalArrangement = Arrangement.Bottom,
     ) {
         AnimatedVisibility(
@@ -347,7 +355,9 @@ fun LoginInput(
             keyboardOptions = Next,
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
-            }
+            },
+            error = false,
+            helperText = stringResource(id = R.string.sign_in_id_error),
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -361,7 +371,9 @@ fun LoginInput(
             isPassword = true,
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
-            }
+            },
+            error = false,
+            helperText = stringResource(id = R.string.sign_in_password_error),
         )
     }
 }
