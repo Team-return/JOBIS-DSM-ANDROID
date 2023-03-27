@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -94,7 +95,12 @@ fun SplashScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = JobisColor.LightBlue,
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        JobisColor.DarkBlue,
+                        JobisColor.LightBlue,
+                    ),
+                ),
             ),
     ) {
         Column(

@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
         statusBarColor: Color = JobisColor.Gray100,
         navigationBarColor: Color = JobisColor.Gray100,
     ) {
-        window.statusBarColor = JobisColor.LightBlue.toArgb()
+        window.statusBarColor = JobisColor.DarkBlue.toArgb()
         window.navigationBarColor = JobisColor.LightBlue.toArgb()
 
         @Suppress("DEPRECATION")
