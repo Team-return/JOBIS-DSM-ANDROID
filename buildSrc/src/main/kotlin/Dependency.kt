@@ -22,6 +22,7 @@ object Dependency {
 
     object OKHTTP {
         const val OKHTTP = "com.squareup.okhttp3:okhttp:${Version.OKHTTP}"
+        const val LOGINTERCEPTER = "com.squareup.okhttp3:logging-interceptor:${Version.OKHTTP}"
     }
 
     object HILT {

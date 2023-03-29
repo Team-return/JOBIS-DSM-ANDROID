@@ -1,4 +1,4 @@
-package team.retum.jobis_android.viewmodel.login
+package team.retum.jobis_android.viewmodel.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,22 +9,38 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.exception.BadRequestException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.LoginParam
 import team.retum.domain.usecase.LoginUseCase
-import team.retum.jobis_android.contract.LoginSideEffect
-import team.retum.jobis_android.contract.LoginState
+import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.contract.SignInState
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class SignInViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-) : ContainerHost<LoginState, LoginSideEffect>, ViewModel() {
+) : ContainerHost<SignInState, SignInSideEffect>, ViewModel() {
 
-    override val container = container<LoginState, LoginSideEffect>(LoginState())
+    override val container = container<SignInState, SignInSideEffect>(SignInState())
+
+    internal fun onEvent(
+        event: SignInEvent,
+    ){
+        when(event){
+            is SignInEvent.SetId -> {
+                setUserId(
+                    id = event.id,
+                )
+            }
+            is SignInEvent.SetPassword -> {
+                setPassword(
+                    password = event.password,
+                )
+            }
+        }
+    }
 
     internal fun postLogin() = intent {
         viewModelScope.launch {
@@ -37,41 +53,39 @@ class LoginViewModel @Inject constructor(
                     )
                 )
             }.onSuccess {
-                postSideEffect(LoginSideEffect.MoveToMain)
+                postSideEffect(SignInSideEffect.MoveToMain)
             }.onFailure {
                 when (it) {
                     is UnAuthorizationException -> {
-                        postSideEffect(LoginSideEffect.UnAuthorization)
+                        postSideEffect(SignInSideEffect.UnAuthorization)
                     }
+
                     is NotFoundException -> {
-                        postSideEffect(LoginSideEffect.NotFound)
+                        postSideEffect(SignInSideEffect.NotFound)
                     }
+
                     is OnServerException -> {
-                        postSideEffect(LoginSideEffect.OnServerError)
-                    }
-                    is BadRequestException -> {
-                        postSideEffect(LoginSideEffect.BadRequest)
+                        postSideEffect(SignInSideEffect.ServerException)
                     }
                 }
             }
         }
     }
 
-    internal fun setUserId(
+    private fun setUserId(
         id: String,
-    ) = intent{
+    ) = intent {
         reduce { state.copy(accountId = id) }
     }
 
-    internal fun setPassword(
+    private fun setPassword(
         password: String,
-    ) = intent{
-        reduce { state.copy(password = password)}
+    ) = intent {
+        reduce { state.copy(password = password) }
     }
 
-    internal fun setAutoLogin(
-        isAutoLogin: Boolean,
-    ) = intent {
-        reduce { state.copy(isAutoLogin = isAutoLogin) }
+    sealed class SignInEvent() {
+        data class SetId(val id: String) : SignInEvent()
+        data class SetPassword(val password: String) : SignInEvent()
     }
 }

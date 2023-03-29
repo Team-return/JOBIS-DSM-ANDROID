@@ -1,17 +1,15 @@
 package team.retum.jobis_android.contract
 
-data class LoginState(
+data class SignInState(
     val accountId: String = "",
     val password: String = "",
     val isAutoLogin: Boolean = false,
     val loginErrorMessage: String? = null,
 )
 
-sealed class LoginSideEffect {
-    object MoveToMain : LoginSideEffect()
-    object MoveToLogin : LoginSideEffect()
-    object UnAuthorization : LoginSideEffect()
-    object BadRequest : LoginSideEffect()
-    object NotFound : LoginSideEffect()
-    object OnServerError : LoginSideEffect()
+sealed class SignInSideEffect {
+    object MoveToMain : SignInSideEffect()
+    object UnAuthorization : SignInSideEffect()
+    object NotFound : SignInSideEffect()
+    object ServerException: SignInSideEffect()
 }

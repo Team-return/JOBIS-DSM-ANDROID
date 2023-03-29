@@ -50,7 +50,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    implementation("com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:v0.0.1.1")
+    implementation("com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:v1.0.1")
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
     //implementation(Dependency.COMPOSE.LIFECYCLE)
