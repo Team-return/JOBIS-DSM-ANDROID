@@ -7,9 +7,6 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
 }
 
-val properties = Properties()
-properties.load(project.rootProject.file("local.properties").inputStream())
-
 android {
     namespace = ProjectProperties.NAME_SPACE_DI
     compileSdk = 33
@@ -19,8 +16,6 @@ android {
         targetSdk = ProjectProperties.COMPILE_SDK
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
-
-        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
     }
 
     buildTypes {
@@ -52,6 +47,8 @@ dependencies {
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
     implementation(Dependency.RETROFIT.GSON_CONVERTER)
+    implementation(Dependency.OKHTTP.OKHTTP)
+    implementation(Dependency.OKHTTP.LOGINTERCEPTER)
 
     implementation(Dependency.Android.ANDROIDX_CORE)
     implementation(Dependency.Android.APPCOMMPAT)

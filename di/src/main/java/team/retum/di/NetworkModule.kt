@@ -1,10 +1,12 @@
 package team.retum.di
 
+import com.jobis.di.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
@@ -19,12 +21,32 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideInterceptor(
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().setLevel(
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            },
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDefaultOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
         authorizationInterceptor: AuthorizationInterceptor,
-    ): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(authorizationInterceptor)
-            .build()
+    ): OkHttpClient = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(authorizationInterceptor).build()
+
+//    @Provides
+//    @Singleton
+//    fun provideInterceptor(
+//        authorizationInterceptor: AuthorizationInterceptor,
+//    ): OkHttpClient =
+//        OkHttpClient.Builder()
+//            .addInterceptor(authorizationInterceptor)
+//            .build()
 
     @Provides
     @Singleton

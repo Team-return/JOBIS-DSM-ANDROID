@@ -6,6 +6,9 @@ import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.OtherException
+import team.retum.domain.exception.TimeoutException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class HttpHandler<T> {
 
@@ -33,5 +36,11 @@ class HttpHandler<T> {
                 in 500..599 -> onServerError(message)
                 else -> onOtherException(code, message)
             }
+        } catch (e: KotlinNullPointerException) {
+            throw e
+        } catch (e: SocketTimeoutException) {
+            throw TimeoutException()
+        } catch (e: Throwable) {
+            throw OtherException()
         }
 }
