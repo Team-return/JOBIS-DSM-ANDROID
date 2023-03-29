@@ -9,7 +9,6 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.exception.BadRequestException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.UnAuthorizationException
@@ -66,11 +65,7 @@ class SignInViewModel @Inject constructor(
                     }
 
                     is OnServerException -> {
-                        postSideEffect(SignInSideEffect.OnServerError)
-                    }
-
-                    is BadRequestException -> {
-                        postSideEffect(SignInSideEffect.BadRequest)
+                        postSideEffect(SignInSideEffect.ServerException)
                     }
                 }
             }

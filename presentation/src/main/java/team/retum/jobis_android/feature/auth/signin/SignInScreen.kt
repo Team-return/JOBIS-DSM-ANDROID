@@ -39,6 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
+import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.util.UnderLineTextFieldWrapper
 import team.retum.jobis_android.util.Next
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel.SignInEvent
@@ -64,9 +66,19 @@ fun SplashScreen(
     var isShowLoginButton by remember { mutableStateOf(false) }
     var isLogin by remember { mutableStateOf(false) }
 
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     val focusManager = LocalFocusManager.current
 
-    val onIdChanged = { id: String ->
+    var isIdError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
+
+    val onIdChanged = { value: String ->
+        if (id.length != value.length) {
+            isIdError = false
+        }
+        id = value
         viewModel.onEvent(
             event = SignInEvent.SetId(
                 id = id,
@@ -74,7 +86,11 @@ fun SplashScreen(
         )
     }
 
-    val onPasswordChanged = { password: String ->
+    val onPasswordChanged = { value: String ->
+        if (password.length != value.length) {
+            isPasswordError = false
+        }
+        password = value
         viewModel.onEvent(
             event = SignInEvent.SetPassword(
                 password = password,
@@ -89,6 +105,24 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(3000)
         isShowLoginButton = true
+
+        container.collect {
+            when (it) {
+                is SignInSideEffect.MoveToMain -> {
+                    // TODO implement success event
+                }
+
+                is SignInSideEffect.UnAuthorization -> {
+                    isPasswordError = true
+                }
+
+                is SignInSideEffect.NotFound -> {
+                    isIdError = true
+                }
+
+                else -> {}
+            }
+        }
     }
 
     Box(
@@ -171,6 +205,8 @@ fun SplashScreen(
             onIdChanged = onIdChanged,
             onPasswordChanged = onPasswordChanged,
             focusManager = focusManager,
+            isIdError = isIdError,
+            isPasswordError = isPasswordError,
         )
     }
 }
@@ -185,6 +221,8 @@ fun LoginSheet(
     onIdChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     focusManager: FocusManager,
+    isIdError: Boolean,
+    isPasswordError: Boolean,
 ) {
 
     val padding by animateFloatAsState(
@@ -233,6 +271,8 @@ fun LoginSheet(
                         onIdChanged = onIdChanged,
                         onPasswordChanged = onPasswordChanged,
                         focusManager = focusManager,
+                        idError = isIdError,
+                        passwordError = isPasswordError,
                     )
                 }
 
@@ -344,6 +384,8 @@ fun LoginInput(
     onIdChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     focusManager: FocusManager,
+    idError: Boolean,
+    passwordError: Boolean,
 ) {
     Column(
         modifier = Modifier.padding(
@@ -352,34 +394,36 @@ fun LoginInput(
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        JobisUnderLineTextField(
-            color = JobisTextFieldColor.UnderLineColor,
-            onValueChanged = onIdChanged,
-            value = id,
-            hint = stringResource(id = R.string.sign_in_id_hint),
-            fieldText = stringResource(id = R.string.id),
-            keyboardOptions = Next,
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Next)
-            },
-            error = false,
-            helperText = stringResource(id = R.string.sign_in_id_error),
-        )
+        UnderLineTextFieldWrapper {
+            JobisUnderLineTextField(
+                color = JobisTextFieldColor.UnderLineColor,
+                onValueChanged = onIdChanged,
+                value = id,
+                hint = stringResource(id = R.string.sign_in_id_hint),
+                fieldText = stringResource(id = R.string.id),
+                keyboardOptions = Next,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
+                error = idError,
+                helperText = stringResource(id = R.string.sign_in_id_error),
+            )
+        }
 
-        Spacer(modifier = Modifier.height(30.dp))
-
-        JobisUnderLineTextField(
-            color = JobisTextFieldColor.UnderLineColor,
-            onValueChanged = onPasswordChanged,
-            value = password,
-            hint = stringResource(id = R.string.sign_in_password_hint),
-            fieldText = stringResource(id = R.string.password),
-            isPassword = true,
-            keyboardActions = KeyboardActions {
-                focusManager.clearFocus()
-            },
-            error = false,
-            helperText = stringResource(id = R.string.sign_in_password_error),
-        )
+        UnderLineTextFieldWrapper {
+            JobisUnderLineTextField(
+                color = JobisTextFieldColor.UnderLineColor,
+                onValueChanged = onPasswordChanged,
+                value = password,
+                hint = stringResource(id = R.string.sign_in_password_hint),
+                fieldText = stringResource(id = R.string.password),
+                isPassword = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+                error = passwordError,
+                helperText = stringResource(id = R.string.sign_in_password_error),
+            )
+        }
     }
 }

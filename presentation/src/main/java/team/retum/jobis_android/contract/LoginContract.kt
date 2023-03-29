@@ -10,7 +10,6 @@ data class SignInState(
 sealed class SignInSideEffect {
     object MoveToMain : SignInSideEffect()
     object UnAuthorization : SignInSideEffect()
-    object BadRequest : SignInSideEffect()
     object NotFound : SignInSideEffect()
-    object OnServerError : SignInSideEffect()
+    object ServerException: SignInSideEffect()
 }
