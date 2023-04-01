@@ -4,8 +4,15 @@
 
     <string name="welcome">welcome</string>
     <string name="sign_in_kr">로그인</string>
+    <string name="sign_up">회원가입</string>
     <string name="id">아이디</string>
     <string name="password">비밀번호</string>
+    <string name="password_repeat">비밀번호 재입력</string>
+    <string name="email">이메일</string>
+    <string name="name">이름</string>
+    <string name="phoneNumber">전화번호</string>
+
+    <!--    SignIn-->
 
     <string name="sign_in">Sign In</string>
     <string name="sign_in_start_service">로그인하고 서비스를 사용하세요.</string>
@@ -19,5 +26,14 @@
     <string name="sign_in_unauthorized">잘못된 비밀번호 입니다</string>
     <string name="sign_in_not_found">존재하지 않는 유저입니다</string>
 
-    <string name="sign_up">회원가입</string>
+    <!--    Sign Up-->
+
+    <string name="sign_up_password_hint">8 ~ 16자, 영문자, 숫자, 특수문자 포함</string>
+    <string name="sign_up_name_hint">이름을 입력하세요.</string>
+    <string name="sign_up_phone_number_hint">ex) 010–1234–5678</string>
+
+    <string name="sign_up_email_error">계정이 올바르지 않습니다.학교 계정을 사용해 주세요.</string>
+
+    <string name="sign_up_password_repeat_error">비밀번호가 일치하지 않습니다.</string>
+    
 </resources>
