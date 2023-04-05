@@ -12,7 +12,7 @@ fun UnderLineTextFieldWrapper(
     content: @Composable () -> Unit,
 ){
     Box(
-        modifier = Modifier.height(100.dp),
+        modifier = Modifier.height(90.dp),
     ){
         content()
     }

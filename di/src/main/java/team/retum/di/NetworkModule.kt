@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://3.39.136.247:8080"
+    private const val BASE_URL = "http://52.79.106.90:8080"
 
     @Provides
     @Singleton
@@ -38,15 +38,6 @@ object NetworkModule {
         authorizationInterceptor: AuthorizationInterceptor,
     ): OkHttpClient = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
         .addInterceptor(authorizationInterceptor).build()
-
-//    @Provides
-//    @Singleton
-//    fun provideInterceptor(
-//        authorizationInterceptor: AuthorizationInterceptor,
-//    ): OkHttpClient =
-//        OkHttpClient.Builder()
-//            .addInterceptor(authorizationInterceptor)
-//            .build()
 
     @Provides
     @Singleton
