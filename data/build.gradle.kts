@@ -52,9 +52,9 @@ dependencies {
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
     implementation(Dependency.RETROFIT.GSON_CONVERTER)
 
-    implementation(Dependency.Android.ANDROIDX_CORE)
-    implementation(Dependency.Android.APPCOMMPAT)
-    implementation(Dependency.Android.APPCOMMPAT)
+    implementation(Dependency.ANDROID.ANDROIDX_CORE)
+    implementation(Dependency.ANDROID.APPCOMMPAT)
+    implementation(Dependency.ANDROID.APPCOMMPAT)
     testImplementation(Dependency.TEST.JUNIT)
     androidTestImplementation(Dependency.TEST.EXT_JUNIT)
     androidTestImplementation(Dependency.TEST.ESPRESSO)

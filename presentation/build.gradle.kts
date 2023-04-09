@@ -50,10 +50,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    implementation("com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:v1.0.1")
+    implementation(Dependency.DESIGNSYSTEM.JOBIS)
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
-    //implementation(Dependency.COMPOSE.LIFECYCLE)
     implementation(Dependency.COMPOSE.ACTIVITY)
     implementation(Dependency.COMPOSE.UI)
     implementation(Dependency.COMPOSE.PREVIEW)
@@ -79,13 +78,13 @@ dependencies {
     implementation(Dependency.ORBIT.COMPOSE)
     testImplementation(Dependency.ORBIT.TEST)
 
-    implementation(Dependency.Android.ANDROIDX_CORE)
-    implementation(Dependency.Android.APPCOMMPAT)
-    implementation(Dependency.Android.MATERIAL)
-    implementation(Dependency.Android.ACTIVITY)
-    implementation(Dependency.Android.FRAGMENT)
+    implementation(Dependency.ANDROID.ANDROIDX_CORE)
+    implementation(Dependency.ANDROID.APPCOMMPAT)
+    implementation(Dependency.ANDROID.MATERIAL)
+    implementation(Dependency.ANDROID.ACTIVITY)
+    implementation(Dependency.ANDROID.FRAGMENT)
 
-    implementation(Dependency.Android.CONSTRAINT)
+    implementation(Dependency.ANDROID.CONSTRAINT)
     testImplementation(Dependency.TEST.JUNIT)
     androidTestImplementation(Dependency.TEST.EXT_JUNIT)
     androidTestImplementation(Dependency.TEST.ESPRESSO)
