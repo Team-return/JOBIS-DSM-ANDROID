@@ -1,6 +1,6 @@
 object Dependency {
 
-    object Android {
+    object ANDROID {
         const val ANDROIDX_CORE = "androidx.core:core-ktx:${Version.ANDROID_CORE}"
         const val APPCOMMPAT = "androidx.appcompat:appcompat:${Version.APPCOMMPAT}"
         const val MATERIAL = "com.google.android.material:material:${Version.ANDROID_CORE}"
@@ -56,5 +56,9 @@ object Dependency {
         const val VIEWMODEL = "org.orbit-mvi:orbit-viewmodel:${Version.ORBIT_MVI}"
         const val COMPOSE = "org.orbit-mvi:orbit-compose:${Version.ORBIT_MVI}"
         const val TEST = "org.orbit-mvi:orbit-test:${Version.ORBIT_MVI}"
+    }
+
+    object DESIGNSYSTEM{
+        const val JOBIS = "com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:${Version.DESIGN_SYSTEM}"
     }
 }

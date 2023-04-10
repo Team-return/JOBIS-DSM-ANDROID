@@ -54,9 +54,9 @@ dependencies {
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
-    implementation(Dependency.Android.ANDROIDX_CORE)
-    implementation(Dependency.Android.APPCOMMPAT)
-    implementation(Dependency.Android.MATERIAL)
+    implementation(Dependency.ANDROID.ANDROIDX_CORE)
+    implementation(Dependency.ANDROID.APPCOMMPAT)
+    implementation(Dependency.ANDROID.MATERIAL)
     testImplementation(Dependency.TEST.JUNIT)
     androidTestImplementation(Dependency.TEST.EXT_JUNIT)
     androidTestImplementation(Dependency.TEST.ESPRESSO)
