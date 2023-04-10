@@ -15,6 +15,8 @@
     <string name="class_room">반</string>
     <string name="number">번호</string>
     <string name="gender">성별</string>
+    <string name="male">남성</string>
+    <string name="female">여성</string>
 
     <!--    SignIn-->
 

@@ -3,7 +3,6 @@ package team.retum.jobis_android.feature.auth
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -48,15 +46,16 @@ import team.retum.jobis_android.util.Next
 import team.retum.jobis_android.util.UnderLineTextFieldWrapper
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel.SignInEvent
+import team.retum.jobisui.button.JobisRadioButton
 import team.retum.jobisui.colors.JobisButtonColor
+import team.retum.jobisui.colors.JobisCheckBoxColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisDropDownColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.dropdown.JobisDropDown
-import team.retum.jobisui.image.JobisImage
 import team.retum.jobisui.ui.theme.Body4
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.dropdown.JobisDropDown
+import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisUnderLineTextField
 import team.returm.jobisdesignsystem.util.Animated
 
@@ -84,7 +83,7 @@ fun SplashScreen(
     var signUpPassword by remember { mutableStateOf("") }
     var signUpPasswordRepeat by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
+    var isGenderChecked by remember { mutableStateOf(0) }
 
     val focusManager = LocalFocusManager.current
 
@@ -93,8 +92,6 @@ fun SplashScreen(
     var isEmailError by remember { mutableStateOf(false) }
     var isSignUpPasswordError by remember { mutableStateOf(false) }
     var isSignUpPasswordRepeatError by remember { mutableStateOf(false) }
-
-    val scrollState = rememberScrollState()
 
     val onIdChanged = { value: String ->
         if (id.length != value.length) {
@@ -145,13 +142,18 @@ fun SplashScreen(
         name = value
     }
 
-    val onPhoneNumberChanged = { value: String ->
-        phoneNumber = value
+    val onMaleChecked = { value: Boolean ->
+        isGenderChecked = if(value) 1 else 0
     }
+
+    val onFemaleChecked = { value: Boolean ->
+        isGenderChecked = if(value) 2 else 0
+    }
+
 
     val maxHeight by animateFloatAsState(
         if (isSignIn) 0.62f
-        else if(isSignUp) 0.64f
+        else if (isSignUp) 0.64f
         else 0.04f,
     )
 
@@ -198,8 +200,6 @@ fun SplashScreen(
 
         SplashMainImage(
             isShowSignInSheet = isShowSignInSheet,
-            isSignIn = isSignIn,
-            isSignUp = isSignUp,
         )
 
         SplashBackgroundImages(
@@ -210,15 +210,7 @@ fun SplashScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .jobisClickable(
-                    rippleEnabled = false,
-                    interactionSource = remember { MutableInteractionSource() },
-                ) {
-                    focusManager.clearFocus()
-                    isSignIn = false
-                    isSignUp = false
-                },
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
         ) {
             Animated(
@@ -237,7 +229,6 @@ fun SplashScreen(
                             color = JobisColor.Gray100,
                         )
                         .padding(
-                            vertical = 10.dp,
                             horizontal = 20.dp,
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -265,13 +256,15 @@ fun SplashScreen(
                         signUpPassword = signUpPassword,
                         signUpPasswordRepeat = signUpPasswordRepeat,
                         name = name,
-                        phoneNumber = phoneNumber,
+                        isGenderChecked = isGenderChecked,
                         onEmailChanged = onEmailChanged,
                         onSignUpPasswordChange = onSignUpPasswordChange,
                         onSignUpPasswordRepeatChanged = onSignUpPasswordRepeatChanged,
                         onNameChanged = onNameChanged,
-                        onPhoneNumberChanged = onPhoneNumberChanged,
+                        onMaleChecked = onMaleChecked,
+                        onFemaleChecked = onFemaleChecked,
                         focusManager = focusManager,
+                        maxNumber = 20,
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -294,8 +287,6 @@ fun SplashScreen(
 @Composable
 fun SplashMainImage(
     isShowSignInSheet: Boolean,
-    isSignIn: Boolean,
-    isSignUp: Boolean,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -303,34 +294,27 @@ fun SplashMainImage(
         verticalArrangement = Arrangement.Center,
     ) {
 
-        Animated(
-            visible = !(isSignIn || isSignUp)
-        ) {
-            JobisImage(
-                modifier = Modifier.size(145.dp),
-                drawable = R.drawable.ic_logo,
-            )
-        }
+        JobisImage(
+            modifier = Modifier.size(145.dp),
+            drawable = R.drawable.ic_logo,
+        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Animated(
-            visible = !(isSignIn || isSignUp)
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.Center,
         ) {
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                JobisImage(
-                    modifier = Modifier.size(
-                        width = 142.dp,
-                        height = 60.dp,
-                    ),
-                    drawable = R.drawable.ic_jobis_text,
-                )
+            JobisImage(
+                modifier = Modifier.size(
+                    width = 142.dp,
+                    height = 60.dp,
+                ),
+                drawable = R.drawable.ic_jobis_text,
+            )
 
-                Spacer(modifier = Modifier.width(4.dp))
-            }
+            Spacer(modifier = Modifier.width(4.dp))
         }
 
         Animated(
@@ -524,14 +508,23 @@ fun ColumnScope.SignUpInputs(
     signUpPassword: String,
     signUpPasswordRepeat: String,
     name: String,
-    phoneNumber: String,
+    isGenderChecked: Int,
     onEmailChanged: (String) -> Unit,
     onSignUpPasswordChange: (String) -> Unit,
     onSignUpPasswordRepeatChanged: (String) -> Unit,
     onNameChanged: (String) -> Unit,
-    onPhoneNumberChanged: (String) -> Unit,
+    onMaleChecked: (Boolean) -> Unit,
+    onFemaleChecked: (Boolean) -> Unit,
+    maxNumber: Int,
     focusManager: FocusManager,
 ) {
+
+    val numberList = mutableListOf<String>()
+
+    repeat(maxNumber) {
+        numberList.add((it + 1).toString())
+    }
+
     Animated(
         visible = isSignUp,
     ) {
@@ -596,53 +589,97 @@ fun ColumnScope.SignUpInputs(
                     value = name,
                     fieldText = stringResource(id = R.string.name),
                     keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
+                        imeAction = ImeAction.Done,
                     ),
+                    keyboardActions = KeyboardActions {
+                        focusManager.clearFocus()
+                    }
                 )
             }
 
-            UnderLineTextFieldWrapper {
-                JobisUnderLineTextField(
-                    color = JobisTextFieldColor.UnderLineColor,
-                    hint = stringResource(id = R.string.sign_up_phone_number_hint),
-                    onValueChanged = onPhoneNumberChanged,
-                    value = phoneNumber,
-                    fieldText = stringResource(id = R.string.phone_number),
-                    keyboardActions = KeyboardActions {
-                        focusManager.clearFocus()
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardType = KeyboardType.NumberPassword,
-                )
-            }
-            Row(){
-                JobisDropDown(
-                    color = JobisDropDownColor.MainColor,
-                    itemList = listOf(),
-                    title = stringResource(id = R.string.grade),
-                )
-                JobisDropDown(
-                    color = JobisDropDownColor.MainColor,
-                    itemList = listOf(),
-                    title = stringResource(id = R.string.class_room),
-                )
-                JobisDropDown(
-                    color = JobisDropDownColor.MainColor,
-                    itemList = listOf(),
-                    title = stringResource(id = R.string.number),
-                )
-            }
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
             ) {
-                JobisDropDown(
-                    color = JobisDropDownColor.MainColor,
-                    itemList = listOf(),
-                    title = stringResource(id = R.string.gender),
+                Body4(
+                    text = stringResource(id = R.string.gender),
                 )
+
+                Spacer(modifier = Modifier.fillMaxWidth(0.55f))
+
+                JobisRadioButton(
+                    color = JobisCheckBoxColor.MainColor,
+                    isChecked = isGenderChecked == 1,
+                ) {
+                    onMaleChecked(it)
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Body4(
+                    text = stringResource(id = R.string.male),
+                )
+
+                Spacer(modifier = Modifier.width(22.dp))
+
+                JobisRadioButton(
+                    color = JobisCheckBoxColor.MainColor,
+                    isChecked = isGenderChecked == 2,
+                ) {
+                    onFemaleChecked(it)
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Body4(
+                    text = stringResource(id = R.string.female),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Box {
+                Row {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(0.33f),
+                    ) {
+                        JobisDropDown(
+                            color = JobisDropDownColor.MainColor,
+                            itemList = listOf("1", "2", "3"),
+                            title = stringResource(id = R.string.grade),
+                        ) {
+
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Box(
+                        modifier = Modifier.fillMaxWidth(0.52f),
+                    ) {
+                        JobisDropDown(
+                            color = JobisDropDownColor.MainColor,
+                            itemList = listOf("1", "2", "3", "4"),
+                            title = stringResource(id = R.string.class_room),
+                        ) {
+
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Box {
+                        JobisDropDown(
+                            color = JobisDropDownColor.MainColor,
+                            itemList = numberList,
+                            title = stringResource(id = R.string.number),
+                        ) {
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -671,7 +708,6 @@ fun ColumnScope.SignInSheetComponents(
         Body4(
             text = stringResource(id = R.string.sign_in_forget_password)
         )
-        Spacer(modifier = Modifier.height(16.dp))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
