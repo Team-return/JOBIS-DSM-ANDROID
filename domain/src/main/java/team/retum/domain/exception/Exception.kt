@@ -6,7 +6,6 @@ class ForbiddenException(): Throwable() // 403
 class NotFoundException(): Throwable() // 404
 class ConflictException(): Throwable() // 409
 class OnServerException(): Throwable() // 500..599
-class OtherException(): Throwable() // Other
 class TimeoutException(): Throwable() // Timeout
 class UnknownException(): Throwable() // UnknownException
 

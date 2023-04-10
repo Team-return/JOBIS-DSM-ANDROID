@@ -6,7 +6,6 @@ import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.ForbiddenException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OnServerException
-import team.retum.domain.exception.OtherException
 import team.retum.domain.exception.TimeoutException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.exception.UnknownException
@@ -22,7 +21,7 @@ class HttpHandler<T> {
     private val onConflict: (message: String) -> Throwable = { ConflictException() }
     private val onServerError: (message: String) -> Throwable = { OnServerException() }
     private val onOtherException: (code: Int, message: String) -> Throwable =
-        { _, _ -> OtherException() }
+        { _, _ -> UnknownException() }
 
     fun httpRequest(httpRequest: suspend () -> T) =
         this.apply { this.httpRequest = httpRequest }
