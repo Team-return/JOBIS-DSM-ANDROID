@@ -41,11 +41,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
+import team.retum.jobis_android.contract.SignInEvent
 import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.util.Next
 import team.retum.jobis_android.util.UnderLineTextFieldWrapper
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
-import team.retum.jobis_android.viewmodel.signin.SignInViewModel.SignInEvent
 import team.retum.jobisui.button.JobisRadioButton
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
@@ -55,7 +55,9 @@ import team.retum.jobisui.colors.JobisTextFieldColor
 import team.retum.jobisui.ui.theme.Body4
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.dropdown.JobisDropDown
+import team.returm.jobisdesignsystem.icon.JobisIcon
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.snackbar.JobisSnackBar
 import team.returm.jobisdesignsystem.textfield.JobisUnderLineTextField
 import team.returm.jobisdesignsystem.util.Animated
 
@@ -85,6 +87,9 @@ fun SplashScreen(
     var name by remember { mutableStateOf("") }
     var isGenderChecked by remember { mutableStateOf(0) }
 
+    var isShowSnackBar by remember { mutableStateOf(false) }
+    var snackBarMessage by remember { mutableStateOf("") }
+
     val focusManager = LocalFocusManager.current
 
     var isIdError by remember { mutableStateOf(false) }
@@ -98,7 +103,7 @@ fun SplashScreen(
             isIdError = false
         }
         id = value
-        viewModel.onEvent(
+        viewModel.sendEvent(
             event = SignInEvent.SetId(
                 id = id,
             )
@@ -110,7 +115,7 @@ fun SplashScreen(
             isPasswordError = false
         }
         password = value
-        viewModel.onEvent(
+        viewModel.sendEvent(
             event = SignInEvent.SetPassword(
                 password = password,
             )
@@ -143,11 +148,11 @@ fun SplashScreen(
     }
 
     val onMaleChecked = { value: Boolean ->
-        isGenderChecked = if(value) 1 else 0
+        isGenderChecked = if (value) 1 else 0
     }
 
     val onFemaleChecked = { value: Boolean ->
-        isGenderChecked = if(value) 2 else 0
+        isGenderChecked = if (value) 2 else 0
     }
 
 
@@ -160,6 +165,13 @@ fun SplashScreen(
     BackHandler {
         isSignIn = false
         isSignUp = false
+    }
+
+    LaunchedEffect(isShowSnackBar) {
+        if (isShowSnackBar) {
+            delay(3000)
+            isShowSnackBar = false
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -180,106 +192,122 @@ fun SplashScreen(
                     isIdError = true
                 }
 
-                else -> {}
+                is SignInSideEffect.Exception -> {
+                    isShowSnackBar = true
+                    snackBarMessage = it.message
+                }
             }
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        JobisColor.DarkBlue,
-                        JobisColor.LightBlue,
+    Box {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            JobisColor.DarkBlue,
+                            JobisColor.LightBlue,
+                        ),
                     ),
                 ),
-            ),
-    ) {
-
-        SplashMainImage(
-            isShowSignInSheet = isShowSignInSheet,
-        )
-
-        SplashBackgroundImages(
-            isShowSignInSheet = isShowSignInSheet,
-            isSignIn = isSignIn,
-            isSignUp = isSignUp,
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom,
         ) {
-            Animated(
-                visible = isShowSignInSheet,
+
+            SplashMainImage(
+                isShowSignInSheet = isShowSignInSheet,
+            )
+
+            SplashBackgroundImages(
+                isShowSignInSheet = isShowSignInSheet,
+                isSignIn = isSignIn,
+                isSignUp = isSignUp,
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
             ) {
-                Column(
-                    modifier = Modifier
-                        .clip(
-                            shape = RoundedCornerShape(
-                                topStart = 16.dp,
-                                topEnd = 16.dp,
-                            )
-                        )
-                        .fillMaxWidth()
-                        .background(
-                            color = JobisColor.Gray100,
-                        )
-                        .padding(
-                            horizontal = 20.dp,
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Animated(
+                    visible = isShowSignInSheet,
                 ) {
+                    Column(
+                        modifier = Modifier
+                            .clip(
+                                shape = RoundedCornerShape(
+                                    topStart = 16.dp,
+                                    topEnd = 16.dp,
+                                )
+                            )
+                            .fillMaxWidth()
+                            .background(
+                                color = JobisColor.Gray100,
+                            )
+                            .padding(
+                                horizontal = 20.dp,
+                            ),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
 
-                    SignInInputs(
-                        maxHeight = maxHeight,
-                        isSignIn = isSignIn,
-                        isIdError = isIdError,
-                        isPasswordError = isPasswordError,
-                        id = id,
-                        password = password,
-                        onIdChanged = onIdChanged,
-                        onPasswordChanged = onPasswordChanged,
-                        focusManager = focusManager,
-                    )
+                        SignInInputs(
+                            maxHeight = maxHeight,
+                            isSignIn = isSignIn,
+                            isIdError = isIdError,
+                            isPasswordError = isPasswordError,
+                            id = id,
+                            password = password,
+                            onIdChanged = onIdChanged,
+                            onPasswordChanged = onPasswordChanged,
+                            focusManager = focusManager,
+                        )
 
-                    SignUpInputs(
-                        maxHeight = maxHeight,
-                        isSignUp = isSignUp,
-                        isEmailError = isEmailError,
-                        isSignUpPasswordError = isSignUpPasswordError,
-                        isSignUpPasswordRepeatError = isSignUpPasswordRepeatError,
-                        email = email,
-                        signUpPassword = signUpPassword,
-                        signUpPasswordRepeat = signUpPasswordRepeat,
-                        name = name,
-                        isGenderChecked = isGenderChecked,
-                        onEmailChanged = onEmailChanged,
-                        onSignUpPasswordChange = onSignUpPasswordChange,
-                        onSignUpPasswordRepeatChanged = onSignUpPasswordRepeatChanged,
-                        onNameChanged = onNameChanged,
-                        onMaleChecked = onMaleChecked,
-                        onFemaleChecked = onFemaleChecked,
-                        focusManager = focusManager,
-                        maxNumber = 20,
-                    )
+                        SignUpInputs(
+                            maxHeight = maxHeight,
+                            isSignUp = isSignUp,
+                            isEmailError = isEmailError,
+                            isSignUpPasswordError = isSignUpPasswordError,
+                            isSignUpPasswordRepeatError = isSignUpPasswordRepeatError,
+                            email = email,
+                            signUpPassword = signUpPassword,
+                            signUpPasswordRepeat = signUpPasswordRepeat,
+                            name = name,
+                            isGenderChecked = isGenderChecked,
+                            onEmailChanged = onEmailChanged,
+                            onSignUpPasswordChange = onSignUpPasswordChange,
+                            onSignUpPasswordRepeatChanged = onSignUpPasswordRepeatChanged,
+                            onNameChanged = onNameChanged,
+                            onMaleChecked = onMaleChecked,
+                            onFemaleChecked = onFemaleChecked,
+                            focusManager = focusManager,
+                            maxNumber = 20,
+                        )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                    SignInSheetComponents(
-                        isSignIn = isSignIn,
-                        isSignUp = isSignUp,
-                        isSignInChange = { isSignIn = true },
-                        isSignUpChange = { isSignUp = true },
-                        viewModel = viewModel,
-                    )
+                        SignInSheetComponents(
+                            isSignIn = isSignIn,
+                            isSignUp = isSignUp,
+                            isSignInChange = { isSignIn = true },
+                            isSignUpChange = { isSignUp = true },
+                            viewModel = viewModel,
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
                 }
             }
+        }
+
+        JobisSnackBar(
+            isShowSnackBar = isShowSnackBar,
+            message = snackBarMessage,
+            messageColor = JobisColor.Red,
+            onCloseClick = { isShowSnackBar = false },
+        ) {
+            JobisImage(
+                drawable = JobisIcon.SnackBarError,
+            )
         }
     }
 }
