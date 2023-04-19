@@ -4,21 +4,10 @@
 
     <!--    Global-->
 
-    <string name="welcome">welcome</string>
-    <string name="sign_in_kr">로그인</string>
+    <string name="jobis_description">취업의 지름길</string>
+    <string name="sign_in">로그인</string>
     <string name="sign_up">회원가입</string>
-    <string name="id">아이디</string>
-    <string name="password">비밀번호</string>
-    <string name="password_repeat">비밀번호 재입력</string>
-    <string name="email">이메일</string>
-    <string name="name">이름</string>
-    <string name="phone_number">전화번호</string>
-    <string name="grade">학년</string>
-    <string name="class_room">반</string>
-    <string name="number">번호</string>
-    <string name="gender">성별</string>
-    <string name="male">남성</string>
-    <string name="female">여성</string>
+
 
     <!--    Exception Handling-->
 
@@ -33,17 +22,15 @@
 
     <!--    SignIn-->
 
-    <string name="sign_in">Sign In</string>
-    <string name="sign_in_start_service">로그인하고 서비스를 사용하세요.</string>
-    <string name="sign_in_id_hint">\@dsm.hs.kr 만 가능합니다</string>
-    <string name="sign_in_password_hint">최대 20자</string>
-    <string name="sign_in_forget_password"><u>비밀번호를 잊으셨나요?</u></string>
+    <string name="sign_in_hint_email">이메일을 입력해주세요</string>
+    <string name="sign_in_hint_password">비밀번호를 입력해주세요</string>
 
-    <string name="sign_in_id_error">존재하지 않는 아이디입니다.</string>
-    <string name="sign_in_password_error">비밀번호가 일치하지 않습니다.</string>
+    <string name="sign_in_auto_sign_in">자동 로그인</string>
+    <string name="sign_in_reset_password">비밀번호 재설정</string>
+    <string name="sign_in_sign_up_question">아직 회원이 아니신가요?</string>
 
-    <string name="sign_in_unauthorized">잘못된 비밀번호 입니다</string>
-    <string name="sign_in_not_found">존재하지 않는 유저입니다</string>
+    <string name="sign_in_email_error">존재하지 않는 이메일 입니다</string>
+    <string name="sign_in_password_error">비밀번호가 일치하지 않습니다</string>
 
     <!--    Sign Up-->
 

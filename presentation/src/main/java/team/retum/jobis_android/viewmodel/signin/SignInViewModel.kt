@@ -30,9 +30,9 @@ class SignInViewModel @Inject constructor(
         event: Event,
     ) {
         when (event) {
-            is SignInEvent.SetId -> {
+            is SignInEvent.SetEmail -> {
                 setUserId(
-                    id = event.id,
+                    id = event.email,
                 )
             }
 
@@ -41,10 +41,14 @@ class SignInViewModel @Inject constructor(
                     password = event.password,
                 )
             }
+
+            is SignInEvent.PostLogin -> {
+                postLogin()
+            }
         }
     }
 
-    internal fun postLogin() = intent {
+    private fun postLogin() = intent {
         viewModelScope.launch {
             kotlin.runCatching {
                 loginUseCase.execute(

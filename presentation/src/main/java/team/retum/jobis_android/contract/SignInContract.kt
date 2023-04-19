@@ -21,6 +21,7 @@ sealed class SignInSideEffect : SideEffect {
 }
 
 sealed class SignInEvent : Event {
-    data class SetId(val id: String) : SignInEvent()
-    data class SetPassword(val password: String) : SignInEvent()
+    class SetEmail(val email: String) : SignInEvent()
+    class SetPassword(val password: String) : SignInEvent()
+    object PostLogin : SignInEvent()
 }
