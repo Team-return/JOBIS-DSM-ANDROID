@@ -14,8 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import team.retum.jobis_android.feature.auth.SplashScreen
 import team.retum.jobis_android.feature.home.HomeScreen
+import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobisui.colors.JobisColor
 
@@ -31,13 +31,13 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.Splash,
+                startDestination = JobisRoute.SignIn,
             ) {
 
                 composable(
-                    route = JobisRoute.Splash,
+                    route = JobisRoute.SignIn,
                 ){
-                    SplashScreen(
+                    SignInScreen(
                         navController = navController,
                     )
                 }
