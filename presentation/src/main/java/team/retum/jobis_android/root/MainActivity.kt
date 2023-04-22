@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
+import team.retum.jobis_android.feature.signup.InputPersonalInformationScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobisui.colors.JobisColor
 
@@ -46,6 +47,14 @@ class MainActivity : ComponentActivity() {
                     route = JobisRoute.Home,
                 ){
                     HomeScreen(
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.InputPersonalInfo,
+                ){
+                    InputPersonalInformationScreen(
                         navController = navController,
                     )
                 }

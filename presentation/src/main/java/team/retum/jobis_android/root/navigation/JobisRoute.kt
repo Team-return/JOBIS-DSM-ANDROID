@@ -4,4 +4,5 @@ object JobisRoute{
     const val Splash = "Splash"
     const val SignIn = "SignIn"
     const val Home = "Home"
+    const val InputPersonalInfo = "InputPersonalInfo"
 }
