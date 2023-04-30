@@ -34,7 +34,6 @@ import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.KeyboardOption
 import team.retum.jobis_android.util.clearTextFieldError
-import team.retum.jobis_android.util.compose.ScreenLayout
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
@@ -101,7 +100,7 @@ fun SignInScreen(
     }
 
     val onSignUpTextClicked = {
-        navController.navigate(JobisRoute.InputPersonalInfo)
+        navController.navigate(JobisRoute.SignUp)
     }
 
     val onSignInButtonClicked = {
@@ -131,24 +130,22 @@ fun SignInScreen(
             }
         }
     }
-    ScreenLayout(
-        onClick = { focusManager.clearFocus() },
-        button = {
-            JobisLargeButton(
-                text = stringResource(id = R.string.sign_in),
-                color = JobisButtonColor.MainSolidColor,
-                onClick = onSignInButtonClicked,
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .jobisClickable(
+                rippleEnabled = false,
+                interactionSource = remember { MutableInteractionSource() },
+            ) {
+                focusManager.clearFocus()
+            }
+            .padding(
+                horizontal = 20.dp,
+                vertical = 36.dp,
             )
-        }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    horizontal = 20.dp,
-                ),
-        ) {
-            Spacer(modifier = Modifier.height(112.dp))
+        Column {
+            Spacer(modifier = Modifier.height(84.dp))
             SignInTitle()
             Spacer(modifier = Modifier.height(80.dp))
             SignInInput(
@@ -174,8 +171,19 @@ fun SignInScreen(
             )
             Spacer(modifier = Modifier.height(22.dp))
         }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+        ) {
+            JobisLargeButton(
+                text = stringResource(id = R.string.sign_in),
+                color = JobisButtonColor.MainSolidColor,
+                onClick = onSignInButtonClicked,
+            )
+        }
     }
 }
+
 
 @Composable
 fun SignInTitle() {

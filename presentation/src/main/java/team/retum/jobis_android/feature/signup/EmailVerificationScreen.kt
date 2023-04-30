@@ -19,25 +19,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.KeyboardOption
-import team.retum.jobis_android.util.compose.AuthScreenLayout
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisTextFieldColor
+import team.retum.jobisui.ui.theme.Heading5
 import team.returm.jobisdesignsystem.button.JobisSmallButton
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 
 @Composable
-fun EmailVerificationScreen(
-    navController: NavController,
-) {
+fun EmailVerificationScreen() {
 
     val focusManager = LocalFocusManager.current
 
     var email by remember { mutableStateOf("") }
-    var verifyCode by remember { mutableStateOf("")}
+    var verifyCode by remember { mutableStateOf("") }
 
     val onEmailChanged = { value: String ->
         email = value
@@ -47,34 +43,24 @@ fun EmailVerificationScreen(
         verifyCode = value
     }
 
-    val onVerifyClicked = {
-
+    val onRequestVerifyButtonClicked = {
+        // TODO implement email verify business logic
     }
 
-    AuthScreenLayout(
-        onLayoutClicked = { focusManager.clearFocus() },
-        onTouchTopBar = { navController.popBackStack() },
-        screenText = stringResource(id = R.string.email_verification),
-        isShowTopBar = true,
-        button = {
-            ProgressWithCompleteButton(
-                currentProgress = 2f,
-                endProgress = 3f,
-            ){
-                navController.navigate(JobisRoute.SetPassword)
-            }
-        },
-    ) {
-        Column {
-            EmailVerifyInputs(
-                email = email,
-                verifyCode = verifyCode,
-                onEmailChanged = onEmailChanged,
-                onVerifyCodeChanged = onVerifyCodeChanged,
-                focusManager = focusManager,
-                onVerifyButtonClicked = onVerifyClicked,
-            )
-        }
+    Column {
+        Spacer(modifier = Modifier.height(50.dp))
+        Heading5(
+            text = stringResource(id = R.string.email_verification),
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        EmailVerifyInputs(
+            email = email,
+            verifyCode = verifyCode,
+            onEmailChanged = onEmailChanged,
+            onVerifyCodeChanged = onVerifyCodeChanged,
+            focusManager = focusManager,
+            onVerifyButtonClicked = onRequestVerifyButtonClicked,
+        )
     }
 }
 
@@ -99,7 +85,7 @@ private fun EmailVerifyInputs(
         Spacer(modifier = Modifier.height(12.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-        ){
+        ) {
             Box(
                 modifier = Modifier.weight(3f),
             ) {
