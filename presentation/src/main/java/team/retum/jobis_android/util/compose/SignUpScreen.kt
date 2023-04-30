@@ -2,6 +2,7 @@ package team.retum.jobis_android.util.compose
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,10 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.bumptech.glide.load.model.DataUrlLoader
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.feature.signup.EmailVerificationScreen
 import team.retum.jobis_android.feature.signup.InputPersonalInformationScreen
@@ -34,6 +37,8 @@ import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Caption
 import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+
+const val Duration = 300
 
 @Composable
 fun SignUpScreen(
@@ -50,14 +55,41 @@ fun SignUpScreen(
     val progressAnimation by animateFloatAsState(
         targetValue = currentProgress / maxProgress,
         animationSpec = tween(
-            durationMillis = 500,
+            durationMillis = 300,
             easing = FastOutSlowInEasing,
+        )
+    )
+
+
+    val personalInfoScreenChangedAlpha by animateFloatAsState(
+        targetValue = if (currentProgress == 0f) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = Duration,
+            easing = LinearEasing,
+        )
+    )
+
+    val emailVerifyChangedAlpha by animateFloatAsState(
+        targetValue = if (currentProgress == 1f) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = Duration,
+            easing = LinearEasing,
+        )
+    )
+
+    val setPasswordScreenChangedAlpha by animateFloatAsState(
+        targetValue = if (currentProgress == 2f) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = Duration,
+            easing = LinearEasing,
         )
     )
 
     BackHandler {
         if (currentProgress > 0f) {
             currentProgress -= 1f
+        } else {
+            navController.popBackStack()
         }
     }
 
@@ -91,17 +123,35 @@ fun SignUpScreen(
 
             when (currentProgress) {
                 0f -> {
-                    InputPersonalInformationScreen()
+                    Box(
+                        modifier = Modifier.alpha(
+                            personalInfoScreenChangedAlpha,
+                        )
+                    ) {
+                        InputPersonalInformationScreen()
+                    }
                     buttonText = stringResource(id = R.string.next)
                 }
 
                 1f -> {
-                    EmailVerificationScreen()
+                    Box(
+                        modifier = Modifier.alpha(
+                            emailVerifyChangedAlpha,
+                        )
+                    ) {
+                        EmailVerificationScreen()
+                    }
                     buttonText = stringResource(id = R.string.email_verification_check_verify)
                 }
 
                 2f -> {
-                    SetPasswordScreen()
+                    Box(
+                        modifier = Modifier.alpha(
+                            setPasswordScreenChangedAlpha,
+                        )
+                    ) {
+                        SetPasswordScreen()
+                    }
                     buttonText = stringResource(id = R.string.sign_up_complete)
                 }
 
