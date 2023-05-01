@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignInEvent
 import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.KeyboardOption
 import team.retum.jobis_android.util.clearTextFieldError
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
@@ -99,7 +100,7 @@ fun SignInScreen(
     }
 
     val onSignUpTextClicked = {
-
+        navController.navigate(JobisRoute.SignUp)
     }
 
     val onSignInButtonClicked = {
@@ -129,49 +130,60 @@ fun SignInScreen(
             }
         }
     }
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .jobisClickable(
                 rippleEnabled = false,
-                interactionSource = interactionSource
+                interactionSource = remember { MutableInteractionSource() },
             ) {
                 focusManager.clearFocus()
             }
-            .padding(horizontal = 20.dp),
+            .padding(
+                horizontal = 20.dp,
+                vertical = 36.dp,
+            )
     ) {
-        Spacer(modifier = Modifier.height(112.dp))
-        SignInTitle()
-        Spacer(modifier = Modifier.height(80.dp))
-        SignInInput(
-            email = email,
-            password = password,
-            onEmailChanged = onEmailChanged,
-            onPasswordChanged = onPasswordChanged,
-            focusManager = focusManager,
-            isEmailError = isEmailError,
-            isPasswordError = isPasswordError,
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        SignInOptions(
-            isChecked = isAutoLogin,
-            onCheckBoxClicked = onAutoLoginChanged,
-            onResetPasswordClicked = onResetPasswordClicked,
-            interactionSource = interactionSource,
-        )
-        Spacer(modifier = Modifier.fillMaxHeight(0.7f))
-        SignInSignUpText(
-            onSignUpTextClicked = onSignUpTextClicked,
-            interactionSource = interactionSource,
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        JobisLargeButton(
-            text = stringResource(id = R.string.sign_in),
-            color = JobisButtonColor.MainSolidColor,
-            onClick = onSignInButtonClicked,
-        )
+        Column {
+            Spacer(modifier = Modifier.height(84.dp))
+            SignInTitle()
+            Spacer(modifier = Modifier.height(80.dp))
+            SignInInput(
+                email = email,
+                password = password,
+                onEmailChanged = onEmailChanged,
+                onPasswordChanged = onPasswordChanged,
+                focusManager = focusManager,
+                isEmailError = isEmailError,
+                isPasswordError = isPasswordError,
+            )
+            Spacer(modifier = Modifier.height(22.dp))
+            SignInOptions(
+                isChecked = isAutoLogin,
+                onCheckBoxClicked = onAutoLoginChanged,
+                onResetPasswordClicked = onResetPasswordClicked,
+                interactionSource = interactionSource,
+            )
+            Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+            SignInSignUpText(
+                onSignUpTextClicked = onSignUpTextClicked,
+                interactionSource = interactionSource,
+            )
+            Spacer(modifier = Modifier.height(22.dp))
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+        ) {
+            JobisLargeButton(
+                text = stringResource(id = R.string.sign_in),
+                color = JobisButtonColor.MainSolidColor,
+                onClick = onSignInButtonClicked,
+            )
+        }
     }
 }
+
 
 @Composable
 fun SignInTitle() {
@@ -302,7 +314,10 @@ fun SignInSignUpText(
             text = stringResource(id = R.string.sign_up),
         )
         JobisImage(
+            modifier = Modifier.padding(top = 2.dp),
             drawable = JobisIcon.RightArrow,
-        )
+        ) {
+            onSignUpTextClicked()
+        }
     }
 }
