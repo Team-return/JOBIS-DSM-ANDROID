@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         route = JobisRoute.SignUp,
                     ) {
                         SignUpScreen(
-                            navController = navController,
+                            navHostController = navController,
                         )
                     }
 
