@@ -69,5 +69,11 @@
     <string name="set_password">비밀번호 설정</string>
     <string name="set_password_repeat_password_hint">비밀번호를 한 번 더 입력해주세요</string>
 
+    <!--    Home-->
+
+    <string name="do_get_recruitment">모집의뢰서\n조회하기</string>
+    <string name="do_get_company">기업 찾기</string>
+    <string name="do_check_interview_schedule">면접 일정\n확인하기</string>
+    <string name="applied_company">내가\n지원한 기업</string>
 
 </resources>
