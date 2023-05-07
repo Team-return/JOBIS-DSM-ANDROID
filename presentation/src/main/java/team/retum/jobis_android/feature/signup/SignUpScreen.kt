@@ -35,6 +35,7 @@ import team.retum.jobis_android.feature.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.TopBar
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Caption
@@ -54,6 +55,7 @@ val titleList = listOf(
 @Composable
 fun SignUpScreen(
     navHostController: NavController,
+    signUpViewModel: SignUpViewModel,
 ) {
 
     var currentProgress by remember { mutableStateOf(1) }
@@ -117,6 +119,7 @@ fun SignUpScreen(
                 ) {
                     StudentInfoScreen(
                         navController = navController,
+                        signUpViewModel = signUpViewModel,
                     )
                 }
 
@@ -125,6 +128,7 @@ fun SignUpScreen(
                 ) {
                     VerifyEmailScreen(
                         navController = navController,
+                        signUpViewModel = signUpViewModel,
                     )
                 }
 
@@ -133,6 +137,7 @@ fun SignUpScreen(
                 ) {
                     SetPasswordScreen(
                         navController = navController,
+                        signUpViewModel = signUpViewModel,
                     )
                 }
             }
@@ -191,7 +196,7 @@ private fun AuthComponents(
     }
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
-        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress-1])
+        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress - 1])
         else stringResource(titleList.first()),
     )
 }

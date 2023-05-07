@@ -9,9 +9,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +23,7 @@ import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisColor
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -34,6 +38,8 @@ class MainActivity : ComponentActivity() {
             val scaffoldState = rememberScaffoldState()
             val navController = rememberNavController()
 
+            val signUpViewModel = hiltViewModel<SignUpViewModel>()
+
             // TODO 토스트 시스템 구현
             Scaffold(
                 scaffoldState = scaffoldState,
@@ -42,12 +48,12 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = JobisRoute.SignIn,
                 ) {
-
                     composable(
                         route = JobisRoute.SignUp,
                     ) {
                         SignUpScreen(
                             navHostController = navController,
+                            signUpViewModel = signUpViewModel,
                         )
                     }
 

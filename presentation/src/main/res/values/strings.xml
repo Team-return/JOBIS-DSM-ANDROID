@@ -63,6 +63,7 @@
     <string name="email_verification_verify_code_hint">인증번호 6자리</string>
     <string name="email_verification_request_verify">인증요청</string>
     <string name="email_verification_check_verify">인증확인</string>
+    <string name="email_verification_resend">재발송</string>
 
     <!--    Set Password-->
 
