@@ -3,6 +3,7 @@ package team.retum.data.remote.datasource.implementation
 import team.retum.data.remote.api.UserApi
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
+import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.response.LoginResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
@@ -13,15 +14,28 @@ class UserDataSourceImpl @Inject constructor(
     private val userApi: UserApi,
     private val userDataStorage: UserDataStorage,
 ) : UserDataSource {
-    override suspend fun postLogin(loginRequest: LoginRequest) =
-        HttpHandler<LoginResponse>()
-            .httpRequest {
-                userApi.postLogin(
-                    loginRequest = loginRequest,
-                )
-            }.sendRequest()
+    override suspend fun postLogin(
+        loginRequest: LoginRequest,
+    ) = HttpHandler<LoginResponse>()
+        .httpRequest {
+            userApi.postLogin(
+                loginRequest = loginRequest,
+            )
+        }.sendRequest()
 
-    override suspend fun setUserInfo(loginParam: LoginParam) {
+    override suspend fun sendVerificationCode(
+        sendVerificationCodeRequest: SendVerificationCodeRequest,
+    ) = HttpHandler<Unit>()
+        .httpRequest {
+            userApi.sendVerificationCode(
+                sendVerificationCodeRequest = sendVerificationCodeRequest,
+            )
+        }.sendRequest()
+
+
+    override suspend fun setUserInfo(
+        loginParam: LoginParam,
+    ) {
         userDataStorage.setUserInfo(
             accountId = loginParam.accountId,
             password = loginParam.password,

@@ -2,7 +2,9 @@ package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
+import team.retum.data.remote.request.toRequest
 import team.retum.domain.param.LoginParam
+import team.retum.domain.param.SendVerificationCodeParam
 import team.retum.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -11,11 +13,19 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override suspend fun postLogin(param: LoginParam) {
-        if(param.isAutoLogin){
+        if (param.isAutoLogin) {
             userDataSource.setUserInfo(param)
         }
         userDataSource.postLogin(
             loginRequest = param.toRequest(),
+        )
+    }
+
+    override suspend fun sendVerificationCode(
+        sendVerificationCodeParam: SendVerificationCodeParam,
+    ) {
+        userDataSource.sendVerificationCode(
+            sendVerificationCodeRequest = sendVerificationCodeParam.toRequest(),
         )
     }
 

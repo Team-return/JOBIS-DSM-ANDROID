@@ -14,11 +14,12 @@ class AuthorizationInterceptor @Inject constructor(
         val path = request.url.encodedPath
 
         val ignorePath = arrayListOf(
-            JobisUrl.USER.login,
-            JobisUrl.USER.reissue,
-            JobisUrl.STUDENT.signup,
-            JobisUrl.CODE.tech,
-            JobisUrl.CODE.job,
+            JobisUrl.User.login,
+            JobisUrl.User.reissue,
+            JobisUrl.Student.signup,
+            JobisUrl.Code.tech,
+            JobisUrl.Code.job,
+            JobisUrl.Auth.code,
         )
 
         if (ignorePath.contains(path)) {

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +22,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.domain.param.AuthCodeType
+import team.retum.jobis_android.contract.SignUpEvent
+import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.util.KeyboardOption
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisSmallButton
@@ -30,6 +35,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 @Composable
 fun VerifyEmailScreen(
     navController: NavController,
+    signUpViewModel: SignUpViewModel,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -37,21 +43,61 @@ fun VerifyEmailScreen(
     var email by remember { mutableStateOf("") }
     var verifyCode by remember { mutableStateOf("") }
 
+    var isSendVerificationCode by remember { mutableStateOf(false) }
+    var isSuccessVerifyEmail by remember { mutableStateOf(false) }
+
     val onEmailChanged = { value: String ->
         email = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetEmail(
+                email = email,
+            )
+        )
     }
 
     val onVerifyCodeChanged = { value: String ->
         verifyCode = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetVerifyCode(
+                verifyCode = verifyCode,
+            )
+        )
     }
 
     val onRequestVerifyButtonClicked = {
-        // TODO implement email verify business logic
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SendVerificationCode(
+                email = email,
+                authCodeType = AuthCodeType.SIGNUP,
+                userName = signUpViewModel.container.stateFlow.value.name,
+            )
+        )
+    }
+
+    LaunchedEffect(Unit) {
+        signUpViewModel.container.sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                is SignUpSideEffect.SendVerificationCodeSuccess -> {
+                    // TODO 토스트 처리
+                    isSendVerificationCode = true
+                }
+
+                is SignUpSideEffect.EmailConflict -> {
+                    // TODO 토스트 처리
+                }
+
+                else -> {
+                    // TODO 토스트 처리
+                }
+            }
+        }
     }
 
     EmailVerifyInputs(
         email = email,
         verifyCode = verifyCode,
+        isSendVerificationCode = isSendVerificationCode,
+        isSuccessVerifyEmail = isSuccessVerifyEmail,
         onEmailChanged = onEmailChanged,
         onVerifyCodeChanged = onVerifyCodeChanged,
         focusManager = focusManager,
@@ -63,6 +109,8 @@ fun VerifyEmailScreen(
 private fun EmailVerifyInputs(
     email: String,
     verifyCode: String,
+    isSendVerificationCode: Boolean,
+    isSuccessVerifyEmail: Boolean,
     onEmailChanged: (String) -> Unit,
     onVerifyCodeChanged: (String) -> Unit,
     onVerifyButtonClicked: () -> Unit,
@@ -100,9 +148,13 @@ private fun EmailVerifyInputs(
                 modifier = Modifier.weight(1f),
             ) {
                 JobisSmallButton(
-                    text = stringResource(id = R.string.email_verification_request_verify),
+                    text = stringResource(
+                        id = if (isSendVerificationCode) R.string.email_verification_resend
+                        else R.string.email_verification_request_verify
+                    ),
                     color = JobisButtonColor.MainSolidColor,
                     onClick = onVerifyButtonClicked,
+                    enabled = !isSuccessVerifyEmail,
                 )
             }
         }
