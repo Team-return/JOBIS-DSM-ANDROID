@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignUpEvent
+import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.util.KeyboardOption
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
@@ -48,12 +49,33 @@ fun StudentInfoScreen(
     var `class` by remember { mutableStateOf("") }
     var number by remember { mutableStateOf("") }
 
-    LaunchedEffect(sex){
+    var isNumberError by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sex) {
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetSex(
                 sex = sex,
             )
         )
+    }
+
+    LaunchedEffect(Unit) {
+        signUpViewModel.container.sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                is SignUpSideEffect.CheckStudentExistsSuccess -> {
+                    changeButtonStatus(true)
+                }
+
+                is SignUpSideEffect.CheckStudentExistsNotFound -> {
+                    // TODO 토스트 처리
+                    isNumberError = true
+                }
+
+                else -> {
+                    // TODO 토스트 처리
+                }
+            }
+        }
     }
 
     val onManSelected = {
@@ -64,8 +86,15 @@ fun StudentInfoScreen(
         sex = Sex.WOMAN
     }
 
+    val changeButtonStatus = {
+        changeButtonStatus(
+            name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank(),
+        )
+    }
+
     val onNameChanged = { value: String ->
         name = value
+        changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetName(
                 name = name,
@@ -75,6 +104,7 @@ fun StudentInfoScreen(
 
     val onGradeChanged = { value: String ->
         grade = value
+        changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetGrade(
                 grade = grade,
@@ -84,6 +114,7 @@ fun StudentInfoScreen(
 
     val onClassChanged = { value: String ->
         `class` = value
+        changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetClass(
                 `class` = `class`,
@@ -93,6 +124,7 @@ fun StudentInfoScreen(
 
     val onNumberChanged = { value: String ->
         number = value
+        changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetNumber(
                 number = number,
@@ -245,3 +277,10 @@ enum class Sex(
 ) {
     MAN("남"), WOMAN("여")
 }
+
+private fun setButtonStatus(
+    name: String,
+    grade: String,
+    `class`: String,
+    number: String,
+) = (name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank())
