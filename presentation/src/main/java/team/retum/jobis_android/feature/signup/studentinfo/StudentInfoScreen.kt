@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +24,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.util.KeyboardOption
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisTextFieldColor
@@ -33,6 +36,8 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 @Composable
 fun StudentInfoScreen(
     navController: NavController,
+    signUpViewModel: SignUpViewModel,
+    changeButtonStatus: (Boolean) -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -42,6 +47,14 @@ fun StudentInfoScreen(
     var grade by remember { mutableStateOf("") }
     var `class` by remember { mutableStateOf("") }
     var number by remember { mutableStateOf("") }
+
+    LaunchedEffect(sex){
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetSex(
+                sex = sex,
+            )
+        )
+    }
 
     val onManSelected = {
         sex = Sex.MAN
@@ -53,18 +66,38 @@ fun StudentInfoScreen(
 
     val onNameChanged = { value: String ->
         name = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetName(
+                name = name,
+            )
+        )
     }
 
     val onGradeChanged = { value: String ->
         grade = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetGrade(
+                grade = grade,
+            )
+        )
     }
 
     val onClassChanged = { value: String ->
         `class` = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetClass(
+                `class` = `class`,
+            )
+        )
     }
 
     val onNumberChanged = { value: String ->
         number = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetNumber(
+                number = number,
+            )
+        )
     }
 
     Column(

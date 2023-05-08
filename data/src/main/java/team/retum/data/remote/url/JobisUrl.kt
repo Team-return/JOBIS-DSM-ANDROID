@@ -15,6 +15,7 @@ object JobisUrl {
     object Student {
         const val signup = "$student/signup"
         const val recruit = "$student/recruit"
+        const val exists = "$student/exists"
     }
 
     object Code {

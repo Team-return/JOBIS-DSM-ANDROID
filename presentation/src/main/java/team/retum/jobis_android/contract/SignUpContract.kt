@@ -20,6 +20,8 @@ data class SignUpState(
 ) : State
 
 sealed class SignUpSideEffect() : SideEffect {
+    object CheckStudentExistsSuccess : SignUpSideEffect()
+    object CheckStudentExistsNotFound : SignUpSideEffect()
     object SendVerificationCodeSuccess : SignUpSideEffect()
     object EmailConflict : SignUpSideEffect()
     class Exception(val message: String) : SignUpSideEffect()
@@ -35,6 +37,7 @@ sealed class SignUpEvent : Event {
     class SetVerifyCode(val verifyCode: String) : SignUpEvent()
     class SetPassword(val password: String) : SignUpEvent()
     class SetRepeatPassword(val repeatPassword: String) : SignUpEvent()
+    object CheckStudentExists: SignUpEvent()
     class SendVerificationCode(
         val email: String,
         val authCodeType: AuthCodeType,

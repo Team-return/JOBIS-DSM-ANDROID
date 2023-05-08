@@ -20,6 +20,7 @@ class AuthorizationInterceptor @Inject constructor(
             JobisUrl.Code.tech,
             JobisUrl.Code.job,
             JobisUrl.Auth.code,
+            JobisUrl.Student.exists,
         )
 
         if (ignorePath.contains(path)) {

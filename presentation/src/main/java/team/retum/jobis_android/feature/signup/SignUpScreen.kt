@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.feature.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.signup.verifyemail.VerifyEmailScreen
@@ -60,6 +61,8 @@ fun SignUpScreen(
 
     var currentProgress by remember { mutableStateOf(1) }
 
+    var buttonEnabled by remember { mutableStateOf(false)}
+
     val navController = rememberNavController()
 
     BackHandler {
@@ -87,6 +90,13 @@ fun SignUpScreen(
 
     val onButtonClicked = {
         if (currentProgress in 0..2) currentProgress++
+        when(currentProgress){
+            2 -> {
+                signUpViewModel.sendEvent(
+                    event = SignUpEvent.CheckStudentExists,
+                )
+            }
+        }
     }
 
     Box(
@@ -120,7 +130,9 @@ fun SignUpScreen(
                     StudentInfoScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                    )
+                    ){
+                        buttonEnabled = it
+                    }
                 }
 
                 composable(
@@ -129,7 +141,9 @@ fun SignUpScreen(
                     VerifyEmailScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                    )
+                    ){
+                        buttonEnabled = it
+                    }
                 }
 
                 composable(
@@ -145,6 +159,7 @@ fun SignUpScreen(
         ProgressBarWithButton(
             currentProgress = currentProgress,
             progress = progressAnimation,
+            buttonEnabled = buttonEnabled,
         ) {
             onButtonClicked()
         }
@@ -155,6 +170,7 @@ fun SignUpScreen(
 private fun ProgressBarWithButton(
     currentProgress: Int,
     progress: Float,
+    buttonEnabled: Boolean,
     onClick: () -> Unit,
 ) {
     Column {
@@ -177,6 +193,7 @@ private fun ProgressBarWithButton(
         JobisLargeButton(
             text = stringResource(id = R.string.next),
             color = JobisButtonColor.MainSolidColor,
+            enabled = buttonEnabled,
         ) {
             onClick()
         }

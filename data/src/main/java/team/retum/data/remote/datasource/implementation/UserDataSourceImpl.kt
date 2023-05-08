@@ -32,6 +32,16 @@ class UserDataSourceImpl @Inject constructor(
             )
         }.sendRequest()
 
+    override suspend fun checkStudentExists(
+        gcn: Int,
+        name: String,
+    ) = HttpHandler<Unit>()
+        .httpRequest {
+            userApi.checkStudentExists(
+                gcn = gcn,
+                name = name,
+            )
+        }.sendRequest()
 
     override suspend fun setUserInfo(
         loginParam: LoginParam,

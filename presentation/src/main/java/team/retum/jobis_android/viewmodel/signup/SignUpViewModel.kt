@@ -8,8 +8,11 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.exception.ConflictException
+import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.AuthCodeType
+import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.SendVerificationCodeParam
+import team.retum.domain.usecase.CheckStudentExistUseCase
 import team.retum.domain.usecase.SendVerificationCodeUseCase
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
@@ -21,10 +24,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
+    private val checkStudentExistUseCase: CheckStudentExistUseCase,
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
 ) : BaseViewModel<SignUpState, SignUpSideEffect>() {
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
+
+    private val state = container.stateFlow.value
 
     override fun sendEvent(event: Event) {
         when (event) {
@@ -37,6 +43,7 @@ class SignUpViewModel @Inject constructor(
             is SignUpEvent.SetVerifyCode -> setVerifyCode(event.verifyCode)
             is SignUpEvent.SetPassword -> setPassword(event.password)
             is SignUpEvent.SetRepeatPassword -> setRepeatPassword(event.repeatPassword)
+            is SignUpEvent.CheckStudentExists -> checkStudentExists()
             is SignUpEvent.SendVerificationCode -> sendVerificationCode(
                 email = event.email,
                 authCodeType = event.authCodeType,
@@ -99,6 +106,43 @@ class SignUpViewModel @Inject constructor(
         reduce { state.copy(repeatPassword = repeatPassword) }
     }
 
+    private fun checkStudentExists() = intent{
+        viewModelScope.launch {
+            checkStudentExistUseCase(
+                checkStudentExistsParam = CheckStudentExistsParam(
+                    gcn = returnGcn(
+                        grade = state.grade,
+                        `class` = state.`class`,
+                        number = state.number,
+                    ),
+                    name = container.stateFlow.value.name,
+                )
+            ).onSuccess {
+                postSideEffect(
+                    sideEffect = SignUpSideEffect.CheckStudentExistsSuccess,
+                )
+            }.onFailure { throwable ->
+                when(throwable) {
+                    is NotFoundException -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.CheckStudentExistsNotFound,
+                        )
+                    }
+
+                    else -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.Exception(
+                                message = getStringFromException(
+                                    throwable = throwable,
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun sendVerificationCode(
         email: String,
         authCodeType: AuthCodeType,
@@ -134,4 +178,10 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+
+    private fun returnGcn(
+        grade: String,
+        `class`: String,
+        number: String,
+    ) = Integer.parseInt("$grade$`class`${number.padStart(2, '0')}")
 }
