@@ -61,7 +61,7 @@ fun SignUpScreen(
 
     var currentProgress by remember { mutableStateOf(1) }
 
-    var buttonEnabled by remember { mutableStateOf(false)}
+    var buttonEnabled by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
 
@@ -89,9 +89,8 @@ fun SignUpScreen(
     )
 
     val onButtonClicked = {
-        if (currentProgress in 0..2) currentProgress++
-        when(currentProgress){
-            2 -> {
+        when (currentProgress) {
+            1 -> {
                 signUpViewModel.sendEvent(
                     event = SignUpEvent.CheckStudentExists,
                 )
@@ -128,9 +127,9 @@ fun SignUpScreen(
                     route = JobisRoute.StudentInfo,
                 ) {
                     StudentInfoScreen(
-                        navController = navController,
                         signUpViewModel = signUpViewModel,
-                    ){
+                        navigate = { currentProgress++ },
+                    ) {
                         buttonEnabled = it
                     }
                 }
@@ -141,7 +140,7 @@ fun SignUpScreen(
                     VerifyEmailScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                    ){
+                    ) {
                         buttonEnabled = it
                     }
                 }

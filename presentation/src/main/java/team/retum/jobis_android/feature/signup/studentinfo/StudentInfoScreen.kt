@@ -36,8 +36,8 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 
 @Composable
 fun StudentInfoScreen(
-    navController: NavController,
     signUpViewModel: SignUpViewModel,
+    navigate: () -> Unit,
     changeButtonStatus: (Boolean) -> Unit,
 ) {
 
@@ -48,8 +48,6 @@ fun StudentInfoScreen(
     var grade by remember { mutableStateOf("") }
     var `class` by remember { mutableStateOf("") }
     var number by remember { mutableStateOf("") }
-
-    var isNumberError by remember { mutableStateOf(false) }
 
     LaunchedEffect(sex) {
         signUpViewModel.sendEvent(
@@ -64,11 +62,12 @@ fun StudentInfoScreen(
             when (sideEffect) {
                 is SignUpSideEffect.CheckStudentExistsSuccess -> {
                     changeButtonStatus(true)
+                    navigate()
                 }
 
                 is SignUpSideEffect.CheckStudentExistsNotFound -> {
                     // TODO 토스트 처리
-                    isNumberError = true
+
                 }
 
                 else -> {
