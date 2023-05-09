@@ -1,7 +1,7 @@
 package team.retum.jobis_android.contract
 
 import team.retum.domain.param.AuthCodeType
-import team.retum.jobis_android.feature.signup.studentinfo.Sex
+import team.retum.domain.param.Sex
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -12,11 +12,11 @@ data class SignUpState(
     var phoneNumber: String = "",
     var password: String = "",
     var repeatPassword: String = "",
-    var grade: String = "",
+    var grade: Int = 0,
     var name: String = "",
-    var gender: String = "",
-    var `class`: String = "",
-    var number: String = "",
+    var gender: Sex = Sex.MAN,
+    var `class`: Int = 0,
+    var number: Int = 0,
 ) : State
 
 sealed class SignUpSideEffect() : SideEffect {
@@ -27,15 +27,17 @@ sealed class SignUpSideEffect() : SideEffect {
     object VerifyEmailSuccess : SignUpSideEffect()
     object VerifyEmailUnAuthorized : SignUpSideEffect()
     object VerifyEmailNotFound : SignUpSideEffect()
+    object SignUpSuccess : SignUpSideEffect()
+    object SignUpConflict : SignUpSideEffect()
     class Exception(val message: String) : SignUpSideEffect()
 }
 
 sealed class SignUpEvent : Event {
     class SetSex(val sex: Sex) : SignUpEvent()
     class SetName(val name: String) : SignUpEvent()
-    class SetGrade(val grade: String) : SignUpEvent()
-    class SetClass(val `class`: String) : SignUpEvent()
-    class SetNumber(val number: String) : SignUpEvent()
+    class SetGrade(val grade: Int) : SignUpEvent()
+    class SetClass(val `class`: Int) : SignUpEvent()
+    class SetNumber(val number: Int) : SignUpEvent()
     class SetEmail(val email: String) : SignUpEvent()
     class SetVerifyCode(val verifyCode: String) : SignUpEvent()
     class SetPassword(val password: String) : SignUpEvent()
@@ -47,4 +49,5 @@ sealed class SignUpEvent : Event {
         val userName: String,
     ) : SignUpEvent()
     object VerifyEmail: SignUpEvent()
+    object SignUp: SignUpEvent()
 }

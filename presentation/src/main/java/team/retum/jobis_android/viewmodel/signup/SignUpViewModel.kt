@@ -13,15 +13,16 @@ import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.AuthCodeType
 import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.SendVerificationCodeParam
+import team.retum.domain.param.Sex
+import team.retum.domain.param.SignUpParam
 import team.retum.domain.param.VerifyEmailParam
 import team.retum.domain.usecase.CheckStudentExistUseCase
 import team.retum.domain.usecase.SendVerificationCodeUseCase
+import team.retum.domain.usecase.SignUpUseCase
 import team.retum.domain.usecase.VerifyEmailUseCase
-import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.contract.SignUpState
-import team.retum.jobis_android.feature.signup.studentinfo.Sex
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
 import javax.inject.Inject
@@ -31,6 +32,7 @@ class SignUpViewModel @Inject constructor(
     private val checkStudentExistUseCase: CheckStudentExistUseCase,
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verifyEmailUseCase: VerifyEmailUseCase,
+    private val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpState, SignUpSideEffect>() {
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
@@ -54,6 +56,7 @@ class SignUpViewModel @Inject constructor(
                 authCodeType = event.authCodeType,
                 userName = event.userName,
             )
+
             is SignUpEvent.VerifyEmail -> verifyEmail()
         }
     }
@@ -61,7 +64,7 @@ class SignUpViewModel @Inject constructor(
     private fun setSex(
         sex: Sex,
     ) = intent {
-        reduce { state.copy(gender = sex.toString()) }
+        reduce { state.copy(gender = sex) }
     }
 
     private fun setName(
@@ -71,19 +74,19 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun setGrade(
-        grade: String,
+        grade: Int,
     ) = intent {
         reduce { state.copy(grade = grade) }
     }
 
     private fun setClass(
-        `class`: String,
+        `class`: Int,
     ) = intent {
         reduce { state.copy(`class` = `class`) }
     }
 
     private fun setNumber(
-        number: String,
+        number: Int,
     ) = intent {
         reduce { state.copy(number = number) }
     }
@@ -224,9 +227,48 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    private fun signUp() = intent {
+        viewModelScope.launch {
+            signUpUseCase(
+                signUpParam = SignUpParam(
+                    email = state.email,
+                    phoneNumber = state.phoneNumber,
+                    password = state.password,
+                    grade = state.grade,
+                    name = state.name,
+                    gender = state.gender,
+                    classRoom = state.`class`,
+                    number = state.number,
+                )
+            ).onSuccess {
+                postSideEffect(
+                    sideEffect = SignUpSideEffect.SignUpSuccess,
+                )
+            }.onFailure { throwable ->
+                when(throwable){
+                    is ConflictException -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.SignUpConflict,
+                        )
+                    }
+
+                    else -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.Exception(
+                                message = getStringFromException(
+                                    throwable = throwable,
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun returnGcn(
-        grade: String,
-        `class`: String,
-        number: String,
-    ) = Integer.parseInt("$grade$`class`${number.padStart(2, '0')}")
+        grade: Int,
+        `class`: Int,
+        number: Int,
+    ) = Integer.parseInt("$grade$`class`${number.toString().padStart(2, '0')}")
 }

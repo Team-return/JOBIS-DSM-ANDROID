@@ -4,6 +4,7 @@ import team.retum.data.remote.api.UserApi
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
+import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.LoginResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
@@ -53,6 +54,17 @@ class UserDataSourceImpl @Inject constructor(
                 authCode = authCode,
             )
         }.sendRequest()
+
+    override suspend fun signUp(
+        signUpRequest: SignUpRequest,
+    ) = HttpHandler<Unit>()
+        .httpRequest {
+            userApi.signUp(
+                signUpRequest = signUpRequest,
+            )
+        }.sendRequest()
+
+
 
     override suspend fun setUserInfo(
         loginParam: LoginParam,

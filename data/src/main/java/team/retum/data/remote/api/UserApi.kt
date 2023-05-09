@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
+import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.LoginResponse
 import team.retum.data.remote.url.JobisUrl
 
@@ -32,5 +33,10 @@ interface UserApi {
     suspend fun verifyEmail(
         @Query("email") email: String,
         @Query("auth-code") authCode: String,
+    )
+
+    @POST(JobisUrl.student)
+    suspend fun signUp(
+        @Body signUpRequest: SignUpRequest,
     )
 }

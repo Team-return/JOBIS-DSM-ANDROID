@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.domain.param.Sex
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.util.KeyboardOption
@@ -106,7 +107,7 @@ fun StudentInfoScreen(
         changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetGrade(
-                grade = grade,
+                grade = Integer.parseInt(grade),
             )
         )
     }
@@ -116,7 +117,7 @@ fun StudentInfoScreen(
         changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetClass(
-                `class` = `class`,
+                `class` = Integer.parseInt(`class`),
             )
         )
     }
@@ -126,7 +127,7 @@ fun StudentInfoScreen(
         changeButtonStatus()
         signUpViewModel.sendEvent(
             event = SignUpEvent.SetNumber(
-                number = number,
+                number = Integer.parseInt(number),
             )
         )
     }
@@ -269,12 +270,6 @@ private fun InformationFields(
             )
         }
     }
-}
-
-enum class Sex(
-    val value: String,
-) {
-    MAN("남"), WOMAN("여")
 }
 
 private fun setButtonStatus(

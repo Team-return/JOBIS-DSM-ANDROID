@@ -59,7 +59,7 @@ fun SignUpScreen(
     signUpViewModel: SignUpViewModel,
 ) {
 
-    var currentProgress by remember { mutableStateOf(2) }
+    var currentProgress by remember { mutableStateOf(1) }
 
     var buttonEnabled by remember { mutableStateOf(false) }
 
@@ -98,6 +98,11 @@ fun SignUpScreen(
             2 -> {
                 signUpViewModel.sendEvent(
                     event = SignUpEvent.VerifyEmail,
+                )
+            }
+            3 -> {
+                signUpViewModel.sendEvent(
+                    event = SignUpEvent.SignUp,
                 )
             }
         }

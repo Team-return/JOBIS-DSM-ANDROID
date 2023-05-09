@@ -2,6 +2,7 @@ package team.retum.data.remote.datasource.declaration
 
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
+import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.LoginResponse
 import team.retum.domain.param.LoginParam
 
@@ -18,6 +19,10 @@ interface UserDataSource {
     suspend fun verifyEmail(
         email: String,
         authCode: String,
+    )
+
+    suspend fun signUp(
+        signUpRequest: SignUpRequest,
     )
 
     suspend fun setUserInfo(loginParam: LoginParam)
