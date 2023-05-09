@@ -15,9 +15,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.util.KeyboardOption
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.retum.jobisui.ui.theme.Heading5
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
@@ -25,6 +28,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 @Composable
 fun SetPasswordScreen(
     navController: NavController,
+    signUpViewModel: SignUpViewModel,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -34,10 +38,20 @@ fun SetPasswordScreen(
 
     val onPasswordChanged = { value: String ->
         password = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetPassword(
+                password = password,
+            )
+        )
     }
 
     val onRepeatPasswordChanged = { value: String ->
         repeatPassword = value
+        signUpViewModel.sendEvent(
+            event = SignUpEvent.SetRepeatPassword(
+                repeatPassword = repeatPassword,
+            )
+        )
     }
 
     SetPasswordInputs(

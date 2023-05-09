@@ -3,6 +3,7 @@ package team.retum.domain.repository
 import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.LoginParam
 import team.retum.domain.param.SendVerificationCodeParam
+import team.retum.domain.param.VerifyEmailParam
 
 
 interface UserRepository {
@@ -12,6 +13,10 @@ interface UserRepository {
 
     suspend fun checkStudentExists(
         checkStudentExistsParam: CheckStudentExistsParam,
+    )
+
+    suspend fun verifyEmail(
+        verifyEmailParam: VerifyEmailParam,
     )
 
     suspend fun fetchUserInfo(): LoginParam

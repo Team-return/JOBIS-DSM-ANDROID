@@ -7,5 +7,5 @@ data class SendVerificationCodeParam(
 )
 
 enum class AuthCodeType {
-    PASSWORD, SIGNUP,
+    PASSWORD, SIGN_UP,
 }

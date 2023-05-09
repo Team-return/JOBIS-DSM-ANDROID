@@ -36,6 +36,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 fun VerifyEmailScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel,
+    changeButtonStatus: (Boolean) -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -43,7 +44,7 @@ fun VerifyEmailScreen(
     var email by remember { mutableStateOf("") }
     var verifyCode by remember { mutableStateOf("") }
 
-    var isSendVerificationCode by remember { mutableStateOf(false) }
+    var isSendedAuthCode by remember { mutableStateOf(false) }
     var isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val onEmailChanged = { value: String ->
@@ -68,7 +69,7 @@ fun VerifyEmailScreen(
         signUpViewModel.sendEvent(
             event = SignUpEvent.SendVerificationCode(
                 email = email,
-                authCodeType = AuthCodeType.SIGNUP,
+                authCodeType = AuthCodeType.SIGN_UP,
                 userName = signUpViewModel.container.stateFlow.value.name,
             )
         )
@@ -79,7 +80,7 @@ fun VerifyEmailScreen(
             when (sideEffect) {
                 is SignUpSideEffect.SendVerificationCodeSuccess -> {
                     // TODO 토스트 처리
-                    isSendVerificationCode = true
+                    isSendedAuthCode = true
                 }
 
                 is SignUpSideEffect.EmailConflict -> {
@@ -96,7 +97,7 @@ fun VerifyEmailScreen(
     EmailVerifyInputs(
         email = email,
         verifyCode = verifyCode,
-        isSendVerificationCode = isSendVerificationCode,
+        isSendedAuthCode = isSendedAuthCode,
         isSuccessVerifyEmail = isSuccessVerifyEmail,
         onEmailChanged = onEmailChanged,
         onVerifyCodeChanged = onVerifyCodeChanged,
@@ -109,7 +110,7 @@ fun VerifyEmailScreen(
 private fun EmailVerifyInputs(
     email: String,
     verifyCode: String,
-    isSendVerificationCode: Boolean,
+    isSendedAuthCode: Boolean,
     isSuccessVerifyEmail: Boolean,
     onEmailChanged: (String) -> Unit,
     onVerifyCodeChanged: (String) -> Unit,
@@ -140,7 +141,8 @@ private fun EmailVerifyInputs(
                     keyboardType = KeyboardType.NumberPassword,
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
-                    }
+                    },
+                    enabled = isSendedAuthCode,
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -149,7 +151,7 @@ private fun EmailVerifyInputs(
             ) {
                 JobisSmallButton(
                     text = stringResource(
-                        id = if (isSendVerificationCode) R.string.email_verification_resend
+                        id = if (isSendedAuthCode) R.string.email_verification_resend
                         else R.string.email_verification_request_verify
                     ),
                     color = JobisButtonColor.MainSolidColor,

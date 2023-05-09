@@ -15,6 +15,11 @@ interface UserDataSource {
         name: String,
     )
 
+    suspend fun verifyEmail(
+        email: String,
+        authCode: String,
+    )
+
     suspend fun setUserInfo(loginParam: LoginParam)
 
     suspend fun fetchUserInfo(): LoginParam

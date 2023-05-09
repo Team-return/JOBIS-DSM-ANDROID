@@ -9,11 +9,15 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
+import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.AuthCodeType
 import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.SendVerificationCodeParam
+import team.retum.domain.param.VerifyEmailParam
 import team.retum.domain.usecase.CheckStudentExistUseCase
 import team.retum.domain.usecase.SendVerificationCodeUseCase
+import team.retum.domain.usecase.VerifyEmailUseCase
+import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.contract.SignUpState
@@ -26,6 +30,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val checkStudentExistUseCase: CheckStudentExistUseCase,
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
+    private val verifyEmailUseCase: VerifyEmailUseCase,
 ) : BaseViewModel<SignUpState, SignUpSideEffect>() {
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
@@ -49,6 +54,7 @@ class SignUpViewModel @Inject constructor(
                 authCodeType = event.authCodeType,
                 userName = event.userName,
             )
+            is SignUpEvent.VerifyEmail -> verifyEmail()
         }
     }
 
@@ -91,7 +97,7 @@ class SignUpViewModel @Inject constructor(
     private fun setVerifyCode(
         verifyCode: String,
     ) = intent {
-        reduce { state.copy(verifyCode = verifyCode) }
+        reduce { state.copy(authCode = verifyCode) }
     }
 
     private fun setPassword(
@@ -106,7 +112,7 @@ class SignUpViewModel @Inject constructor(
         reduce { state.copy(repeatPassword = repeatPassword) }
     }
 
-    private fun checkStudentExists() = intent{
+    private fun checkStudentExists() = intent {
         viewModelScope.launch {
             checkStudentExistUseCase(
                 checkStudentExistsParam = CheckStudentExistsParam(
@@ -122,7 +128,7 @@ class SignUpViewModel @Inject constructor(
                     sideEffect = SignUpSideEffect.CheckStudentExistsSuccess,
                 )
             }.onFailure { throwable ->
-                when(throwable) {
+                when (throwable) {
                     is NotFoundException -> {
                         postSideEffect(
                             sideEffect = SignUpSideEffect.CheckStudentExistsNotFound,
@@ -168,6 +174,45 @@ class SignUpViewModel @Inject constructor(
                     else -> {
                         postSideEffect(
                             SignUpSideEffect.Exception(
+                                message = getStringFromException(
+                                    throwable = throwable,
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun verifyEmail() = intent {
+        viewModelScope.launch {
+            verifyEmailUseCase(
+                verifyEmailParam = VerifyEmailParam(
+                    email = state.email,
+                    authCode = state.authCode,
+                )
+            ).onSuccess {
+                postSideEffect(
+                    sideEffect = SignUpSideEffect.VerifyEmailSuccess,
+                )
+            }.onFailure { throwable ->
+                when (throwable) {
+                    is UnAuthorizationException -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.VerifyEmailUnAuthorized,
+                        )
+                    }
+
+                    is NotFoundException -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.VerifyEmailNotFound,
+                        )
+                    }
+
+                    else -> {
+                        postSideEffect(
+                            sideEffect = SignUpSideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
                                 )

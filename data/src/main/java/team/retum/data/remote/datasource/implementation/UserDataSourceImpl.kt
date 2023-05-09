@@ -43,6 +43,17 @@ class UserDataSourceImpl @Inject constructor(
             )
         }.sendRequest()
 
+    override suspend fun verifyEmail(
+        email: String,
+        authCode: String,
+    ) = HttpHandler<Unit>()
+        .httpRequest {
+            userApi.verifyEmail(
+                email = email,
+                authCode = authCode,
+            )
+        }.sendRequest()
+
     override suspend fun setUserInfo(
         loginParam: LoginParam,
     ) {

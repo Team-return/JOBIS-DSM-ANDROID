@@ -3,6 +3,7 @@ package team.retum.data.remote.api
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 import team.retum.data.remote.request.LoginRequest
@@ -25,5 +26,11 @@ interface UserApi {
     suspend fun checkStudentExists(
         @Query("gcn") gcn: Int,
         @Query("name") name: String,
+    )
+
+    @PATCH(JobisUrl.Auth.code)
+    suspend fun verifyEmail(
+        @Query("email") email: String,
+        @Query("auth-code") authCode: String,
     )
 }

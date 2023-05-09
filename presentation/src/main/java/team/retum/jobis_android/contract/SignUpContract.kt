@@ -8,7 +8,7 @@ import team.retum.jobis_android.util.mvi.State
 
 data class SignUpState(
     var email: String = "",
-    var verifyCode: String = "",
+    var authCode: String = "",
     var phoneNumber: String = "",
     var password: String = "",
     var repeatPassword: String = "",
@@ -24,6 +24,9 @@ sealed class SignUpSideEffect() : SideEffect {
     object CheckStudentExistsNotFound : SignUpSideEffect()
     object SendVerificationCodeSuccess : SignUpSideEffect()
     object EmailConflict : SignUpSideEffect()
+    object VerifyEmailSuccess : SignUpSideEffect()
+    object VerifyEmailUnAuthorized : SignUpSideEffect()
+    object VerifyEmailNotFound : SignUpSideEffect()
     class Exception(val message: String) : SignUpSideEffect()
 }
 
@@ -43,4 +46,5 @@ sealed class SignUpEvent : Event {
         val authCodeType: AuthCodeType,
         val userName: String,
     ) : SignUpEvent()
+    object VerifyEmail: SignUpEvent()
 }
