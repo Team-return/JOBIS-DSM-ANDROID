@@ -271,10 +271,3 @@ private fun InformationFields(
         }
     }
 }
-
-private fun setButtonStatus(
-    name: String,
-    grade: String,
-    `class`: String,
-    number: String,
-) = (name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank())
