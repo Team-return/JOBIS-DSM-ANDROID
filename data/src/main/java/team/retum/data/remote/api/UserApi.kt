@@ -33,7 +33,7 @@ interface UserApi {
     suspend fun verifyEmail(
         @Query("email") email: String,
         @Query("auth-code") authCode: String,
-    )
+    ): Response<Void>
 
     @POST(JobisUrl.student)
     suspend fun signUp(
