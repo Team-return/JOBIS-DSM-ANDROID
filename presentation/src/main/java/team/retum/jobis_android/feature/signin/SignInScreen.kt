@@ -113,7 +113,7 @@ fun SignInScreen(
         signInViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignInSideEffect.MoveToMain -> {
-
+                    navController.navigate(JobisRoute.Main)
                 }
 
                 is SignInSideEffect.NotFound -> {
@@ -179,6 +179,7 @@ fun SignInScreen(
                 text = stringResource(id = R.string.sign_in),
                 color = JobisButtonColor.MainSolidColor,
                 onClick = onSignInButtonClicked,
+                enabled = (email.isNotBlank() && password.isNotBlank()),
             )
         }
     }
@@ -225,24 +226,22 @@ fun SignInInput(
             onValueChanged = onEmailChanged,
             value = email,
             keyboardType = KeyboardType.Email,
-            keyboardOptions = KeyboardOption.Next,
-            error = isEmailError,
-            helperText = stringResource(id = R.string.sign_in_email_error),
+            isError = isEmailError,
+            errorText = stringResource(id = R.string.sign_in_email_error),
         )
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         JobisBoxTextField(
             color = JobisTextFieldColor.MainColor,
             hint = stringResource(id = R.string.sign_in_hint_password),
             onValueChanged = onPasswordChanged,
             value = password,
             keyboardType = KeyboardType.Password,
-            keyboardOptions = KeyboardOption.Done,
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
             isPassword = true,
-            error = isPasswordError,
-            helperText = stringResource(id = R.string.sign_in_password_error),
+            isError = isPasswordError,
+            errorText = stringResource(id = R.string.sign_in_password_error),
         )
     }
 }
@@ -267,7 +266,7 @@ fun SignInOptions(
             JobisCheckBox(
                 color = JobisCheckBoxColor.MainColor,
                 isChecked = isChecked,
-                onClick = onCheckBoxClicked,
+                onChecked = onCheckBoxClicked,
             )
             Caption(
                 text = stringResource(id = R.string.sign_in_auto_sign_in),
