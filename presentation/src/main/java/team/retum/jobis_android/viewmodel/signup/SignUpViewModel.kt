@@ -56,8 +56,8 @@ class SignUpViewModel @Inject constructor(
                 authCodeType = event.authCodeType,
                 userName = event.userName,
             )
-
             is SignUpEvent.VerifyEmail -> verifyEmail()
+            is SignUpEvent.SignUp -> signUp()
         }
     }
 

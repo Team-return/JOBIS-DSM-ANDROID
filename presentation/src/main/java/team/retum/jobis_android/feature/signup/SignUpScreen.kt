@@ -59,9 +59,11 @@ fun SignUpScreen(
     signUpViewModel: SignUpViewModel,
 ) {
 
-    var currentProgress by remember { mutableStateOf(1) }
+    var currentProgress by remember { mutableStateOf(0) }
 
     var buttonEnabled by remember { mutableStateOf(false) }
+
+    var isSuccessVerifyEmail by remember { mutableStateOf(false)}
 
     val navController = rememberNavController()
 
@@ -71,10 +73,15 @@ fun SignUpScreen(
 
     LaunchedEffect(currentProgress) {
         when (currentProgress) {
-            0 -> navHostController.popBackStack()
-            1 -> navController.navigate(JobisRoute.StudentInfo)
-            2 -> navController.navigate(JobisRoute.VerifyEmail)
-            3 -> navController.navigate(JobisRoute.SetPassword)
+            0 -> navController.navigate(JobisRoute.StudentInfo)
+            1 -> {
+                navController.navigate(JobisRoute.VerifyEmail)
+                buttonEnabled = false
+            }
+            2 -> {
+                navController.navigate(JobisRoute.SetPassword)
+                buttonEnabled = false
+            }
             else -> {}
         }
     }
@@ -90,17 +97,19 @@ fun SignUpScreen(
 
     val onButtonClicked = {
         when (currentProgress) {
-            1 -> {
+            0 -> {
                 signUpViewModel.sendEvent(
                     event = SignUpEvent.CheckStudentExists,
                 )
             }
-            2 -> {
+
+            1 -> {
                 signUpViewModel.sendEvent(
                     event = SignUpEvent.VerifyEmail,
                 )
             }
-            3 -> {
+
+            2 -> {
                 signUpViewModel.sendEvent(
                     event = SignUpEvent.SignUp,
                 )
@@ -150,8 +159,12 @@ fun SignUpScreen(
                     VerifyEmailScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                    ) {
-                        buttonEnabled = it
+                        changeButtonState = {
+                            println(it)
+                            buttonEnabled = it
+                        }
+                    ){
+                        currentProgress++
                     }
                 }
 
@@ -161,7 +174,9 @@ fun SignUpScreen(
                     SetPasswordScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                    )
+                    ){
+                        buttonEnabled = it
+                    }
                 }
             }
         }
@@ -169,6 +184,7 @@ fun SignUpScreen(
             currentProgress = currentProgress,
             progress = progressAnimation,
             buttonEnabled = buttonEnabled,
+            isSuccessVerifyEmail = isSuccessVerifyEmail,
         ) {
             onButtonClicked()
         }
@@ -180,6 +196,7 @@ private fun ProgressBarWithButton(
     currentProgress: Int,
     progress: Float,
     buttonEnabled: Boolean,
+    isSuccessVerifyEmail: Boolean,
     onClick: () -> Unit,
 ) {
     Column {
@@ -200,7 +217,10 @@ private fun ProgressBarWithButton(
         )
         Spacer(modifier = Modifier.height(20.dp))
         JobisLargeButton(
-            text = stringResource(id = R.string.next),
+            text = stringResource(
+                id = if (currentProgress == 1 && !isSuccessVerifyEmail) R.string.verification
+                else R.string.next,
+            ),
             color = JobisButtonColor.MainSolidColor,
             enabled = buttonEnabled,
         ) {
@@ -222,7 +242,7 @@ private fun AuthComponents(
     }
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
-        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress - 1])
+        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress])
         else stringResource(titleList.first()),
     )
 }

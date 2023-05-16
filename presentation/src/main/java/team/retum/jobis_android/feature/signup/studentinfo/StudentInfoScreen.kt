@@ -14,12 +14,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -44,11 +46,11 @@ fun StudentInfoScreen(
 
     val focusManager = LocalFocusManager.current
 
-    var sex by remember { mutableStateOf(Sex.MAN) }
-    var name by remember { mutableStateOf("") }
-    var grade by remember { mutableStateOf("") }
-    var `class` by remember { mutableStateOf("") }
-    var number by remember { mutableStateOf("") }
+    var sex by rememberSaveable { mutableStateOf(Sex.MAN) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var grade by rememberSaveable { mutableStateOf("") }
+    var `class` by rememberSaveable { mutableStateOf("") }
+    var number by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(sex) {
         signUpViewModel.sendEvent(
@@ -105,31 +107,37 @@ fun StudentInfoScreen(
     val onGradeChanged = { value: String ->
         grade = value
         changeButtonStatus()
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetGrade(
-                grade = Integer.parseInt(grade),
+        if (grade.isNotBlank()) {
+            signUpViewModel.sendEvent(
+                event = SignUpEvent.SetGrade(
+                    grade = Integer.parseInt(grade),
+                )
             )
-        )
+        }
     }
 
     val onClassChanged = { value: String ->
         `class` = value
         changeButtonStatus()
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetClass(
-                `class` = Integer.parseInt(`class`),
+        if (`class`.isNotBlank()) {
+            signUpViewModel.sendEvent(
+                event = SignUpEvent.SetClass(
+                    `class` = Integer.parseInt(`class`),
+                )
             )
-        )
+        }
     }
 
     val onNumberChanged = { value: String ->
         number = value
         changeButtonStatus()
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetNumber(
-                number = Integer.parseInt(number),
+        if (number.isNotBlank()) {
+            signUpViewModel.sendEvent(
+                event = SignUpEvent.SetNumber(
+                    number = number.toInt(),
+                )
             )
-        )
+        }
     }
 
     Column(
@@ -223,7 +231,7 @@ private fun InformationFields(
         hint = stringResource(id = R.string.input_hint_name),
         onValueChanged = onNameChanged,
         value = name,
-        keyboardOptions = KeyboardOption.Next,
+        imeAction = ImeAction.Next,
     )
     Spacer(modifier = Modifier.height(12.dp))
     Row(
@@ -237,7 +245,7 @@ private fun InformationFields(
                 hint = stringResource(id = R.string.input_hint_grade),
                 onValueChanged = onGradeChanged,
                 value = grade,
-                keyboardOptions = KeyboardOption.Next,
+                imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Number,
             )
         }
@@ -250,7 +258,7 @@ private fun InformationFields(
                 hint = stringResource(id = R.string.input_hint_class),
                 onValueChanged = onClassChanged,
                 value = `class`,
-                keyboardOptions = KeyboardOption.Next,
+                imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Number,
             )
         }
