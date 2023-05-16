@@ -170,8 +170,8 @@ private fun SelectGender(
     sex: Sex,
 ) {
 
-    var manButtonColor: ButtonColor
-    var womanButtonColor: ButtonColor
+    val manButtonColor: ButtonColor
+    val womanButtonColor: ButtonColor
 
     when (sex) {
         Sex.MAN -> {
@@ -233,7 +233,7 @@ private fun InformationFields(
         value = name,
         imeAction = ImeAction.Next,
     )
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(6.dp))
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

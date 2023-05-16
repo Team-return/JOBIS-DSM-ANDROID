@@ -122,7 +122,9 @@ fun VerifyEmailScreen(
             color = JobisTextFieldColor.MainColor,
             onValueChanged = onEmailChanged,
             value = email,
-            hint = stringResource(id = R.string.email_verification_email_hint),
+            hint = stringResource(id = R.string.please_enter_email),
+            helperText = stringResource(id = R.string.email_verification_email_hint),
+            errorText = stringResource(id = R.string.email_verification_email_hint),
             imeAction = ImeAction.Next,
             isError = isEmailFieldError,
         )

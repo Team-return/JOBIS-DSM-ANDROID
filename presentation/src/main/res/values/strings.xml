@@ -37,13 +37,10 @@
 
     <!--    Sign Up-->
 
-    <string name="sign_up_hint_password">8 ~ 16자, 영문자, 숫자, 특수문자 포함</string>
     <string name="sign_up_hint_name">이름을 입력하세요.</string>
     <string name="sign_up_phone_number_hint">ex) 010–1234–5678</string>
 
     <string name="sign_up_email_error">계정이 올바르지 않습니다.학교 계정을 사용해 주세요.</string>
-
-    <string name="sign_up_password_repeat_error">비밀번호가 일치하지 않습니다.</string>
 
     <string name="sign_up_complete">회원가입 완료</string>
 
@@ -70,6 +67,11 @@
 
     <string name="set_password">비밀번호 설정</string>
     <string name="set_password_repeat_password_hint">비밀번호를 한 번 더 입력해주세요</string>
+    <string name="set_password_mismatch_password_format">비밀번호 형식이 올바르지 않습니다</string>
+    <string name="set_password_mismatch_password">비밀번호가 일치하지 않습니다</string>
+
+    <string name="set_password_hint_password">8 ~ 16자, 영문자, 숫자, 특수문자 포함</string>
+
 
     <!--    Home-->
 

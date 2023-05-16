@@ -16,14 +16,11 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
-import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.KeyboardOption
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
@@ -99,7 +96,7 @@ fun SetPasswordScreen(
         }
     }
 
-    SetPasswordInputs(
+    PasswordFields(
         password = password,
         repeatPassword = repeatPassword,
         onPasswordChanged = onPasswordChanged,
@@ -108,30 +105,6 @@ fun SetPasswordScreen(
         isRepeatPasswordError = isRepeatPasswordError,
         focusManager = focusManager,
     )
-}
-
-@Composable
-private fun SetPasswordInputs(
-    password: String,
-    repeatPassword: String,
-    onPasswordChanged: (String) -> Unit,
-    onRepeatPasswordChanged: (String) -> Unit,
-    isPasswordError: Boolean,
-    isRepeatPasswordError: Boolean,
-    focusManager: FocusManager,
-) {
-
-    Column {
-        PasswordFields(
-            password = password,
-            repeatPassword = repeatPassword,
-            onPasswordChanged = onPasswordChanged,
-            onRepeatPasswordChanged = onRepeatPasswordChanged,
-            isPasswordError = isPasswordError,
-            isRepeatPasswordError = isRepeatPasswordError,
-            focusManager = focusManager,
-        )
-    }
 }
 
 @Composable
@@ -150,6 +123,8 @@ private fun PasswordFields(
             onValueChanged = onPasswordChanged,
             value = password,
             hint = stringResource(id = R.string.sign_in_hint_password),
+            helperText = stringResource(id = R.string.set_password_hint_password),
+            errorText = stringResource(id = R.string.set_password_mismatch_password_format),
             imeAction = ImeAction.Next,
             isPassword = true,
             isError = isPasswordError,
@@ -160,6 +135,7 @@ private fun PasswordFields(
             onValueChanged = onRepeatPasswordChanged,
             value = repeatPassword,
             hint = stringResource(id = R.string.set_password_repeat_password_hint),
+            errorText = stringResource(id = R.string.set_password_mismatch_password),
             imeAction = ImeAction.Done,
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
