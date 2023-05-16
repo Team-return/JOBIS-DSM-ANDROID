@@ -57,6 +57,7 @@ val titleList = listOf(
 fun SignUpScreen(
     navHostController: NavController,
     signUpViewModel: SignUpViewModel,
+    moveToMain: () -> Unit,
 ) {
 
     var currentProgress by remember { mutableStateOf(0) }
@@ -174,6 +175,7 @@ fun SignUpScreen(
                     SetPasswordScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
+                        moveToMain = moveToMain,
                     ){
                         buttonEnabled = it
                     }

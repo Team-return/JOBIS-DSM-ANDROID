@@ -32,7 +32,7 @@ interface UserApi {
     @PATCH(JobisUrl.Auth.code)
     suspend fun verifyEmail(
         @Query("email") email: String,
-        @Query("auth-code") authCode: String,
+        @Query("auth_code") authCode: String,
     ): Response<Void>
 
     @POST(JobisUrl.student)

@@ -37,6 +37,7 @@ val passwordRegex =
 fun SetPasswordScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel,
+    moveToMain: () -> Unit,
     changeButtonStatus: (Boolean) -> Unit,
 ) {
 
@@ -84,7 +85,7 @@ fun SetPasswordScreen(
         signUpViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignUpSideEffect.SignUpSuccess -> {
-                    navController.navigate(JobisRoute.Main)
+                    moveToMain()
                 }
 
                 is SignUpSideEffect.SignUpConflict -> {

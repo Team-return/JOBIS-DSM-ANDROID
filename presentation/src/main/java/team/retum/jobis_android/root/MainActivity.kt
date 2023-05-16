@@ -54,7 +54,9 @@ class MainActivity : ComponentActivity() {
                         SignUpScreen(
                             navHostController = navController,
                             signUpViewModel = signUpViewModel,
-                        )
+                        ){
+                            navController.navigate(JobisRoute.Main)
+                        }
                     }
 
                     composable(

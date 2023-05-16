@@ -10,6 +10,7 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="next">다음</string>
+    <string name="verification">인증</string>
 
     <!--    Exception Handling-->
 

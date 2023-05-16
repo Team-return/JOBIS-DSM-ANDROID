@@ -8,6 +8,7 @@ object JobisRoute {
     const val StudentInfo = "StudentInfo"
     const val VerifyEmail = "EmailVerify"
     const val SetPassword = "SetPassword"
+
     object Navigation {
         const val Home = "Home"
     }
