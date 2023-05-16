@@ -7,7 +7,6 @@ import team.retum.domain.param.SignUpParam
 
 data class SignUpRequest(
     @SerializedName("email") val email: String,
-    @SerializedName("phone_number") val phoneNumber: String,
     @SerializedName("password") val password: String,
     @SerializedName("grade") val grade: Int,
     @SerializedName("name") val name: String,
@@ -18,7 +17,6 @@ data class SignUpRequest(
 
 fun SignUpParam.toRequest() = SignUpRequest(
     email = this.email,
-    phoneNumber = this.phoneNumber,
     password = this.password,
     grade = this.grade,
     name = this.name,

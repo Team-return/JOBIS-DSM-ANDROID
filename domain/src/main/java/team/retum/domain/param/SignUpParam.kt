@@ -2,7 +2,6 @@ package team.retum.domain.param
 
 data class SignUpParam(
     val email: String,
-    val phoneNumber: String,
     val password: String,
     val grade: Int,
     val name: String,

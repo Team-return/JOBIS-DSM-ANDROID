@@ -9,7 +9,6 @@ import team.retum.jobis_android.util.mvi.State
 data class SignUpState(
     var email: String = "",
     var authCode: String = "",
-    var phoneNumber: String = "",
     var password: String = "",
     var repeatPassword: String = "",
     var grade: Int = 0,

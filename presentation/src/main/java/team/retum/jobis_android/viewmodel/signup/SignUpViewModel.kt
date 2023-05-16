@@ -232,7 +232,6 @@ class SignUpViewModel @Inject constructor(
             signUpUseCase(
                 signUpParam = SignUpParam(
                     email = state.email,
-                    phoneNumber = state.phoneNumber,
                     password = state.password,
                     grade = state.grade,
                     name = state.name,
