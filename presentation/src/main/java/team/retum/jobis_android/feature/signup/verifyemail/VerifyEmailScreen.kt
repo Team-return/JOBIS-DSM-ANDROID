@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
@@ -31,7 +30,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisSmallButton
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 @Stable
@@ -51,11 +49,13 @@ fun VerifyEmailScreen(
     var authCode by remember { mutableStateOf("") }
 
     var enabledAuthCodeField by remember { mutableStateOf(false) }
+    var enabledSendAuthCodeButton by remember { mutableStateOf(false) }
 
     var isEmailFieldError by remember { mutableStateOf(false) }
 
     val onEmailChanged = { value: String ->
         email = value
+        enabledSendAuthCodeButton = email.isNotBlank()
         val error = Pattern.matches(emailRegex, email)
         isEmailFieldError = !error
         signUpViewModel.sendEvent(
@@ -157,7 +157,7 @@ fun VerifyEmailScreen(
                     ),
                     color = JobisButtonColor.MainSolidColor,
                     onClick = onSendVerificationCodeButtonClicked,
-                    enabled = !isEmailFieldError
+                    enabled = enabledSendAuthCodeButton,
                 )
             }
         }

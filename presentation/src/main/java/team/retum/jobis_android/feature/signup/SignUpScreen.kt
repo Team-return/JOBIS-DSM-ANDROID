@@ -57,6 +57,7 @@ val titleList = listOf(
 fun SignUpScreen(
     navHostController: NavController,
     signUpViewModel: SignUpViewModel,
+    moveToSignIn: () -> Unit,
     moveToMain: () -> Unit,
 ) {
 
@@ -64,26 +65,23 @@ fun SignUpScreen(
 
     var buttonEnabled by remember { mutableStateOf(false) }
 
-    var isSuccessVerifyEmail by remember { mutableStateOf(false)}
+    val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
 
     BackHandler {
-        currentProgress--
+        currentProgress = navigatePopBackStack(
+            currentProgress = currentProgress,
+            moveToSignIn = moveToSignIn,
+        )
     }
 
     LaunchedEffect(currentProgress) {
+        buttonEnabled = false
         when (currentProgress) {
             0 -> navController.navigate(JobisRoute.StudentInfo)
-            1 -> {
-                navController.navigate(JobisRoute.VerifyEmail)
-                buttonEnabled = false
-            }
-            2 -> {
-                navController.navigate(JobisRoute.SetPassword)
-                buttonEnabled = false
-            }
-            else -> {}
+            1 -> navController.navigate(JobisRoute.VerifyEmail)
+            2 -> navController.navigate(JobisRoute.SetPassword)
         }
     }
 
@@ -96,7 +94,14 @@ fun SignUpScreen(
         )
     )
 
-    val onButtonClicked = {
+    val onTopBarClicked = {
+        currentProgress = navigatePopBackStack(
+            currentProgress = currentProgress,
+            moveToSignIn = moveToSignIn,
+        )
+    }
+
+    val onNextButtonClicked = {
         when (currentProgress) {
             0 -> {
                 signUpViewModel.sendEvent(
@@ -132,12 +137,11 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.height(36.dp))
-            AuthComponents(
+            AuthLayoutHeaders(
                 currentProgress = currentProgress,
                 titleList = titleList,
-            ) {
-                currentProgress--
-            }
+                onTopBarClicked = onTopBarClicked
+            )
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
@@ -164,7 +168,7 @@ fun SignUpScreen(
                             println(it)
                             buttonEnabled = it
                         }
-                    ){
+                    ) {
                         currentProgress++
                     }
                 }
@@ -176,7 +180,7 @@ fun SignUpScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
                         moveToMain = moveToMain,
-                    ){
+                    ) {
                         buttonEnabled = it
                     }
                 }
@@ -188,7 +192,7 @@ fun SignUpScreen(
             buttonEnabled = buttonEnabled,
             isSuccessVerifyEmail = isSuccessVerifyEmail,
         ) {
-            onButtonClicked()
+            onNextButtonClicked()
         }
     }
 }
@@ -232,7 +236,7 @@ private fun ProgressBarWithButton(
 }
 
 @Composable
-private fun AuthComponents(
+private fun AuthLayoutHeaders(
     currentProgress: Int,
     titleList: List<Int>,
     onTopBarClicked: () -> Unit,
@@ -247,4 +251,16 @@ private fun AuthComponents(
         text = if (currentProgress in 1..3) stringResource(titleList[currentProgress])
         else stringResource(titleList.first()),
     )
+}
+
+private fun navigatePopBackStack(
+    currentProgress: Int,
+    moveToSignIn: () -> Unit,
+): Int {
+    if (currentProgress > 0) {
+        return currentProgress - 1
+    } else {
+        moveToSignIn()
+        return 0
+    }
 }

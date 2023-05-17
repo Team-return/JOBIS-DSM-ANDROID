@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
                         SignUpScreen(
                             navHostController = navController,
                             signUpViewModel = signUpViewModel,
+                            moveToSignIn = {
+                                navController.popBackStack()
+                            }
                         ){
                             navController.navigate(JobisRoute.Main)
                         }
