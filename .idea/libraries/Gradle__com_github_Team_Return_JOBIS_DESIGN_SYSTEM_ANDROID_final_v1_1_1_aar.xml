@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.Team-Return.JOBIS-DESIGN-SYSTEM-ANDROID:final:v1.1.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0010cfcd32c5bd1291e76fee12219aa0/transformed/jetified-final-v1.1.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0010cfcd32c5bd1291e76fee12219aa0/transformed/jetified-final-v1.1.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0010cfcd32c5bd1291e76fee12219aa0/transformed/jetified-final-v1.1.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4778d3c50517e322137243a2d5aba9da/transformed/jetified-final-v1.1.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4778d3c50517e322137243a2d5aba9da/transformed/jetified-final-v1.1.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4778d3c50517e322137243a2d5aba9da/transformed/jetified-final-v1.1.1/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

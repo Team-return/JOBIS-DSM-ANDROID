@@ -30,11 +30,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.feature.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.TopBar
+import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Caption
@@ -54,23 +56,32 @@ val titleList = listOf(
 @Composable
 fun SignUpScreen(
     navHostController: NavController,
+    signUpViewModel: SignUpViewModel,
+    moveToSignIn: () -> Unit,
+    moveToMain: () -> Unit,
 ) {
 
-    var currentProgress by remember { mutableStateOf(1) }
+    var currentProgress by remember { mutableStateOf(0) }
+
+    var buttonEnabled by remember { mutableStateOf(false) }
+
+    val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
 
     BackHandler {
-        currentProgress--
+        currentProgress = navigatePopBackStack(
+            currentProgress = currentProgress,
+            moveToSignIn = moveToSignIn,
+        )
     }
 
     LaunchedEffect(currentProgress) {
+        buttonEnabled = false
         when (currentProgress) {
-            0 -> navHostController.popBackStack()
-            1 -> navController.navigate(JobisRoute.StudentInfo)
-            2 -> navController.navigate(JobisRoute.VerifyEmail)
-            3 -> navController.navigate(JobisRoute.SetPassword)
-            else -> {}
+            0 -> navController.navigate(JobisRoute.StudentInfo)
+            1 -> navController.navigate(JobisRoute.VerifyEmail)
+            2 -> navController.navigate(JobisRoute.SetPassword)
         }
     }
 
@@ -83,8 +94,33 @@ fun SignUpScreen(
         )
     )
 
-    val onButtonClicked = {
-        if (currentProgress in 0..2) currentProgress++
+    val onTopBarClicked = {
+        currentProgress = navigatePopBackStack(
+            currentProgress = currentProgress,
+            moveToSignIn = moveToSignIn,
+        )
+    }
+
+    val onNextButtonClicked = {
+        when (currentProgress) {
+            0 -> {
+                signUpViewModel.sendEvent(
+                    event = SignUpEvent.CheckStudentExists,
+                )
+            }
+
+            1 -> {
+                signUpViewModel.sendEvent(
+                    event = SignUpEvent.VerifyEmail,
+                )
+            }
+
+            2 -> {
+                signUpViewModel.sendEvent(
+                    event = SignUpEvent.SignUp,
+                )
+            }
+        }
     }
 
     Box(
@@ -101,12 +137,11 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.height(36.dp))
-            AuthComponents(
+            AuthLayoutHeaders(
                 currentProgress = currentProgress,
                 titleList = titleList,
-            ) {
-                currentProgress--
-            }
+                onTopBarClicked = onTopBarClicked
+            )
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
@@ -116,8 +151,11 @@ fun SignUpScreen(
                     route = JobisRoute.StudentInfo,
                 ) {
                     StudentInfoScreen(
-                        navController = navController,
-                    )
+                        signUpViewModel = signUpViewModel,
+                        navigate = { currentProgress++ },
+                    ) {
+                        buttonEnabled = it
+                    }
                 }
 
                 composable(
@@ -125,7 +163,14 @@ fun SignUpScreen(
                 ) {
                     VerifyEmailScreen(
                         navController = navController,
-                    )
+                        signUpViewModel = signUpViewModel,
+                        changeButtonState = {
+                            println(it)
+                            buttonEnabled = it
+                        }
+                    ) {
+                        currentProgress++
+                    }
                 }
 
                 composable(
@@ -133,15 +178,21 @@ fun SignUpScreen(
                 ) {
                     SetPasswordScreen(
                         navController = navController,
-                    )
+                        signUpViewModel = signUpViewModel,
+                        moveToMain = moveToMain,
+                    ) {
+                        buttonEnabled = it
+                    }
                 }
             }
         }
         ProgressBarWithButton(
             currentProgress = currentProgress,
             progress = progressAnimation,
+            buttonEnabled = buttonEnabled,
+            isSuccessVerifyEmail = isSuccessVerifyEmail,
         ) {
-            onButtonClicked()
+            onNextButtonClicked()
         }
     }
 }
@@ -150,6 +201,8 @@ fun SignUpScreen(
 private fun ProgressBarWithButton(
     currentProgress: Int,
     progress: Float,
+    buttonEnabled: Boolean,
+    isSuccessVerifyEmail: Boolean,
     onClick: () -> Unit,
 ) {
     Column {
@@ -170,8 +223,12 @@ private fun ProgressBarWithButton(
         )
         Spacer(modifier = Modifier.height(20.dp))
         JobisLargeButton(
-            text = stringResource(id = R.string.next),
+            text = stringResource(
+                id = if (currentProgress == 1 && !isSuccessVerifyEmail) R.string.verification
+                else R.string.next,
+            ),
             color = JobisButtonColor.MainSolidColor,
+            enabled = buttonEnabled,
         ) {
             onClick()
         }
@@ -179,7 +236,7 @@ private fun ProgressBarWithButton(
 }
 
 @Composable
-private fun AuthComponents(
+private fun AuthLayoutHeaders(
     currentProgress: Int,
     titleList: List<Int>,
     onTopBarClicked: () -> Unit,
@@ -191,7 +248,19 @@ private fun AuthComponents(
     }
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
-        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress-1])
+        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress])
         else stringResource(titleList.first()),
     )
+}
+
+private fun navigatePopBackStack(
+    currentProgress: Int,
+    moveToSignIn: () -> Unit,
+): Int {
+    if (currentProgress > 0) {
+        return currentProgress - 1
+    } else {
+        moveToSignIn()
+        return 0
+    }
 }

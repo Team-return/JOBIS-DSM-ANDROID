@@ -14,14 +14,6 @@ import java.net.SocketTimeoutException
 class HttpHandler<T> {
 
     private lateinit var httpRequest: suspend () -> T
-    private val onBadRequest: (message: String) -> Throwable = { BadRequestException() }
-    private val onUnauthorization: (message: String) -> Throwable = { UnAuthorizationException() }
-    private val onForbidden: (message: String) -> Throwable = { ForbiddenException()}
-    private val onNotFound: (message: String) -> Throwable = { NotFoundException() }
-    private val onConflict: (message: String) -> Throwable = { ConflictException() }
-    private val onServerError: (message: String) -> Throwable = { OnServerException() }
-    private val onOtherException: (code: Int, message: String) -> Throwable =
-        { _, _ -> UnknownException() }
 
     fun httpRequest(httpRequest: suspend () -> T) =
         this.apply { this.httpRequest = httpRequest }
@@ -31,15 +23,14 @@ class HttpHandler<T> {
             httpRequest()
         } catch (e: HttpException) {
             val code = e.code()
-            val message = e.message()
             throw when (code) {
-                400 -> onBadRequest(message)
-                401 -> onUnauthorization(message)
-                403 -> onForbidden(message)
-                404 -> onNotFound(message)
-                409 -> onConflict(message)
-                in 500..599 -> onServerError(message)
-                else -> onOtherException(code, message)
+                400 -> BadRequestException()
+                401 -> UnAuthorizationException()
+                403 -> ForbiddenException()
+                404 -> NotFoundException()
+                409 -> ConflictException()
+                in 500..599 -> OnServerException()
+                else -> UnknownException()
             }
         } catch (e: KotlinNullPointerException) {
             throw e

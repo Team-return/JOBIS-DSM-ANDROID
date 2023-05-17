@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:jobis:v1.1.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/8fe79a0481a6bb8952abb34c700de6f3/transformed/jetified-jobis-v1.1.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8fe79a0481a6bb8952abb34c700de6f3/transformed/jetified-jobis-v1.1.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8fe79a0481a6bb8952abb34c700de6f3/transformed/jetified-jobis-v1.1.3/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
