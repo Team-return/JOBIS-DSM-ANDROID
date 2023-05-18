@@ -35,46 +35,41 @@ class MainActivity : ComponentActivity() {
         setContent {
             SetWindowStatus()
 
-            val scaffoldState = rememberScaffoldState()
             val navController = rememberNavController()
 
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             // TODO 토스트 시스템 구현
-            Scaffold(
-                scaffoldState = scaffoldState,
+            NavHost(
+                navController = navController,
+                startDestination = JobisRoute.Main,
             ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = JobisRoute.SignIn,
+                composable(
+                    route = JobisRoute.SignUp,
                 ) {
-                    composable(
-                        route = JobisRoute.SignUp,
-                    ) {
-                        SignUpScreen(
-                            navHostController = navController,
-                            signUpViewModel = signUpViewModel,
-                            moveToSignIn = {
-                                navController.popBackStack()
-                            }
-                        ){
-                            navController.navigate(JobisRoute.Main)
+                    SignUpScreen(
+                        navHostController = navController,
+                        signUpViewModel = signUpViewModel,
+                        moveToSignIn = {
+                            navController.popBackStack()
                         }
-                    }
-
-                    composable(
-                        route = JobisRoute.SignIn,
                     ) {
-                        SignInScreen(
-                            navController = navController,
-                        )
+                        navController.navigate(JobisRoute.Main)
                     }
+                }
 
-                    composable(
-                        route = JobisRoute.Main,
-                    ) {
-                        MainScreen()
-                    }
+                composable(
+                    route = JobisRoute.SignIn,
+                ) {
+                    SignInScreen(
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.Main,
+                ) {
+                    MainScreen()
                 }
             }
         }
