@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.BottomBar
+import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -20,7 +20,11 @@ fun MainScreen() {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        bottomBar = { BottomBar() },
+        bottomBar = {
+            BottomBar(
+                navController = navController,
+            )
+        },
     ) {
         NavHost(
             navController = navController,

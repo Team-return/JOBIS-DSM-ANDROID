@@ -11,5 +11,8 @@ object JobisRoute {
 
     object Navigation {
         const val Home = "Home"
+        const val Recruitment = "Recruitment"
+        const val Profile = "Profile"
+        const val Menu = "Menu"
     }
 }
