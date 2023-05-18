@@ -10,6 +10,13 @@
     <string name="next">다음</string>
     <string name="verification">인증</string>
 
+    <!--    Bottom Navigation-->
+
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_recruitment">의뢰서</string>
+    <string name="bottom_nav_profile">프로필</string>
+    <string name="bottom_nav_menu">메뉴</string>
+
     <!--    Exception Handling-->
 
     <string name="bad_request_exception">잘못된 형식의 요청입니다</string>
