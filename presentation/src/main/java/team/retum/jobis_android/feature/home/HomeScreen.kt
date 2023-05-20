@@ -24,7 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobisui.colors.JobisColor
+import team.retum.jobisui.ui.theme.Body1
 import team.retum.jobisui.ui.theme.Body4
+import team.retum.jobisui.ui.theme.Caption
+import team.retum.jobisui.ui.theme.Heading3
 import team.retum.jobisui.ui.theme.Heading6
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.util.JobisSize
@@ -35,16 +38,11 @@ fun HomeScreen(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = 24.dp,
-                end = 24.dp,
-                bottom = 28.dp,
-            ),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         StudentInformation(
-            name = "name",
+            employmentRate = "32.5",
             major = "major",
         )
         Spacer(modifier = Modifier.height(28.dp))
@@ -56,12 +54,13 @@ fun HomeScreen(
 
 @Composable
 private fun StudentInformation(
-    name: String,
+    employmentRate: String,
     major: String,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(98.dp)
             .shadow(
                 elevation = 48.dp,
             )
@@ -70,9 +69,9 @@ private fun StudentInformation(
             )
             .clip(
                 shape = RoundedCornerShape(
-                    bottomStart = 30.dp,
-                    bottomEnd = 30.dp,
-                )
+                    bottomStart = 34.dp,
+                    bottomEnd = 34.dp,
+                ),
             )
             .background(
                 brush = Brush.horizontalGradient(listOf(JobisColor.Blue, JobisColor.LightBlue)),
@@ -82,18 +81,53 @@ private fun StudentInformation(
         Column(
             modifier = Modifier.padding(
                 horizontal = 30.dp,
-                vertical = 24.dp,
             ),
         ) {
-            Heading6(
-                text = name,
-                color = JobisColor.Gray100,
-            )
-            Body4(
-                text = major,
-                color = JobisColor.Gray100,
-            )
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Heading3(
+                        text = employmentRate,
+                        color = JobisColor.Gray100,
+                    )
+                    Body1(
+                        modifier = Modifier.padding(
+                            start = 4.dp,
+                            bottom = 4.dp,
+                        ),
+                        text = "%",
+                        color = JobisColor.Gray100,
+                    )
+                }
+                Caption(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            bottom = 4.dp,
+                        ),
+                    text = "${stringResource(id = R.string.home_count_success_candidate)} : 10/65",
+                    color = JobisColor.Gray100,
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Body4(
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    text = stringResource(id = R.string.home_employment_rate),
+                    color = JobisColor.Gray100,
+                )
+                Caption(
+                    text = "${stringResource(id = R.string.home_count_apply_candidate)} : 32/65",
+                    color = JobisColor.Gray100,
+                )
+            }
         }
+
     }
 }
 
@@ -145,37 +179,26 @@ private fun Card(
 @Composable
 private fun MenuCardGroup() {
     Row(
-        modifier = Modifier.height(170.dp),
+        modifier = Modifier
+            .height(170.dp)
+            .padding(
+                horizontal = 24.dp,
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Card(
             modifier = Modifier.weight(0.6f),
             alignment = Alignment.BottomEnd,
-            text = stringResource(id = R.string.do_get_recruitment),
+            text = stringResource(id = R.string.home_do_get_recruitment),
             drawable = R.drawable.ic_get_recruitment,
         )
         Spacer(modifier = Modifier.width(12.dp))
         Card(
             modifier = Modifier.weight(0.4f),
             alignment = Alignment.BottomCenter,
-            text = stringResource(id = R.string.do_get_company),
+            text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
         )
     }
     Spacer(modifier = Modifier.height(10.dp))
-    Row(
-        modifier = Modifier.height(88.dp),
-    ) {
-        Card(
-            modifier = Modifier.weight(0.4f),
-            alignment = Alignment.Center,
-            text = stringResource(id = R.string.do_check_interview_schedule),
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Card(
-            modifier = Modifier.weight(0.6f),
-            alignment = Alignment.Center,
-            text = stringResource(id = R.string.applied_company),
-        )
-    }
 }
