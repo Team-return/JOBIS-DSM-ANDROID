@@ -60,7 +60,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    private fun provideRecruitmentApi(
+    fun provideRecruitmentApi(
         retrofit: Retrofit,
     ): RecruitmentApi = retrofit.create(RecruitmentApi::class.java)
 
