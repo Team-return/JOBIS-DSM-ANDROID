@@ -2,6 +2,7 @@ package team.retum.jobis_android.feature.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +12,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,10 +36,10 @@ import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.ApplyCompaniesEntity
 import team.retum.jobis_android.contract.HomeEvent
-import team.retum.jobis_android.contract.HomeSideEffect
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
+import team.retum.jobisui.ui.theme.Body2
 import team.retum.jobisui.ui.theme.Body3
 import team.retum.jobisui.ui.theme.Body4
 import team.retum.jobisui.ui.theme.Caption
@@ -41,45 +47,67 @@ import team.retum.jobisui.ui.theme.Heading3
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.util.JobisSize
 
+@Stable
+val ApplyCompaniesItemShape = RoundedCornerShape(
+    size = 10.dp,
+)
+
 @Composable
 internal fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
+    var totalStudentCount by remember { mutableStateOf(0) }
+    var passCount by remember { mutableStateOf(0) }
+    var appliedCount by remember { mutableStateOf(0) }
+    var name by remember { mutableStateOf("") }
     val applyCompanies = remember { mutableStateListOf<ApplyCompaniesEntity>() }
+
 
     LaunchedEffect(Unit) {
         homeViewModel.sendEvent(
             event = HomeEvent.FetchUserApplyCompanies,
         )
 
-        homeViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                is HomeSideEffect.SuccessUserApplyCompanies -> {
-                    applyCompanies.addAll(sideEffect.applyCompanies)
-                }
-
-                else -> {
-                    // TODO 토스트 처리
-                }
-            }
+        homeViewModel.container.stateFlow.collect {
+            totalStudentCount = it.totalStudentCont
+            passCount = it.passCount
+            appliedCount = it.approvedCount
+            name = it.name
+            applyCompanies.addAll(it.applyCompanies)
         }
-
     }
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        StudentInformation(
-            employmentRate = "32.5",
-            major = "major",
+        RecruitmentStatus(
+            totalStudentCount = totalStudentCount,
+            passCount = passCount,
+            appliedCount = passCount,
         )
-        Spacer(modifier = Modifier.height(24.dp))
-
-        if (applyCompanies.isNotEmpty()) {
-            CompanyApplyHistoryList(
+        Spacer(modifier = Modifier.height(30.dp))
+        Column(
+            modifier = Modifier.padding(
+                horizontal = 24.dp,
+            )
+        ) {
+            UserInformation(
+                name = name,
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                Caption(
+                    text = stringResource(id = R.string.home_apply_status),
+                    color = JobisColor.Gray600,
+                )
+            }
+            ApplyCompanies(
                 applyCompanies = applyCompanies,
             )
         }
@@ -97,14 +125,23 @@ internal fun HomeScreen(
             MenuCardGroup()
         }
     }
-
 }
 
 @Composable
-private fun StudentInformation(
-    employmentRate: String,
-    major: String,
+private fun RecruitmentStatus(
+    totalStudentCount: Int,
+    passCount: Int,
+    appliedCount: Int,
 ) {
+
+    var employmentRate = 0f
+    var passString = "$passCount / $totalStudentCount"
+    var appliedString = "$appliedCount / $totalStudentCount"
+
+    if (appliedCount != 0) {
+        employmentRate = totalStudentCount.div(appliedCount).toFloat()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,8 +165,9 @@ private fun StudentInformation(
     ) {
         Column(
             modifier = Modifier.padding(
-                horizontal = 30.dp,
+                horizontal = 32.dp,
             ),
+            verticalArrangement = Arrangement.Bottom,
         ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -139,7 +177,7 @@ private fun StudentInformation(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Heading3(
-                        text = employmentRate,
+                        text = employmentRate.toString(),
                         color = JobisColor.Gray100,
                     )
                     Body1(
@@ -157,7 +195,7 @@ private fun StudentInformation(
                         .padding(
                             bottom = 4.dp,
                         ),
-                    text = "${stringResource(id = R.string.home_count_success_candidate)} : 10/65",
+                    text = "${stringResource(id = R.string.home_count_success_candidate)} : $passString",
                     color = JobisColor.Gray100,
                 )
             }
@@ -170,7 +208,7 @@ private fun StudentInformation(
                     color = JobisColor.Gray100,
                 )
                 Caption(
-                    text = "${stringResource(id = R.string.home_count_apply_candidate)} : 32/65",
+                    text = "${stringResource(id = R.string.home_count_apply_candidate)} : $appliedString",
                     color = JobisColor.Gray100,
                 )
             }
@@ -179,67 +217,78 @@ private fun StudentInformation(
 }
 
 @Composable
-private fun CompanyApplyHistoryList(
+private fun UserInformation(
+    name: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        JobisImage(
+            modifier = Modifier.size(40.dp),
+            drawable = R.drawable.ic_profile,
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Body2(
+                text = name,
+            )
+            Caption(
+                text = "소개과",
+                color = JobisColor.Gray600,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ApplyCompanies(
     applyCompanies: List<ApplyCompaniesEntity>,
 ) {
+    val size = if (applyCompanies.size >= 2) 2
+    else applyCompanies.size
 
-    Box(
-        modifier = Modifier.padding(
-            horizontal = 30.dp,
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            space = 16.dp,
         )
     ) {
-
-        val size = if (applyCompanies.size >= 2) 2
-        else applyCompanies.size
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                space = 16.dp,
+        items(
+            count = size,
+        ) { index ->
+            if (index == 0) {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            ApplyCompany(
+                company = applyCompanies[index].companyName,
+                status = applyCompanies[index].status.value,
             )
-        ) {
-            items(
-                count = size,
-            ) { index ->
-                if (index == 0) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                CompanyApplyHistoryItem(
-                    company = applyCompanies[index].companyName,
-                    status = applyCompanies[index].status.value,
-                    date = "",
-                )
-                if (index == size - 1) {
-                    Spacer(modifier = Modifier.height(18.dp))
-                }
+            if (index == size - 1) {
+                Spacer(modifier = Modifier.height(18.dp))
             }
         }
     }
 }
 
 @Composable
-private fun CompanyApplyHistoryItem(
+private fun ApplyCompany(
     company: String,
     status: String,
-    date: String,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(68.dp)
-            .shadow(
-                shape = RoundedCornerShape(
-                    size = 10.dp,
-                ),
-                elevation = 4.dp,
-            )
             .clip(
-                shape = RoundedCornerShape(
-                    size = 10.dp,
-                )
+                shape = ApplyCompaniesItemShape,
             )
-            .background(
-                color = JobisColor.Gray200,
+            .border(
+                width = 2.dp,
+                color = JobisColor.Gray400,
+                shape = ApplyCompaniesItemShape,
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -254,27 +303,15 @@ private fun CompanyApplyHistoryItem(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Body3(
                     text = company
                 )
-                Caption(
-                    text = date,
-                    color = JobisColor.Gray600,
-                )
-            }
-            Row {
-                Caption(
-                    text = stringResource(id = R.string.home_apply_current),
-                )
-                Caption(
+                Body3(
                     text = " $status ",
                     color = JobisColor.LightBlue,
-                )
-                Caption(
-                    text = stringResource(id = R.string.home_apply_status),
                 )
             }
         }
