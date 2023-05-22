@@ -4,20 +4,16 @@ import android.content.SharedPreferences
 
 interface UserDataStorage {
 
-    fun putTokens(
-        accessToken: String,
-        refreshToken: String,
-    )
-
     fun fetchAccessToken(): String
+
     fun fetchRefreshToken(): String
 
-    fun fetchUserId(): String
-    fun fetchPassword(): String
-
     fun setUserInfo(
-        accountId: String,
-        password: String,
+        accessToken: String,
+        accessTokenExpiresAt: String,
+        refreshToken: String,
+        refreshTokenExpiresAt: String,
+        authority: String,
     )
 
     fun getPreference(key: String): SharedPreferences

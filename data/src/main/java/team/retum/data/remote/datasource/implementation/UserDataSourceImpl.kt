@@ -5,10 +5,10 @@ import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
-import team.retum.data.remote.response.LoginResponse
+import team.retum.data.remote.response.SignInResponse
+import team.retum.data.remote.response.UserApplyCompaniesResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
-import team.retum.domain.param.LoginParam
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
@@ -17,7 +17,7 @@ class UserDataSourceImpl @Inject constructor(
 ) : UserDataSource {
     override suspend fun postLogin(
         loginRequest: LoginRequest,
-    ) = HttpHandler<LoginResponse>()
+    ) = HttpHandler<SignInResponse>()
         .httpRequest {
             userApi.postLogin(
                 loginRequest = loginRequest,
@@ -64,23 +64,23 @@ class UserDataSourceImpl @Inject constructor(
             )
         }.sendRequest()
 
+    override suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse =
+        HttpHandler<UserApplyCompaniesResponse>()
+            .httpRequest {
+                userApi.fetchUserApplyCompanies()
+            }
+            .sendRequest()
 
 
     override suspend fun setUserInfo(
-        loginParam: LoginParam,
+        signInResponse: SignInResponse,
     ) {
         userDataStorage.setUserInfo(
-            accountId = loginParam.accountId,
-            password = loginParam.password,
+            accessToken = signInResponse.accessToken,
+            accessTokenExpiresAt = signInResponse.accessExpiresAt,
+            refreshToken = signInResponse.refreshToken,
+            refreshTokenExpiresAt = signInResponse.refreshTokenExpiresAt,
+            authority = signInResponse.authority,
         )
     }
-
-    override suspend fun fetchUserInfo(): LoginParam =
-        userDataStorage.run {
-            LoginParam(
-                accountId = fetchUserId(),
-                password = fetchPassword(),
-                isAutoLogin = true,
-            )
-        }
 }

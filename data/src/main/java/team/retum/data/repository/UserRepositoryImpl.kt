@@ -3,6 +3,9 @@ package team.retum.data.repository
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.toRequest
+import team.retum.data.remote.response.SignInResponse
+import team.retum.data.remote.response.toEntity
+import team.retum.domain.entity.UserApplyCompaniesEntity
 import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.LoginParam
 import team.retum.domain.param.SendVerificationCodeParam
@@ -16,11 +19,19 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override suspend fun postLogin(param: LoginParam) {
-        if (param.isAutoLogin) {
-            userDataSource.setUserInfo(param)
-        }
-        userDataSource.postLogin(
+
+        val response = userDataSource.postLogin(
             loginRequest = param.toRequest(),
+        )
+
+        userDataSource.setUserInfo(
+            signInResponse = SignInResponse(
+                accessToken = response.accessToken,
+                accessExpiresAt = response.accessExpiresAt,
+                refreshToken = response.refreshToken,
+                refreshTokenExpiresAt = response.refreshTokenExpiresAt,
+                authority = response.authority,
+            )
         )
     }
 
@@ -49,6 +60,9 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun fetchUserApplyCompanies(): UserApplyCompaniesEntity =
+        userDataSource.fetchUserApplyCompanies().toEntity()
+
     override suspend fun verifyEmail(
         verifyEmailParam: VerifyEmailParam,
     ) {
@@ -57,9 +71,6 @@ class UserRepositoryImpl @Inject constructor(
             authCode = verifyEmailParam.authCode,
         )
     }
-
-    override suspend fun fetchUserInfo(): LoginParam =
-        userDataSource.fetchUserInfo()
 
     private fun LoginParam.toRequest(): LoginRequest =
         LoginRequest(
