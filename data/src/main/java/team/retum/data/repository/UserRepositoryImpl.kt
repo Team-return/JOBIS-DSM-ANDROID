@@ -3,6 +3,7 @@ package team.retum.data.repository
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.toRequest
+import team.retum.data.remote.response.LoginResponse
 import team.retum.data.remote.response.toEntity
 import team.retum.domain.entity.UserApplyCompaniesEntity
 import team.retum.domain.param.CheckStudentExistsParam
@@ -12,17 +13,26 @@ import team.retum.domain.param.SignUpParam
 import team.retum.domain.param.VerifyEmailParam
 import team.retum.domain.repository.UserRepository
 import javax.inject.Inject
+import kotlin.math.acos
 
 class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
 ) : UserRepository {
 
     override suspend fun postLogin(param: LoginParam) {
-        if (param.isAutoLogin) {
-            userDataSource.setUserInfo(param)
-        }
-        userDataSource.postLogin(
+
+        val response = userDataSource.postLogin(
             loginRequest = param.toRequest(),
+        )
+
+        userDataSource.setUserInfo(
+            loginResponse = LoginResponse(
+                accessToken = response.accessToken,
+                accessExpiresAt = response.accessExpiresAt,
+                refreshToken = response.refreshToken,
+                refreshTokenExpiresAt = response.refreshTokenExpiresAt,
+                authority = response.authority,
+            )
         )
     }
 
@@ -62,9 +72,6 @@ class UserRepositoryImpl @Inject constructor(
             authCode = verifyEmailParam.authCode,
         )
     }
-
-    override suspend fun fetchUserInfo(): LoginParam =
-        userDataSource.fetchUserInfo()
 
     private fun LoginParam.toRequest(): LoginRequest =
         LoginRequest(

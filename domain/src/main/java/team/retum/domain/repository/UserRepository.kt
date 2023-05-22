@@ -30,6 +30,4 @@ interface UserRepository {
     )
 
     suspend fun fetchUserApplyCompanies(): UserApplyCompaniesEntity
-
-    suspend fun fetchUserInfo(): LoginParam
 }
