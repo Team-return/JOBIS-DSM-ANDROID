@@ -11,5 +11,15 @@ data class UserApplyCompaniesEntity(
 
 data class ApplyCompaniesEntity(
     val companyName: String,
-    val status: String,
+    val status: Status,
 )
+
+enum class Status(
+    val value: String,
+){
+    REQUESTED("승인요청"),
+    APPROVED("승인완료"),
+    FAILED("탈락"),
+    PASS("합격"),
+    REJECTED("반려"),
+}

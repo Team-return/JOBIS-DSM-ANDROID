@@ -2,6 +2,7 @@ package team.retum.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.entity.ApplyCompaniesEntity
+import team.retum.domain.entity.Status
 import team.retum.domain.entity.UserApplyCompaniesEntity
 
 data class UserApplyCompaniesResponse(
@@ -14,7 +15,7 @@ data class UserApplyCompaniesResponse(
 ){
     data class ApplyCompanies(
         @SerializedName("company_name") val companyName: String,
-        @SerializedName("status") val status: String,
+        @SerializedName("status") val status: Status,
     )
 }
 
