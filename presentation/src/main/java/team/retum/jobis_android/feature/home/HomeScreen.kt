@@ -3,6 +3,7 @@ package team.retum.jobis_android.feature.home
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.ApplyCompaniesEntity
 import team.retum.jobis_android.contract.HomeEvent
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
@@ -44,6 +46,7 @@ import team.retum.jobisui.ui.theme.Body3
 import team.retum.jobisui.ui.theme.Body4
 import team.retum.jobisui.ui.theme.Caption
 import team.retum.jobisui.ui.theme.Heading3
+import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.util.JobisSize
 
@@ -107,6 +110,7 @@ internal fun HomeScreen(
                     color = JobisColor.Gray600,
                 )
             }
+            Spacer(modifier = Modifier.height(6.dp))
             ApplyCompanies(
                 applyCompanies = applyCompanies,
             )
@@ -122,7 +126,9 @@ internal fun HomeScreen(
             Spacer(
                 modifier = Modifier.height(28.dp),
             )
-            MenuCardGroup()
+            MenuCardGroup(
+                navController = navController,
+            )
         }
     }
 }
@@ -139,7 +145,7 @@ private fun RecruitmentStatus(
     val appliedString = "$appliedCount / $totalStudentCount"
 
     if (appliedCount != 0) {
-        employmentRate = totalStudentCount.div(appliedCount).toFloat()
+        employmentRate = (appliedCount.toFloat() / totalStudentCount.toFloat() * 100)
     }
 
     Column(
@@ -250,7 +256,7 @@ private fun ApplyCompanies(
     val size = if (applyCompanies.size >= 2) 2
     else applyCompanies.size
 
-    if(applyCompanies.isNotEmpty()) {
+    if (applyCompanies.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(
@@ -272,7 +278,7 @@ private fun ApplyCompanies(
                 }
             }
         }
-    }else {
+    } else {
         ApplyCompany(
             isEmpty = true,
         )
@@ -300,7 +306,12 @@ private fun ApplyCompany(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if(isEmpty == false) {
+        if (isEmpty == true) {
+            Caption(
+                text = stringResource(id = R.string.home_no_apply_companies),
+                color = JobisColor.Gray500,
+            )
+        } else {
             Column(
                 modifier = Modifier
                     .padding(
@@ -323,17 +334,14 @@ private fun ApplyCompany(
                     )
                 }
             }
-        }else{
-            Caption(
-                text = stringResource(id = R.string.home_no_apply_companies),
-                color = JobisColor.Gray500,
-            )
         }
     }
 }
 
 @Composable
-private fun MenuCardGroup() {
+private fun MenuCardGroup(
+    navController: NavController,
+) {
     Row(
         modifier = Modifier
             .height(200.dp)
@@ -347,6 +355,9 @@ private fun MenuCardGroup() {
             alignment = Alignment.BottomEnd,
             text = stringResource(id = R.string.home_do_get_recruitment),
             drawable = R.drawable.ic_get_recruitment,
+            onClick = {
+                navController.navigate(JobisRoute.SearchRecruitment)
+            }
         )
         Spacer(modifier = Modifier.width(12.dp))
         Card(
@@ -354,6 +365,7 @@ private fun MenuCardGroup() {
             alignment = Alignment.BottomCenter,
             text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
+            onClick = {},
         )
     }
     Spacer(modifier = Modifier.height(10.dp))
@@ -365,6 +377,7 @@ private fun Card(
     alignment: Alignment,
     text: String,
     @DrawableRes drawable: Int? = null,
+    onClick: () -> Unit,
 ) {
     Box(
         modifier = modifier,
@@ -381,6 +394,12 @@ private fun Card(
                     shape = JobisSize.Shape.Large,
                 )
                 .background(color = JobisColor.Gray100)
+                .jobisClickable(
+                    rippleEnabled = false,
+                    interactionSource = remember { MutableInteractionSource() },
+                ) {
+                    onClick()
+                }
                 .padding(
                     horizontal = 22.dp,
                     vertical = 14.dp,

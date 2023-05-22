@@ -80,4 +80,8 @@
     <string name="home_apply_status">지원현황</string>
     <string name="home_no_apply_companies">아직 지원한 기업이 없어요</string>
 
+    <!--    Search Recruitment-->
+
+    <string name="search_recruitment_header">모집의뢰서 조회하기</string>
+
 </resources>
