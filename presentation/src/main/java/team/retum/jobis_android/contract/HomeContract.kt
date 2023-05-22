@@ -1,6 +1,7 @@
 package team.retum.jobis_android.contract
 
 import team.retum.domain.entity.ApplyCompaniesEntity
+import team.retum.domain.entity.UserApplyCompaniesEntity
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -15,8 +16,8 @@ data class HomeState(
 ) : State
 
 sealed class HomeSideEffect : SideEffect {
-    class SuccessUserApplyCompanies(
-        val applyCompanies: List<ApplyCompaniesEntity>,
+    class SuccessFetchMainPageInformations(
+        val mainPageInformations: UserApplyCompaniesEntity,
     ) : HomeSideEffect()
 
     class Exception(
