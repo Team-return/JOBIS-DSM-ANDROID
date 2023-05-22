@@ -135,8 +135,8 @@ private fun RecruitmentStatus(
 ) {
 
     var employmentRate = 0f
-    var passString = "$passCount / $totalStudentCount"
-    var appliedString = "$appliedCount / $totalStudentCount"
+    val passString = "$passCount / $totalStudentCount"
+    val appliedString = "$appliedCount / $totalStudentCount"
 
     if (appliedCount != 0) {
         employmentRate = totalStudentCount.div(appliedCount).toFloat()
@@ -250,33 +250,40 @@ private fun ApplyCompanies(
     val size = if (applyCompanies.size >= 2) 2
     else applyCompanies.size
 
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-        )
-    ) {
-        items(
-            count = size,
-        ) { index ->
-            if (index == 0) {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            ApplyCompany(
-                company = applyCompanies[index].companyName,
-                status = applyCompanies[index].status.value,
+    if(applyCompanies.isNotEmpty()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
             )
-            if (index == size - 1) {
-                Spacer(modifier = Modifier.height(18.dp))
+        ) {
+            items(
+                count = size,
+            ) { index ->
+                if (index == 0) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                ApplyCompany(
+                    company = applyCompanies[index].companyName,
+                    status = applyCompanies[index].status.value,
+                )
+                if (index == size - 1) {
+                    Spacer(modifier = Modifier.height(18.dp))
+                }
             }
         }
+    }else {
+        ApplyCompany(
+            isEmpty = true,
+        )
     }
 }
 
 @Composable
 private fun ApplyCompany(
-    company: String,
-    status: String,
+    company: String? = null,
+    status: String? = null,
+    isEmpty: Boolean? = null,
 ) {
     Column(
         modifier = Modifier
@@ -293,27 +300,34 @@ private fun ApplyCompany(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier = Modifier
-                .padding(
-                    horizontal = 18.dp,
-                    vertical = 10.dp,
-                ),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+        if(isEmpty == false) {
+            Column(
+                modifier = Modifier
+                    .padding(
+                        horizontal = 18.dp,
+                        vertical = 10.dp,
+                    ),
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                Body3(
-                    text = company
-                )
-                Body3(
-                    text = " $status ",
-                    color = JobisColor.LightBlue,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Body3(
+                        text = company!!
+                    )
+                    Body3(
+                        text = " $status ",
+                        color = JobisColor.LightBlue,
+                    )
+                }
             }
+        }else{
+            Caption(
+                text = stringResource(id = R.string.home_no_apply_companies),
+                color = JobisColor.Gray500,
+            )
         }
     }
 }
