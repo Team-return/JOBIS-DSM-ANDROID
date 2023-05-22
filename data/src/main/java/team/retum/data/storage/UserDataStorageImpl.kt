@@ -4,42 +4,29 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
-import team.retum.data.storage.UserDataStorageImpl.User.ACCOUNT_ID
-import team.retum.data.storage.UserDataStorageImpl.User.PASSWORD
-import team.retum.data.storage.UserDataStorageImpl.UserPersonalKey.ACCESS_TOKEN
-import team.retum.data.storage.UserDataStorageImpl.UserPersonalKey.REFRESH_TOKEN
 import javax.inject.Inject
 
 class UserDataStorageImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : UserDataStorage {
 
-    override fun putTokens(
-        accessToken: String,
-        refreshToken: String,
-    ) {
-        putString(ACCESS_TOKEN, accessToken)
-        putString(REFRESH_TOKEN, refreshToken)
-    }
-
     override fun fetchAccessToken(): String =
-        getString(ACCESS_TOKEN)
+        getString(UserPersonalKey.ACCESS_TOKEN)
 
     override fun fetchRefreshToken(): String =
-        getString(REFRESH_TOKEN)
-
-    override fun fetchUserId(): String =
-        getPreference(ACCOUNT_ID).getString(ACCOUNT_ID, "").toString()
-
-    override fun fetchPassword(): String =
-        getPreference(PASSWORD).getString(PASSWORD, "").toString()
+        getString(UserPersonalKey.REFRESH_TOKEN)
 
     override fun setUserInfo(
-        accountId: String,
-        password: String,
+        accessToken: String,
+        accessTokenExpiresAt: String,
+        refreshToken: String,
+        refreshTokenExpiresAt: String,
+        authority: String,
     ) {
-        putString(ACCOUNT_ID, accountId)
-        putString(PASSWORD, password)
+        putString(UserPersonalKey.ACCESS_TOKEN, accessToken)
+        putString(UserPersonalKey.ACCESS_TOKEN_EXPIRES_AT, accessTokenExpiresAt)
+        putString(UserPersonalKey.REFRESH_TOKEN, refreshToken)
+        putString(UserPersonalKey.REFRESH_TOKEN_EXPIRES_AT, refreshTokenExpiresAt)
     }
 
     override fun getPreference(key: String): SharedPreferences =
@@ -53,17 +40,14 @@ class UserDataStorageImpl @Inject constructor(
     override fun putString(
         key: String,
         value: String,
-    ){
+    ) {
         getPreference(key).edit().putString(key, value).apply()
     }
 
     private object UserPersonalKey {
         const val ACCESS_TOKEN = "AccessToken"
         const val REFRESH_TOKEN = "RefreshToken"
-    }
-
-    private object User {
-        const val ACCOUNT_ID = "AccountId"
-        const val PASSWORD = "Password"
+        const val ACCESS_TOKEN_EXPIRES_AT = "AccessToken_Expires_At"
+        const val REFRESH_TOKEN_EXPIRES_AT = "RefreshToken_Expires_At"
     }
 }
