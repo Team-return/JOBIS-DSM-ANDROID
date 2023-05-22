@@ -9,7 +9,6 @@ import team.retum.data.remote.response.LoginResponse
 import team.retum.data.remote.response.UserApplyCompaniesResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
-import team.retum.domain.param.LoginParam
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
@@ -72,21 +71,16 @@ class UserDataSourceImpl @Inject constructor(
             }
             .sendRequest()
 
+
     override suspend fun setUserInfo(
-        loginParam: LoginParam,
+        loginResponse: LoginResponse,
     ) {
         userDataStorage.setUserInfo(
-            accountId = loginParam.accountId,
-            password = loginParam.password,
+            accessToken = loginResponse.accessToken,
+            accessTokenExpiresAt = loginResponse.accessExpiresAt,
+            refreshToken = loginResponse.refreshToken,
+            refreshTokenExpiresAt = loginResponse.refreshTokenExpiresAt,
+            authority = loginResponse.authority,
         )
     }
-
-    override suspend fun fetchUserInfo(): LoginParam =
-        userDataStorage.run {
-            LoginParam(
-                accountId = fetchUserId(),
-                password = fetchPassword(),
-                isAutoLogin = true,
-            )
-        }
 }

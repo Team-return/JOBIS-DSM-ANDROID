@@ -5,7 +5,6 @@ import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.LoginResponse
 import team.retum.data.remote.response.UserApplyCompaniesResponse
-import team.retum.domain.param.LoginParam
 
 interface UserDataSource {
     suspend fun postLogin(loginRequest: LoginRequest): LoginResponse
@@ -28,7 +27,5 @@ interface UserDataSource {
 
     suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse
 
-    suspend fun setUserInfo(loginParam: LoginParam)
-
-    suspend fun fetchUserInfo(): LoginParam
+    suspend fun setUserInfo(loginResponse: LoginResponse)
 }
