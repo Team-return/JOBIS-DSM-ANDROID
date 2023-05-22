@@ -6,6 +6,7 @@ object JobisUrl {
     const val code = "/code"
     const val student = "/students"
     const val auth = "/auth"
+    const val recruitment = "/recruitment"
 
     object User {
         const val login = "$users/login"
@@ -26,5 +27,9 @@ object JobisUrl {
 
     object Auth {
         const val code = "$auth/code"
+    }
+
+    object Recruitment{
+        const val student = "$recruitment/student"
     }
 }
