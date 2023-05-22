@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,8 +25,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.domain.entity.ApplyCompaniesEntity
+import team.retum.jobis_android.contract.HomeEvent
+import team.retum.jobis_android.contract.HomeSideEffect
+import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
 import team.retum.jobisui.ui.theme.Body3
@@ -34,11 +42,31 @@ import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.util.JobisSize
 
 @Composable
-fun HomeScreen(
+internal fun HomeScreen(
     navController: NavController,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    // TODO 서버 값으로 리팩토링
-    val tempList = emptyList<String>()
+
+    val applyCompanies = remember { mutableStateListOf<ApplyCompaniesEntity>() }
+
+    LaunchedEffect(Unit) {
+        homeViewModel.sendEvent(
+            event = HomeEvent.FetchUserApplyCompanies,
+        )
+
+        homeViewModel.container.sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                is HomeSideEffect.SuccessUserApplyCompanies -> {
+                    applyCompanies.addAll(sideEffect.applyCompanies)
+                }
+
+                else -> {
+                    // TODO 토스트 처리
+                }
+            }
+        }
+
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -49,10 +77,10 @@ fun HomeScreen(
             major = "major",
         )
         Spacer(modifier = Modifier.height(24.dp))
-        // TODO 서버 값으로 리팩토링
-        if (tempList.isNotEmpty()) {
+
+        if (applyCompanies.isNotEmpty()) {
             CompanyApplyHistoryList(
-                historyList = tempList,
+                applyCompanies = applyCompanies,
             )
         }
         Column(
@@ -152,7 +180,7 @@ private fun StudentInformation(
 
 @Composable
 private fun CompanyApplyHistoryList(
-    historyList: List<Any>,
+    applyCompanies: List<ApplyCompaniesEntity>,
 ) {
 
     Box(
@@ -161,8 +189,8 @@ private fun CompanyApplyHistoryList(
         )
     ) {
 
-        val size = if (historyList.size >= 2) 2
-        else historyList.size
+        val size = if (applyCompanies.size >= 2) 2
+        else applyCompanies.size
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -177,9 +205,9 @@ private fun CompanyApplyHistoryList(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 CompanyApplyHistoryItem(
-                    company = historyList[index].toString(),
-                    status = historyList[index].toString(),
-                    date = historyList[index].toString(),
+                    company = applyCompanies[index].companyName,
+                    status = applyCompanies[index].status.value,
+                    date = "",
                 )
                 if (index == size - 1) {
                     Spacer(modifier = Modifier.height(18.dp))
