@@ -3,11 +3,11 @@ package team.retum.data.remote.datasource.declaration
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
-import team.retum.data.remote.response.LoginResponse
+import team.retum.data.remote.response.SignInResponse
 import team.retum.data.remote.response.UserApplyCompaniesResponse
 
 interface UserDataSource {
-    suspend fun postLogin(loginRequest: LoginRequest): LoginResponse
+    suspend fun postLogin(loginRequest: LoginRequest): SignInResponse
 
     suspend fun sendVerificationCode(sendVerificationCodeRequest: SendVerificationCodeRequest)
 
@@ -27,5 +27,5 @@ interface UserDataSource {
 
     suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse
 
-    suspend fun setUserInfo(loginResponse: LoginResponse)
+    suspend fun setUserInfo(signInResponse: SignInResponse)
 }

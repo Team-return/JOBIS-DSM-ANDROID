@@ -3,7 +3,7 @@ package team.retum.data.repository
 import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.toRequest
-import team.retum.data.remote.response.LoginResponse
+import team.retum.data.remote.response.SignInResponse
 import team.retum.data.remote.response.toEntity
 import team.retum.domain.entity.UserApplyCompaniesEntity
 import team.retum.domain.param.CheckStudentExistsParam
@@ -13,7 +13,6 @@ import team.retum.domain.param.SignUpParam
 import team.retum.domain.param.VerifyEmailParam
 import team.retum.domain.repository.UserRepository
 import javax.inject.Inject
-import kotlin.math.acos
 
 class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
@@ -26,7 +25,7 @@ class UserRepositoryImpl @Inject constructor(
         )
 
         userDataSource.setUserInfo(
-            loginResponse = LoginResponse(
+            signInResponse = SignInResponse(
                 accessToken = response.accessToken,
                 accessExpiresAt = response.accessExpiresAt,
                 refreshToken = response.refreshToken,
