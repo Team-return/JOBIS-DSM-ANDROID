@@ -3,6 +3,7 @@ package team.retum.jobis_android.feature.recruitment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,11 +39,15 @@ import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
+import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
+import team.retum.jobisui.colors.JobisTextFieldColor
 import team.retum.jobisui.ui.theme.Body2
 import team.retum.jobisui.ui.theme.Caption
 import team.retum.jobisui.util.jobisClickable
+import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import java.text.DecimalFormat
 
 @Composable
@@ -108,7 +114,8 @@ internal fun SearchRecruitmentScreen(
         Header(
             text = stringResource(id = R.string.search_recruitment_header),
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+        Filter()
         RecruitmentList(
             recruitments = recruitments,
             onPageChanged = onPageChanged,
@@ -136,6 +143,41 @@ private fun Header(
         Divider(
             modifier = Modifier.fillMaxWidth(),
             color = JobisColor.Gray400,
+        )
+    }
+}
+
+@Composable
+private fun Filter() {
+
+    var keyword by remember { mutableStateOf("") }
+
+    val onKeywordChanged = { value: String ->
+
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.weight(0.9f),
+        ) {
+            JobisBoxTextField(
+                color = JobisTextFieldColor.MainColor,
+                onValueChanged = onKeywordChanged,
+                value = keyword,
+                hint = stringResource(id = R.string.search_recruitment_filter_hint),
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        JobisMediumIconButton(
+            drawable = R.drawable.ic_filter,
+            color = JobisButtonColor.MainSolidColor,
+            onClick = {},
+            shape = RoundedCornerShape(
+                size = 4.dp,
+            )
         )
     }
 }
