@@ -13,9 +13,9 @@ class RecruitmentRepositoryImpl @Inject constructor(
     override suspend fun fetchRecruitmentList(
         fetchRecruitmentListParam: FetchRecruitmentListParam
     ): RecruitmentListEntity = recruitmentDataSource.fetchRecruitmentList(
-        page = fetchRecruitmentListParam.key,
-        keyword = fetchRecruitmentListParam.keyword,
-        company = fetchRecruitmentListParam.companyName,
+        page = fetchRecruitmentListParam.page,
+        code = fetchRecruitmentListParam.code,
+        company = fetchRecruitmentListParam.company,
     ).toEntity()
 
 }

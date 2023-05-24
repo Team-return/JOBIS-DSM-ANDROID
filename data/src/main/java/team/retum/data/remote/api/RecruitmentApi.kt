@@ -9,7 +9,7 @@ interface RecruitmentApi {
     @GET(JobisUrl.Recruitment.student)
     suspend fun fetchRecruitmentList(
         @Query("page") page: Int,
-        @Query("keyword") keyword: String?,
+        @Query("code") code: Long?,
         @Query("company") company: String?,
     ): RecruitmentListResponse
 }

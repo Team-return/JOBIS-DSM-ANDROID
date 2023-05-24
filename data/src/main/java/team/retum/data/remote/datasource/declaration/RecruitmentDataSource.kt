@@ -5,7 +5,7 @@ import team.retum.data.remote.response.RecruitmentListResponse
 interface RecruitmentDataSource {
     suspend fun fetchRecruitmentList(
         page: Int,
-        keyword: String?,
+        code: Long?,
         company: String?,
     ): RecruitmentListResponse
 }
