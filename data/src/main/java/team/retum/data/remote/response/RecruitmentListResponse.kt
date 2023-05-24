@@ -16,6 +16,7 @@ data class Recruitment(
     @SerializedName("military") val military: Boolean,
     @SerializedName("total_hiring") val totalHiring: Int,
     @SerializedName("job_code_list") val jobCodeList: List<String>,
+    @SerializedName("bookmarked") val bookmarked: Boolean,
 )
 
 fun RecruitmentListResponse.toEntity() = RecruitmentListEntity(
@@ -30,4 +31,5 @@ private fun Recruitment.toEntity() = RecruitmentEntity(
     military = this.military,
     totalHiring = this.totalHiring,
     jobCodeList = this.jobCodeList,
+    bookmarked = this.bookmarked,
 )

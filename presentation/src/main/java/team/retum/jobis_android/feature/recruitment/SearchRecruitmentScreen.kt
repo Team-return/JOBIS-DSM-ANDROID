@@ -215,7 +215,7 @@ private fun RecruitmentList(
             Recruitment(
                 imageUrl = item.companyProfileUrl,
                 position = position.toString(),
-                isBookmarked = false,
+                isBookmarked = item.bookmarked,
                 companyName = item.companyName,
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = item.military,
@@ -306,7 +306,8 @@ private fun Recruitment(
                     )
                     JobisImage(
                         modifier = Modifier.size(18.dp),
-                        drawable = R.drawable.ic_bookmarked_off,
+                        drawable = if (isBookmarked) R.drawable.ic_bookmarked_on
+                        else R.drawable.ic_bookmarked_off,
                     )
                 }
                 Caption(
