@@ -1,8 +1,10 @@
 package team.retum.jobis_android.feature.recruitment
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +40,7 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body2
 import team.retum.jobisui.ui.theme.Caption
+import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.image.JobisImage
 import java.text.DecimalFormat
 
@@ -46,13 +50,27 @@ internal fun SearchRecruitmentScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
-    val page by remember { mutableStateOf(1)}
+    var page by remember { mutableStateOf(1) }
+
+    LaunchedEffect(page) {
+        recruitmentViewModel.sendEvent(
+            event = RecruitmentEvent.FetchRecruitments(
+                page = page,
+                code = null,
+                company = null,
+            )
+        )
+    }
 
     val recruitments = remember {
         mutableStateListOf<RecruitmentEntity>()
     }
 
-    LaunchedEffect(Unit){
+    val onPageChanged = { value: Int ->
+        page = value
+    }
+
+    LaunchedEffect(Unit) {
         recruitmentViewModel.sendEvent(
             event = RecruitmentEvent.FetchRecruitments(
                 page = page,
@@ -61,10 +79,12 @@ internal fun SearchRecruitmentScreen(
             )
         )
 
-        recruitmentViewModel.container.sideEffectFlow.collect{ sideEffect ->
-            when(sideEffect){
+        recruitmentViewModel.container.sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
                 is RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect -> {
-                    recruitments.clear()
+                    if (page == 1) {
+                        recruitments.clear()
+                    }
                     recruitments.addAll(sideEffect.recruitmentListEntity.recruitmentEntities)
                 }
 
@@ -91,6 +111,7 @@ internal fun SearchRecruitmentScreen(
         Spacer(modifier = Modifier.height(40.dp))
         RecruitmentList(
             recruitments = recruitments,
+            onPageChanged = onPageChanged,
         )
     }
 }
@@ -122,18 +143,26 @@ private fun Header(
 @Composable
 private fun RecruitmentList(
     recruitments: List<RecruitmentEntity>,
+    onPageChanged: (Int) -> Unit,
 ) {
-    LazyColumn {
+
+    var currentPage by remember { mutableStateOf(1) }
+
+    LazyColumn(
+        contentPadding = PaddingValues(
+            bottom = 80.dp,
+        ),
+    ) {
         itemsIndexed(
             items = recruitments,
-        ) { index, item, ->
+        ) { index, item ->
 
             val position = StringBuilder()
             val trainPay = DecimalFormat("#,###").format(item.trainPay)
 
-            for(i in 0..item.jobCodeList.lastIndex){
+            for (i in 0..item.jobCodeList.lastIndex) {
                 position.append(item.jobCodeList[i])
-                if(i != item.jobCodeList.lastIndex) {
+                if (i != item.jobCodeList.lastIndex) {
                     position.append(" / ")
                 }
             }
@@ -149,8 +178,36 @@ private fun RecruitmentList(
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = item.military,
             )
-            if (index == recruitments.lastIndex) {
-                Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .jobisClickable(
+                        rippleEnabled = false,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        currentPage++
+                        onPageChanged(currentPage)
+                    },
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Caption(
+                    text = stringResource(
+                        id = R.string.search_recruitment_more_details,
+                    ),
+                    color = JobisColor.Gray600,
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                JobisImage(
+                    drawable = R.drawable.ic_down_arrow_gray_600,
+                    onClick = {
+                        currentPage++
+                        onPageChanged(currentPage)
+                    }
+                )
             }
         }
     }
@@ -225,10 +282,12 @@ private fun Recruitment(
                     Caption(
                         text = trainPay,
                     )
-                    JobisImage(
-                        modifier = Modifier.size(18.dp),
-                        drawable = R.drawable.ic_military_support,
-                    )
+                    if (isMilitarySupported) {
+                        JobisImage(
+                            modifier = Modifier.size(18.dp),
+                            drawable = R.drawable.ic_military_support,
+                        )
+                    }
                 }
             }
         }

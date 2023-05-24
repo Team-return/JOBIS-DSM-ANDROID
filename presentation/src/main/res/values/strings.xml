@@ -83,6 +83,7 @@
     <!--    Search Recruitment-->
 
     <string name="search_recruitment_header">모집의뢰서 조회하기</string>
-    <string name="search_recruitment_train_pay">실습 수당 %s</string>
+    <string name="search_recruitment_train_pay">실습 수당 %s 원</string>
+    <string name="search_recruitment_more_details">더보기</string>
 
 </resources>
