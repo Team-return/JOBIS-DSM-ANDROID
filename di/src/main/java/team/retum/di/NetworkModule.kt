@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
+import team.retum.data.remote.api.RecruitmentApi
 import team.retum.data.remote.api.UserApi
 import javax.inject.Singleton
 
@@ -56,4 +57,11 @@ object NetworkModule {
         retrofit: Retrofit,
     ): UserApi =
         retrofit.create(UserApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRecruitmentApi(
+        retrofit: Retrofit,
+    ): RecruitmentApi = retrofit.create(RecruitmentApi::class.java)
+
 }
