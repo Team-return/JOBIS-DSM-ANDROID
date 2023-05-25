@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class RecruitmentRepositoryImpl @Inject constructor(
     private val recruitmentDataSource: RecruitmentDataSource,
-): RecruitmentRepository {
+) : RecruitmentRepository {
     override suspend fun fetchRecruitmentList(
         fetchRecruitmentListParam: FetchRecruitmentListParam
     ): RecruitmentListEntity = recruitmentDataSource.fetchRecruitmentList(
@@ -18,4 +18,11 @@ class RecruitmentRepositoryImpl @Inject constructor(
         company = fetchRecruitmentListParam.company,
     ).toEntity()
 
+    override suspend fun bookmarkRecruitment(
+        recruitmentId: Long,
+    ) {
+        recruitmentDataSource.bookmarkRecruitment(
+            recruitmentId = recruitmentId,
+        )
+    }
 }

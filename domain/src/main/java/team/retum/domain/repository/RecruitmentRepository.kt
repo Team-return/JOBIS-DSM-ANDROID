@@ -7,4 +7,8 @@ interface RecruitmentRepository {
     suspend fun fetchRecruitmentList(
         fetchRecruitmentListParam: FetchRecruitmentListParam,
     ): RecruitmentListEntity
+
+    suspend fun bookmarkRecruitment(
+        recruitmentId: Long,
+    )
 }
