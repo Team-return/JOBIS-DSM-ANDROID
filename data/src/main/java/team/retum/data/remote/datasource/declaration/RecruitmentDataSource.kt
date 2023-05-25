@@ -8,4 +8,8 @@ interface RecruitmentDataSource {
         code: Long?,
         company: String?,
     ): RecruitmentListResponse
+
+    suspend fun bookmarkRecruitment(
+        recruitmentId: Long,
+    )
 }
