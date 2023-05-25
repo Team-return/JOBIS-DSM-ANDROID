@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -119,6 +120,7 @@ internal fun SearchRecruitmentScreen(
         RecruitmentList(
             recruitments = recruitments,
             onPageChanged = onPageChanged,
+            recruitmentViewModel = recruitmentViewModel,
         )
     }
 }
@@ -186,6 +188,7 @@ private fun Filter() {
 private fun RecruitmentList(
     recruitments: List<RecruitmentEntity>,
     onPageChanged: (Int) -> Unit,
+    recruitmentViewModel: RecruitmentViewModel,
 ) {
 
     var currentPage by remember { mutableStateOf(1) }
@@ -215,10 +218,24 @@ private fun RecruitmentList(
             Recruitment(
                 imageUrl = item.companyProfileUrl,
                 position = position.toString(),
-                isBookmarked = item.bookmarked,
+                isBookmarked = remember { mutableStateOf(item.bookmarked) },
                 companyName = item.companyName,
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = item.military,
+                onBookmarked = {
+                    recruitmentViewModel.sendEvent(
+                        event = RecruitmentEvent.BookmarkRecruitment(
+                            recruitmentId = item.recruitId.toLong()
+                        )
+                    )
+                    recruitmentViewModel.sendEvent(
+                        event = RecruitmentEvent.FetchRecruitments(
+                            page = currentPage,
+                            code = null,
+                            company = null,
+                        )
+                    )
+                }
             )
         }
         item {
@@ -259,11 +276,17 @@ private fun RecruitmentList(
 private fun Recruitment(
     imageUrl: String,
     position: String,
-    isBookmarked: Boolean,
+    isBookmarked: MutableState<Boolean>,
     companyName: String,
     trainPay: String,
     isMilitarySupported: Boolean,
+    onBookmarked: () -> Unit,
 ) {
+
+    var isItemClicked by remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -306,8 +329,13 @@ private fun Recruitment(
                     )
                     JobisImage(
                         modifier = Modifier.size(18.dp),
-                        drawable = if (isBookmarked) R.drawable.ic_bookmarked_on
+                        drawable = if (isBookmarked.value) R.drawable.ic_bookmarked_on
                         else R.drawable.ic_bookmarked_off,
+                        onClick = {
+                            onBookmarked()
+                            isItemClicked = !isItemClicked
+                            isBookmarked.value = !isBookmarked.value
+                        }
                     )
                 }
                 Caption(

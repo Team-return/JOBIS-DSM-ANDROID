@@ -8,6 +8,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.param.FetchRecruitmentListParam
+import team.retum.domain.usecase.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.FetchRecruitmentListUseCase
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class RecruitmentViewModel @Inject constructor(
     private val fetchRecruitmentListUseCase: FetchRecruitmentListUseCase,
+    private val bookmarkRecruitmentUseCase: BookmarkRecruitmentUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
@@ -30,6 +32,12 @@ internal class RecruitmentViewModel @Inject constructor(
                     page = event.page,
                     code = event.code,
                     company = event.company,
+                )
+            }
+
+            is RecruitmentEvent.BookmarkRecruitment -> {
+                bookmarkRecruitment(
+                    recruitmentId = event.recruitmentId,
                 )
             }
         }
@@ -61,6 +69,27 @@ internal class RecruitmentViewModel @Inject constructor(
                         )
                     )
                 )
+            }
+        }
+    }
+
+    private fun bookmarkRecruitment(
+        recruitmentId: Long,
+    ) = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            bookmarkRecruitmentUseCase(
+                recruitmentId = recruitmentId,
+            ).onSuccess {
+
+            }.onFailure { throwable ->
+                postSideEffect(
+                    sideEffect = RecruitmentSideEffect.Exception(
+                        message = getStringFromException(
+                            throwable = throwable,
+                        )
+                    )
+                )
+
             }
         }
     }

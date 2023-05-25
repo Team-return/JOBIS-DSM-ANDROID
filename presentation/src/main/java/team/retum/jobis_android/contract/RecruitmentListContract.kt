@@ -27,5 +27,9 @@ sealed class RecruitmentEvent: Event{
         val code: Long?,
         val company: String?,
     ): RecruitmentEvent()
+
+    class BookmarkRecruitment(
+        val recruitmentId: Long,
+    ): RecruitmentEvent()
 }
 
