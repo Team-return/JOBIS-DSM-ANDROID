@@ -4,8 +4,6 @@ import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.toRequest
 import team.retum.data.remote.response.SignInResponse
-import team.retum.data.remote.response.toEntity
-import team.retum.domain.entity.UserApplyCompaniesEntity
 import team.retum.domain.param.CheckStudentExistsParam
 import team.retum.domain.param.LoginParam
 import team.retum.domain.param.SendVerificationCodeParam
@@ -59,9 +57,6 @@ class UserRepositoryImpl @Inject constructor(
             signUpRequest = signUpParam.toRequest(),
         )
     }
-
-    override suspend fun fetchUserApplyCompanies(): UserApplyCompaniesEntity =
-        userDataSource.fetchUserApplyCompanies().toEntity()
 
     override suspend fun verifyEmail(
         verifyEmailParam: VerifyEmailParam,

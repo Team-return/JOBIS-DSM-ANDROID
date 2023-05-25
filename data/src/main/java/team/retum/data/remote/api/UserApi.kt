@@ -10,7 +10,6 @@ import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.SignInResponse
-import team.retum.data.remote.response.UserApplyCompaniesResponse
 import team.retum.data.remote.url.JobisUrl
 
 interface UserApi {
@@ -40,7 +39,4 @@ interface UserApi {
     suspend fun signUp(
         @Body signUpRequest: SignUpRequest,
     )
-
-    @GET(JobisUrl.Student.main)
-    suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse
 }

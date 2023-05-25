@@ -35,10 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.ApplyCompaniesEntity
-import team.retum.jobis_android.contract.HomeEvent
+import team.retum.jobis_android.contract.ApplicationsEvent
+import team.retum.jobis_android.contract.ApplicationsSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.viewmodel.home.HomeViewModel
+import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
 import team.retum.jobisui.ui.theme.Body2
@@ -58,28 +58,34 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    applicationsViewModel: ApplicationsViewModel = hiltViewModel(),
 ) {
 
     var totalStudentCount by remember { mutableStateOf(0) }
     var passCount by remember { mutableStateOf(0) }
-    var appliedCount by remember { mutableStateOf(0) }
+    var approvedCount by remember { mutableStateOf(0) }
     var name by remember { mutableStateOf("") }
     val applyCompanies = remember { mutableStateListOf<ApplyCompaniesEntity>() }
 
-
     LaunchedEffect(Unit) {
-        homeViewModel.sendEvent(
-            event = HomeEvent.FetchUserApplyCompanies,
+        applicationsViewModel.sendEvent(
+            event = ApplicationsEvent.FetchTotalPassedStudentCount,
         )
 
-        homeViewModel.container.stateFlow.collect {
-            totalStudentCount = it.totalStudentCont
-            passCount = it.passCount
-            appliedCount = it.approvedCount
-            name = it.name
-            applyCompanies.addAll(it.applyCompanies)
+        applicationsViewModel.container.sideEffectFlow.collect{ sideEffect ->
+            when(sideEffect){
+                is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
+                    totalStudentCount = sideEffect.totalStudentCount
+                    passCount = sideEffect.passCount
+                    approvedCount = sideEffect.approvedCount
+                }
+
+                else -> {
+
+                }
+            }
         }
+
     }
 
     Column(
