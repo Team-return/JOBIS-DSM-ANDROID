@@ -38,7 +38,10 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.AppliedHistoryEntity
 import team.retum.jobis_android.contract.ApplicationsEvent
 import team.retum.jobis_android.contract.ApplicationsSideEffect
+import team.retum.jobis_android.contract.StudentEvent
+import team.retum.jobis_android.contract.StudentSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.viewmodel.StudentsViewModel
 import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
@@ -60,12 +63,15 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
 internal fun HomeScreen(
     navController: NavController,
     applicationsViewModel: ApplicationsViewModel = hiltViewModel(),
+    studentsViewModel: StudentsViewModel = hiltViewModel(),
 ) {
 
     var totalStudentCount by remember { mutableStateOf(0) }
     var passCount by remember { mutableStateOf(0) }
     var approvedCount by remember { mutableStateOf(0) }
     var name by remember { mutableStateOf("") }
+    var gcn by remember { mutableStateOf("") }
+    var department by remember { mutableStateOf("") }
     val applyCompanies = remember { mutableStateListOf<AppliedHistoryEntity>() }
 
     LaunchedEffect(Unit) {
@@ -77,7 +83,6 @@ internal fun HomeScreen(
             sendEvent(
                 event = ApplicationsEvent.FetchAppliedCompanyHistories,
             )
-
 
             container.sideEffectFlow.collect { sideEffect ->
                 when (sideEffect) {
@@ -98,7 +103,28 @@ internal fun HomeScreen(
                 }
             }
         }
+    }
 
+    LaunchedEffect(Unit) {
+        with(studentsViewModel) {
+            sendEvent(
+                event = StudentEvent.FetchStudentInformation,
+            )
+
+            container.sideEffectFlow.collect { sideEffect ->
+                when (sideEffect) {
+                    is StudentSideEffect.SuccessFetchStudentInformation -> {
+                        name = sideEffect.studentName
+                        gcn = sideEffect.studentGcn
+                        department = sideEffect.department.department
+                    }
+
+                    is StudentSideEffect.Exception -> {
+
+                    }
+                }
+            }
+        }
     }
 
     Column(
@@ -118,6 +144,8 @@ internal fun HomeScreen(
         ) {
             UserInformation(
                 name = name,
+                gcn = gcn,
+                department = department,
             )
             Spacer(modifier = Modifier.height(20.dp))
             Row(
@@ -244,6 +272,8 @@ private fun RecruitmentStatus(
 @Composable
 private fun UserInformation(
     name: String,
+    gcn: String,
+    department: String,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -258,10 +288,10 @@ private fun UserInformation(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Body2(
-                text = name,
+                text = "$gcn $name",
             )
             Caption(
-                text = "소개과",
+                text = department,
                 color = JobisColor.Gray600,
             )
         }
