@@ -4,8 +4,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import team.retum.data.repository.ApplicationsRepositoryImpl
 import team.retum.data.repository.RecruitmentRepositoryImpl
 import team.retum.data.repository.UserRepositoryImpl
+import team.retum.domain.repository.ApplicationsRepository
 import team.retum.domain.repository.RecruitmentRepository
 import team.retum.domain.repository.UserRepository
 import javax.inject.Singleton
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindsRecruitmentRepository(
         recruitmentRepositoryImpl: RecruitmentRepositoryImpl,
     ): RecruitmentRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsApplicationsRepository(
+        applicationsRepositoryImpl: ApplicationsRepositoryImpl,
+    ): ApplicationsRepository
 }
