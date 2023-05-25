@@ -1,5 +1,6 @@
 package team.retum.jobis_android.contract
 
+import team.retum.domain.entity.AppliedHistoryEntity
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -9,6 +10,10 @@ sealed class ApplicationsSideEffect: SideEffect{
         val totalStudentCount: Int,
         val passCount: Int,
         val approvedCount: Int,
+    ): ApplicationsSideEffect()
+
+    class SuccessFetchAppliedCompanyHistories(
+        val applications: List<AppliedHistoryEntity>,
     ): ApplicationsSideEffect()
 
     class Exception(
@@ -24,4 +29,5 @@ data class ApplicationsState(
 
 sealed class ApplicationsEvent: Event{
     object FetchTotalPassedStudentCount: ApplicationsEvent()
+    object FetchAppliedCompanyHistories: ApplicationsEvent()
 }

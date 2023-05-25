@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.domain.entity.AppliedHistoryEntity
 import team.retum.jobis_android.contract.ApplicationsEvent
 import team.retum.jobis_android.contract.ApplicationsSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
@@ -65,23 +66,35 @@ internal fun HomeScreen(
     var passCount by remember { mutableStateOf(0) }
     var approvedCount by remember { mutableStateOf(0) }
     var name by remember { mutableStateOf("") }
-    val applyCompanies = remember { mutableStateListOf<ApplyCompaniesEntity>() }
+    val applyCompanies = remember { mutableStateListOf<AppliedHistoryEntity>() }
 
     LaunchedEffect(Unit) {
-        applicationsViewModel.sendEvent(
-            event = ApplicationsEvent.FetchTotalPassedStudentCount,
-        )
+        with(applicationsViewModel) {
+            sendEvent(
+                event = ApplicationsEvent.FetchTotalPassedStudentCount,
+            )
 
-        applicationsViewModel.container.sideEffectFlow.collect{ sideEffect ->
-            when(sideEffect){
-                is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
-                    totalStudentCount = sideEffect.totalStudentCount
-                    passCount = sideEffect.passCount
-                    approvedCount = sideEffect.approvedCount
-                }
+            sendEvent(
+                event = ApplicationsEvent.FetchAppliedCompanyHistories,
+            )
 
-                else -> {
 
+            container.sideEffectFlow.collect { sideEffect ->
+                when (sideEffect) {
+                    is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
+                        totalStudentCount = sideEffect.totalStudentCount
+                        passCount = sideEffect.passCount
+                        approvedCount = sideEffect.approvedCount
+                    }
+
+                    is ApplicationsSideEffect.SuccessFetchAppliedCompanyHistories -> {
+                        applyCompanies.clear()
+                        applyCompanies.addAll(sideEffect.applications)
+                    }
+
+                    else -> {
+
+                    }
                 }
             }
         }
@@ -257,7 +270,7 @@ private fun UserInformation(
 
 @Composable
 private fun ApplyCompanies(
-    applyCompanies: List<ApplyCompaniesEntity>,
+    applyCompanies: List<AppliedHistoryEntity>,
 ) {
     val size = if (applyCompanies.size >= 2) 2
     else applyCompanies.size
@@ -276,8 +289,8 @@ private fun ApplyCompanies(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 ApplyCompany(
-                    company = applyCompanies[index].companyName,
-                    status = applyCompanies[index].status.value,
+                    company = applyCompanies[index].company,
+                    status = applyCompanies[index].applicationStatus.status,
                 )
                 if (index == size - 1) {
                     Spacer(modifier = Modifier.height(18.dp))
