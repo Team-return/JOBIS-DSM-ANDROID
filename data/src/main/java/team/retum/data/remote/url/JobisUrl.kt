@@ -37,5 +37,6 @@ object JobisUrl {
 
     object Applications{
         const val employment = "$applications/employment/count"
+        const val students = "$applications/students"
     }
 }
