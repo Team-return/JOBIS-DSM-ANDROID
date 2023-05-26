@@ -7,6 +7,7 @@ object Dependency {
         const val CONSTRAINT = "androidx.constraintlayout:constraintlayout:${Version.CONSTRAINT}"
         const val ACTIVITY = "androidx.activity:activity-ktx:${Version.ACTIVITY}"
         const val FRAGMENT = "androidx.fragment:fragment-ktx:${Version.FRAGMENT}"
+        const val PAGING = "androidx.paging:paging-compose:${Version.PAGING}"
     }
 
     object TEST {
