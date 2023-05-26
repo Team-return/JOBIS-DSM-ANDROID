@@ -4,7 +4,6 @@ import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.SignInResponse
-import team.retum.data.remote.response.UserApplyCompaniesResponse
 
 interface UserDataSource {
     suspend fun postLogin(loginRequest: LoginRequest): SignInResponse
@@ -24,8 +23,6 @@ interface UserDataSource {
     suspend fun signUp(
         signUpRequest: SignUpRequest,
     )
-
-    suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse
 
     suspend fun setUserInfo(signInResponse: SignInResponse)
 }

@@ -6,7 +6,6 @@ import team.retum.data.remote.request.LoginRequest
 import team.retum.data.remote.request.SendVerificationCodeRequest
 import team.retum.data.remote.request.SignUpRequest
 import team.retum.data.remote.response.SignInResponse
-import team.retum.data.remote.response.UserApplyCompaniesResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
@@ -63,14 +62,6 @@ class UserDataSourceImpl @Inject constructor(
                 signUpRequest = signUpRequest,
             )
         }.sendRequest()
-
-    override suspend fun fetchUserApplyCompanies(): UserApplyCompaniesResponse =
-        HttpHandler<UserApplyCompaniesResponse>()
-            .httpRequest {
-                userApi.fetchUserApplyCompanies()
-            }
-            .sendRequest()
-
 
     override suspend fun setUserInfo(
         signInResponse: SignInResponse,

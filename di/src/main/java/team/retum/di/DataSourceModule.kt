@@ -4,9 +4,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import team.retum.data.remote.datasource.declaration.ApplicationsDataSource
 import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
+import team.retum.data.remote.datasource.declaration.StudentsDataSource
 import team.retum.data.remote.datasource.declaration.UserDataSource
+import team.retum.data.remote.datasource.implementation.ApplicationsDataSourceImpl
 import team.retum.data.remote.datasource.implementation.RecruitmentDataSourceImpl
+import team.retum.data.remote.datasource.implementation.StudentsDataSourceImpl
 import team.retum.data.remote.datasource.implementation.UserDataSourceImpl
 import javax.inject.Singleton
 
@@ -25,4 +29,16 @@ abstract class DataSourceModule {
     abstract fun bindsRecruitmentDataSource(
         recruitmentDataSourceImpl: RecruitmentDataSourceImpl,
     ): RecruitmentDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsApplicationsDataSource(
+        applicationsDataSourceImpl: ApplicationsDataSourceImpl,
+    ): ApplicationsDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsStudentsDataSource(
+        studentsDataSourceImpl: StudentsDataSourceImpl,
+    ): StudentsDataSource
 }

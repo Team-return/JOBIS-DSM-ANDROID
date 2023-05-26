@@ -35,10 +35,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.ApplyCompaniesEntity
-import team.retum.jobis_android.contract.HomeEvent
+import team.retum.domain.entity.AppliedHistoryEntity
+import team.retum.jobis_android.contract.ApplicationsEvent
+import team.retum.jobis_android.contract.ApplicationsSideEffect
+import team.retum.jobis_android.contract.StudentEvent
+import team.retum.jobis_android.contract.StudentSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.viewmodel.home.HomeViewModel
+import team.retum.jobis_android.viewmodel.StudentsViewModel
+import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
 import team.retum.jobisui.ui.theme.Body2
@@ -58,27 +62,68 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    applicationsViewModel: ApplicationsViewModel = hiltViewModel(),
+    studentsViewModel: StudentsViewModel = hiltViewModel(),
 ) {
 
     var totalStudentCount by remember { mutableStateOf(0) }
     var passCount by remember { mutableStateOf(0) }
-    var appliedCount by remember { mutableStateOf(0) }
+    var approvedCount by remember { mutableStateOf(0) }
     var name by remember { mutableStateOf("") }
-    val applyCompanies = remember { mutableStateListOf<ApplyCompaniesEntity>() }
-
+    var gcn by remember { mutableStateOf("") }
+    var department by remember { mutableStateOf("") }
+    val applyCompanies = remember { mutableStateListOf<AppliedHistoryEntity>() }
 
     LaunchedEffect(Unit) {
-        homeViewModel.sendEvent(
-            event = HomeEvent.FetchUserApplyCompanies,
-        )
+        with(applicationsViewModel) {
+            sendEvent(
+                event = ApplicationsEvent.FetchTotalPassedStudentCount,
+            )
 
-        homeViewModel.container.stateFlow.collect {
-            totalStudentCount = it.totalStudentCont
-            passCount = it.passCount
-            appliedCount = it.approvedCount
-            name = it.name
-            applyCompanies.addAll(it.applyCompanies)
+            sendEvent(
+                event = ApplicationsEvent.FetchAppliedCompanyHistories,
+            )
+
+            container.sideEffectFlow.collect { sideEffect ->
+                when (sideEffect) {
+                    is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
+                        totalStudentCount = sideEffect.totalStudentCount
+                        passCount = sideEffect.passCount
+                        approvedCount = sideEffect.approvedCount
+                    }
+
+                    is ApplicationsSideEffect.SuccessFetchAppliedCompanyHistories -> {
+                        applyCompanies.clear()
+                        applyCompanies.addAll(sideEffect.applications)
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        with(studentsViewModel) {
+            sendEvent(
+                event = StudentEvent.FetchStudentInformation,
+            )
+
+            container.sideEffectFlow.collect { sideEffect ->
+                when (sideEffect) {
+                    is StudentSideEffect.SuccessFetchStudentInformation -> {
+                        name = sideEffect.studentName
+                        gcn = sideEffect.studentGcn
+                        department = sideEffect.department.department
+                    }
+
+                    is StudentSideEffect.Exception -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -99,6 +144,8 @@ internal fun HomeScreen(
         ) {
             UserInformation(
                 name = name,
+                gcn = gcn,
+                department = department,
             )
             Spacer(modifier = Modifier.height(20.dp))
             Row(
@@ -225,6 +272,8 @@ private fun RecruitmentStatus(
 @Composable
 private fun UserInformation(
     name: String,
+    gcn: String,
+    department: String,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -239,10 +288,10 @@ private fun UserInformation(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Body2(
-                text = name,
+                text = "$gcn $name",
             )
             Caption(
-                text = "소개과",
+                text = department,
                 color = JobisColor.Gray600,
             )
         }
@@ -251,7 +300,7 @@ private fun UserInformation(
 
 @Composable
 private fun ApplyCompanies(
-    applyCompanies: List<ApplyCompaniesEntity>,
+    applyCompanies: List<AppliedHistoryEntity>,
 ) {
     val size = if (applyCompanies.size >= 2) 2
     else applyCompanies.size
@@ -270,8 +319,8 @@ private fun ApplyCompanies(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 ApplyCompany(
-                    company = applyCompanies[index].companyName,
-                    status = applyCompanies[index].status.value,
+                    company = applyCompanies[index].company,
+                    status = applyCompanies[index].applicationStatus.status,
                 )
                 if (index == size - 1) {
                     Spacer(modifier = Modifier.height(18.dp))

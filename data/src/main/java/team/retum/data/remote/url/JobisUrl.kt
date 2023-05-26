@@ -8,6 +8,7 @@ object JobisUrl {
     const val auth = "/auth"
     const val recruitment = "/recruitments"
     const val bookmarks = "/bookmarks"
+    const val applications = "/applications"
 
     object User {
         const val login = "$users/login"
@@ -18,7 +19,7 @@ object JobisUrl {
         const val signup = "$student/signup"
         const val recruit = "$student/recruit"
         const val exists = "$student/exists"
-        const val main = "$student/main"
+        const val my = "$student/my"
     }
 
     object Code {
@@ -33,5 +34,10 @@ object JobisUrl {
     object Recruitment {
         const val student = "$recruitment/student"
         const val bookmark = "$bookmarks/{recruitment-id}"
+    }
+
+    object Applications{
+        const val employment = "$applications/employment/count"
+        const val students = "$applications/students"
     }
 }
