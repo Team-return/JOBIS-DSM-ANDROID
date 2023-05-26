@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -24,12 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.param.Sex
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
-import team.retum.jobis_android.util.KeyboardOption
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor

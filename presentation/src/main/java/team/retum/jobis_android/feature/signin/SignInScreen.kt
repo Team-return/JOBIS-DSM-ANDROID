@@ -32,8 +32,7 @@ import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignInEvent
 import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.KeyboardOption
-import team.retum.jobis_android.util.clearTextFieldError
+import team.retum.jobis_android.util.compose.clearTextFieldError
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
