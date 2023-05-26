@@ -1,6 +1,6 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.entity.RecruitmentListEntity
+import team.retum.domain.entity.RecruitmentsEntity
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -13,7 +13,7 @@ data class RecruitmentState(
 
 sealed class RecruitmentSideEffect: SideEffect{
     class SuccessFetchRecruitmentsSideEffect(
-        val recruitmentListEntity: RecruitmentListEntity,
+        val recruitmentsEntity: RecruitmentsEntity,
     ): RecruitmentSideEffect()
 
     class Exception(
