@@ -15,7 +15,7 @@ data class Recruitment(
     @SerializedName("train_pay") val trainPay: Int,
     @SerializedName("military") val military: Boolean,
     @SerializedName("total_hiring") val totalHiring: Int,
-    @SerializedName("job_code_list") val jobCodeList: List<String>,
+    @SerializedName("job_code_list") val jobCodeList: String,
     @SerializedName("bookmarked") val bookmarked: Boolean,
 )
 
