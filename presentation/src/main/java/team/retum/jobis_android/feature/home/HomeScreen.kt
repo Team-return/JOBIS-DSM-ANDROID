@@ -414,7 +414,9 @@ private fun MenuCardGroup(
             alignment = Alignment.BottomCenter,
             text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
-            onClick = {},
+            onClick = {
+                navController.navigate(JobisRoute.Company)
+            },
         )
     }
     Spacer(modifier = Modifier.height(10.dp))

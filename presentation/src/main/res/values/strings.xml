@@ -87,4 +87,8 @@
     <string name="search_recruitment_more_details">더보기</string>
     <string name="search_recruitment_filter_hint">회사검색</string>
 
+    <!--    Companies-->
+
+    <string name="companies_million">%s억</string>
+
 </resources>

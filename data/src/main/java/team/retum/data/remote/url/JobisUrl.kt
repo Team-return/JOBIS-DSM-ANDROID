@@ -9,6 +9,7 @@ object JobisUrl {
     const val recruitment = "/recruitments"
     const val bookmarks = "/bookmarks"
     const val applications = "/applications"
+    const val companies = "/companies"
 
     object User {
         const val login = "$users/login"
@@ -39,5 +40,9 @@ object JobisUrl {
     object Applications{
         const val employment = "$applications/employment/count"
         const val students = "$applications/students"
+    }
+
+    object Company{
+        const val student = "$companies/student"
     }
 }

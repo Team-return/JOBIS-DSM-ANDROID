@@ -126,7 +126,7 @@ internal fun SearchRecruitmentScreen(
 }
 
 @Composable
-private fun Header(
+internal fun Header(
     text: String,
 ) {
     Column {
@@ -150,7 +150,7 @@ private fun Header(
 }
 
 @Composable
-private fun Filter() {
+internal fun Filter() {
 
     var keyword by remember { mutableStateOf("") }
 
