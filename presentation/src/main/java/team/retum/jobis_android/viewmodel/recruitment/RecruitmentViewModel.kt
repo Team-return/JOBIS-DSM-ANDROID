@@ -17,7 +17,7 @@ import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.util.paging.RecruitmentPagingSource
+import team.retum.jobis_android.util.paging.recruitment.RecruitmentPagingSource
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
 import javax.inject.Inject
 
