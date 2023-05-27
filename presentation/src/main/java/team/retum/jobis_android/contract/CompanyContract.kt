@@ -14,6 +14,6 @@ sealed class CompanySideEffect: SideEffect{
 
 data class CompanyState(
     var companies: List<CompanyEntity> = emptyList(),
-    var page: Int = 0,
+    var page: Int = 1,
     var name: String? = null,
 ): State

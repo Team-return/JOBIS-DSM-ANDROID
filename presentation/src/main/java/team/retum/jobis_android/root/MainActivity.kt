@@ -6,20 +6,18 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.company.CompanyListScreen
 import team.retum.jobis_android.feature.main.MainScreen
+import team.retum.jobis_android.feature.recruitment.SearchRecruitmentScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
@@ -69,7 +67,25 @@ class MainActivity : ComponentActivity() {
                 composable(
                     route = JobisRoute.Main,
                 ) {
-                    MainScreen()
+                    MainScreen(
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.SearchRecruitment,
+                ) {
+                    SearchRecruitmentScreen(
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.Company,
+                ) {
+                    CompanyListScreen(
+                        navController = navController,
+                    )
                 }
             }
         }
