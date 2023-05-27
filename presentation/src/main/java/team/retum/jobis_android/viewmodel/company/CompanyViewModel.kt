@@ -18,6 +18,7 @@ import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.contract.CompanyState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
+import java.lang.StringBuilder
 import javax.inject.Inject
 
 @HiltViewModel
@@ -122,6 +123,16 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
+    internal fun setCompanyId(
+        companyId: Int,
+    ) = intent {
+        reduce {
+            state.copy(
+                companyId = companyId,
+            )
+        }
+    }
+
     private fun setCompanyDetails(
         companyDetailsEntity: CompanyDetailsEntity,
     ) = intent {
@@ -153,4 +164,22 @@ class CompanyViewModel @Inject constructor(
             }
         }
     }
+
+    internal fun getCompanyDetails(): List<String?> =
+        with(container.stateFlow.value.companyDetails) {
+            return listOf(
+                representativeName,
+                foundedAt,
+                workerNumber.toString(),
+                take.toString(),
+                address1,
+                address2,
+                manager1,
+                phoneNumber1,
+                manager2,
+                phoneNumber2,
+                email,
+                fax,
+            )
+        }
 }

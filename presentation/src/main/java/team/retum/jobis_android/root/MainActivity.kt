@@ -11,10 +11,13 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.company.CompanyListScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.SearchRecruitmentScreen
@@ -85,6 +88,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     CompanyListScreen(
                         navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.CompanyDetails,
+                    arguments = listOf(
+                        navArgument("company-id"){ type = NavType.IntType }
+                    )
+                ){
+                    CompanyDetailsScreen(
+                        navController = navController,
+                        companyId = it.arguments?.getInt("company-id") ?: 0,
                     )
                 }
             }

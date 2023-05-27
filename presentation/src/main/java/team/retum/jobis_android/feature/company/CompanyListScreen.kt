@@ -31,6 +31,7 @@ import team.retum.domain.entity.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.feature.recruitment.Filter
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body2
@@ -61,12 +62,13 @@ fun CompanyListScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Header(
-            text = stringResource(id = R.string.search_recruitment_header),
+            text = stringResource(id = R.string.company_list_search_company),
         )
         Spacer(modifier = Modifier.height(12.dp))
         Filter()
         CompanyList(
             companies = state.companies,
+            navController = navController,
         )
     }
 }
@@ -74,6 +76,7 @@ fun CompanyListScreen(
 @Composable
 private fun CompanyList(
     companies: List<CompanyEntity>,
+    navController: NavController,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
@@ -87,7 +90,9 @@ private fun CompanyList(
                 name = item.name,
                 logoUrl = item.logoUrl,
                 take = item.take,
-            ) {}
+            ) {
+                navController.navigate("CompanyDetails/${item.id}")
+            }
             Spacer(
                 modifier = Modifier.height(16.dp),
             )
@@ -147,7 +152,7 @@ private fun Company(
                     modifier = Modifier.height(2.dp),
                 )
                 Caption(
-                    text = stringResource(id = R.string.companies_million, take.toString()),
+                    text = stringResource(id = R.string.company_list_million, take.toString()),
                     color = JobisColor.Gray600,
                 )
             }

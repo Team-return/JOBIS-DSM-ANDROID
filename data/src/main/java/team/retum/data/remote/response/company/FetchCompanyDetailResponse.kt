@@ -45,5 +45,5 @@ fun FetchCompanyDetailResponse.toEntity() = CompanyDetailsEntity(
     representativeName = this.representativeName,
     take = this.take,
     workerNumber = this.workerNumber,
-    zipCode1 = this.zipCode1
+    zipCode1 = this.zipCode1,
 )
