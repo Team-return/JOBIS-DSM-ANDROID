@@ -1,6 +1,7 @@
 package team.retum.data.remote.response.company
 
 import com.google.gson.annotations.SerializedName
+import team.retum.domain.entity.company.CompanyDetailsEntity
 
 data class FetchCompanyDetailResponse(
     @SerializedName("address1") val address1: String,
@@ -22,5 +23,27 @@ data class FetchCompanyDetailResponse(
     @SerializedName("take") val take: Double,
     @SerializedName("worker_number") val workerNumber: Int,
     @SerializedName("zip_code1") val zipCode1: String,
-    @SerializedName("zip_code2") val zipCode2: String
+    @SerializedName("zip_code2") val zipCode2: String,
+)
+
+fun FetchCompanyDetailResponse.toEntity() = CompanyDetailsEntity(
+    address1 = this.address1,
+    address2 = this.address2,
+    attachments = this.attachments,
+    businessNumber = this.businessNumber,
+    companyIntroduce = this.companyIntroduce,
+    companyName = this.companyName,
+    companyProfileUrl = this.companyProfileUrl,
+    email = this.email,
+    fax = this.fax,
+    foundedAt = this.foundedAt,
+    manager1 = this.manager1,
+    manager2 = this.manager2,
+    phoneNumber1 = this.phoneNumber1,
+    phoneNumber2 = this.phoneNumber2,
+    recruitmentId = this.recruitmentId,
+    representativeName = this.representativeName,
+    take = this.take,
+    workerNumber = this.workerNumber,
+    zipCode1 = this.zipCode1
 )
