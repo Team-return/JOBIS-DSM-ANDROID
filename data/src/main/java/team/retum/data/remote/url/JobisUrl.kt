@@ -44,5 +44,6 @@ object JobisUrl {
 
     object Company{
         const val student = "$companies/student"
+        const val details = "$companies/{company-id}"
     }
 }
