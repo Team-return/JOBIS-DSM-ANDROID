@@ -1,6 +1,7 @@
 package team.retum.jobis_android.viewmodel.review
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -15,6 +16,7 @@ import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class ReviewViewModel @Inject constructor(
     private val fetchReviewsUseCase: FetchReviewsUseCase,
 ) : BaseViewModel<ReviewState, ReviewSideEffect>() {
@@ -49,6 +51,16 @@ class ReviewViewModel @Inject constructor(
         reduce {
             state.copy(
                 reviews = reviews,
+            )
+        }
+    }
+
+    internal fun setCompanyId(
+        companyId: Long,
+    ) = intent {
+        reduce {
+            state.copy(
+                companyId = companyId,
             )
         }
     }

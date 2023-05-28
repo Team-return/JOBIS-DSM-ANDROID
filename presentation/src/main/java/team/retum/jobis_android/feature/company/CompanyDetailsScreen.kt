@@ -1,30 +1,40 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
+import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1
@@ -33,14 +43,19 @@ import team.retum.jobisui.ui.theme.Caption
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.image.JobisImage
 
+@Stable
+val ReviewItemShape = RoundedCornerShape(size = 14.dp)
+
 @Composable
 fun CompanyDetailsScreen(
     navController: NavController,
     companyId: Int,
     companyViewModel: CompanyViewModel = hiltViewModel(),
+    reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
 
-    val state = companyViewModel.container.stateFlow.collectAsState().value
+    val companyState = companyViewModel.container.stateFlow.collectAsState()
+    val reviewState = reviewViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
         companyViewModel.setCompanyId(
@@ -48,12 +63,26 @@ fun CompanyDetailsScreen(
         )
         companyViewModel.fetchCompanyDetails()
 
+        reviewViewModel.setCompanyId(
+            companyId = companyId.toLong(),
+        )
+
+        reviewViewModel.fetchReviews()
+
         companyViewModel.container.sideEffectFlow.collect { sideEffect ->
             when (sideEffect) {
                 is CompanySideEffect.NotFoundCompany -> {
 
                 }
 
+                else -> {
+
+                }
+            }
+        }
+
+        reviewViewModel.container.sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
                 else -> {
 
                 }
@@ -73,6 +102,10 @@ fun CompanyDetailsScreen(
         contentAlignment = Alignment.BottomCenter,
     ) {
         Column(
+            modifier = Modifier
+                .verticalScroll(
+                    state = ScrollState(0),
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Header(
@@ -80,9 +113,9 @@ fun CompanyDetailsScreen(
             )
             Spacer(modifier = Modifier.height(30.dp))
             CompanyDetails(
-                companyProfileUrl = state.companyDetails.companyProfileUrl,
-                companyName = state.companyDetails.companyName,
-                companyIntroduce = state.companyDetails.companyIntroduce,
+                companyProfileUrl = companyState.value.companyDetails.companyProfileUrl,
+                companyName = companyState.value.companyDetails.companyName,
+                companyIntroduce = companyState.value.companyDetails.companyIntroduce,
                 companyDetails = companyViewModel.getCompanyDetails()
             )
             Divider(
@@ -97,6 +130,9 @@ fun CompanyDetailsScreen(
                 text = stringResource(id = R.string.company_details_review_interview),
                 color = JobisColor.Gray700,
             )
+            Spacer(modifier = Modifier.height(12.dp))
+            Reviews(reviews = reviewState.value.reviews)
+            Spacer(modifier = Modifier.height(80.dp))
         }
         JobisLargeButton(
             text = stringResource(id = R.string.company_details_see_recruitents),
@@ -160,5 +196,60 @@ private fun CompanyDetails(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun Reviews(
+    reviews: List<ReviewEntity>,
+) {
+    Column(
+        modifier = Modifier
+            .height(180.dp)
+            .verticalScroll(
+                state = ScrollState(0),
+            ),
+    ) {
+        repeat(reviews.size) { index ->
+            val item = reviews[index]
+            Review(
+                writer = item.writer,
+                year = item.year.toString()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+        Spacer(modifier = Modifier.fillMaxHeight(0.5f))
+    }
+}
+
+@Composable
+private fun Review(
+    writer: String,
+    year: String,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 50.dp)
+            .clip(
+                shape = ReviewItemShape,
+            )
+            .border(
+                width = 1.dp,
+                color = JobisColor.Gray400,
+                shape = ReviewItemShape,
+            )
+            .padding(
+                horizontal = 20.dp,
+                vertical = 16.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Caption(text = stringResource(id = R.string.reviews_writer, writer))
+        Caption(
+            text = year,
+            color = JobisColor.Gray600,
+        )
     }
 }

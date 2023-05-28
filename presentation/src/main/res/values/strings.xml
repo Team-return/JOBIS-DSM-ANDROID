@@ -112,4 +112,8 @@
     <string name="company_details_null">없음</string>
     <string name="company_details_review_interview">면접 후기</string>
 
+    <!--    Reviews-->
+
+    <string name="reviews_writer">%s님의 후기</string>
+
 </resources>
