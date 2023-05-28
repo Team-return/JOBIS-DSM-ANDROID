@@ -14,6 +14,7 @@ import team.retum.data.interceptor.AuthorizationInterceptor
 import team.retum.data.remote.api.ApplicationsApi
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.api.RecruitmentApi
+import team.retum.data.remote.api.ReviewApi
 import team.retum.data.remote.api.StudentsApi
 import team.retum.data.remote.api.UserApi
 import javax.inject.Singleton
@@ -85,5 +86,11 @@ object NetworkModule {
     fun provideCompanyApi(
         retrofit: Retrofit,
     ): CompanyApi = retrofit.create(CompanyApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReviewApi(
+        retrofit: Retrofit,
+    ): ReviewApi = retrofit.create(ReviewApi::class.java)
 
 }
