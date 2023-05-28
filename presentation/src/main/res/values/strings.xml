@@ -92,19 +92,24 @@
     <string name="company_list_million">%s억</string>
     <string name="company_list_search_company">기업 조회하기</string>
 
-    <string name="company_list_representative_name">대표자</string>
-    <string name="company_list_founded_at">설립일</string>
-    <string name="company_list_worker_number">근로자 수</string>
-    <string name="company_list_take">연매출</string>
-    <string name="company_list_address1">주소(본사)</string>
-    <string name="company_list_address2">주소(지점)</string>
-    <string name="company_list_manager1">담당자1</string>
-    <string name="company_list_phone_number1">전화번호1</string>
-    <string name="company_list_manager2">담당자2</string>
-    <string name="company_list_phone_number2">전화번호2</string>
-    <string name="company_list_email">이메일</string>
-    <string name="company_list_fax">팩스</string>
+    <!--    Company Details-->
 
-    <string name="company_list_null">없음</string>
+    <string name="company_details_see_recruitents">모집의뢰서 보기</string>
+
+    <string name="company_details_representative_name">대표자</string>
+    <string name="company_details_founded_at">설립일</string>
+    <string name="company_details_worker_number">근로자 수</string>
+    <string name="company_details_take">연매출</string>
+    <string name="company_details_address1">주소(본사)</string>
+    <string name="company_details_address2">주소(지점)</string>
+    <string name="company_details_manager1">담당자1</string>
+    <string name="company_details_phone_number1">전화번호1</string>
+    <string name="company_details_manager2">담당자2</string>
+    <string name="company_details_phone_number2">전화번호2</string>
+    <string name="company_details_email">이메일</string>
+    <string name="company_details_fax">팩스</string>
+
+    <string name="company_details_null">없음</string>
+    <string name="company_details_review_interview">면접 후기</string>
 
 </resources>

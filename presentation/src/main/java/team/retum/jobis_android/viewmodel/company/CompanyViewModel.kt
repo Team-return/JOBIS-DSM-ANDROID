@@ -1,6 +1,7 @@
 package team.retum.jobis_android.viewmodel.company
 
 import androidx.lifecycle.viewModelScope
+import com.jobis.jobis_android.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +19,6 @@ import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.contract.CompanyState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +26,6 @@ class CompanyViewModel @Inject constructor(
     private val fetchCompaniesUseCase: FetchCompaniesUseCase,
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
-
 
     override fun sendEvent(event: Event) {}
 
@@ -165,21 +164,21 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
-    internal fun getCompanyDetails(): List<String?> =
+    internal fun getCompanyDetails(): List<Pair<Int, String?>> =
         with(container.stateFlow.value.companyDetails) {
             return listOf(
-                representativeName,
-                foundedAt,
-                workerNumber.toString(),
-                take.toString(),
-                address1,
-                address2,
-                manager1,
-                phoneNumber1,
-                manager2,
-                phoneNumber2,
-                email,
-                fax,
+                R.string.company_details_representative_name to representativeName,
+                R.string.company_details_founded_at to foundedAt,
+                R.string.company_details_worker_number to workerNumber.toString(),
+                R.string.company_details_take to take.toString(),
+                R.string.company_details_address1 to address1,
+                R.string.company_details_address2 to address2,
+                R.string.company_details_manager1 to manager1,
+                R.string.company_details_phone_number1 to phoneNumber1,
+                R.string.company_details_manager2 to manager2,
+                R.string.company_details_phone_number2 to phoneNumber2,
+                R.string.company_details_email to email,
+                R.string.company_details_fax to fax,
             )
         }
 }
