@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
+import team.retum.data.remote.response.recruitment.FetchRecruitmentDetailsResponse
 import team.retum.data.remote.response.recruitment.RecruitmentsResponse
 import team.retum.data.remote.url.JobisUrl
 
@@ -20,4 +21,9 @@ interface RecruitmentApi {
     suspend fun bookmarkRecruitment(
         @Path("recruitment-id") recruitmentId: Long,
     ): Response<Void>
+
+    @GET(JobisUrl.Recruitment.details)
+    suspend fun fetchRecruitmentDetails(
+        recruitmentId: Long,
+    ): FetchRecruitmentDetailsResponse
 }
