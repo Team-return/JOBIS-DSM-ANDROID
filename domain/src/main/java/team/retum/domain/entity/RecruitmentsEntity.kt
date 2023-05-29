@@ -1,6 +1,6 @@
 package team.retum.domain.entity
 
-data class RecruitmentListEntity(
+data class RecruitmentsEntity(
     val recruitmentEntities: List<RecruitmentEntity>,
 )
 
@@ -11,6 +11,6 @@ data class RecruitmentEntity(
     val trainPay: Int,
     val military: Boolean,
     val totalHiring: Int,
-    val jobCodeList: List<String>,
+    val jobCodeList: String,
     val bookmarked: Boolean,
 )

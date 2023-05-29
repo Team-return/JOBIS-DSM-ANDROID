@@ -58,7 +58,7 @@ internal class RecruitmentViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(
                     sideEffect = RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect(
-                        recruitmentListEntity = it,
+                        recruitmentsEntity = it,
                     )
                 )
             }.onFailure { throwable ->
@@ -89,7 +89,6 @@ internal class RecruitmentViewModel @Inject constructor(
                         )
                     )
                 )
-
             }
         }
     }

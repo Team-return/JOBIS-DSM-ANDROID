@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
             // TODO 토스트 시스템 구현
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.SignIn,
+                startDestination = JobisRoute.Main,
             ) {
                 composable(
                     route = JobisRoute.SignUp,
