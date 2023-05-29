@@ -1,6 +1,8 @@
 package team.retum.data.remote.response.recruitment
 
 import com.google.gson.annotations.SerializedName
+import team.retum.domain.entity.recruitment.AreasEntity
+import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 
 data class FetchRecruitmentDetailsResponse(
     @SerializedName("areas") val areas: List<Areas>,
@@ -22,9 +24,34 @@ data class FetchRecruitmentDetailsResponse(
 )
 
 data class Areas(
-    @SerializedName("recruit_are_id") val recruitAreId: Long,
+    @SerializedName("recruit_area_id") val recruitAreaId: Long,
     @SerializedName("job") val job: List<String>,
     @SerializedName("tech") val tech: List<String>,
     @SerializedName("hiring") val hiring: Int,
     @SerializedName("major_task") val majorTask: String,
+)
+
+fun FetchRecruitmentDetailsResponse.toEntity() = RecruitmentDetailsEntity(
+    areas = this.areas.map { it.toEntity() },
+    preferentialTreatment = this.preferentialTreatment,
+    requiredGrade = this.requiredGrade,
+    workHours = this.workHours,
+    requiredLicenses = this.requiredLicenses,
+    hiringProgress = this.hiringProgress,
+    trainPay = this.trainPay,
+    pay = this.pay,
+    benefits = this.benefits,
+    military = this.military,
+    submitDocument = this.submitDocument,
+    startDate = this.startDate,
+    endDate = this.endDate,
+    etc = this.etc,
+)
+
+private fun Areas.toEntity() = AreasEntity(
+    recruitAreaId = this.recruitAreaId,
+    job = this.job,
+    tech = this.tech,
+    hiring = this.hiring,
+    majorTask = this.majorTask,
 )

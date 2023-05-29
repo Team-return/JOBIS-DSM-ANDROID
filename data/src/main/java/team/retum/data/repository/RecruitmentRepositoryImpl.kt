@@ -3,6 +3,7 @@ package team.retum.data.repository
 import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
 import team.retum.data.remote.response.applications.toEntity
 import team.retum.data.remote.response.recruitment.toEntity
+import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentsEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
 import team.retum.domain.repository.RecruitmentRepository
@@ -26,4 +27,10 @@ class RecruitmentRepositoryImpl @Inject constructor(
             recruitmentId = recruitmentId,
         )
     }
+
+    override suspend fun fetchRecruitmentDetails(
+        recruitmentId: Long,
+    ): RecruitmentDetailsEntity = recruitmentDataSource.fetchRecruitmentDetails(
+        recruitmentId = recruitmentId,
+    ).toEntity()
 }
