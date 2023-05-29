@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,11 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,11 +36,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.RecruitmentEntity
 import team.retum.jobis_android.contract.RecruitmentEvent
+import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -47,13 +52,37 @@ import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import java.text.DecimalFormat
 
+@Stable
+const val PAGE_SIZE = 11
+
 @Composable
 internal fun RecruitmentsScreen(
     navController: NavController,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
-    val recruitments = recruitmentViewModel.recruitments.collectAsLazyPagingItems()
+    val recruitments = remember { mutableStateListOf<RecruitmentEntity>() }
+
+    LaunchedEffect(Unit) {
+        recruitmentViewModel.sendEvent(
+            event = RecruitmentEvent.FetchRecruitments(
+                page = 1,
+                code = null,
+                company = null,
+            )
+        )
+        recruitmentViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect -> {
+                    recruitments.addAll(it.recruitmentsEntity.recruitmentEntities)
+                }
+
+                else -> {
+
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -138,20 +167,47 @@ private fun Filter() {
 
 @Composable
 private fun RecruitmentList(
-    recruitments: LazyPagingItems<RecruitmentEntity>,
+    recruitments: List<RecruitmentEntity>,
     recruitmentViewModel: RecruitmentViewModel,
 ) {
+
+    var page by remember { mutableStateOf(1) }
+
+    val lazyListState = rememberLazyListState()
+
+    val lastIndex = remember {
+        derivedStateOf {
+            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        }
+    }
+
+    LaunchedEffect(lastIndex.value) {
+        Log.d("TEST", lastIndex.value.toString())
+        Log.d("TEST", (PAGE_SIZE - 1).toString())
+        if (lastIndex.value != 0 && lastIndex.value % (PAGE_SIZE - 1) == 0) {
+            page += 1
+            recruitmentViewModel.sendEvent(
+                event = RecruitmentEvent.FetchRecruitments(
+                    page = page,
+                    code = null,
+                    company = null,
+                )
+            )
+        }
+    }
 
     LazyColumn(
         contentPadding = PaddingValues(
             bottom = 80.dp,
         ),
+        state = lazyListState,
     ) {
+
         items(
-            count = recruitments.itemCount,
+            count = recruitments.size,
         ) { index ->
 
-            val item = recruitments[index]!!
+            val item = recruitments[index]
 
             val position = item.jobCodeList.replace(',', '/')
             val trainPay = DecimalFormat("#,###").format(item.trainPay)
@@ -160,8 +216,9 @@ private fun RecruitmentList(
                 modifier = Modifier.height(16.dp),
             )
             Recruitment(
+                index = index,
                 imageUrl = item.companyProfileUrl,
-                position = position.toString(),
+                position = position,
                 isBookmarked = remember { mutableStateOf(item.bookmarked) },
                 companyName = item.companyName,
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
@@ -180,6 +237,7 @@ private fun RecruitmentList(
 
 @Composable
 private fun Recruitment(
+    index: Int,
     imageUrl: String,
     position: String,
     isBookmarked: MutableState<Boolean>,
@@ -188,6 +246,8 @@ private fun Recruitment(
     isMilitarySupported: Boolean,
     onBookmarked: () -> Unit,
 ) {
+
+    Log.d("TEST", "$index ${isBookmarked.value}")
 
     var isItemClicked by remember {
         mutableStateOf(false)

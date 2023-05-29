@@ -4,7 +4,6 @@ object Version {
     const val CONSTRAINT = "2.1.4"
     const val ACTIVITY = "1.6.1"
     const val FRAGMENT = "1.5.5"
-    const val PAGING = "1.0.0-alpha20"
 
     const val JUNIT = "4.13.2"
     const val EXT_JUNIT = "1.1.5"

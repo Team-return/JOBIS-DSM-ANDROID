@@ -1,9 +1,6 @@
 package team.retum.jobis_android.viewmodel.recruitment
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +14,6 @@ import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.util.paging.recruitment.RecruitmentPagingSource
 import team.retum.jobis_android.viewmodel.base.BaseViewModel
 import javax.inject.Inject
 
@@ -28,15 +24,6 @@ internal class RecruitmentViewModel @Inject constructor(
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
-
-    internal val recruitments = Pager(
-        config = PagingConfig(
-            pageSize = 11,
-        ),
-        pagingSourceFactory = {
-            getRecruitmentPagingSource()
-        },
-    ).flow.cachedIn(viewModelScope)
 
     override fun sendEvent(event: Event) {
         when (event) {
@@ -105,8 +92,4 @@ internal class RecruitmentViewModel @Inject constructor(
             }
         }
     }
-
-    private fun getRecruitmentPagingSource() = RecruitmentPagingSource(
-        fetchRecruitmentListUseCase = fetchRecruitmentListUseCase,
-    )
 }

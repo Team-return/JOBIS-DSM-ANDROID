@@ -6,7 +6,7 @@ import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
 data class RecruitmentState(
-    var key: Int = 0,
+    var key: Int = 1,
     var keyword: String = "",
     var company: String = "",
 ): State

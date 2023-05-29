@@ -87,7 +87,6 @@ dependencies {
     implementation(Dependency.ANDROID.MATERIAL)
     implementation(Dependency.ANDROID.ACTIVITY)
     implementation(Dependency.ANDROID.FRAGMENT)
-    implementation(Dependency.ANDROID.PAGING)
 
     implementation(Dependency.ANDROID.CONSTRAINT)
     testImplementation(Dependency.TEST.JUNIT)
