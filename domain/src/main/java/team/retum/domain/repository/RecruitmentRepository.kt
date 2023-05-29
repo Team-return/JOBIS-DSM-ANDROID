@@ -1,7 +1,7 @@
 package team.retum.domain.repository
 
-import team.retum.domain.entity.RecruitmentsEntity
-import team.retum.domain.param.FetchRecruitmentListParam
+import team.retum.domain.entity.recruitment.RecruitmentsEntity
+import team.retum.domain.param.recruitment.FetchRecruitmentListParam
 
 interface RecruitmentRepository {
     suspend fun fetchRecruitmentList(

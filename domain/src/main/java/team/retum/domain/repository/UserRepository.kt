@@ -1,14 +1,14 @@
 package team.retum.domain.repository
 
-import team.retum.domain.param.CheckStudentExistsParam
-import team.retum.domain.param.LoginParam
-import team.retum.domain.param.SendVerificationCodeParam
-import team.retum.domain.param.SignUpParam
-import team.retum.domain.param.VerifyEmailParam
+import team.retum.domain.param.user.CheckStudentExistsParam
+import team.retum.domain.param.user.SignInParam
+import team.retum.domain.param.user.SendVerificationCodeParam
+import team.retum.domain.param.user.SignUpParam
+import team.retum.domain.param.user.VerifyEmailParam
 
 interface UserRepository {
     suspend fun postLogin(
-        param: LoginParam,
+        param: SignInParam,
     )
 
     suspend fun sendVerificationCode(

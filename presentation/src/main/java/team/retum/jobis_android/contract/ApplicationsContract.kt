@@ -1,6 +1,6 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.entity.AppliedHistoryEntity
+import team.retum.domain.entity.applications.AppliedHistoryEntity
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State

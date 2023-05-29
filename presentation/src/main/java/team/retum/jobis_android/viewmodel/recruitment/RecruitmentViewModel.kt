@@ -7,14 +7,14 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.param.FetchRecruitmentListParam
-import team.retum.domain.usecase.BookmarkRecruitmentUseCase
-import team.retum.domain.usecase.FetchRecruitmentListUseCase
+import team.retum.domain.param.recruitment.FetchRecruitmentListParam
+import team.retum.domain.usecase.recruitment.BookmarkRecruitmentUseCase
+import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.viewmodel.base.BaseViewModel
+import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

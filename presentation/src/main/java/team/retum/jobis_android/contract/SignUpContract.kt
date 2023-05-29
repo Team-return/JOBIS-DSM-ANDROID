@@ -1,7 +1,7 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.param.AuthCodeType
-import team.retum.domain.param.Sex
+import team.retum.domain.param.user.AuthCodeType
+import team.retum.domain.param.user.Sex
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State

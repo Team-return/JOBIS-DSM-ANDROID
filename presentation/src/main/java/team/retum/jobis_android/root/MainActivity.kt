@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.company.CompanyListScreen
 import team.retum.jobis_android.feature.main.MainScreen
-import team.retum.jobis_android.feature.recruitment.SearchRecruitmentScreen
+import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
             // TODO 토스트 시스템 구현
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.Main,
+                startDestination = JobisRoute.SignIn,
             ) {
                 composable(
                     route = JobisRoute.SignUp,
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                 composable(
                     route = JobisRoute.SearchRecruitment,
                 ) {
-                    SearchRecruitmentScreen(
+                    RecruitmentsScreen(
                         navController = navController,
                     )
                 }

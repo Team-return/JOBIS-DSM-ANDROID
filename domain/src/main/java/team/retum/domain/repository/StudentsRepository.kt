@@ -1,6 +1,6 @@
 package team.retum.domain.repository
 
-import team.retum.domain.entity.StudentInformationEntity
+import team.retum.domain.entity.student.StudentInformationEntity
 
 interface StudentsRepository {
     suspend fun fetchStudentInformation(): StudentInformationEntity

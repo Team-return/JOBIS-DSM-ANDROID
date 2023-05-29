@@ -13,7 +13,7 @@ import team.retum.domain.usecase.review.FetchReviewsUseCase
 import team.retum.jobis_android.contract.ReviewSideEffect
 import team.retum.jobis_android.contract.ReviewState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.viewmodel.base.BaseViewModel
+import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

@@ -9,16 +9,16 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.entity.CompanyEntity
+import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.exception.NotFoundException
-import team.retum.domain.param.FetchCompaniesParam
-import team.retum.domain.usecase.FetchCompaniesUseCase
+import team.retum.domain.param.company.FetchCompaniesParam
+import team.retum.domain.usecase.company.FetchCompaniesUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
 import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.contract.CompanyState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.viewmodel.base.BaseViewModel
+import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

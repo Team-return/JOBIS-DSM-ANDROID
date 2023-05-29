@@ -6,16 +6,16 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
-import team.retum.data.remote.request.LoginRequest
-import team.retum.data.remote.request.SendVerificationCodeRequest
-import team.retum.data.remote.request.SignUpRequest
-import team.retum.data.remote.response.SignInResponse
+import team.retum.data.remote.request.user.SignInRequest
+import team.retum.data.remote.request.user.SendVerificationCodeRequest
+import team.retum.data.remote.request.user.SignUpRequest
+import team.retum.data.remote.response.user.SignInResponse
 import team.retum.data.remote.url.JobisUrl
 
 interface UserApi {
     @POST(JobisUrl.User.login)
     suspend fun postLogin(
-        @Body loginRequest: LoginRequest,
+        @Body signInRequest: SignInRequest,
     ): SignInResponse
 
     @POST(JobisUrl.Auth.code)

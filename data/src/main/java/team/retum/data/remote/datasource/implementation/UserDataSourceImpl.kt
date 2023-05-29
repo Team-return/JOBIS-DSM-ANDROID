@@ -2,10 +2,10 @@ package team.retum.data.remote.datasource.implementation
 
 import team.retum.data.remote.api.UserApi
 import team.retum.data.remote.datasource.declaration.UserDataSource
-import team.retum.data.remote.request.LoginRequest
-import team.retum.data.remote.request.SendVerificationCodeRequest
-import team.retum.data.remote.request.SignUpRequest
-import team.retum.data.remote.response.SignInResponse
+import team.retum.data.remote.request.user.SignInRequest
+import team.retum.data.remote.request.user.SendVerificationCodeRequest
+import team.retum.data.remote.request.user.SignUpRequest
+import team.retum.data.remote.response.user.SignInResponse
 import team.retum.data.storage.UserDataStorage
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
@@ -15,11 +15,11 @@ class UserDataSourceImpl @Inject constructor(
     private val userDataStorage: UserDataStorage,
 ) : UserDataSource {
     override suspend fun postLogin(
-        loginRequest: LoginRequest,
+        signInRequest: SignInRequest,
     ) = HttpHandler<SignInResponse>()
         .httpRequest {
             userApi.postLogin(
-                loginRequest = loginRequest,
+                signInRequest = signInRequest,
             )
         }.sendRequest()
 

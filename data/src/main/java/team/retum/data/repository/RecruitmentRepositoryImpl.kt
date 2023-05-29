@@ -1,9 +1,10 @@
 package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
-import team.retum.data.remote.response.toEntity
-import team.retum.domain.entity.RecruitmentsEntity
-import team.retum.domain.param.FetchRecruitmentListParam
+import team.retum.data.remote.response.applications.toEntity
+import team.retum.data.remote.response.recruitment.toEntity
+import team.retum.domain.entity.recruitment.RecruitmentsEntity
+import team.retum.domain.param.recruitment.FetchRecruitmentListParam
 import team.retum.domain.repository.RecruitmentRepository
 import javax.inject.Inject
 

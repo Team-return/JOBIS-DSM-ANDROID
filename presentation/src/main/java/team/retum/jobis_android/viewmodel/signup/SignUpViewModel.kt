@@ -10,21 +10,21 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.domain.param.AuthCodeType
-import team.retum.domain.param.CheckStudentExistsParam
-import team.retum.domain.param.SendVerificationCodeParam
-import team.retum.domain.param.Sex
-import team.retum.domain.param.SignUpParam
-import team.retum.domain.param.VerifyEmailParam
-import team.retum.domain.usecase.CheckStudentExistUseCase
-import team.retum.domain.usecase.SendVerificationCodeUseCase
-import team.retum.domain.usecase.SignUpUseCase
-import team.retum.domain.usecase.VerifyEmailUseCase
+import team.retum.domain.param.user.AuthCodeType
+import team.retum.domain.param.user.CheckStudentExistsParam
+import team.retum.domain.param.user.SendVerificationCodeParam
+import team.retum.domain.param.user.Sex
+import team.retum.domain.param.user.SignUpParam
+import team.retum.domain.param.user.VerifyEmailParam
+import team.retum.domain.usecase.user.CheckStudentExistUseCase
+import team.retum.domain.usecase.user.SendVerificationCodeUseCase
+import team.retum.domain.usecase.user.SignUpUseCase
+import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.contract.SignUpState
 import team.retum.jobis_android.util.mvi.Event
-import team.retum.jobis_android.viewmodel.base.BaseViewModel
+import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,6 +1,6 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.entity.Department
+import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
