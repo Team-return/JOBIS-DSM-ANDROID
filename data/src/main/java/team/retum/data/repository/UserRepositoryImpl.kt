@@ -1,14 +1,14 @@
 package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.UserDataSource
-import team.retum.data.remote.request.LoginRequest
-import team.retum.data.remote.request.toRequest
-import team.retum.data.remote.response.SignInResponse
-import team.retum.domain.param.CheckStudentExistsParam
-import team.retum.domain.param.LoginParam
-import team.retum.domain.param.SendVerificationCodeParam
-import team.retum.domain.param.SignUpParam
-import team.retum.domain.param.VerifyEmailParam
+import team.retum.data.remote.request.user.SignInRequest
+import team.retum.data.remote.request.user.toRequest
+import team.retum.data.remote.response.user.SignInResponse
+import team.retum.domain.param.user.CheckStudentExistsParam
+import team.retum.domain.param.user.SignInParam
+import team.retum.domain.param.user.SendVerificationCodeParam
+import team.retum.domain.param.user.SignUpParam
+import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -16,10 +16,10 @@ class UserRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
 ) : UserRepository {
 
-    override suspend fun postLogin(param: LoginParam) {
+    override suspend fun postLogin(param: SignInParam) {
 
         val response = userDataSource.postLogin(
-            loginRequest = param.toRequest(),
+            signInRequest = param.toRequest(),
         )
 
         userDataSource.setUserInfo(
@@ -67,8 +67,8 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun LoginParam.toRequest(): LoginRequest =
-        LoginRequest(
+    private fun SignInParam.toRequest(): SignInRequest =
+        SignInRequest(
             accountId = accountId,
             password = password,
         )

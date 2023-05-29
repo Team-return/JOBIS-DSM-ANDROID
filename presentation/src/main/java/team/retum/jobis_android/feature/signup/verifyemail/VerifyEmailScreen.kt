@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.param.AuthCodeType
+import team.retum.domain.param.user.AuthCodeType
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel

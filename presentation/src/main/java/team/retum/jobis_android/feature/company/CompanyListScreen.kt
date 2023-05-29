@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.CompanyEntity
+import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.feature.recruitment.Filter
 import team.retum.jobis_android.feature.recruitment.Header

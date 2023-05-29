@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.AppliedHistoryEntity
+import team.retum.domain.entity.applications.AppliedHistoryEntity
 import team.retum.jobis_android.contract.ApplicationsEvent
 import team.retum.jobis_android.contract.ApplicationsSideEffect
 import team.retum.jobis_android.contract.StudentEvent
 import team.retum.jobis_android.contract.StudentSideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.viewmodel.StudentsViewModel
+import team.retum.jobis_android.viewmodel.student.StudentsViewModel
 import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.ui.theme.Body1

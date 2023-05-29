@@ -2,7 +2,7 @@ package team.retum.data.remote.datasource.implementation
 
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.datasource.declaration.CompanyDataSource
-import team.retum.data.remote.response.FetchCompaniesResponse
+import team.retum.data.remote.response.company.FetchCompaniesResponse
 import team.retum.data.remote.response.company.FetchCompanyDetailResponse
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject

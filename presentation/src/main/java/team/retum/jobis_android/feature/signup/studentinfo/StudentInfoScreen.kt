@@ -24,7 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
-import team.retum.domain.param.Sex
+import team.retum.domain.param.user.Sex
 import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel

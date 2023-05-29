@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.declaration
 
-import team.retum.data.remote.response.FetchCompaniesResponse
+import team.retum.data.remote.response.company.FetchCompaniesResponse
 import team.retum.data.remote.response.company.FetchCompanyDetailResponse
 
 interface CompanyDataSource {

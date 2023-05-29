@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.RecruitmentEntity
+import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
