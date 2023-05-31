@@ -53,9 +53,6 @@ import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import java.text.DecimalFormat
 
-@Stable
-const val PAGE_SIZE = 11
-
 @Composable
 internal fun RecruitmentsScreen(
     navController: NavController,
@@ -184,8 +181,8 @@ private fun RecruitmentList(
         }
     }
 
-    LaunchedEffect(lastIndex.value) {
-        if (lastIndex.value != 0 && lastIndex.value % (PAGE_SIZE - 1) == 0) {
+    LaunchedEffect(lastIndex.value){
+        if(recruitments.size - 1 == lastIndex.value && recruitments.size % page == 0){
             page += 1
             recruitmentViewModel.sendEvent(
                 event = RecruitmentEvent.FetchRecruitments(
@@ -199,7 +196,7 @@ private fun RecruitmentList(
 
     LazyColumn(
         contentPadding = PaddingValues(
-            bottom = 80.dp,
+            bottom = 16.dp,
         ),
         state = lazyListState,
     ) {
@@ -231,7 +228,10 @@ private fun RecruitmentList(
                     )
                 },
                 onItemClicked = {
-                    navController.currentBackStackEntry?.arguments?.putString("companyName", item.companyName)
+                    navController.currentBackStackEntry?.arguments?.putString(
+                        "companyName",
+                        item.companyName
+                    )
                     navController.navigate("RecruitmentDetails/${item.recruitId}")
                 }
             )
