@@ -1,7 +1,7 @@
 package team.retum.jobis_android.feature.recruitment
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +47,7 @@ import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.retum.jobisui.ui.theme.Body2
 import team.retum.jobisui.ui.theme.Caption
+import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
@@ -102,6 +103,7 @@ internal fun RecruitmentsScreen(
         RecruitmentList(
             recruitments = recruitments,
             recruitmentViewModel = recruitmentViewModel,
+            navController = navController,
         )
     }
 }
@@ -169,6 +171,7 @@ internal fun Filter() {
 private fun RecruitmentList(
     recruitments: List<RecruitmentEntity>,
     recruitmentViewModel: RecruitmentViewModel,
+    navController: NavController,
 ) {
 
     var page by remember { mutableStateOf(1) }
@@ -182,8 +185,6 @@ private fun RecruitmentList(
     }
 
     LaunchedEffect(lastIndex.value) {
-        Log.d("TEST", lastIndex.value.toString())
-        Log.d("TEST", (PAGE_SIZE - 1).toString())
         if (lastIndex.value != 0 && lastIndex.value % (PAGE_SIZE - 1) == 0) {
             page += 1
             recruitmentViewModel.sendEvent(
@@ -216,7 +217,6 @@ private fun RecruitmentList(
                 modifier = Modifier.height(16.dp),
             )
             Recruitment(
-                index = index,
                 imageUrl = item.companyProfileUrl,
                 position = position,
                 isBookmarked = remember { mutableStateOf(item.bookmarked) },
@@ -229,6 +229,10 @@ private fun RecruitmentList(
                             recruitmentId = item.recruitId.toLong()
                         )
                     )
+                },
+                onItemClicked = {
+                    navController.currentBackStackEntry?.arguments?.putString("companyName", item.companyName)
+                    navController.navigate("RecruitmentDetails/${item.recruitId}")
                 }
             )
         }
@@ -237,7 +241,6 @@ private fun RecruitmentList(
 
 @Composable
 private fun Recruitment(
-    index: Int,
     imageUrl: String,
     position: String,
     isBookmarked: MutableState<Boolean>,
@@ -245,9 +248,8 @@ private fun Recruitment(
     trainPay: String,
     isMilitarySupported: Boolean,
     onBookmarked: () -> Unit,
+    onItemClicked: () -> Unit,
 ) {
-
-    Log.d("TEST", "$index ${isBookmarked.value}")
 
     var isItemClicked by remember {
         mutableStateOf(false)
@@ -265,7 +267,13 @@ private fun Recruitment(
             )
             .background(
                 color = JobisColor.Gray100,
-            ),
+            )
+            .jobisClickable(
+                rippleEnabled = false,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onItemClicked()
+            },
     ) {
         Row(
             modifier = Modifier.padding(

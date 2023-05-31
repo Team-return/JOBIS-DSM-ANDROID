@@ -8,7 +8,8 @@ object JobisRoute {
     const val StudentInfo = "StudentInfo"
     const val VerifyEmail = "EmailVerify"
     const val SetPassword = "SetPassword"
-    const val SearchRecruitment = "SearchRecruitment"
+    const val Recruitments = "Recruitments"
+    const val RecruitmentDetails = "RecruitmentDetails/{recruitment-id}"
     const val Company = "Companies"
     const val CompanyDetails = "CompanyDetails/{company-id}"
 

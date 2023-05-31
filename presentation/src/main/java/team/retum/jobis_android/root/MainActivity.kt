@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.company.CompanyListScreen
 import team.retum.jobis_android.feature.main.MainScreen
+import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
@@ -27,7 +28,7 @@ import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisColor
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffodPaddingParameter")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
             // TODO 토스트 시스템 구현
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.SignIn,
+                startDestination = JobisRoute.Main,
             ) {
                 composable(
                     route = JobisRoute.SignUp,
@@ -76,10 +77,22 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(
-                    route = JobisRoute.SearchRecruitment,
+                    route = JobisRoute.Recruitments,
                 ) {
                     RecruitmentsScreen(
                         navController = navController,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.RecruitmentDetails,
+                    arguments = listOf(
+                        navArgument("recruitment-id") { type = NavType.LongType }
+                    )
+                ){
+                    RecruitmentDetailsScreen(
+                        navController = navController,
+                        recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
                     )
                 }
 
