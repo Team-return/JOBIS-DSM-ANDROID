@@ -1,6 +1,7 @@
 package team.retum.jobis_android.viewmodel.recruitment
 
 import androidx.lifecycle.viewModelScope
+import com.jobis.jobis_android.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +19,6 @@ import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -142,5 +142,33 @@ internal class RecruitmentViewModel @Inject constructor(
             }
         }
     }
+
+    internal fun setRecruitmentId(
+        recruitmentId: Long,
+    ) = intent {
+        reduce {
+            state.copy(
+                recruitmentId = recruitmentId,
+            )
+        }
+        fetchRecruitmentDetails()
+    }
+
+    internal fun getRecruitmentDetails(): List<Pair<Int, Any?>> =
+        with(container.stateFlow.value.details){
+            return listOf(
+                R.string.recruitment_details_recruit_period to "$startDate ~ $endDate",
+                R.string.recruitment_details_position to areas,
+                R.string.recruitment_details_preferential_treatment to benefits,
+                R.string.recruitment_details_licenses to requiredLicenses,
+                R.string.recruitment_details_required_grade to requiredGrade,
+                R.string.recruitment_details_worker_time to workHours,
+                R.string.recruitment_details_hiring to pay,
+                R.string.recruitment_details_benefits to benefits,
+                R.string.recruitment_details_hiring_progress to hiringProgress,
+                R.string.recruitment_details_required_documents to submitDocument,
+                R.string.recruitment_details_etc to etc,
+            )
+        }
 
 }
