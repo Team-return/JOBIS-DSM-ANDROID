@@ -24,6 +24,6 @@ interface RecruitmentApi {
 
     @GET(JobisUrl.Recruitment.details)
     suspend fun fetchRecruitmentDetails(
-        recruitmentId: Long,
+        @Path("recruitment-id") recruitmentId: Long,
     ): FetchRecruitmentDetailsResponse
 }

@@ -9,7 +9,7 @@ data class RecruitmentDetailsEntity(
     val hiringProgress: List<String>,
     val trainPay: Int,
     val pay: Int?,
-    val benefits: String,
+    val benefits: String?,
     val military: Boolean,
     val submitDocument: String?,
     val startDate: String,
@@ -20,7 +20,7 @@ data class RecruitmentDetailsEntity(
 
 data class AreasEntity(
     val recruitAreaId: Long,
-    val job: List<String>,
+    val job: String,
     val tech: List<String>,
     val hiring: Int,
     val majorTask: String,

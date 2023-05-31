@@ -13,7 +13,7 @@ data class FetchRecruitmentDetailsResponse(
     @SerializedName("hiring_progress") val hiringProgress: List<String>,
     @SerializedName("train_pay") val trainPay: Int,
     @SerializedName("pay") val pay: Int?,
-    @SerializedName("benefits") val benefits: String,
+    @SerializedName("benefits") val benefits: String?,
     @SerializedName("military") val military: Boolean,
     @SerializedName("submit_document") val submitDocument: String?,
     @SerializedName("start_date") val startDate: String,
@@ -25,7 +25,7 @@ data class FetchRecruitmentDetailsResponse(
 
 data class Areas(
     @SerializedName("recruit_area_id") val recruitAreaId: Long,
-    @SerializedName("job") val job: List<String>,
+    @SerializedName("job") val job: String,
     @SerializedName("tech") val tech: List<String>,
     @SerializedName("hiring") val hiring: Int,
     @SerializedName("major_task") val majorTask: String,
