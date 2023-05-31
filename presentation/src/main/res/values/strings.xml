@@ -87,6 +87,25 @@
     <string name="search_recruitment_more_details">더보기</string>
     <string name="search_recruitment_filter_hint">회사검색</string>
 
+    <!--    Recruitment Details-->
+
+    <string name="recruitment_details_get_company">기업 보기</string>
+
+    <string name="recruitment_details_recruit_period">모집기간</string>
+    <string name="recruitment_details_position">모집분야</string>
+    <string name="recruitment_details_preferential_treatment">우대사항</string>
+    <string name="recruitment_details_licenses">자격증</string>
+    <string name="recruitment_details_required_grade">필수성적</string>
+    <string name="recruitment_details_worker_time">근무시간</string>
+    <string name="recruitment_details_pay">실습수당</string>
+    <string name="recruitment_details_hiring">정규직전환시</string>
+    <string name="recruitment_details_benefits">복리후생</string>
+    <string name="recruitment_details_hiring_progress">채용절차</string>
+    <string name="recruitment_details_required_documents">제출서류</string>
+    <string name="recruitment_details_etc">기타사항</string>
+
+    <string name="recruitment_details_do_apply">지원하기</string>
+
     <!--    Company List-->
 
     <string name="company_list_million">%s억</string>
@@ -115,5 +134,6 @@
     <!--    Reviews-->
 
     <string name="reviews_writer">%s님의 후기</string>
+
 
 </resources>

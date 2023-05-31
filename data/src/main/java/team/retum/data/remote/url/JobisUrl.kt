@@ -35,7 +35,8 @@ object JobisUrl {
 
     object Recruitment {
         const val student = "$recruitment/student"
-        const val bookmark = "$bookmarks/{recruitment-id}"
+        const val bookmark = "$bookmarks/${Properties.recruitmentId}"
+        const val details = "$recruitment/${Properties.recruitmentId}"
     }
 
     object Applications{
@@ -45,10 +46,15 @@ object JobisUrl {
 
     object Company{
         const val student = "$companies/student"
-        const val details = "$companies/{company-id}"
+        const val details = "$companies/${Properties.companyId}"
     }
 
     object Review{
-        const val reviews = "$review/{company-id}"
+        const val reviews = "$review/${Properties.companyId}"
+    }
+
+    object Properties{
+        const val recruitmentId = "{recruitment-id}"
+        const val companyId = "{company-id}"
     }
 }

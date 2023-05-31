@@ -405,7 +405,7 @@ private fun MenuCardGroup(
             text = stringResource(id = R.string.home_do_get_recruitment),
             drawable = R.drawable.ic_get_recruitment,
             onClick = {
-                navController.navigate(JobisRoute.SearchRecruitment)
+                navController.navigate(JobisRoute.Recruitments)
             }
         )
         Spacer(modifier = Modifier.width(12.dp))
