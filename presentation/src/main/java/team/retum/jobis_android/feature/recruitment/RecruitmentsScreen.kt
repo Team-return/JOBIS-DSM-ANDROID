@@ -196,7 +196,7 @@ private fun RecruitmentList(
 
     LazyColumn(
         contentPadding = PaddingValues(
-            bottom = 8.dp,
+            bottom = 16.dp,
         ),
         state = lazyListState,
     ) {
