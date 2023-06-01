@@ -169,5 +169,4 @@ internal class RecruitmentViewModel @Inject constructor(
                 R.string.recruitment_details_etc to etc,
             )
         }
-
 }

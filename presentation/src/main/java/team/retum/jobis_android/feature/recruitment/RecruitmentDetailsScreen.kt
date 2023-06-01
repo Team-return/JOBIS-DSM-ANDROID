@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,13 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
+import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -107,6 +105,7 @@ internal fun RecruitmentDetailsScreen(
             RecruitmentDetails(
                 details = recruitmentViewModel.getRecruitmentDetails(),
                 areas = areas,
+                hiringProgress = state.value.details.hiringProgress,
             )
             Spacer(modifier = Modifier.height(80.dp))
         }
@@ -144,7 +143,8 @@ private fun CompanyInformation(
 @Composable
 private fun RecruitmentDetails(
     details: List<Pair<Int, Any?>>,
-    areas: List<AreasEntity>
+    areas: List<AreasEntity>,
+    hiringProgress: List<HiringProgress>,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -180,8 +180,16 @@ private fun RecruitmentDetails(
         repeat(details.size - 1) { index ->
             RecruitmentDetail(
                 title = stringResource(details[index + 1].first),
-                content = (details[index].second
-                    ?: stringResource(id = R.string.company_details_null)).toString(),
+                content = if (index == 6) {
+                    StringBuilder().apply {
+                        repeat(hiringProgress.size){ index ->
+                            append("${index+1}. ${hiringProgress[index].value}\n")
+                        }
+                    }.toString()
+                } else {
+                    (details[index + 1].second
+                        ?: stringResource(id = R.string.company_details_null)).toString()
+                },
             )
             Spacer(modifier = Modifier.height(10.dp))
         }
