@@ -158,7 +158,6 @@ internal class RecruitmentViewModel @Inject constructor(
         with(container.stateFlow.value.details){
             return listOf(
                 R.string.recruitment_details_recruit_period to "$startDate ~ $endDate",
-                R.string.recruitment_details_position to areas,
                 R.string.recruitment_details_preferential_treatment to benefits,
                 R.string.recruitment_details_licenses to requiredLicenses,
                 R.string.recruitment_details_required_grade to requiredGrade,

@@ -106,6 +106,13 @@
 
     <string name="recruitment_details_do_apply">지원하기</string>
 
+    <string name="recruitment_details_main_work">주요업무</string>
+    <string name="recruitment_details_main_skills">사용기술</string>
+    <string name="recruitment_details_count">%s 명</string>
+
+    <string name="recruitment_details_show_detail">자세히</string>
+    <string name="recruitment_details_show_simply">간략히</string>
+
     <!--    Company List-->
 
     <string name="company_list_million">%s억</string>
