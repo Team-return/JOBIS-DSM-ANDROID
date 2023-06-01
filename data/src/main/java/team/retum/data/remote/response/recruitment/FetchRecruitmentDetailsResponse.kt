@@ -2,6 +2,7 @@ package team.retum.data.remote.response.recruitment
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.entity.recruitment.AreasEntity
+import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 
 data class FetchRecruitmentDetailsResponse(
@@ -10,17 +11,15 @@ data class FetchRecruitmentDetailsResponse(
     @SerializedName("required_grade") val requiredGrade: Int?,
     @SerializedName("work_hours") val workHours: Int,
     @SerializedName("required_licenses") val requiredLicenses: List<String>?,
-    @SerializedName("hiring_progress") val hiringProgress: List<String>,
+    @SerializedName("hiring_progress") val hiringProgress: List<HiringProgress>,
     @SerializedName("train_pay") val trainPay: Int,
     @SerializedName("pay") val pay: Int?,
     @SerializedName("benefits") val benefits: String?,
     @SerializedName("military") val military: Boolean,
-    @SerializedName("submit_document") val submitDocument: String?,
+    @SerializedName("submit_document") val submitHiringProgress: String,
     @SerializedName("start_date") val startDate: String,
     @SerializedName("end_date") val endDate: String,
     @SerializedName("etc") val etc: String?,
-
-
 )
 
 data class Areas(
@@ -42,7 +41,7 @@ fun FetchRecruitmentDetailsResponse.toEntity() = RecruitmentDetailsEntity(
     pay = this.pay,
     benefits = this.benefits,
     military = this.military,
-    submitDocument = this.submitDocument,
+    submitDocument = this.submitHiringProgress,
     startDate = this.startDate,
     endDate = this.endDate,
     etc = this.etc,

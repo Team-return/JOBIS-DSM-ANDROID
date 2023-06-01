@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -53,13 +54,35 @@ import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import java.text.DecimalFormat
 
+private data class Recruitment(
+    val recruitId: Int,
+    val companyName: String,
+    val companyProfileUrl: String,
+    val trainPay: Int,
+    val military: Boolean,
+    val totalHiring: Int,
+    val jobCodeList: String,
+    var bookmarked: Boolean,
+)
+
+private fun RecruitmentEntity.toModel() = Recruitment(
+    recruitId = this.recruitId,
+    companyName = this.companyName,
+    companyProfileUrl = this.companyProfileUrl,
+    trainPay = this.trainPay,
+    military = this.military,
+    totalHiring = this.totalHiring,
+    jobCodeList = this.jobCodeList,
+    bookmarked = this.bookmarked,
+)
+
 @Composable
 internal fun RecruitmentsScreen(
     navController: NavController,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
-    val recruitments = remember { mutableStateListOf<RecruitmentEntity>() }
+    val recruitments = remember { mutableStateListOf<Recruitment>() }
 
     LaunchedEffect(Unit) {
         recruitmentViewModel.sendEvent(
@@ -72,7 +95,7 @@ internal fun RecruitmentsScreen(
         recruitmentViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect -> {
-                    recruitments.addAll(it.recruitmentsEntity.recruitmentEntities)
+                    recruitments.addAll(it.recruitmentsEntity.recruitmentEntities.map { it.toModel() })
                 }
 
                 else -> {
@@ -166,7 +189,7 @@ internal fun Filter() {
 
 @Composable
 private fun RecruitmentList(
-    recruitments: List<RecruitmentEntity>,
+    recruitments: List<Recruitment>,
     recruitmentViewModel: RecruitmentViewModel,
     navController: NavController,
 ) {
@@ -181,8 +204,8 @@ private fun RecruitmentList(
         }
     }
 
-    LaunchedEffect(lastIndex.value){
-        if(recruitments.size - 1 == lastIndex.value && recruitments.size % page == 0){
+    LaunchedEffect(lastIndex.value) {
+        if (recruitments.size - 1 == lastIndex.value && recruitments.size % page == 0) {
             page += 1
             recruitmentViewModel.sendEvent(
                 event = RecruitmentEvent.FetchRecruitments(
@@ -201,38 +224,38 @@ private fun RecruitmentList(
         state = lazyListState,
     ) {
 
-        items(
-            count = recruitments.size,
-        ) { index ->
+        items(recruitments) { recruitment ->
 
-            val item = recruitments[index]
+            val position = recruitment.jobCodeList.replace(',', '/')
+            val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
 
-            val position = item.jobCodeList.replace(',', '/')
-            val trainPay = DecimalFormat("#,###").format(item.trainPay)
+            var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
             Spacer(
                 modifier = Modifier.height(16.dp),
             )
             Recruitment(
-                imageUrl = item.companyProfileUrl,
+                imageUrl = recruitment.companyProfileUrl,
                 position = position,
-                isBookmarked = remember { mutableStateOf(item.bookmarked) },
-                companyName = item.companyName,
+                isBookmarked = isBookmarked,
+                companyName = recruitment.companyName,
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
-                isMilitarySupported = item.military,
+                isMilitarySupported = recruitment.military,
                 onBookmarked = {
+                    recruitment.bookmarked = !recruitment.bookmarked
+                    isBookmarked = !isBookmarked
                     recruitmentViewModel.sendEvent(
                         event = RecruitmentEvent.BookmarkRecruitment(
-                            recruitmentId = item.recruitId.toLong()
+                            recruitmentId = recruitment.recruitId.toLong()
                         )
                     )
                 },
                 onItemClicked = {
                     navController.currentBackStackEntry?.arguments?.putString(
                         "companyName",
-                        item.companyName
+                        recruitment.companyName
                     )
-                    navController.navigate("RecruitmentDetails/${item.recruitId}")
+                    navController.navigate("RecruitmentDetails/${recruitment.recruitId}")
                 }
             )
         }
@@ -243,7 +266,7 @@ private fun RecruitmentList(
 private fun Recruitment(
     imageUrl: String,
     position: String,
-    isBookmarked: MutableState<Boolean>,
+    isBookmarked: Boolean,
     companyName: String,
     trainPay: String,
     isMilitarySupported: Boolean,
@@ -254,6 +277,8 @@ private fun Recruitment(
     var isItemClicked by remember {
         mutableStateOf(false)
     }
+
+    var bookmarked = isBookmarked
 
     Column(
         modifier = Modifier
@@ -303,12 +328,12 @@ private fun Recruitment(
                     )
                     JobisImage(
                         modifier = Modifier.size(18.dp),
-                        drawable = if (isBookmarked.value) R.drawable.ic_bookmarked_on
+                        drawable = if (bookmarked) R.drawable.ic_bookmarked_on
                         else R.drawable.ic_bookmarked_off,
                         onClick = {
                             onBookmarked()
                             isItemClicked = !isItemClicked
-                            isBookmarked.value = !isBookmarked.value
+                            bookmarked = !bookmarked
                         }
                     )
                 }

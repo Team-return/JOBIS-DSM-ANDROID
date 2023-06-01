@@ -22,7 +22,7 @@ data class RecruitmentState(
         pay = null,
         benefits = "",
         military = false,
-        submitDocument = null,
+        submitDocument = "",
         startDate = "",
         endDate = "",
         etc = null,
