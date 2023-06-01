@@ -183,7 +183,8 @@ private fun RecruitmentDetails(
                 content = if (index == 6) {
                     StringBuilder().apply {
                         repeat(hiringProgress.size){ index ->
-                            append("${index+1}. ${hiringProgress[index].value}\n")
+                            append("${index+1}. ${hiringProgress[index].value}")
+                            if(index != hiringProgress.lastIndex) append("\n")
                         }
                     }.toString()
                 } else {
@@ -269,11 +270,13 @@ private fun PositionCard(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
         Animated(
             visible = showDetails
         ) {
             Caption(text = majorTask)
         }
+        Spacer(modifier = Modifier.height(4.dp))
         Animated(
             visible = showDetails,
             isBounce = true,
