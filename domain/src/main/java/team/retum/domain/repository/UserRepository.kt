@@ -26,4 +26,6 @@ interface UserRepository {
     suspend fun signUp(
         signUpParam: SignUpParam,
     )
+
+    suspend fun fetchAutoSignInOption(): Boolean
 }
