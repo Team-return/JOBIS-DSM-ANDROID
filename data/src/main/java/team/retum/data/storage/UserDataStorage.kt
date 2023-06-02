@@ -16,6 +16,12 @@ interface UserDataStorage {
         authority: String,
     )
 
+    fun setAutoSignInOption(
+        autoSignInOption: Boolean,
+    )
+
+    fun fetchAutoSignInOption(): Boolean
+
     fun getPreference(key: String): SharedPreferences
 
     fun getString(
