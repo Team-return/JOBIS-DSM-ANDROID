@@ -7,8 +7,10 @@ import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(
     private val userRepository: UserRepository,
-) : UseCase<SignInParam, Unit>() {
-    override suspend fun execute(data: SignInParam) {
-        userRepository.postLogin(data)
+){
+    suspend operator fun invoke(
+        param: SignInParam,
+    ) = runCatching{
+        userRepository.postLogin(param = param)
     }
 }

@@ -33,10 +33,10 @@ import team.retum.jobis_android.feature.recruitment.Filter
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Body2
-import team.retum.jobisui.ui.theme.Caption
 import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.theme.Body2
+import team.returm.jobisdesignsystem.theme.Caption
 
 @Composable
 fun CompanyListScreen(

@@ -22,15 +22,21 @@ class UserRepositoryImpl @Inject constructor(
             signInRequest = param.toRequest(),
         )
 
-        userDataSource.setUserInfo(
-            signInResponse = SignInResponse(
-                accessToken = response.accessToken,
-                accessExpiresAt = response.accessExpiresAt,
-                refreshToken = response.refreshToken,
-                refreshTokenExpiresAt = response.refreshTokenExpiresAt,
-                authority = response.authority,
+        userDataSource.run {
+            setUserInfo(
+                signInResponse = SignInResponse(
+                    accessToken = response.accessToken,
+                    accessExpiresAt = response.accessExpiresAt,
+                    refreshToken = response.refreshToken,
+                    refreshTokenExpiresAt = response.refreshTokenExpiresAt,
+                    authority = response.authority,
+                )
             )
-        )
+
+            setAutoSignInOption(
+                autoSignInOption = param.isAutoLogin,
+            )
+        }
     }
 
     override suspend fun sendVerificationCode(
@@ -56,6 +62,10 @@ class UserRepositoryImpl @Inject constructor(
         userDataSource.signUp(
             signUpRequest = signUpParam.toRequest(),
         )
+    }
+
+    override suspend fun fetchAutoSignInOption(): Boolean {
+        return userDataSource.fetchAutoSignInOption()
     }
 
     override suspend fun verifyEmail(

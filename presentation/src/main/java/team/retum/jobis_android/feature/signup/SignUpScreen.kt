@@ -39,9 +39,9 @@ import team.retum.jobis_android.util.compose.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Caption
-import team.retum.jobisui.ui.theme.Heading5
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.theme.Heading5
 
 @Stable
 const val maxProgress = 3

@@ -29,6 +29,19 @@ class UserDataStorageImpl @Inject constructor(
         putString(UserPersonalKey.REFRESH_TOKEN_EXPIRES_AT, refreshTokenExpiresAt)
     }
 
+    override fun setAutoSignInOption(
+        autoSignInOption: Boolean,
+    ) {
+        getPreference(UserPersonalKey.AUTO_SIGN_IN).edit()
+            .putBoolean(UserPersonalKey.AUTO_SIGN_IN, autoSignInOption).apply()
+    }
+
+    override fun fetchAutoSignInOption(): Boolean {
+        return getPreference(UserPersonalKey.AUTO_SIGN_IN).getBoolean(
+            UserPersonalKey.AUTO_SIGN_IN, false,
+        )
+    }
+
     override fun getPreference(key: String): SharedPreferences =
         context.getSharedPreferences(key, MODE_PRIVATE)
 
@@ -45,9 +58,10 @@ class UserDataStorageImpl @Inject constructor(
     }
 
     private object UserPersonalKey {
-        const val ACCESS_TOKEN = "AccessToken"
-        const val REFRESH_TOKEN = "RefreshToken"
-        const val ACCESS_TOKEN_EXPIRES_AT = "AccessToken_Expires_At"
-        const val REFRESH_TOKEN_EXPIRES_AT = "RefreshToken_Expires_At"
+        const val ACCESS_TOKEN = "accessToken"
+        const val REFRESH_TOKEN = "refreshKey"
+        const val ACCESS_TOKEN_EXPIRES_AT = "accessTokenExpiresAt"
+        const val REFRESH_TOKEN_EXPIRES_AT = "refreshTokenExpiresAt"
+        const val AUTO_SIGN_IN = "autoSignIn"
     }
 }

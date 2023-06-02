@@ -24,6 +24,7 @@ import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
+import team.returm.jobisdesignsystem.textfield.TextFieldType
 import java.util.regex.Pattern
 
 @Stable
@@ -126,8 +127,8 @@ private fun PasswordFields(
             helperText = stringResource(id = R.string.set_password_hint_password),
             errorText = stringResource(id = R.string.set_password_mismatch_password_format),
             imeAction = ImeAction.Next,
-            isPassword = true,
-            isError = isPasswordError,
+            textFieldType = TextFieldType.PASSWORD,
+            error = isPasswordError,
         )
         Spacer(modifier = Modifier.height(12.dp))
         JobisBoxTextField(
@@ -140,8 +141,8 @@ private fun PasswordFields(
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            isPassword = true,
-            isError = isRepeatPasswordError,
+            textFieldType = TextFieldType.PASSWORD,
+            error = isRepeatPasswordError,
         )
     }
 }

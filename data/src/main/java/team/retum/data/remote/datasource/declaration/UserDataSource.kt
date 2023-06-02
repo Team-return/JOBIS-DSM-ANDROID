@@ -25,4 +25,8 @@ interface UserDataSource {
     )
 
     suspend fun setUserInfo(signInResponse: SignInResponse)
+
+    suspend fun setAutoSignInOption(autoSignInOption: Boolean)
+
+    suspend fun fetchAutoSignInOption(): Boolean
 }

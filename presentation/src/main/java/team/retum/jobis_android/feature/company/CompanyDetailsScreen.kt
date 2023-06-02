@@ -37,11 +37,11 @@ import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Body1
-import team.retum.jobisui.ui.theme.Body2
-import team.retum.jobisui.ui.theme.Caption
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.theme.Body1
+import team.returm.jobisdesignsystem.theme.Body2
+import team.returm.jobisdesignsystem.theme.Caption
 
 @Stable
 val ReviewItemShape = RoundedCornerShape(size = 14.dp)
