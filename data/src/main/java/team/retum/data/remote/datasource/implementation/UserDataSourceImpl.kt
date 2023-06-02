@@ -74,4 +74,16 @@ class UserDataSourceImpl @Inject constructor(
             authority = signInResponse.authority,
         )
     }
+
+    override suspend fun setAutoSignInOption(
+        autoSignInOption: Boolean,
+    ) {
+        userDataStorage.setAutoSignInOption(
+            autoSignInOption = autoSignInOption,
+        )
+    }
+
+    override suspend fun fetchAutoSignInOption(): Boolean {
+        return userDataStorage.fetchAutoSignInOption()
+    }
 }
