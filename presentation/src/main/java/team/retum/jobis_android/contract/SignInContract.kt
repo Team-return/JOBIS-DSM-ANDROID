@@ -1,14 +1,14 @@
 package team.retum.jobis_android.contract
 
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
 data class SignInState(
-    val accountId: String = "",
+    val email: String = "",
     val password: String = "",
-    val isAutoLogin: Boolean = false,
-    val loginErrorMessage: String? = null,
+    val autoSignIn: Boolean = false,
+    val emailError: Boolean = false,
+    val passwordError: Boolean= false,
 ) : State
 
 sealed class SignInSideEffect : SideEffect {
@@ -18,10 +18,4 @@ sealed class SignInSideEffect : SideEffect {
     class Exception(
         val message: String,
     ): SignInSideEffect()
-}
-
-sealed class SignInEvent : Event {
-    class SetEmail(val email: String) : SignInEvent()
-    class SetPassword(val password: String) : SignInEvent()
-    object PostLogin : SignInEvent()
 }

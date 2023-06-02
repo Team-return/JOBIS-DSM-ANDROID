@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,9 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import kotlinx.coroutines.delay
+import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
 import team.retum.jobisui.colors.JobisColor
@@ -44,31 +48,54 @@ import team.returm.jobisdesignsystem.util.Animated
 @Composable
 internal fun SignInScreen(
     navController: NavController,
+    signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
+
+    val state = signInViewModel.container.stateFlow.collectAsState()
 
     var show by remember { mutableStateOf(false) }
 
+    val email = state.value.email
+    val password = state.value.password
+    val emailError = state.value.emailError
+    val passwordError = state.value.passwordError
+
     LaunchedEffect(Unit) {
-        delay(500)
         show = true
+        signInViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is SignInSideEffect.MoveToMain -> {
+                    navController.navigate(JobisRoute.Main)
+                }
+
+                is SignInSideEffect.UnAuthorization -> {
+                    signInViewModel.setPasswordError(true)
+                }
+
+                is SignInSideEffect.NotFound -> {
+                    signInViewModel.setEmailError(true)
+                }
+
+                else -> {
+                    // TODO 토스트
+                }
+            }
+        }
+
     }
 
-    var email by remember { mutableStateOf("") }
-
-    var password by remember { mutableStateOf("") }
-
-    var autoSignInChecked by remember { mutableStateOf(false) }
-
-    val onEmailChanged = { value: String ->
-        email = value
+    val onEmailChanged = { email: String ->
+        signInViewModel.setUserId(email)
+        signInViewModel.setEmailError(false)
     }
 
-    val onPasswordChanged = { value: String ->
-        password = value
+    val onPasswordChanged = { password: String ->
+        signInViewModel.setPassword(password)
+        signInViewModel.setPasswordError(false)
     }
 
     val onSignInCheckChange = {
-        autoSignInChecked = !autoSignInChecked
+        signInViewModel.setAutoSignIn(!state.value.autoSignIn)
     }
 
     Box {
@@ -115,10 +142,12 @@ internal fun SignInScreen(
                 password = password,
                 onEmailChanged = onEmailChanged,
                 onPasswordChanged = onPasswordChanged,
+                emailError = emailError,
+                passwordError = passwordError,
             )
             Spacer(modifier = Modifier.height(22.dp))
             SignInOptions(
-                autoSignInChecked = autoSignInChecked,
+                autoSignInChecked = state.value.autoSignIn,
             ) {
                 onSignInCheckChange()
             }
@@ -130,6 +159,7 @@ internal fun SignInScreen(
                     text = stringResource(id = R.string.sign_in_sign_up_question),
                     color = JobisColor.Gray600,
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Caption(
                     text = stringResource(id = R.string.sign_up),
                     decoration = TextDecoration.Underline,
@@ -139,8 +169,11 @@ internal fun SignInScreen(
             JobisLargeButton(
                 text = stringResource(id = R.string.sign_in),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = {},
-            )   
+                onClick = {
+                    signInViewModel.postLogin()
+                },
+                enabled = email.isNotEmpty() && password.isNotEmpty() && !emailError && !passwordError,
+            )
         }
     }
 }
@@ -151,12 +184,16 @@ private fun SignInInputs(
     password: String,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
+    emailError: Boolean,
+    passwordError: Boolean,
 ) {
     JobisBoxTextField(
         color = JobisTextFieldColor.MainColor,
         value = email,
         onValueChanged = onEmailChanged,
         hint = stringResource(id = R.string.sign_in_hint_email),
+        error = emailError,
+        errorText = stringResource(id = R.string.sign_in_email_error),
     )
     Spacer(modifier = Modifier.height(12.dp))
     JobisBoxTextField(
@@ -164,6 +201,8 @@ private fun SignInInputs(
         value = password,
         onValueChanged = onPasswordChanged,
         hint = stringResource(id = R.string.sign_in_hint_password),
+        error = passwordError,
+        errorText = stringResource(id = R.string.sign_in_password_error),
         textFieldType = TextFieldType.PASSWORD,
     )
 }

@@ -11,7 +11,6 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.user.SignInParam
 import team.retum.domain.usecase.user.SignInUseCase
-import team.retum.jobis_android.contract.SignInEvent
 import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.contract.SignInState
 import team.retum.jobis_android.util.mvi.Event
@@ -26,39 +25,17 @@ class SignInViewModel @Inject constructor(
 
     override val container = container<SignInState, SignInSideEffect>(SignInState())
 
-    override fun sendEvent(
-        event: Event,
-    ) {
-        when (event) {
-            is SignInEvent.SetEmail -> {
-                setUserId(
-                    id = event.email,
-                )
-            }
+    override fun sendEvent(event: Event) {}
 
-            is SignInEvent.SetPassword -> {
-                setPassword(
-                    password = event.password,
-                )
-            }
-
-            is SignInEvent.PostLogin -> {
-                postLogin()
-            }
-        }
-    }
-
-    private fun postLogin() = intent {
+    internal fun postLogin() = intent {
         viewModelScope.launch {
-            kotlin.runCatching {
-                signInUseCase.execute(
-                    data = SignInParam(
-                        accountId = state.accountId,
-                        password = state.password,
-                        isAutoLogin = state.isAutoLogin,
-                    )
+            signInUseCase(
+                param = SignInParam(
+                    accountId = state.email,
+                    password = state.password,
+                    isAutoLogin = state.autoSignIn,
                 )
-            }.onSuccess {
+            ).onSuccess {
                 postSideEffect(SignInSideEffect.MoveToMain)
             }.onFailure { throwable ->
                 postSignInErrorEffect(
@@ -72,7 +49,6 @@ class SignInViewModel @Inject constructor(
         throwable: Throwable,
     ) = intent {
         when (throwable) {
-
             is UnAuthorizationException -> {
                 postSideEffect(SignInSideEffect.UnAuthorization)
             }
@@ -93,15 +69,33 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun setUserId(
+    internal fun setUserId(
         id: String,
     ) = intent {
-        reduce { state.copy(accountId = id) }
+        reduce { state.copy(email = id) }
     }
 
-    private fun setPassword(
+    internal fun setPassword(
         password: String,
     ) = intent {
         reduce { state.copy(password = password) }
+    }
+
+    internal fun setAutoSignIn(
+        autoSignIn: Boolean,
+    ) = intent {
+        reduce { state.copy(autoSignIn = autoSignIn) }
+    }
+
+    internal fun setEmailError(
+        emailError: Boolean,
+    ) = intent {
+        reduce { state.copy(emailError = emailError) }
+    }
+
+    internal fun setPasswordError(
+        passwordError: Boolean,
+    ) = intent {
+        reduce { state.copy(passwordError = passwordError) }
     }
 }
