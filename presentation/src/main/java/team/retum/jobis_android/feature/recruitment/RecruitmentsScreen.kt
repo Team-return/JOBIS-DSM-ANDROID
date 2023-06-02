@@ -46,12 +46,13 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.ui.theme.Body2
-import team.retum.jobisui.ui.theme.Caption
+
 import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
+import team.returm.jobisdesignsystem.theme.Body2
+import team.returm.jobisdesignsystem.theme.Caption
 import java.text.DecimalFormat
 
 private data class Recruitment(

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Body4
+import team.returm.jobisdesignsystem.theme.Body4
 
 @Composable
 fun BottomBar(

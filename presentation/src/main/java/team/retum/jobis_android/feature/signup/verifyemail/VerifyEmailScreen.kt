@@ -126,7 +126,7 @@ fun VerifyEmailScreen(
             helperText = stringResource(id = R.string.email_verification_email_hint),
             errorText = stringResource(id = R.string.email_verification_email_hint),
             imeAction = ImeAction.Next,
-            isError = isEmailFieldError,
+            error = isEmailFieldError,
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(

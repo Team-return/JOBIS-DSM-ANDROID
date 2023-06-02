@@ -40,12 +40,12 @@ import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Body1
-import team.retum.jobisui.ui.theme.Body3
-import team.retum.jobisui.ui.theme.Caption
 import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.theme.Body1
+import team.returm.jobisdesignsystem.theme.Body3
+import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.Animated
 
 @Stable

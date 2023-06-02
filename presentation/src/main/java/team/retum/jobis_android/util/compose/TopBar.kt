@@ -13,10 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.ui.theme.Body1
 import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.icon.JobisIcon
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.theme.Body1
 
 @Composable
 fun TopBar(
