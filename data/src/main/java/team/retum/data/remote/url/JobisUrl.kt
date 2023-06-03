@@ -25,8 +25,7 @@ object JobisUrl {
     }
 
     object Code {
-        const val tech = "$code/tech"
-        const val job = "$code/job"
+        const val code = JobisUrl.code
     }
 
     object Auth {

@@ -126,7 +126,7 @@ internal fun RecruitmentsScreen(
             topStart = 16.dp,
             topEnd = 16.dp,
         ),
-        sheetState = sheetState
+        sheetState = sheetState,
     ) {
         Column(
             modifier = Modifier
@@ -401,15 +401,37 @@ private fun RecruitmentFilter(
     onTechCodeChanged: (String) -> Unit,
 ) {
 
-    var folded by remember { mutableStateOf(false) }
+    var folded by remember { mutableStateOf(true) }
 
     val foldedPadding by animateDpAsState(
         targetValue = if (folded) 180.dp
         else 120.dp,
     )
 
-    val techs = remember { mutableStateListOf<String>("spring", "sprijs", "fisejf") }
-    val techChecks = remember { mutableStateListOf<Boolean>(false, false, false) }
+    val techs = remember {
+        mutableStateListOf<String>(
+            "안드로이드",
+            "안드로이드",
+            "안드로이드",
+            "안드로이드",
+            "안드로이드",
+            "안드로이드",
+            "안드로이드",
+            "안드로이드"
+        )
+    }
+    val techChecks = remember {
+        mutableStateListOf<Boolean>(
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        )
+    }
 
     val onTechChecked = { index: Int ->
         techChecks[index] = !techChecks[index]
@@ -514,7 +536,6 @@ private fun RecruitmentFilter(
                 )
             }
         }
-
     }
 }
 
@@ -569,7 +590,7 @@ private fun Techs(
     onTechChecked: (Int) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(400.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         itemsIndexed(techs) { index, tech ->
