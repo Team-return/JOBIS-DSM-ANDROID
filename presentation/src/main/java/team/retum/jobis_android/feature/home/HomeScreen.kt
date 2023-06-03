@@ -322,9 +322,6 @@ private fun ApplyCompanies(
                     company = applyCompanies[index].company,
                     status = applyCompanies[index].applicationStatus.status,
                 )
-                if (index == size - 1) {
-                    Spacer(modifier = Modifier.height(18.dp))
-                }
             }
         }
     } else {
@@ -332,6 +329,8 @@ private fun ApplyCompanies(
             isEmpty = true,
         )
     }
+
+    Spacer(modifier = Modifier.height(18.dp))
 }
 
 @Composable

@@ -64,7 +64,9 @@ fun CompanyListScreen(
             text = stringResource(id = R.string.company_list_search_company),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Filter()
+        Filter(
+            onFilterClicked = {},
+        )
         CompanyList(
             companies = state.companies,
             navController = navController,

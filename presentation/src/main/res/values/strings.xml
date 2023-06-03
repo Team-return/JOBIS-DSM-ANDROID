@@ -142,5 +142,14 @@
 
     <string name="reviews_writer">%s님의 후기</string>
 
+    <!--    Recruitment Filter-->
+
+    <string name="tech_code_filter">기술 코드 필터</string>
+    <string name="search_tech_code">기술 코드 검색</string>
+    <string name="unfold">접기</string>
+    <string name="choose_position">분야 선택</string>
+    <string name="chose">선택됨 :</string>
+    <string name="apply">적용</string>
+
 
 </resources>
