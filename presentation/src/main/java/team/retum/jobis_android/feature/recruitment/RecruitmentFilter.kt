@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,6 +35,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
@@ -96,9 +98,9 @@ internal fun RecruitmentFilter(
 
     var folded by remember { mutableStateOf(true) }
 
-    val foldedPadding by animateDpAsState(
-        targetValue = if (folded) 160.dp
-        else 0.dp,
+    val foldedOffset by animateDpAsState(
+        targetValue = if (folded) (-90).dp
+        else 180.dp,
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
@@ -156,8 +158,8 @@ internal fun RecruitmentFilter(
                 }
                 Column(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(bottom = foldedPadding),
+                        .fillMaxHeight(0.9f)
+                        .offset(y = foldedOffset),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
                 ) {
@@ -170,9 +172,9 @@ internal fun RecruitmentFilter(
                                 rippleEnabled = false,
                                 interactionSource = remember { MutableInteractionSource() },
                             ) {
-                                if (state.jobs.isNotEmpty()) {
-                                    folded = !folded
-                                }
+                                //if (state.jobs.isNotEmpty()) {
+                                folded = !folded
+                                //}
                             },
                             text = stringResource(
                                 id = if (folded) R.string.choose_position
@@ -224,15 +226,12 @@ private fun Positions(
 
     var selectedPosition by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .padding(bottom = 16.dp)
-    ) {
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
             modifier = Modifier.padding(top = 14.dp),
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisSpacing = 8.dp,
-            mainAxisSpacing = 8.dp,
+            mainAxisSpacing = 4.dp,
         ) {
             positions.forEach { item ->
                 Position(
@@ -341,3 +340,8 @@ private fun Tech(
         )
     }
 }
+
+private fun Modifier.foldedPadding(
+    foldedPadding: Dp
+) = if (foldedPadding <= 0.dp) this.padding(top = foldedPadding)
+else this.padding(bottom = foldedPadding)

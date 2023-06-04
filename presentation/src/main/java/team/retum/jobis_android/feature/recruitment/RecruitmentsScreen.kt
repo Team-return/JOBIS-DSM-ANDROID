@@ -18,14 +18,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -44,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
@@ -97,7 +96,8 @@ internal fun RecruitmentsScreen(
     val coroutineScope = rememberCoroutineScope()
 
     coroutineScope.launch {
-        sheetState.show()
+        delay(500)
+        sheetState.showExpand()
     }
 
     ModalBottomSheetLayout(
@@ -109,6 +109,7 @@ internal fun RecruitmentsScreen(
             topEnd = 16.dp,
         ),
         sheetState = sheetState,
+
     ) {
         Column(
             modifier = Modifier
@@ -125,9 +126,9 @@ internal fun RecruitmentsScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Filter {
-//                coroutineScope.launch {
-//                    sheetState.show()
-//                }
+                coroutineScope.launch {
+                    sheetState.showExpand()
+                }
             }
             RecruitmentList(
                 recruitments = recruitments,
@@ -375,4 +376,9 @@ private fun Recruitment(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+internal suspend fun ModalBottomSheetState.showExpand(){
+    animateTo(ModalBottomSheetValue.Expanded)
 }
