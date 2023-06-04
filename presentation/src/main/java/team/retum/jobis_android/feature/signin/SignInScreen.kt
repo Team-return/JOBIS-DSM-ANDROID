@@ -35,7 +35,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
 import team.returm.jobisdesignsystem.image.JobisImage
@@ -44,6 +43,7 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading1
 import team.returm.jobisdesignsystem.util.Animated
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
@@ -218,12 +218,7 @@ private fun SignInOptions(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
-            modifier = Modifier.jobisClickable(
-                rippleEnabled = false,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                onSignInCheckChanged()
-            },
+            modifier = Modifier.jobisClickable(onClick = onSignInCheckChanged),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             JobisCheckBox(

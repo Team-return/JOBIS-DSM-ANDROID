@@ -49,7 +49,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
@@ -57,6 +56,7 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentFilter(
@@ -168,10 +168,7 @@ internal fun RecruitmentFilter(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Caption(
-                            modifier = Modifier.jobisClickable(
-                                rippleEnabled = false,
-                                interactionSource = remember { MutableInteractionSource() },
-                            ) {
+                            modifier = Modifier.jobisClickable {
                                 if (state.jobs.isNotEmpty()) {
                                     folded = !folded
                                 }
@@ -274,11 +271,7 @@ private fun Position(
                 shape = RoundedCornerShape(18.dp)
             )
             .clip(RoundedCornerShape(18.dp))
-            .jobisClickable(
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onSelectedPosition()
-            },
+            .jobisClickable(onClick = onSelectedPosition),
         contentAlignment = Alignment.Center,
     ) {
         Body4(

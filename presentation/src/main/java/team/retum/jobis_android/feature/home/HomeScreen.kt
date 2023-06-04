@@ -44,7 +44,6 @@ import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.student.StudentsViewModel
 import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
@@ -53,6 +52,7 @@ import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading3
 import team.returm.jobisdesignsystem.util.JobisSize
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
 val ApplyCompaniesItemShape = RoundedCornerShape(
@@ -444,12 +444,7 @@ private fun Card(
                     shape = JobisSize.Shape.Large,
                 )
                 .background(color = JobisColor.Gray100)
-                .jobisClickable(
-                    rippleEnabled = false,
-                    interactionSource = remember { MutableInteractionSource() },
-                ) {
-                    onClick()
-                }
+                .jobisClickable(onClick = onClick)
                 .padding(
                     horizontal = 22.dp,
                     vertical = 14.dp,

@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,12 +52,12 @@ import team.retum.jobis_android.viewmodel.recruitment.toModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -301,18 +300,9 @@ private fun Recruitment(
                 shape = ApplyCompaniesItemShape,
                 elevation = 8.dp,
             )
-            .clip(
-                shape = ApplyCompaniesItemShape,
-            )
-            .background(
-                color = JobisColor.Gray100,
-            )
-            .jobisClickable(
-                rippleEnabled = false,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onItemClicked()
-            },
+            .clip(shape = ApplyCompaniesItemShape,)
+            .background(color = JobisColor.Gray100)
+            .jobisClickable(onClick = onItemClicked),
     ) {
         Row(
             modifier = Modifier.padding(

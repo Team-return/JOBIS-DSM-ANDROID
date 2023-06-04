@@ -1,10 +1,8 @@
 package team.retum.jobis_android.feature.recruitment
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,13 +38,13 @@ import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.Animated
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
 val PositionCardShape = RoundedCornerShape(
@@ -182,9 +180,9 @@ private fun RecruitmentDetails(
                 title = stringResource(details[index + 1].first),
                 content = if (index == 6) {
                     StringBuilder().apply {
-                        repeat(hiringProgress.size){ index ->
-                            append("${index+1}. ${hiringProgress[index].value}")
-                            if(index != hiringProgress.lastIndex) append("\n")
+                        repeat(hiringProgress.size) { index ->
+                            append("${index + 1}. ${hiringProgress[index].value}")
+                            if (index != hiringProgress.lastIndex) append("\n")
                         }
                     }.toString()
                 } else {
@@ -303,10 +301,7 @@ private fun PositionCard(
             horizontalArrangement = Arrangement.Center,
         ) {
             Caption(
-                modifier = Modifier.jobisClickable(
-                    rippleEnabled = false,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
+                modifier = Modifier.jobisClickable {
                     showDetails = !showDetails
                 },
                 text = if (showDetails) stringResource(id = R.string.recruitment_details_show_simply)
