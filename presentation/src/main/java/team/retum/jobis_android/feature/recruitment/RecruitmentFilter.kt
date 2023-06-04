@@ -32,10 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
@@ -172,9 +172,9 @@ internal fun RecruitmentFilter(
                                 rippleEnabled = false,
                                 interactionSource = remember { MutableInteractionSource() },
                             ) {
-                                //if (state.jobs.isNotEmpty()) {
-                                folded = !folded
-                                //}
+                                if (state.jobs.isNotEmpty()) {
+                                    folded = !folded
+                                }
                             },
                             text = stringResource(
                                 id = if (folded) R.string.choose_position
@@ -228,7 +228,11 @@ private fun Positions(
 
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
-            modifier = Modifier.padding(top = 14.dp),
+            modifier = Modifier
+                .padding(top = 14.dp)
+                .graphicsLayer {
+                    alpha = 0.9f
+                },
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisSpacing = 8.dp,
             mainAxisSpacing = 4.dp,
@@ -238,12 +242,14 @@ private fun Positions(
                     keyword = item.keyword,
                     selected = selectedPosition == item.keyword,
                 ) {
-                    with(codeViewModel) {
-                        setType(Type.TECH)
-                        setParentCode(item.code)
-                        fetchCodes()
+                    if (!folded) {
+                        with(codeViewModel) {
+                            setType(Type.TECH)
+                            setParentCode(item.code)
+                            fetchCodes()
+                        }
+                        selectedPosition = item.keyword
                     }
-                    selectedPosition = item.keyword
                 }
             }
         }
@@ -340,8 +346,3 @@ private fun Tech(
         )
     }
 }
-
-private fun Modifier.foldedPadding(
-    foldedPadding: Dp
-) = if (foldedPadding <= 0.dp) this.padding(top = foldedPadding)
-else this.padding(bottom = foldedPadding)

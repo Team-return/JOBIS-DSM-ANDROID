@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.code
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +46,7 @@ internal class CodeViewModel @Inject constructor(
                         setTechs(
                             techs = it.codes,
                         )
+                        techList.clear()
                         techList.addAll(it.codes)
                     }
 
