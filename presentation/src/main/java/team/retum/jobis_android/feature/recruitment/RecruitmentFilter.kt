@@ -53,7 +53,6 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
-import team.returm.jobisdesignsystem.util.Animated
 
 @Composable
 internal fun RecruitmentFilter(
@@ -88,7 +87,7 @@ internal fun RecruitmentFilter(
 
     val foldedPadding by animateDpAsState(
         targetValue = if (folded) 160.dp
-        else 10.dp,
+        else (-48).dp,
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
@@ -108,7 +107,7 @@ internal fun RecruitmentFilter(
         Box(
             contentAlignment = Alignment.BottomCenter,
         ) {
-            Box{
+            Box {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
@@ -159,8 +158,8 @@ internal fun RecruitmentFilter(
                                 rippleEnabled = false,
                                 interactionSource = remember { MutableInteractionSource() },
                             ) {
-                                if(state.codes.isNotEmpty()) {
-                                    folded = !folded
+                                if (state.codes.isNotEmpty()) {
+                                folded = !folded
                                 }
                             },
                             text = stringResource(
@@ -209,44 +208,68 @@ private fun Positions(
     folded: Boolean,
     positions: List<CodeEntity>,
 ) {
+
+    var selectedPosition by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier.padding(bottom = 16.dp)
+        modifier = Modifier
+
+            .padding(bottom = 16.dp)
     ) {
-        Animated(visible = true) {
-            FlowRow(
-                modifier = Modifier.padding(top = 14.dp),
-                mainAxisAlignment = MainAxisAlignment.Start,
-                crossAxisSpacing = 8.dp,
-                mainAxisSpacing = 8.dp,
-            ) {
-                positions.forEach { item ->
-                    Box(
-                        modifier = Modifier
-                            .shadow(
-                                elevation = 2.dp,
-                                shape = RoundedCornerShape(18.dp)
-                            )
-                            .background(
-                                color = JobisColor.Gray100,
-                                shape = RoundedCornerShape(18.dp)
-                            )
-                            .clip(RoundedCornerShape(18.dp)),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Body4(
-                            modifier = Modifier.padding(
-                                horizontal = 14.dp,
-                                vertical = 4.dp,
-                            ),
-                            text = item.keyword,
-                            color = JobisColor.Gray600,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
+        FlowRow(
+            modifier = Modifier.padding(top = 14.dp),
+            mainAxisAlignment = MainAxisAlignment.Start,
+            crossAxisSpacing = 8.dp,
+            mainAxisSpacing = 8.dp,
+        ) {
+            positions.forEach { item ->
+                Position(
+                    keyword = item.keyword,
+                    selected = selectedPosition == item.keyword,
+                ) {
+                    selectedPosition = item.keyword
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun Position(
+    keyword: String,
+    selected: Boolean,
+    onSelectedPosition: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(18.dp)
+            )
+            .background(
+                color = if (selected) JobisColor.LightBlue
+                else JobisColor.Gray100,
+                shape = RoundedCornerShape(18.dp)
+            )
+            .clip(RoundedCornerShape(18.dp))
+            .jobisClickable(
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onSelectedPosition()
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Body4(
+            modifier = Modifier.padding(
+                horizontal = 14.dp,
+                vertical = 4.dp,
+            ),
+            text = keyword,
+            color = if (selected) JobisColor.Gray100
+            else JobisColor.Gray600,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
