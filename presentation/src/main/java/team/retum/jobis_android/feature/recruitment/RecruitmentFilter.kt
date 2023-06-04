@@ -75,7 +75,7 @@ internal fun RecruitmentFilter(
         }
     }
 
-    val onTechCodeChanged = { keyword: String ->
+    val onKeywordChanged = { keyword: String ->
         codeViewModel.setKeyword(keyword)
     }
 
@@ -143,7 +143,7 @@ internal fun RecruitmentFilter(
                     Spacer(modifier = Modifier.height(12.dp))
                     JobisBoxTextField(
                         color = JobisTextFieldColor.MainColor,
-                        onValueChanged = onTechCodeChanged,
+                        onValueChanged = onKeywordChanged,
                         value = state.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,

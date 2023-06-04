@@ -1,5 +1,6 @@
 package team.retum.jobis_android.viewmodel.code
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,8 @@ internal class CodeViewModel @Inject constructor(
 
     override val container = container<CodeState, CodeSideEffect>(CodeState())
 
+    private val techList = mutableListOf<CodeEntity>()
+
     override fun sendEvent(event: Event) {}
 
     internal fun fetchCodes() = intent {
@@ -40,9 +43,12 @@ internal class CodeViewModel @Inject constructor(
                         jobs = it.codes,
                     )
 
-                    Type.TECH -> setTechs(
-                        techs = it.codes,
-                    )
+                    Type.TECH -> {
+                        setTechs(
+                            techs = it.codes,
+                        )
+                        techList.addAll(it.codes)
+                    }
 
                     Type.BUSINESS_AREA -> setBusinessAreas(
                         businessAreas = it.codes,
@@ -90,6 +96,7 @@ internal class CodeViewModel @Inject constructor(
                 keyword = keyword,
             )
         }
+        searchTechCode(keyword)
     }
 
     internal fun setType(
@@ -110,5 +117,23 @@ internal class CodeViewModel @Inject constructor(
                 parentCode = parentCode,
             )
         }
+    }
+
+    private fun searchTechCode(
+        keyword: String,
+    ) = intent {
+
+        val resultList = mutableListOf<CodeEntity>()
+
+        techList.filter {
+            keyword.uppercase() == it.keyword.substring(keyword.indices).uppercase()
+        }.map {
+            resultList.add(it)
+        }
+
+        setTechs(
+            techs = if (keyword.isBlank()) techList
+            else resultList,
+        )
     }
 }
