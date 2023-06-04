@@ -126,7 +126,7 @@ internal class CodeViewModel @Inject constructor(
         val resultList = mutableListOf<CodeEntity>()
 
         techList.filter {
-            keyword.uppercase() == it.keyword.substring(keyword.indices).uppercase()
+            (keyword.length <= it.keyword.length && (keyword.uppercase() == it.keyword.substring(keyword.indices).uppercase()))
         }.map {
             resultList.add(it)
         }

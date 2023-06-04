@@ -255,7 +255,6 @@ private fun RecruitmentList(
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = recruitment.military,
                 onBookmarked = {
-                    recruitment.bookmarked = !recruitment.bookmarked
                     isBookmarked = !isBookmarked
                     recruitmentViewModel.sendEvent(
                         event = RecruitmentEvent.BookmarkRecruitment(

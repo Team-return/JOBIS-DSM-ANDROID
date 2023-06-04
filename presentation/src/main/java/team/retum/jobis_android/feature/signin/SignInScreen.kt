@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.signin
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -103,7 +102,7 @@ internal fun SignInScreen(
             Animated(visible = show) {
                 JobisImage(
                     modifier = Modifier.offset(
-                        x = (120).dp,
+                        x = 120.dp,
                         y = (-220).dp,
                     ),
                     drawable = R.drawable.ic_splash,

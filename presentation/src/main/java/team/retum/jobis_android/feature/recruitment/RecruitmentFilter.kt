@@ -226,10 +226,7 @@ private fun Positions(
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
             modifier = Modifier
-                .padding(top = 14.dp)
-                .graphicsLayer {
-                    alpha = 0.9f
-                },
+                .padding(top = 14.dp),
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisSpacing = 8.dp,
             mainAxisSpacing = 4.dp,
