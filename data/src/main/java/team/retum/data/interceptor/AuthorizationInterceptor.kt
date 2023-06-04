@@ -17,8 +17,6 @@ class AuthorizationInterceptor @Inject constructor(
             JobisUrl.User.login,
             JobisUrl.User.reissue,
             JobisUrl.Student.signup,
-            JobisUrl.Code.tech,
-            JobisUrl.Code.job,
             JobisUrl.Auth.code,
             JobisUrl.Student.exists,
         )

@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":data"))
 
     implementation(Dependency.DESIGNSYSTEM.JOBIS)
+    implementation ("com.google.accompanist:accompanist-flowlayout:0.30.1")
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
     implementation(Dependency.COMPOSE.ACTIVITY)
