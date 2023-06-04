@@ -6,7 +6,9 @@ import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
 data class CodeState(
-    val codes: List<CodeEntity> = emptyList(),
+    val jobs: List<CodeEntity> = emptyList(),
+    val techs: List<CodeEntity> = emptyList(),
+    val businessAreas: List<CodeEntity> = emptyList(),
     val keyword: String? = null,
     val type: Type = Type.JOB,
     val parentCode: Long? = null,

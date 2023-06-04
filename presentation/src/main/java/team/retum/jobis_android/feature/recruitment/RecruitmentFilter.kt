@@ -39,7 +39,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.code.CodeEntity
+import team.retum.domain.param.code.Type
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
@@ -61,20 +63,29 @@ internal fun RecruitmentFilter(
 
     val state by codeViewModel.container.stateFlow.collectAsState()
 
-    val techs = remember { mutableStateListOf<String>() }
-    val techChecks = remember { mutableStateListOf<Boolean>() }
+    val techs = state.techs
 
-    var techCode by remember { mutableStateOf("") }
+    val techChecks = remember {
+        mutableStateListOf<Boolean>()
+    }
 
-    val onTechCodeChanged = { value: String ->
-        techCode = value
+    runBlocking {
+        repeat(techs.size) {
+            techChecks.add(false)
+        }
+    }
+
+    val onTechCodeChanged = { keyword: String ->
+        codeViewModel.setKeyword(keyword)
     }
 
     val tech = StringBuilder().apply {
         techs.forEach {
-            if (techChecks[techs.indexOf(it)]) {
-                append(it)
-                append(" ")
+            if (techChecks.isNotEmpty()) {
+                if (techChecks[techs.indexOf(it)]) {
+                    append(it.keyword)
+                    append(" ")
+                }
             }
         }
     }.toString().trim().replace(" ", " | ")
@@ -87,7 +98,7 @@ internal fun RecruitmentFilter(
 
     val foldedPadding by animateDpAsState(
         targetValue = if (folded) 160.dp
-        else (-48).dp,
+        else 0.dp,
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
@@ -133,13 +144,14 @@ internal fun RecruitmentFilter(
                     JobisBoxTextField(
                         color = JobisTextFieldColor.MainColor,
                         onValueChanged = onTechCodeChanged,
-                        value = techCode,
+                        value = state.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
                     )
                     Positions(
                         folded = folded,
-                        positions = state.codes,
+                        positions = state.jobs,
+                        codeViewModel = codeViewModel,
                     )
                 }
                 Column(
@@ -158,13 +170,13 @@ internal fun RecruitmentFilter(
                                 rippleEnabled = false,
                                 interactionSource = remember { MutableInteractionSource() },
                             ) {
-                                if (state.codes.isNotEmpty()) {
-                                folded = !folded
+                                if (state.jobs.isNotEmpty()) {
+                                    folded = !folded
                                 }
                             },
                             text = stringResource(
-                                id = if (folded) R.string.unfold
-                                else R.string.choose_position,
+                                id = if (folded) R.string.choose_position
+                                else R.string.unfold,
                             ),
                             color = JobisColor.Gray600,
                             decoration = TextDecoration.Underline,
@@ -207,13 +219,13 @@ internal fun RecruitmentFilter(
 private fun Positions(
     folded: Boolean,
     positions: List<CodeEntity>,
+    codeViewModel: CodeViewModel,
 ) {
 
     var selectedPosition by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
-
             .padding(bottom = 16.dp)
     ) {
         FlowRow(
@@ -227,6 +239,11 @@ private fun Positions(
                     keyword = item.keyword,
                     selected = selectedPosition == item.keyword,
                 ) {
+                    with(codeViewModel) {
+                        setType(Type.TECH)
+                        setParentCode(item.code)
+                        fetchCodes()
+                    }
                     selectedPosition = item.keyword
                 }
             }
@@ -275,7 +292,7 @@ private fun Position(
 
 @Composable
 private fun Techs(
-    techs: List<String>,
+    techs: List<CodeEntity>,
     techChecks: List<Boolean>,
     onTechChecked: (Int) -> Unit,
 ) {
@@ -287,7 +304,7 @@ private fun Techs(
     ) {
         itemsIndexed(techs) { index, tech ->
             Tech(
-                tech = tech,
+                tech = tech.keyword,
                 checked = techChecks[index],
                 onTechChecked = { onTechChecked(index) },
             )

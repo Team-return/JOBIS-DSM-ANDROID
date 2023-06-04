@@ -20,14 +20,14 @@ import javax.inject.Inject
 @HiltViewModel
 internal class CodeViewModel @Inject constructor(
     private val fetchCodesUseCase: FetchCodesUseCase,
-) : BaseViewModel<CodeState, CodeSideEffect>(){
+) : BaseViewModel<CodeState, CodeSideEffect>() {
 
     override val container = container<CodeState, CodeSideEffect>(CodeState())
 
     override fun sendEvent(event: Event) {}
 
-    internal fun fetchCodes() = intent{
-        viewModelScope.launch(Dispatchers.IO){
+    internal fun fetchCodes() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchCodesUseCase(
                 fetchCodesParam = FetchCodesParam(
                     keyword = state.keyword,
@@ -35,26 +35,56 @@ internal class CodeViewModel @Inject constructor(
                     parentCode = state.parentCode,
                 )
             ).onSuccess {
-                setCodes(
-                    codes = it.codes,
-                )
+                when (state.type) {
+                    Type.JOB -> setJobs(
+                        jobs = it.codes,
+                    )
+
+                    Type.TECH -> setTechs(
+                        techs = it.codes,
+                    )
+
+                    Type.BUSINESS_AREA -> setBusinessAreas(
+                        businessAreas = it.codes,
+                    )
+                }
             }
         }
     }
 
-    private fun setCodes(
-        codes: List<CodeEntity>,
-    ) = intent{
-        reduce{
+    private fun setJobs(
+        jobs: List<CodeEntity>,
+    ) = intent {
+        reduce {
             state.copy(
-                codes = codes,
+                jobs = jobs,
+            )
+        }
+    }
+
+    private fun setTechs(
+        techs: List<CodeEntity>,
+    ) = intent {
+        reduce {
+            state.copy(
+                techs = techs,
+            )
+        }
+    }
+
+    private fun setBusinessAreas(
+        businessAreas: List<CodeEntity>,
+    ) = intent {
+        reduce {
+            state.copy(
+                businessAreas = businessAreas,
             )
         }
     }
 
     internal fun setKeyword(
         keyword: String,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 keyword = keyword,
@@ -64,8 +94,8 @@ internal class CodeViewModel @Inject constructor(
 
     internal fun setType(
         type: Type,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 type = type,
             )
@@ -74,8 +104,8 @@ internal class CodeViewModel @Inject constructor(
 
     internal fun setParentCode(
         parentCode: Long,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 parentCode = parentCode,
             )
