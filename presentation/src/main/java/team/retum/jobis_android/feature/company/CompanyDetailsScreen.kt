@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -112,7 +113,7 @@ fun CompanyDetailsScreen(
             Header(
                 text = stringResource(id = R.string.company_list_search_company),
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             CompanyDetails(
                 companyProfileUrl = companyState.value.companyDetails.companyProfileUrl,
                 companyName = companyState.value.companyDetails.companyName,
@@ -124,17 +125,20 @@ fun CompanyDetailsScreen(
                 color = JobisColor.Gray400,
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Body2(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.Start),
-                text = stringResource(id = R.string.company_details_review_interview),
-                color = JobisColor.Gray700,
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Reviews(reviews = reviewState.value.reviews)
+            if (reviewState.value.reviews.isNotEmpty()) {
+                Body2(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(alignment = Alignment.Start),
+                    text = stringResource(id = R.string.company_details_review_interview),
+                    color = JobisColor.Gray700,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Reviews(reviews = reviewState.value.reviews)
+            }
             Spacer(modifier = Modifier.height(80.dp))
         }
+
         JobisLargeButton(
             text = stringResource(id = R.string.company_details_see_recruitents),
             color = JobisButtonColor.MainSolidColor,
@@ -150,7 +154,7 @@ private fun CompanyDetails(
     companyIntroduce: String,
     companyDetails: List<Pair<Int, String?>>,
 ) {
-    Column {
+    Column{
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
