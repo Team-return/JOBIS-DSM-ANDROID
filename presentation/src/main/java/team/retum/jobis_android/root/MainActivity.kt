@@ -20,7 +20,7 @@ import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
-import team.retum.jobis_android.feature.company.CompanyListScreen
+import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                 composable(
                     route = JobisRoute.Company,
                 ) {
-                    CompanyListScreen(
+                    CompaniesScreen(
                         navController = navController,
                     )
                 }
