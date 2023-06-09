@@ -5,12 +5,14 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import team.retum.data.repository.ApplicationsRepositoryImpl
+import team.retum.data.repository.CodeRepositoryImpl
 import team.retum.data.repository.CompanyRepositoryImpl
 import team.retum.data.repository.RecruitmentRepositoryImpl
 import team.retum.data.repository.ReviewRepositoryImpl
 import team.retum.data.repository.StudentsRepositoryImpl
 import team.retum.data.repository.UserRepositoryImpl
 import team.retum.domain.repository.ApplicationsRepository
+import team.retum.domain.repository.CodeRepository
 import team.retum.domain.repository.CompanyRepository
 import team.retum.domain.repository.RecruitmentRepository
 import team.retum.domain.repository.ReviewRepository
@@ -57,4 +59,10 @@ abstract class RepositoryModule {
     abstract fun bindsReviewRepository(
         reviewRepositoryImpl: ReviewRepositoryImpl,
     ): ReviewRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsCodeRepository(
+        codeRepositoryImpl: CodeRepositoryImpl,
+    ): CodeRepository
 }

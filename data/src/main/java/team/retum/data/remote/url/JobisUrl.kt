@@ -3,7 +3,7 @@ package team.retum.data.remote.url
 object JobisUrl {
 
     const val users = "/users"
-    const val code = "/code"
+    const val code = "/codes"
     const val student = "/students"
     const val auth = "/auth"
     const val recruitment = "/recruitments"
@@ -25,8 +25,7 @@ object JobisUrl {
     }
 
     object Code {
-        const val tech = "$code/tech"
-        const val job = "$code/job"
+        const val code = JobisUrl.code
     }
 
     object Auth {

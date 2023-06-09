@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.signin
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
 import team.returm.jobisdesignsystem.image.JobisImage
@@ -44,6 +42,7 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading1
 import team.returm.jobisdesignsystem.util.Animated
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
@@ -103,7 +102,7 @@ internal fun SignInScreen(
             Animated(visible = show) {
                 JobisImage(
                     modifier = Modifier.offset(
-                        x = (120).dp,
+                        x = 120.dp,
                         y = (-220).dp,
                     ),
                     drawable = R.drawable.ic_splash,
@@ -218,12 +217,7 @@ private fun SignInOptions(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
-            modifier = Modifier.jobisClickable(
-                rippleEnabled = false,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                onSignInCheckChanged()
-            },
+            modifier = Modifier.jobisClickable(onClick = onSignInCheckChanged),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             JobisCheckBox(

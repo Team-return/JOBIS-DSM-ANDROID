@@ -10,6 +10,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
+import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
 import team.retum.domain.usecase.recruitment.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
@@ -170,3 +171,25 @@ internal class RecruitmentViewModel @Inject constructor(
             )
         }
 }
+
+internal data class Recruitment(
+    val recruitId: Int,
+    val companyName: String,
+    val companyProfileUrl: String,
+    val trainPay: Int,
+    val military: Boolean,
+    val totalHiring: Int,
+    val jobCodeList: String,
+    var bookmarked: Boolean,
+)
+
+internal fun RecruitmentEntity.toModel() = Recruitment(
+    recruitId = this.recruitId,
+    companyName = this.companyName,
+    companyProfileUrl = this.companyProfileUrl,
+    trainPay = this.trainPay,
+    military = this.military,
+    totalHiring = this.totalHiring,
+    jobCodeList = this.jobCodeList,
+    bookmarked = this.bookmarked,
+)

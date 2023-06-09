@@ -63,8 +63,10 @@ dependencies {
     implementation(Dependency.COMPOSE.MATERIAL)
     implementation(Dependency.COMPOSE.NAVIGATION)
     implementation(Dependency.COMPOSE.NAVIGATION_HILT)
+    implementation(Dependency.COMPOSE.FLOW_LAYOUT)
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
+
 
     implementation(Dependency.GLIDE.GLIDE)
 

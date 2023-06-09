@@ -28,10 +28,11 @@ object Version {
     const val COMPOSE_MATERIAL = "1.3.1"
     const val COMPOSE_NAVIGATON = "2.5.3"
     const val COMPOSE_NAVIGATION_HILT = "1.0.0"
+    const val COMPOSE_FLOW_LAYOUT = "0.30.1"
 
     const val SPLASH_SCREEN = "1.0.0"
 
     const val ORBIT_MVI = "4.5.0"
 
-    const val DESIGN_SYSTEM = "v1.1.4"
+    const val DESIGN_SYSTEM = "v1.1.5"
 }

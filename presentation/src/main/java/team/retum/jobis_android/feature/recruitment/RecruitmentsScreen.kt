@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,15 +18,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,45 +41,25 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.recruitment.RecruitmentEntity
+import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
+import team.retum.jobis_android.viewmodel.recruitment.Recruitment
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
+import team.retum.jobis_android.viewmodel.recruitment.toModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-
-import team.retum.jobisui.util.jobisClickable
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
 
-private data class Recruitment(
-    val recruitId: Int,
-    val companyName: String,
-    val companyProfileUrl: String,
-    val trainPay: Int,
-    val military: Boolean,
-    val totalHiring: Int,
-    val jobCodeList: String,
-    var bookmarked: Boolean,
-)
-
-private fun RecruitmentEntity.toModel() = Recruitment(
-    recruitId = this.recruitId,
-    companyName = this.companyName,
-    companyProfileUrl = this.companyProfileUrl,
-    trainPay = this.trainPay,
-    military = this.military,
-    totalHiring = this.totalHiring,
-    jobCodeList = this.jobCodeList,
-    bookmarked = this.bookmarked,
-)
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun RecruitmentsScreen(
     navController: NavController,
@@ -93,7 +76,7 @@ internal fun RecruitmentsScreen(
                 company = null,
             )
         )
-        recruitmentViewModel.container.sideEffectFlow.collect {
+        recruitmentViewModel.container.sideEffectFlow.collect { it ->
             when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect -> {
                     recruitments.addAll(it.recruitmentsEntity.recruitmentEntities.map { it.toModel() })
@@ -106,26 +89,46 @@ internal fun RecruitmentsScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = 28.dp,
-                start = 24.dp,
-                end = 24.dp,
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Header(
-            text = stringResource(id = R.string.search_recruitment_header),
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Filter()
-        RecruitmentList(
-            recruitments = recruitments,
-            recruitmentViewModel = recruitmentViewModel,
-            navController = navController,
-        )
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheetLayout(
+        sheetContent = {
+            RecruitmentFilter()
+        },
+        sheetShape = RoundedCornerShape(
+            topStart = 16.dp,
+            topEnd = 16.dp,
+        ),
+        sheetState = sheetState,
+
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = 28.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Header(
+                text = stringResource(id = R.string.search_recruitment_header),
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Filter {
+                coroutineScope.launch {
+                    sheetState.showExpand()
+                }
+            }
+            Recruitments(
+                recruitments = recruitments,
+                recruitmentViewModel = recruitmentViewModel,
+                navController = navController,
+            )
+        }
     }
 }
 
@@ -154,11 +157,13 @@ internal fun Header(
 }
 
 @Composable
-internal fun Filter() {
+internal fun Filter(
+    onFilterClicked: () -> Unit,
+) {
 
-    var keyword by remember { mutableStateOf("") }
+    val keyword by remember { mutableStateOf("") }
 
-    val onKeywordChanged = { value: String ->
+    val onKeywordChanged = { _: String ->
 
     }
 
@@ -180,7 +185,7 @@ internal fun Filter() {
         JobisMediumIconButton(
             drawable = R.drawable.ic_filter,
             color = JobisButtonColor.MainSolidColor,
-            onClick = {},
+            onClick = onFilterClicked,
             shape = RoundedCornerShape(
                 size = 4.dp,
             )
@@ -189,7 +194,7 @@ internal fun Filter() {
 }
 
 @Composable
-private fun RecruitmentList(
+private fun Recruitments(
     recruitments: List<Recruitment>,
     recruitmentViewModel: RecruitmentViewModel,
     navController: NavController,
@@ -243,7 +248,6 @@ private fun RecruitmentList(
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = recruitment.military,
                 onBookmarked = {
-                    recruitment.bookmarked = !recruitment.bookmarked
                     isBookmarked = !isBookmarked
                     recruitmentViewModel.sendEvent(
                         event = RecruitmentEvent.BookmarkRecruitment(
@@ -288,18 +292,9 @@ private fun Recruitment(
                 shape = ApplyCompaniesItemShape,
                 elevation = 8.dp,
             )
-            .clip(
-                shape = ApplyCompaniesItemShape,
-            )
-            .background(
-                color = JobisColor.Gray100,
-            )
-            .jobisClickable(
-                rippleEnabled = false,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onItemClicked()
-            },
+            .clip(shape = ApplyCompaniesItemShape)
+            .background(color = JobisColor.Gray100)
+            .jobisClickable(onClick = onItemClicked),
     ) {
         Row(
             modifier = Modifier.padding(
@@ -363,4 +358,9 @@ private fun Recruitment(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+internal suspend fun ModalBottomSheetState.showExpand() {
+    animateTo(ModalBottomSheetValue.Expanded)
 }
