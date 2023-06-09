@@ -125,19 +125,22 @@ internal class RecruitmentViewModel @Inject constructor(
                 state.copy(
                     details = RecruitmentDetailsEntity(
                         areas = areas,
-                        preferentialTreatment = preferentialTreatment,
-                        requiredGrade = requiredGrade,
-                        workHours = workHours,
-                        requiredLicenses = requiredLicenses,
-                        hiringProgress = hiringProgress,
-                        trainPay = trainPay,
-                        pay = pay,
                         benefits = benefits,
-                        military = military,
-                        submitDocument = submitDocument,
-                        startDate = startDate,
+                        companyId = companyId,
+                        companyName = companyName,
+                        companyProfileUrl = companyProfileUrl,
                         endDate = endDate,
                         etc = etc,
+                        hiringProgress = hiringProgress,
+                        military = military,
+                        pay = pay,
+                        preferentialTreatment = preferentialTreatment,
+                        requiredGrade = requiredGrade,
+                        requiredLicenses = requiredLicenses,
+                        startDate = startDate,
+                        submitDocument = submitDocument,
+                        trainPay = trainPay,
+                        workHours = workHours,
                     )
                 )
             }

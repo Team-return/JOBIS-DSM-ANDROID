@@ -2,28 +2,30 @@ package team.retum.domain.entity.recruitment
 
 data class RecruitmentDetailsEntity(
     val areas: List<AreasEntity>,
-    val preferentialTreatment: String?,
-    val requiredGrade: Int?,
-    val workHours: Int,
-    val requiredLicenses: List<String>?,
-    val hiringProgress: List<HiringProgress>,
-    val trainPay: Int,
-    val pay: Int?,
     val benefits: String?,
-    val military: Boolean,
-    val submitDocument: String,
-    val startDate: String,
+    val companyId: Long,
+    val companyName: String,
+    val companyProfileUrl: String,
     val endDate: String,
     val etc: String?,
-
-    )
+    val hiringProgress: List<HiringProgress>,
+    val military: Boolean,
+    val pay: Int?,
+    val preferentialTreatment: String?,
+    val requiredGrade: Int?,
+    val requiredLicenses: List<String>?,
+    val startDate: String,
+    val submitDocument: String,
+    val trainPay: Int,
+    val workHours: Int,
+)
 
 data class AreasEntity(
-    val recruitAreaId: Long,
+    val hiring: Long,
+    val id: Long,
     val job: String,
-    val tech: List<String>,
-    val hiring: Int,
     val majorTask: String,
+    val tech: List<String>,
 )
 
 enum class HiringProgress(

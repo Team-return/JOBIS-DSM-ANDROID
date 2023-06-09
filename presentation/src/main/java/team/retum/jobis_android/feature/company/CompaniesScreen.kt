@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
@@ -38,7 +38,7 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-fun CompanyListScreen(
+fun CompaniesScreen(
     navController: NavController,
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
@@ -64,7 +64,7 @@ fun CompanyListScreen(
         Filter(
             onFilterClicked = {},
         )
-        CompanyList(
+        Companies(
             companies = state.companies,
             navController = navController,
         )
@@ -72,7 +72,7 @@ fun CompanyListScreen(
 }
 
 @Composable
-private fun CompanyList(
+private fun Companies(
     companies: List<CompanyEntity>,
     navController: NavController,
 ) {
@@ -126,13 +126,14 @@ private fun Company(
                 bottom = 8.dp,
             )
         ) {
-            JobisImage(
+            AsyncImage(
                 modifier = Modifier.size(80.dp),
-                drawable = R.drawable.ic_get_recruitment,
+                model = logoUrl,
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                Body2(text = name,)
+                Body2(text = name)
                 Spacer(modifier = Modifier.height(2.dp))
                 Caption(
                     text = stringResource(id = R.string.company_list_million, take.toString()),

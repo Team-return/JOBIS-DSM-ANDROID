@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentEvent
@@ -304,9 +305,10 @@ private fun Recruitment(
                 bottom = 8.dp,
             )
         ) {
-            JobisImage(
+            AsyncImage(
                 modifier = Modifier.size(80.dp),
-                drawable = R.drawable.ic_get_recruitment,
+                model = imageUrl,
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(

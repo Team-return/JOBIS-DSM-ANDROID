@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
@@ -39,7 +42,6 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
@@ -59,6 +61,8 @@ internal fun RecruitmentDetailsScreen(
 ) {
 
     val state = recruitmentViewModel.container.stateFlow.collectAsState()
+
+    val details = state.value.details
 
     val areas = state.value.details.areas
 
@@ -93,7 +97,10 @@ internal fun RecruitmentDetailsScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CompanyInformation(companyName = companyName.value)
+            CompanyInformation(
+                companyName = companyName.value,
+                companyProfileUrl = details.companyProfileUrl,
+            )
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
                 modifier = Modifier.fillMaxWidth(),
@@ -103,7 +110,7 @@ internal fun RecruitmentDetailsScreen(
             RecruitmentDetails(
                 details = recruitmentViewModel.getRecruitmentDetails(),
                 areas = areas,
-                hiringProgress = state.value.details.hiringProgress,
+                hiringProgress = details.hiringProgress,
             )
             Spacer(modifier = Modifier.height(80.dp))
         }
@@ -117,14 +124,19 @@ internal fun RecruitmentDetailsScreen(
 
 @Composable
 private fun CompanyInformation(
+    companyProfileUrl: String,
     companyName: String,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        JobisImage(
-            drawable = R.drawable.ic_get_recruitment
+        AsyncImage(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape),
+            model = companyProfileUrl,
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Body1(text = companyName)
