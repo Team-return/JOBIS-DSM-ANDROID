@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.contract.CompanySideEffect
@@ -154,9 +155,10 @@ private fun CompanyDetails(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            JobisImage(
+            AsyncImage(
                 modifier = Modifier.size(80.dp),
-                drawable = R.drawable.ic_get_company,
+                model = companyProfileUrl,
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(16.dp))
             Body1(text = companyName)
