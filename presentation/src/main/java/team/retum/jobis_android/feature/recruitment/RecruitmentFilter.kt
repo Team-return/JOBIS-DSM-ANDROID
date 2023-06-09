@@ -1,10 +1,10 @@
 package team.retum.jobis_android.feature.recruitment
 
+import android.content.res.Resources
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -98,9 +98,11 @@ internal fun RecruitmentFilter(
 
     var folded by remember { mutableStateOf(true) }
 
+    var positionsHeight by remember { mutableStateOf(0.dp) }
+
     val foldedOffset by animateDpAsState(
-        targetValue = if (folded) (-90).dp
-        else 180.dp,
+        targetValue = if (!folded) (positionsHeight + 12.dp)
+        else (-12).dp,
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
@@ -154,7 +156,9 @@ internal fun RecruitmentFilter(
                         folded = folded,
                         positions = state.jobs,
                         codeViewModel = codeViewModel,
-                    )
+                    ) {
+                        positionsHeight = it.dp
+                    }
                 }
                 Column(
                     modifier = Modifier
@@ -164,7 +168,10 @@ internal fun RecruitmentFilter(
                     verticalArrangement = Arrangement.Bottom,
                 ) {
                     Column(
-                        modifier = Modifier.background(JobisColor.Gray100),
+                        modifier = Modifier
+                            .fillMaxHeight(0.82f)
+                            .background(JobisColor.Gray100)
+                            .padding(top = 12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Caption(
@@ -219,6 +226,7 @@ private fun Positions(
     folded: Boolean,
     positions: List<CodeEntity>,
     codeViewModel: CodeViewModel,
+    setOnPositionsHeight: (Int) -> Unit,
 ) {
 
     var selectedPosition by remember { mutableStateOf("") }
@@ -226,7 +234,10 @@ private fun Positions(
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
             modifier = Modifier
-                .padding(top = 14.dp),
+                .padding(top = 14.dp)
+                .onGloballyPositioned {
+                    setOnPositionsHeight(it.size.height.toDp)
+                },
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisSpacing = 8.dp,
             mainAxisSpacing = 4.dp,
@@ -336,3 +347,5 @@ private fun Tech(
         )
     }
 }
+
+val Int.toDp get() = (this / Resources.getSystem().displayMetrics.density).toInt()
