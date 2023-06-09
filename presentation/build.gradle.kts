@@ -68,7 +68,7 @@ dependencies {
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
 
-    implementation(Dependency.GLIDE.GLIDE)
+    implementation(Dependency.COIL.COIL)
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
     implementation(Dependency.RETROFIT.GSON_CONVERTER)

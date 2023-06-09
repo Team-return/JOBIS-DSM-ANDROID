@@ -30,8 +30,8 @@ object Dependency {
         const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
     }
 
-    object GLIDE {
-        const val GLIDE = "com.github.bumptech.glide:glide:${Version.GLIDE}"
+    object COIL {
+        const val COIL = "io.coil-kt:coil-compose:${Version.COIL}"
     }
 
     object COMPOSE{

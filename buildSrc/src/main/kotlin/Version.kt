@@ -14,7 +14,7 @@ object Version {
 
     const val HILT = "2.44.2"
 
-    const val GLIDE = "4.14.2"
+    const val COIL = "2.4.0"
 
     const val ANDROID_GRADLE = "7.2.1"
     const val KOTLIN_GRADLE = "1.6.10"
