@@ -17,8 +17,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +42,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
-import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
@@ -67,28 +67,16 @@ internal fun RecruitmentFilter(
 
     val techs = state.techs
 
-    val techChecks = remember {
-        mutableStateListOf<Boolean>()
-    }
-
-    runBlocking {
-        repeat(techs.size) {
-            techChecks.add(false)
-        }
-    }
+    val selectedTechs = remember { mutableStateListOf<String>() }
 
     val onKeywordChanged = { keyword: String ->
         codeViewModel.setKeyword(keyword)
     }
 
-    val tech = StringBuilder().apply {
-        techs.forEach {
-            if (techChecks.isNotEmpty()) {
-                if (techChecks[techs.indexOf(it)]) {
-                    append(it.keyword)
-                    append(" ")
-                }
-            }
+    val selectedTech = StringBuilder().apply {
+        selectedTechs.forEach {
+            append(it)
+            append(" ")
         }
     }.toString().trim().replace(" ", " | ")
 
@@ -109,8 +97,12 @@ internal fun RecruitmentFilter(
         )
     )
 
-    val onTechChecked = { index: Int ->
-        techChecks[index] = !techChecks[index]
+    val onTechChecked = { tech: String ->
+        if (selectedTechs.contains(tech)) {
+            selectedTechs.remove(tech)
+        } else {
+            selectedTechs.add(tech)
+        }
     }
 
     Column(
@@ -151,6 +143,10 @@ internal fun RecruitmentFilter(
                         value = state.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
+                        keyboardActions = KeyboardActions {
+                            folded = false
+                        },
+                        enabled = selectedTech.isNotEmpty()
                     )
                     Positions(
                         folded = folded,
@@ -199,14 +195,14 @@ internal fun RecruitmentFilter(
                                 color = JobisColor.Gray600,
                             )
                             Body4(
-                                text = tech.ifEmpty { stringResource(id = R.string.company_details_null) },
+                                text = selectedTech.ifEmpty { stringResource(id = R.string.company_details_null) },
                                 color = JobisColor.LightBlue,
                             )
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                         Techs(
                             techs = techs,
-                            techChecks = techChecks,
+                            selectedTechs = selectedTechs,
                             onTechChecked = onTechChecked,
                         )
                     }
@@ -229,7 +225,7 @@ private fun Positions(
     setOnPositionsHeight: (Int) -> Unit,
 ) {
 
-    var selectedPosition by remember { mutableStateOf("") }
+    var selectedPosition by remember { mutableStateOf(-1) }
 
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
@@ -242,18 +238,18 @@ private fun Positions(
             crossAxisSpacing = 8.dp,
             mainAxisSpacing = 4.dp,
         ) {
-            positions.forEach { item ->
+            repeat(positions.size) {
                 Position(
-                    keyword = item.keyword,
-                    selected = selectedPosition == item.keyword,
+                    keyword = positions[it].keyword,
+                    selected = selectedPosition == it,
                 ) {
                     if (!folded) {
                         with(codeViewModel) {
                             setType(Type.TECH)
-                            setParentCode(item.code)
+                            setParentCode(positions[it].code)
                             fetchCodes()
                         }
-                        selectedPosition = item.keyword
+                        selectedPosition = it
                     }
                 }
             }
@@ -299,8 +295,8 @@ private fun Position(
 @Composable
 private fun Techs(
     techs: List<CodeEntity>,
-    techChecks: List<Boolean>,
-    onTechChecked: (Int) -> Unit,
+    selectedTechs: List<String>,
+    onTechChecked: (String) -> Boolean,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -308,11 +304,11 @@ private fun Techs(
             .height(400.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        itemsIndexed(techs) { index, tech ->
+        items(techs) { tech ->
             Tech(
                 tech = tech.keyword,
-                checked = techChecks[index],
-                onTechChecked = { onTechChecked(index) },
+                checked = selectedTechs.contains(tech.keyword),
+                onTechChecked = { onTechChecked(tech.keyword) },
             )
         }
     }

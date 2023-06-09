@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
@@ -94,11 +93,6 @@ internal fun RecruitmentsScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    coroutineScope.launch {
-        delay(500)
-        sheetState.showExpand()
-    }
-
     ModalBottomSheetLayout(
         sheetContent = {
             RecruitmentFilter()
@@ -109,7 +103,7 @@ internal fun RecruitmentsScreen(
         ),
         sheetState = sheetState,
 
-    ) {
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -129,12 +123,11 @@ internal fun RecruitmentsScreen(
                     sheetState.showExpand()
                 }
             }
-            RecruitmentList(
+            Recruitments(
                 recruitments = recruitments,
                 recruitmentViewModel = recruitmentViewModel,
                 navController = navController,
             )
-
         }
     }
 }
@@ -201,7 +194,7 @@ internal fun Filter(
 }
 
 @Composable
-private fun RecruitmentList(
+private fun Recruitments(
     recruitments: List<Recruitment>,
     recruitmentViewModel: RecruitmentViewModel,
     navController: NavController,
@@ -299,7 +292,7 @@ private fun Recruitment(
                 shape = ApplyCompaniesItemShape,
                 elevation = 8.dp,
             )
-            .clip(shape = ApplyCompaniesItemShape,)
+            .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(onClick = onItemClicked),
     ) {
@@ -368,6 +361,6 @@ private fun Recruitment(
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-internal suspend fun ModalBottomSheetState.showExpand(){
+internal suspend fun ModalBottomSheetState.showExpand() {
     animateTo(ModalBottomSheetValue.Expanded)
 }
