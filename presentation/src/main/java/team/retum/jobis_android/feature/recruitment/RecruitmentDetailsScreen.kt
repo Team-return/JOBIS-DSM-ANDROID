@@ -66,12 +66,6 @@ internal fun RecruitmentDetailsScreen(
 
     val areas = state.value.details.areas
 
-    val companyName = remember {
-        mutableStateOf(
-            navController.previousBackStackEntry?.arguments?.getString("companyName")!!
-        )
-    }
-
     LaunchedEffect(Unit) {
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
@@ -98,9 +92,11 @@ internal fun RecruitmentDetailsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CompanyInformation(
-                companyName = companyName.value,
+                companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
-            )
+            ){
+                navController.navigate("CompanyDetails/${details.companyId}")
+            }
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
                 modifier = Modifier.fillMaxWidth(),
@@ -126,6 +122,7 @@ internal fun RecruitmentDetailsScreen(
 private fun CompanyInformation(
     companyProfileUrl: String,
     companyName: String,
+    onGetCompanyButtonClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -145,9 +142,8 @@ private fun CompanyInformation(
     JobisLargeButton(
         text = stringResource(id = R.string.recruitment_details_get_company),
         color = JobisButtonColor.MainGrayColor,
-    ) {
-
-    }
+        onClick = onGetCompanyButtonClicked,
+    )
 }
 
 @Composable
