@@ -105,14 +105,13 @@ fun CompanyDetailsScreen(
     ) {
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .verticalScroll(
                     state = ScrollState(0),
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Header(
-                text = stringResource(id = R.string.company_list_search_company),
-            )
+            Header(text = stringResource(id = R.string.company_list_search_company))
             Spacer(modifier = Modifier.height(16.dp))
             CompanyDetails(
                 companyProfileUrl = companyState.value.companyDetails.companyProfileUrl,
@@ -142,8 +141,9 @@ fun CompanyDetailsScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.company_details_see_recruitents),
             color = JobisButtonColor.MainSolidColor,
-            onClick = {},
-        )
+        ){
+            navController.navigate("RecruitmentDetails/${companyState.value.companyId}")
+        }
     }
 }
 
