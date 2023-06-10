@@ -18,9 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
-import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
+import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
@@ -54,8 +53,8 @@ class MainActivity : ComponentActivity() {
                 navController.navigate(
                     if (state.value.autoSignInOption) JobisRoute.Main
                     else JobisRoute.SignIn,
-                ){
-                    popUpTo(JobisRoute.Splash){
+                ) {
+                    popUpTo(JobisRoute.Splash) {
                         inclusive = true
                     }
                 }
@@ -151,8 +150,8 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun SetWindowStatus() {
-        window.statusBarColor = JobisColor.DarkBlue.toArgb()
-        window.navigationBarColor = JobisColor.LightBlue.toArgb()
+        window.statusBarColor = JobisColor.Gray100.toArgb()
+        window.navigationBarColor = JobisColor.Gray100.toArgb()
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {
