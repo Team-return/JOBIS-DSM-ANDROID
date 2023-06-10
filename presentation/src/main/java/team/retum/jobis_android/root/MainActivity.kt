@@ -26,6 +26,7 @@ import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
+import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -41,10 +42,6 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
 
-            runBlocking {
-                mainViewModel.fetchAutoSignInOption()
-            }
-
             SetWindowStatus()
 
             val navController = rememberNavController()
@@ -53,14 +50,32 @@ class MainActivity : ComponentActivity() {
 
             val state = mainViewModel.container.stateFlow.collectAsState()
 
-            val startDestination = if (state.value.autoSignInOption) JobisRoute.Main
-            else JobisRoute.SignIn
+            val moveToScreenBySignInOption = {
+                navController.navigate(
+                    if (state.value.autoSignInOption) JobisRoute.Main
+                    else JobisRoute.SignIn,
+                ){
+                    popUpTo(JobisRoute.Splash){
+                        inclusive = true
+                    }
+                }
+            }
 
             // TODO 토스트 시스템 구현
             NavHost(
                 navController = navController,
-                startDestination = startDestination,
+                startDestination = JobisRoute.Splash,
             ) {
+
+                composable(
+                    route = JobisRoute.Splash,
+                ) {
+                    SplashScreen(
+                        moveToScreenBySignInOption = moveToScreenBySignInOption,
+                        mainViewModel = mainViewModel,
+                    )
+                }
+
                 composable(
                     route = JobisRoute.SignUp,
                 ) {

@@ -64,7 +64,11 @@ internal fun SignInScreen(
         signInViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignInSideEffect.MoveToMain -> {
-                    navController.navigate(JobisRoute.Main)
+                    navController.navigate(JobisRoute.Main){
+                        popUpTo(JobisRoute.SignIn){
+                            inclusive = true
+                        }
+                    }
                 }
 
                 is SignInSideEffect.UnAuthorization -> {
@@ -105,7 +109,7 @@ internal fun SignInScreen(
                         x = 120.dp,
                         y = (-220).dp,
                     ),
-                    drawable = R.drawable.ic_splash,
+                    drawable = R.drawable.ic_sign_in_background,
                 )
             }
         }
