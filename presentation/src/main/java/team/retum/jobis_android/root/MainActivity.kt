@@ -18,14 +18,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
-import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
+import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
+import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -41,10 +41,6 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
 
-            runBlocking {
-                mainViewModel.fetchAutoSignInOption()
-            }
-
             SetWindowStatus()
 
             val navController = rememberNavController()
@@ -53,14 +49,32 @@ class MainActivity : ComponentActivity() {
 
             val state = mainViewModel.container.stateFlow.collectAsState()
 
-            val startDestination = if (state.value.autoSignInOption) JobisRoute.Main
-            else JobisRoute.SignIn
+            val moveToScreenBySignInOption = {
+                navController.navigate(
+                    if (state.value.autoSignInOption) JobisRoute.Main
+                    else JobisRoute.SignIn,
+                ) {
+                    popUpTo(JobisRoute.Splash) {
+                        inclusive = true
+                    }
+                }
+            }
 
             // TODO 토스트 시스템 구현
             NavHost(
                 navController = navController,
-                startDestination = startDestination,
+                startDestination = JobisRoute.Splash,
             ) {
+
+                composable(
+                    route = JobisRoute.Splash,
+                ) {
+                    SplashScreen(
+                        moveToScreenBySignInOption = moveToScreenBySignInOption,
+                        mainViewModel = mainViewModel,
+                    )
+                }
+
                 composable(
                     route = JobisRoute.SignUp,
                 ) {
@@ -136,8 +150,8 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun SetWindowStatus() {
-        window.statusBarColor = JobisColor.DarkBlue.toArgb()
-        window.navigationBarColor = JobisColor.LightBlue.toArgb()
+        window.statusBarColor = JobisColor.Gray100.toArgb()
+        window.navigationBarColor = JobisColor.Gray100.toArgb()
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {
