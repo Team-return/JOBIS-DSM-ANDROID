@@ -3,7 +3,6 @@ package team.retum.jobis_android.feature.home
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,11 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,14 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.applications.AppliedHistoryEntity
-import team.retum.jobis_android.contract.ApplicationsEvent
-import team.retum.jobis_android.contract.ApplicationsSideEffect
-import team.retum.jobis_android.contract.StudentEvent
-import team.retum.jobis_android.contract.StudentSideEffect
+import team.retum.domain.entity.applications.AppliedCompanyHistoryEntity
+import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.viewmodel.student.StudentsViewModel
-import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
+import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
@@ -62,79 +54,28 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
-    applicationsViewModel: ApplicationsViewModel = hiltViewModel(),
-    studentsViewModel: StudentsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
-    var totalStudentCount by remember { mutableStateOf(0) }
-    var passCount by remember { mutableStateOf(0) }
-    var approvedCount by remember { mutableStateOf(0) }
-    var name by remember { mutableStateOf("") }
-    var gcn by remember { mutableStateOf("") }
-    var department by remember { mutableStateOf("") }
-    val applyCompanies = remember { mutableStateListOf<AppliedHistoryEntity>() }
+    val state by homeViewModel.container.stateFlow.collectAsState()
 
-    LaunchedEffect(Unit) {
-        with(applicationsViewModel) {
-            sendEvent(
-                event = ApplicationsEvent.FetchTotalPassedStudentCount,
-            )
-
-            sendEvent(
-                event = ApplicationsEvent.FetchAppliedCompanyHistories,
-            )
-
-            container.sideEffectFlow.collect { sideEffect ->
-                when (sideEffect) {
-                    is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
-                        totalStudentCount = sideEffect.totalStudentCount
-                        passCount = sideEffect.passCount
-                        approvedCount = sideEffect.approvedCount
-                    }
-
-                    is ApplicationsSideEffect.SuccessFetchAppliedCompanyHistories -> {
-                        applyCompanies.clear()
-                        applyCompanies.addAll(sideEffect.applications)
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        }
+    LaunchedEffect(Unit){
+        homeViewModel.fetchTotalPassedStudentCount()
+        homeViewModel.fetchStudentInformations()
+        homeViewModel.fetchAppliedCompanyHistories()
     }
 
-    LaunchedEffect(Unit) {
-        with(studentsViewModel) {
-            sendEvent(
-                event = StudentEvent.FetchStudentInformation,
-            )
-
-            container.sideEffectFlow.collect { sideEffect ->
-                when (sideEffect) {
-                    is StudentSideEffect.SuccessFetchStudentInformation -> {
-                        name = sideEffect.studentName
-                        gcn = sideEffect.studentGcn
-                        department = sideEffect.department.department
-                    }
-
-                    is StudentSideEffect.Exception -> {
-
-                    }
-                }
-            }
-        }
-    }
+    val studentCounts = state.studentCounts
+    val studentInformation = state.studentInformation
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
-            totalStudentCount = totalStudentCount,
-            passCount = passCount,
-            appliedCount = passCount,
+            totalStudentCount = studentCounts.totalStudentCount,
+            passCount = studentCounts.passCount,
+            approvedCount = studentCounts.approvedCount,
         )
         Spacer(modifier = Modifier.height(30.dp))
         Column(
@@ -143,9 +84,9 @@ internal fun HomeScreen(
             )
         ) {
             UserInformation(
-                name = name,
-                gcn = gcn,
-                department = department,
+                name = studentInformation.studentName,
+                gcn = studentInformation.studentGcn,
+                department = studentInformation.department
             )
             Spacer(modifier = Modifier.height(20.dp))
             Row(
@@ -159,7 +100,7 @@ internal fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(6.dp))
             ApplyCompanies(
-                applyCompanies = applyCompanies,
+                applyCompanies = state.appliedCompanyHistories,
             )
         }
         Column(
@@ -182,17 +123,17 @@ internal fun HomeScreen(
 
 @Composable
 private fun RecruitmentStatus(
-    totalStudentCount: Int,
-    passCount: Int,
-    appliedCount: Int,
+    totalStudentCount: Long,
+    passCount: Long,
+    approvedCount: Long,
 ) {
 
     var employmentRate = 0f
     val passString = "$passCount / $totalStudentCount"
-    val appliedString = "$appliedCount / $totalStudentCount"
+    val appliedString = "$approvedCount / $totalStudentCount"
 
-    if (appliedCount != 0) {
-        employmentRate = (appliedCount.toFloat() / totalStudentCount.toFloat() * 100)
+    if (approvedCount != 0L) {
+        employmentRate = (approvedCount.toFloat() / totalStudentCount.toFloat() * 100)
     }
 
     Column(
@@ -273,7 +214,7 @@ private fun RecruitmentStatus(
 private fun UserInformation(
     name: String,
     gcn: String,
-    department: String,
+    department: Department,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -291,7 +232,7 @@ private fun UserInformation(
                 text = "$gcn $name",
             )
             Caption(
-                text = department,
+                text = department.department,
                 color = JobisColor.Gray600,
             )
         }
@@ -300,7 +241,7 @@ private fun UserInformation(
 
 @Composable
 private fun ApplyCompanies(
-    applyCompanies: List<AppliedHistoryEntity>,
+    applyCompanies: List<AppliedCompanyHistoryEntity>,
 ) {
     val size = if (applyCompanies.size >= 2) 2
     else applyCompanies.size

@@ -34,6 +34,8 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             fetchStudentCountsUseCase().onSuccess {
                 setStudentCounts(studentCountsEntity = it)
+            }.onFailure {
+
             }
         }
     }
@@ -42,6 +44,8 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             fetchAppliedCompanyHistoriesUseCase().onSuccess {
                 setAppliedCompanyHistories(appliedCompanyHistories = it)
+            }.onFailure {
+
             }
         }
     }
@@ -50,6 +54,8 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             fetchStudentInformationUseCase().onSuccess {
                 setStudentInformation(studentInformationEntity = it)
+            }.onFailure {
+
             }
         }
     }

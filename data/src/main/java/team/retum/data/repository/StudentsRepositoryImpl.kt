@@ -1,7 +1,6 @@
 package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.StudentsDataSource
-import team.retum.data.remote.response.applications.toEntity
 import team.retum.data.remote.response.students.toEntity
 import team.retum.domain.entity.student.StudentInformationEntity
 import team.retum.domain.repository.StudentsRepository
