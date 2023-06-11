@@ -122,6 +122,7 @@ internal fun RecruitmentsScreen(
             Filter {
                 coroutineScope.launch {
                     sheetState.showExpand()
+                    sheetState.show()
                 }
             }
             Recruitments(

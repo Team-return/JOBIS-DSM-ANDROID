@@ -46,6 +46,7 @@ object Dependency {
         const val NAVIGATION = "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATON}"
         const val NAVIGATION_HILT = "androidx.hilt:hilt-navigation-compose:${Version.COMPOSE_NAVIGATION_HILT}"
         const val FLOW_LAYOUT = "com.google.accompanist:accompanist-flowlayout:${Version.COMPOSE_FLOW_LAYOUT}"
+        const val NAVIGATION_ANIMATION = "com.google.accompanist:accompanist-navigation-animation:${Version.COMPOSE_NAVIGATION_ANIMATION}"
     }
 
     object SPLASH{

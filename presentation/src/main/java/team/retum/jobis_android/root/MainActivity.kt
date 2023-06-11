@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,10 +14,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
@@ -36,6 +38,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -43,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
             SetWindowStatus()
 
-            val navController = rememberNavController()
+            val navController = rememberAnimatedNavController()
 
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
@@ -61,7 +64,7 @@ class MainActivity : ComponentActivity() {
             }
 
             // TODO 토스트 시스템 구현
-            NavHost(
+            AnimatedNavHost(
                 navController = navController,
                 startDestination = JobisRoute.Splash,
             ) {
