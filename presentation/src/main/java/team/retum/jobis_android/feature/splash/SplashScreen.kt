@@ -21,7 +21,6 @@ import team.returm.jobisdesignsystem.util.Animated
 @Composable
 internal fun SplashScreen(
     moveToScreenBySignInOption: () -> Unit,
-    mainViewModel: MainViewModel,
 ) {
 
     var visible by remember { mutableStateOf(false) }
@@ -29,7 +28,6 @@ internal fun SplashScreen(
     LaunchedEffect(Unit) {
         visible = true
         delay(2000)
-        mainViewModel.fetchAutoSignInOption()
         moveToScreenBySignInOption()
     }
 

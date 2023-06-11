@@ -121,7 +121,6 @@ internal fun RecruitmentsScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Filter {
                 coroutineScope.launch {
-                    sheetState.showExpand()
                     sheetState.show()
                 }
             }
@@ -361,9 +360,4 @@ private fun Recruitment(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-internal suspend fun ModalBottomSheetState.showExpand() {
-    animateTo(ModalBottomSheetValue.Expanded)
 }
