@@ -1,10 +1,10 @@
 package team.retum.domain.entity.applications
 
 data class AppliedCompanyHistoriesEntity(
-    val applications: List<AppliedHistoryEntity>,
+    val applications: List<AppliedCompanyHistoryEntity>,
 )
 
-data class AppliedHistoryEntity(
+data class AppliedCompanyHistoryEntity(
     val applicationId: Int,
     val company: String,
     val attachmentUrlList: List<String>,
