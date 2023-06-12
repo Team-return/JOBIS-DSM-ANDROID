@@ -111,7 +111,7 @@ internal fun RecruitmentsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = 28.dp,
+                    top = 48.dp,
                     start = 24.dp,
                     end = 24.dp,
                 ),

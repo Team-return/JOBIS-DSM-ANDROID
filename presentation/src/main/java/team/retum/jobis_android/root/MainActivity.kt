@@ -2,6 +2,7 @@ package team.retum.jobis_android.root
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -180,6 +181,7 @@ class MainActivity : ComponentActivity() {
     private fun SetWindowStatus() {
         window.statusBarColor = JobisColor.Gray100.toArgb()
         window.navigationBarColor = JobisColor.Gray100.toArgb()
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {
