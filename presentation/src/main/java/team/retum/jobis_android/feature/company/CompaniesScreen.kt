@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +31,6 @@ import team.retum.jobis_android.feature.recruitment.Filter
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -61,9 +59,7 @@ fun CompaniesScreen(
     ) {
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
-        Filter(
-            onFilterClicked = {},
-        )
+        Filter(onFilterClicked = {})
         Companies(
             companies = state.companies,
             navController = navController,
@@ -76,11 +72,7 @@ private fun Companies(
     companies: List<CompanyEntity>,
     navController: NavController,
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(
-            vertical = 20.dp,
-        ),
-    ) {
+    LazyColumn(contentPadding = PaddingValues(vertical = 20.dp)) {
         items(companies) { item ->
             Company(
                 name = item.name,
@@ -104,19 +96,9 @@ private fun Company(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                shape = ApplyCompaniesItemShape,
-                elevation = 8.dp,
-            )
-            .clip(
-                shape = ApplyCompaniesItemShape,
-            )
-            .background(
-                color = JobisColor.Gray100,
-            )
-            .jobisClickable {
-                onClick()
-            },
+            .clip(shape = ApplyCompaniesItemShape)
+            .background(color = JobisColor.Gray100)
+            .jobisClickable(onClick = onClick),
     ) {
         Row(
             modifier = Modifier.padding(
@@ -124,7 +106,8 @@ private fun Company(
                 end = 20.dp,
                 top = 8.dp,
                 bottom = 8.dp,
-            )
+            ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
                 modifier = Modifier.size(80.dp),
