@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,10 +31,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyHistoryEntity
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.util.compose.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
@@ -59,10 +62,12 @@ internal fun HomeScreen(
 
     val state by homeViewModel.container.stateFlow.collectAsState()
 
-    LaunchedEffect(Unit){
-        homeViewModel.fetchTotalPassedStudentCount()
-        homeViewModel.fetchStudentInformations()
-        homeViewModel.fetchAppliedCompanyHistories()
+    LaunchedEffect(Unit) {
+        with(homeViewModel) {
+            fetchTotalPassedStudentCount()
+            fetchStudentInformations()
+            fetchAppliedCompanyHistories()
+        }
     }
 
     val studentCounts = state.studentCounts
@@ -84,6 +89,7 @@ internal fun HomeScreen(
             )
         ) {
             UserInformation(
+                profileImageUrl = studentInformation.profileImageUrl,
                 name = studentInformation.studentName,
                 gcn = studentInformation.studentGcn,
                 department = studentInformation.department
@@ -212,6 +218,7 @@ private fun RecruitmentStatus(
 
 @Composable
 private fun UserInformation(
+    profileImageUrl: String,
     name: String,
     gcn: String,
     department: Department,
@@ -220,18 +227,34 @@ private fun UserInformation(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        JobisImage(
-            modifier = Modifier.size(40.dp),
-            drawable = R.drawable.ic_profile,
+        AsyncImage(
+            modifier = Modifier
+                .size(40.dp)
+                .skeleton(
+                    show = profileImageUrl.isEmpty(),
+                    shape = CircleShape,
+                ),
+            model = profileImageUrl,
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Body2(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .skeleton(
+                        minWidth = 74.dp,
+                        show = gcn.isEmpty(),
+                    ),
                 text = "$gcn $name",
             )
             Caption(
+                modifier = Modifier.skeleton(
+                    minWidth = 88.dp,
+                    show = department.department.isEmpty(),
+                ),
                 text = department.department,
                 color = JobisColor.Gray600,
             )
