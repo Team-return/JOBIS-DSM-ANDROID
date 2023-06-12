@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import team.retum.data.interceptor.AuthorizationInterceptor
 import team.retum.data.remote.api.ApplicationsApi
+import team.retum.data.remote.api.BookmarkApi
 import team.retum.data.remote.api.CodeApi
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.api.RecruitmentApi
@@ -99,5 +100,11 @@ object NetworkModule {
     fun provideCodeApi(
         retrofit: Retrofit,
     ): CodeApi = retrofit.create(CodeApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideBookmarkApi(
+        retrofit: Retrofit,
+    ): BookmarkApi = retrofit.create(BookmarkApi::class.java)
 
 }
