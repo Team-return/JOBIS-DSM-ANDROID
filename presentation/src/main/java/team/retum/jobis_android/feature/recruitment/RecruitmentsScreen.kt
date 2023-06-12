@@ -22,6 +22,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Surface
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
+import team.retum.jobis_android.util.compose.skeleton
 import team.retum.jobis_android.viewmodel.recruitment.Recruitment
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobis_android.viewmodel.recruitment.toModel
@@ -109,7 +111,7 @@ internal fun RecruitmentsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = 28.dp,
+                    top = 48.dp,
                     start = 24.dp,
                     end = 24.dp,
                 ),
@@ -121,7 +123,7 @@ internal fun RecruitmentsScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Filter {
                 coroutineScope.launch {
-                    sheetState.showExpand()
+                    sheetState.show()
                 }
             }
             Recruitments(
@@ -169,7 +171,9 @@ internal fun Filter(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -289,10 +293,6 @@ private fun Recruitment(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                shape = ApplyCompaniesItemShape,
-                elevation = 8.dp,
-            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(onClick = onItemClicked),
@@ -303,13 +303,21 @@ private fun Recruitment(
                 end = 20.dp,
                 top = 8.dp,
                 bottom = 8.dp,
-            )
+            ),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            AsyncImage(
-                modifier = Modifier.size(80.dp),
-                model = imageUrl,
-                contentDescription = null,
-            )
+            Surface(
+                modifier = Modifier.size(90.dp),
+                contentColor = JobisColor.Gray400,
+            ) {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .skeleton(show = imageUrl.isEmpty()),
+                    model = imageUrl,
+                    contentDescription = null,
+                )
+            }
             Spacer(modifier = Modifier.width(12.dp))
             Column(
                 modifier = Modifier.padding(
@@ -360,9 +368,4 @@ private fun Recruitment(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-internal suspend fun ModalBottomSheetState.showExpand() {
-    animateTo(ModalBottomSheetValue.Expanded)
 }

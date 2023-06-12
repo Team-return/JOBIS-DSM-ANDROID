@@ -2,21 +2,26 @@ package team.retum.jobis_android.root
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
@@ -27,6 +32,10 @@ import team.retum.jobis_android.feature.signin.SignInScreen
 import team.retum.jobis_android.feature.signup.SignUpScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.util.compose.slideInLeft
+import team.retum.jobis_android.util.compose.slideInRight
+import team.retum.jobis_android.util.compose.slideOutLeft
+import team.retum.jobis_android.util.compose.slideOutRight
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisColor
@@ -36,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -43,11 +53,15 @@ class MainActivity : ComponentActivity() {
 
             SetWindowStatus()
 
-            val navController = rememberNavController()
+            val navController = rememberAnimatedNavController()
 
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             val state = mainViewModel.container.stateFlow.collectAsState()
+
+            LaunchedEffect(Unit) {
+                mainViewModel.fetchAutoSignInOption()
+            }
 
             val moveToScreenBySignInOption = {
                 navController.navigate(
@@ -61,18 +75,15 @@ class MainActivity : ComponentActivity() {
             }
 
             // TODO 토스트 시스템 구현
-            NavHost(
+            AnimatedNavHost(
                 navController = navController,
                 startDestination = JobisRoute.Splash,
             ) {
-
                 composable(
                     route = JobisRoute.Splash,
+                    exitTransition = { fadeOut(tween(300)) },
                 ) {
-                    SplashScreen(
-                        moveToScreenBySignInOption = moveToScreenBySignInOption,
-                        mainViewModel = mainViewModel,
-                    )
+                    SplashScreen(moveToScreenBySignInOption = moveToScreenBySignInOption)
                 }
 
                 composable(
@@ -91,6 +102,7 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.SignIn,
+                    exitTransition = { fadeOut(tween(500)) },
                 ) {
                     SignInScreen(
                         navController = navController,
@@ -99,6 +111,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.Main,
+                    exitTransition = {
+                        fadeOut()
+                    }
                 ) {
                     MainScreen(
                         navController = navController,
@@ -107,6 +122,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.Recruitments,
+                    exitTransition = { slideOutLeft() },
+                    popEnterTransition = { slideInRight() },
+                    popExitTransition = { fadeOut(tween(300)) }
                 ) {
                     RecruitmentsScreen(
                         navController = navController,
@@ -117,7 +135,11 @@ class MainActivity : ComponentActivity() {
                     route = JobisRoute.RecruitmentDetails,
                     arguments = listOf(
                         navArgument("recruitment-id") { type = NavType.LongType }
-                    )
+                    ),
+                    enterTransition = { slideInLeft() },
+                    exitTransition = { slideOutLeft() },
+                    popEnterTransition = { slideInRight() },
+                    popExitTransition = { slideOutRight() }
                 ) {
                     RecruitmentDetailsScreen(
                         navController = navController,
@@ -127,6 +149,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.Company,
+                    exitTransition = { slideOutLeft() },
+                    popEnterTransition = { slideInRight() },
+                    popExitTransition = { fadeOut(tween(300)) }
                 ) {
                     CompaniesScreen(
                         navController = navController,
@@ -137,7 +162,11 @@ class MainActivity : ComponentActivity() {
                     route = JobisRoute.CompanyDetails,
                     arguments = listOf(
                         navArgument("company-id") { type = NavType.IntType }
-                    )
+                    ),
+                    enterTransition = { slideInLeft() },
+                    exitTransition = { slideOutLeft() },
+                    popEnterTransition = { slideInRight() },
+                    popExitTransition = { slideOutRight() }
                 ) {
                     CompanyDetailsScreen(
                         navController = navController,
@@ -152,6 +181,7 @@ class MainActivity : ComponentActivity() {
     private fun SetWindowStatus() {
         window.statusBarColor = JobisColor.Gray100.toArgb()
         window.navigationBarColor = JobisColor.Gray100.toArgb()
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {

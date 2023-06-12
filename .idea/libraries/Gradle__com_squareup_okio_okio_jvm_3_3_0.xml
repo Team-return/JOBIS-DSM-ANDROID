@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: com.squareup.okio:okio-jvm:3.3.0">
+  <library name="Gradle: com.squareup.okio:okio-jvm:3.3.0" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio-jvm/3.3.0/2d175add2d06a67bda111ae5455e49b42d0bb287/okio-jvm-3.3.0.jar!/" />
     </CLASSES>

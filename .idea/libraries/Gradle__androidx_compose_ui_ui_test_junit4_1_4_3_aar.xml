@@ -1,9 +1,9 @@
 <component name="libraryTable">
-  <library name="Gradle: androidx.compose.ui:ui-test-junit4:1.4.3@aar">
+  <library name="Gradle: androidx.compose.ui:ui-test-junit4:1.4.3@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/21c7ea2011bc1a1df7811575f0644ba1/transformed/jetified-ui-test-junit4-1.4.3/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/21c7ea2011bc1a1df7811575f0644ba1/transformed/jetified-ui-test-junit4-1.4.3/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/21c7ea2011bc1a1df7811575f0644ba1/transformed/jetified-ui-test-junit4-1.4.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/664db7b82f928aa89a932a04bc5cf6a4/transformed/jetified-ui-test-junit4-1.4.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/664db7b82f928aa89a932a04bc5cf6a4/transformed/jetified-ui-test-junit4-1.4.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/664db7b82f928aa89a932a04bc5cf6a4/transformed/jetified-ui-test-junit4-1.4.3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

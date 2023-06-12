@@ -34,9 +34,11 @@ object Dependency {
         const val COIL = "io.coil-kt:coil-compose:${Version.COIL}"
     }
 
-    object COMPOSE{
-        const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.COMPOSE_LIFECYCLE}"
-        const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-compose:${Version.COMPOSE_LIFECYCLE_RUNTIME}"
+    object COMPOSE {
+        const val VIEWMODEL =
+            "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.COMPOSE_LIFECYCLE}"
+        const val LIFECYCLE =
+            "androidx.lifecycle:lifecycle-runtime-compose:${Version.COMPOSE_LIFECYCLE_RUNTIME}"
         const val ACTIVITY = "androidx.activity:activity-compose:${Version.COMPOSE_ACTIVITY}"
         const val UI = "androidx.compose.ui:ui:${Version.COMPOSE_UI}"
         const val PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE_UI}"
@@ -44,22 +46,28 @@ object Dependency {
         const val JUNIT = "androidx.compose.ui:ui-test-junit4:${Version.COMPOSE_UI}"
         const val UI_TEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE_UI}"
         const val NAVIGATION = "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATON}"
-        const val NAVIGATION_HILT = "androidx.hilt:hilt-navigation-compose:${Version.COMPOSE_NAVIGATION_HILT}"
-        const val FLOW_LAYOUT = "com.google.accompanist:accompanist-flowlayout:${Version.COMPOSE_FLOW_LAYOUT}"
+        const val NAVIGATION_HILT =
+            "androidx.hilt:hilt-navigation-compose:${Version.COMPOSE_NAVIGATION_HILT}"
+        const val FLOW_LAYOUT =
+            "com.google.accompanist:accompanist-flowlayout:${Version.COMPOSE_FLOW_LAYOUT}"
+        const val NAVIGATION_ANIMATION =
+            "com.google.accompanist:accompanist-navigation-animation:${Version.COMPOSE_NAVIGATION_ANIMATION}"
+        const val SHIMMER = "com.valentinilk.shimmer:compose-shimmer:${Version.SHIMMER}"
     }
 
-    object SPLASH{
+    object SPLASH {
         const val SPLASH_SCREEN = "androidx.core:core-splashscreen:${Version.SPLASH_SCREEN}"
     }
 
-    object ORBIT{
+    object ORBIT {
         const val MVI = "org.orbit-mvi:orbit-core:${Version.ORBIT_MVI}"
         const val VIEWMODEL = "org.orbit-mvi:orbit-viewmodel:${Version.ORBIT_MVI}"
         const val COMPOSE = "org.orbit-mvi:orbit-compose:${Version.ORBIT_MVI}"
         const val TEST = "org.orbit-mvi:orbit-test:${Version.ORBIT_MVI}"
     }
 
-    object DESIGNSYSTEM{
-        const val JOBIS = "com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:jobis:${Version.DESIGN_SYSTEM}"
+    object DESIGNSYSTEM {
+        const val JOBIS =
+            "com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:jobis:${Version.DESIGN_SYSTEM}"
     }
 }

@@ -3,28 +3,26 @@ package team.retum.jobis_android.feature.home
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,15 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.applications.AppliedHistoryEntity
-import team.retum.jobis_android.contract.ApplicationsEvent
-import team.retum.jobis_android.contract.ApplicationsSideEffect
-import team.retum.jobis_android.contract.StudentEvent
-import team.retum.jobis_android.contract.StudentSideEffect
+import team.retum.domain.entity.applications.AppliedCompanyEntity
+import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.viewmodel.student.StudentsViewModel
-import team.retum.jobis_android.viewmodel.applications.ApplicationsViewModel
+import team.retum.jobis_android.util.compose.skeleton
+import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
@@ -62,143 +58,94 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
-    applicationsViewModel: ApplicationsViewModel = hiltViewModel(),
-    studentsViewModel: StudentsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
-    var totalStudentCount by remember { mutableStateOf(0) }
-    var passCount by remember { mutableStateOf(0) }
-    var approvedCount by remember { mutableStateOf(0) }
-    var name by remember { mutableStateOf("") }
-    var gcn by remember { mutableStateOf("") }
-    var department by remember { mutableStateOf("") }
-    val applyCompanies = remember { mutableStateListOf<AppliedHistoryEntity>() }
+    val state by homeViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        with(applicationsViewModel) {
-            sendEvent(
-                event = ApplicationsEvent.FetchTotalPassedStudentCount,
-            )
-
-            sendEvent(
-                event = ApplicationsEvent.FetchAppliedCompanyHistories,
-            )
-
-            container.sideEffectFlow.collect { sideEffect ->
-                when (sideEffect) {
-                    is ApplicationsSideEffect.SuccessFetchTotalPassedStudentCount -> {
-                        totalStudentCount = sideEffect.totalStudentCount
-                        passCount = sideEffect.passCount
-                        approvedCount = sideEffect.approvedCount
-                    }
-
-                    is ApplicationsSideEffect.SuccessFetchAppliedCompanyHistories -> {
-                        applyCompanies.clear()
-                        applyCompanies.addAll(sideEffect.applications)
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
+        with(homeViewModel) {
+            fetchTotalPassedStudentCount()
+            fetchStudentInformations()
+            fetchAppliedCompanyHistories()
         }
     }
 
-    LaunchedEffect(Unit) {
-        with(studentsViewModel) {
-            sendEvent(
-                event = StudentEvent.FetchStudentInformation,
-            )
-
-            container.sideEffectFlow.collect { sideEffect ->
-                when (sideEffect) {
-                    is StudentSideEffect.SuccessFetchStudentInformation -> {
-                        name = sideEffect.studentName
-                        gcn = sideEffect.studentGcn
-                        department = sideEffect.department.department
-                    }
-
-                    is StudentSideEffect.Exception -> {
-
-                    }
-                }
-            }
-        }
-    }
+    val studentCounts = state.studentCounts
+    val studentInformation = state.studentInformation
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(JobisColor.Gray300),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
-            totalStudentCount = totalStudentCount,
-            passCount = passCount,
-            appliedCount = passCount,
+            totalStudentCount = studentCounts.totalStudentCount,
+            passCount = studentCounts.passCount,
+            approvedCount = studentCounts.approvedCount,
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Column(
-            modifier = Modifier.padding(
-                horizontal = 24.dp,
-            )
-        ) {
-            UserInformation(
-                name = name,
-                gcn = gcn,
-                department = department,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp),
             ) {
-                Caption(
-                    text = stringResource(id = R.string.home_apply_status),
-                    color = JobisColor.Gray600,
+                UserInformation(
+                    profileImageUrl = studentInformation.profileImageUrl,
+                    name = studentInformation.studentName,
+                    gcn = studentInformation.studentGcn,
+                    department = studentInformation.department
                 )
+                Spacer(modifier = Modifier.height(20.dp))
+                Column(
+                    modifier = Modifier
+                        .background(
+                            color = JobisColor.Gray100,
+                            shape = JobisSize.Shape.Large,
+                        )
+                        .padding(16.dp),
+                ) {
+                    Caption(
+                        text = stringResource(id = R.string.home_apply_status),
+                        color = JobisColor.Gray600,
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    ApplyCompanies(appliedCompanies = state.appliedCompanyHistories)
+                }
             }
-            Spacer(modifier = Modifier.height(6.dp))
-            ApplyCompanies(
-                applyCompanies = applyCompanies,
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = JobisColor.Gray200,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(
-                modifier = Modifier.height(28.dp),
-            )
-            MenuCardGroup(
-                navController = navController,
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Spacer(modifier = Modifier.height(26.dp))
+                MenuCardGroup(
+                    navController = navController,
+                )
+                Spacer(modifier = Modifier.height(84.dp))
+            }
         }
     }
 }
 
 @Composable
 private fun RecruitmentStatus(
-    totalStudentCount: Int,
-    passCount: Int,
-    appliedCount: Int,
+    totalStudentCount: Long,
+    passCount: Long,
+    approvedCount: Long,
 ) {
 
     var employmentRate = 0f
     val passString = "$passCount / $totalStudentCount"
-    val appliedString = "$appliedCount / $totalStudentCount"
+    val appliedString = "$approvedCount / $totalStudentCount"
 
-    if (appliedCount != 0) {
-        employmentRate = (appliedCount.toFloat() / totalStudentCount.toFloat() * 100)
+    if (approvedCount != 0L) {
+        employmentRate = (approvedCount.toFloat() / totalStudentCount.toFloat() * 100)
     }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(98.dp)
             .padding(
                 horizontal = 14.dp,
             )
@@ -218,7 +165,10 @@ private fun RecruitmentStatus(
     ) {
         Column(
             modifier = Modifier.padding(
-                horizontal = 32.dp,
+                top = 20.dp,
+                start = 32.dp,
+                end = 32.dp,
+                bottom = 20.dp,
             ),
             verticalArrangement = Arrangement.Bottom,
         ) {
@@ -271,27 +221,47 @@ private fun RecruitmentStatus(
 
 @Composable
 private fun UserInformation(
+    profileImageUrl: String,
     name: String,
     gcn: String,
-    department: String,
+    department: Department,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = JobisColor.Gray100,
+                shape = JobisSize.Shape.Large,
+            )
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        JobisImage(
-            modifier = Modifier.size(40.dp),
-            drawable = R.drawable.ic_profile,
+        AsyncImage(
+            modifier = Modifier
+                .size(40.dp)
+                .skeleton(
+                    show = profileImageUrl.isEmpty(),
+                    shape = CircleShape,
+                ),
+            model = profileImageUrl,
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Body2(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .defaultMinSize(minWidth = 72.dp)
+                    .skeleton(show = gcn.isEmpty()),
                 text = "$gcn $name",
             )
             Caption(
-                text = department,
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 104.dp)
+                    .skeleton(show = department.department.isEmpty()),
+                text = department.department,
                 color = JobisColor.Gray600,
             )
         }
@@ -300,28 +270,22 @@ private fun UserInformation(
 
 @Composable
 private fun ApplyCompanies(
-    applyCompanies: List<AppliedHistoryEntity>,
+    appliedCompanies: List<AppliedCompanyEntity>,
 ) {
-    val size = if (applyCompanies.size >= 2) 2
-    else applyCompanies.size
+    val size = if (appliedCompanies.size >= 2) 2
+    else appliedCompanies.size
 
-    if (applyCompanies.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                space = 16.dp,
-            )
-        ) {
-            items(
-                count = size,
-            ) { index ->
+    if (appliedCompanies.isNotEmpty()) {
+        Column {
+            repeat(size) { index ->
                 if (index == 0) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 ApplyCompany(
-                    company = applyCompanies[index].company,
-                    status = applyCompanies[index].applicationStatus.status,
+                    company = appliedCompanies[index].company,
+                    status = appliedCompanies[index].applicationStatus.status,
                 )
+                Spacer(modifier = Modifier.height(12.dp))
             }
         }
     } else {
@@ -329,7 +293,6 @@ private fun ApplyCompanies(
             isEmpty = true,
         )
     }
-
     Spacer(modifier = Modifier.height(18.dp))
 }
 
@@ -398,65 +361,52 @@ private fun MenuCardGroup(
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Card(
-            modifier = Modifier.weight(0.6f),
-            alignment = Alignment.BottomEnd,
+        MenuCard(
             text = stringResource(id = R.string.home_do_get_recruitment),
             drawable = R.drawable.ic_get_recruitment,
-            onClick = {
-                navController.navigate(JobisRoute.Recruitments)
-            }
+            onClick = { navController.navigate(JobisRoute.Recruitments) }
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Card(
-            modifier = Modifier.weight(0.4f),
-            alignment = Alignment.BottomCenter,
+        MenuCard(
             text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
-            onClick = {
-                navController.navigate(JobisRoute.Company)
-            },
+            onClick = { navController.navigate(JobisRoute.Company) },
         )
     }
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
-private fun Card(
-    modifier: Modifier = Modifier,
-    alignment: Alignment,
+private fun MenuCard(
     text: String,
-    @DrawableRes drawable: Int? = null,
+    @DrawableRes drawable: Int,
     onClick: () -> Unit,
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = alignment,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .shadow(
-                    shape = JobisSize.Shape.Large,
-                    elevation = 8.dp,
-                )
-                .clip(
-                    shape = JobisSize.Shape.Large,
-                )
-                .background(color = JobisColor.Gray100)
-                .jobisClickable(onClick = onClick)
-                .padding(
-                    horizontal = 22.dp,
-                    vertical = 14.dp,
-                ),
-        ) {
-            Body1(
-                text = text,
+    Column(
+        modifier = Modifier
+            .defaultMinSize(
+                minWidth = 140.dp,
+                minHeight = 180.dp,
             )
-        }
-        if (drawable != null) {
+            .clip(shape = JobisSize.Shape.Large)
+            .background(color = JobisColor.Gray100)
+            .padding(
+                horizontal = 22.dp,
+                vertical = 14.dp,
+            )
+            .jobisClickable(onClick = onClick),
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Body1(
+            modifier = Modifier.jobisClickable(onClick = onClick),
+            text = text,
+        )
+        Row(
+            modifier = Modifier.defaultMinSize(minWidth = 140.dp),
+            horizontalArrangement = Arrangement.End,
+        ) {
             JobisImage(
                 drawable = drawable,
+                onClick = onClick,
             )
         }
     }
