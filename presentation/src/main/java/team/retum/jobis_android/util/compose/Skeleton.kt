@@ -17,11 +17,19 @@ import team.retum.jobisui.colors.JobisColor
 @SuppressLint("ComposableModifierFactory")
 @Composable
 internal fun Modifier.skeleton(
-    minWidth: Dp = 0.dp,
+    minWidth: Dp? = null,
+    minHeight: Dp? = null,
     show: Boolean,
     shape: Shape = RoundedCornerShape(6.dp),
 ) = this
-    .defaultMinSize(minWidth = minWidth)
+    .then(
+        if (minWidth != null && minHeight != null) {
+            Modifier.defaultMinSize(
+                minWidth = minWidth,
+                minHeight = minHeight,
+            )
+        } else Modifier
+    )
     .clip(shape = shape)
     .then(
         if (show) Modifier.shimmer()
