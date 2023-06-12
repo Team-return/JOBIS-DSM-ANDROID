@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -145,7 +146,6 @@ private fun RecruitmentStatus(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(98.dp)
             .padding(
                 horizontal = 14.dp,
             )
@@ -165,7 +165,10 @@ private fun RecruitmentStatus(
     ) {
         Column(
             modifier = Modifier.padding(
-                horizontal = 32.dp,
+                top = 20.dp,
+                start = 32.dp,
+                end = 32.dp,
+                bottom = 20.dp,
             ),
             verticalArrangement = Arrangement.Bottom,
         ) {
@@ -244,17 +247,14 @@ private fun UserInformation(
             Body2(
                 modifier = Modifier
                     .padding(bottom = 8.dp)
-                    .skeleton(
-                        minWidth = 74.dp,
-                        show = gcn.isEmpty(),
-                    ),
+                    .defaultMinSize(minWidth = 72.dp)
+                    .skeleton(show = gcn.isEmpty()),
                 text = "$gcn $name",
             )
             Caption(
-                modifier = Modifier.skeleton(
-                    minWidth = 88.dp,
-                    show = department.department.isEmpty(),
-                ),
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 104.dp)
+                    .skeleton(show = department.department.isEmpty(),),
                 text = department.department,
                 color = JobisColor.Gray600,
             )
