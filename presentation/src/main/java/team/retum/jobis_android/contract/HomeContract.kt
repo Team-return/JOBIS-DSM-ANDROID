@@ -1,6 +1,6 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.entity.applications.AppliedCompanyHistoryEntity
+import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.applications.StudentCountsEntity
 import team.retum.domain.entity.student.Department
 import team.retum.domain.entity.student.StudentInformationEntity
@@ -13,7 +13,7 @@ data class HomeState(
         passCount = 0L,
         approvedCount = 0L,
     ),
-    val appliedCompanyHistories: List<AppliedCompanyHistoryEntity> = emptyList(),
+    val appliedCompanyHistories: List<AppliedCompanyEntity> = emptyList(),
     val studentInformation: StudentInformationEntity = StudentInformationEntity(
         studentName = "",
         studentGcn = "",

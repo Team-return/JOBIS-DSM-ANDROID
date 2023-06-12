@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.applications.AppliedCompanyHistoryEntity
+import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.skeleton
@@ -75,7 +75,9 @@ internal fun HomeScreen(
     val studentInformation = state.studentInformation
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(JobisColor.Gray300),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
@@ -84,46 +86,44 @@ internal fun HomeScreen(
             approvedCount = studentCounts.approvedCount,
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Column(
-            modifier = Modifier.padding(
-                horizontal = 24.dp,
-            )
-        ) {
-            UserInformation(
-                profileImageUrl = studentInformation.profileImageUrl,
-                name = studentInformation.studentName,
-                gcn = studentInformation.studentGcn,
-                department = studentInformation.department
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp),
             ) {
-                Caption(
-                    text = stringResource(id = R.string.home_apply_status),
-                    color = JobisColor.Gray600,
+                UserInformation(
+                    profileImageUrl = studentInformation.profileImageUrl,
+                    name = studentInformation.studentName,
+                    gcn = studentInformation.studentGcn,
+                    department = studentInformation.department
                 )
+                Spacer(modifier = Modifier.height(20.dp))
+                Column(
+                    modifier = Modifier
+                        .background(
+                            color = JobisColor.Gray100,
+                            shape = JobisSize.Shape.Large,
+                        )
+                        .padding(16.dp),
+                ) {
+                    Caption(
+                        text = stringResource(id = R.string.home_apply_status),
+                        color = JobisColor.Gray600,
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    ApplyCompanies(appliedCompanies = state.appliedCompanyHistories)
+                }
             }
-            Spacer(modifier = Modifier.height(6.dp))
-            ApplyCompanies(
-                applyCompanies = state.appliedCompanyHistories,
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = JobisColor.Gray200,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(
-                modifier = Modifier.height(28.dp),
-            )
-            MenuCardGroup(
-                navController = navController,
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Spacer(modifier = Modifier.height(26.dp))
+                MenuCardGroup(
+                    navController = navController,
+                )
+                Spacer(modifier = Modifier.height(84.dp))
+            }
         }
     }
 }
@@ -227,7 +227,13 @@ private fun UserInformation(
     department: Department,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = JobisColor.Gray100,
+                shape = JobisSize.Shape.Large,
+            )
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -254,7 +260,7 @@ private fun UserInformation(
             Caption(
                 modifier = Modifier
                     .defaultMinSize(minWidth = 104.dp)
-                    .skeleton(show = department.department.isEmpty(),),
+                    .skeleton(show = department.department.isEmpty()),
                 text = department.department,
                 color = JobisColor.Gray600,
             )
@@ -264,28 +270,22 @@ private fun UserInformation(
 
 @Composable
 private fun ApplyCompanies(
-    applyCompanies: List<AppliedCompanyHistoryEntity>,
+    appliedCompanies: List<AppliedCompanyEntity>,
 ) {
-    val size = if (applyCompanies.size >= 2) 2
-    else applyCompanies.size
+    val size = if (appliedCompanies.size >= 2) 2
+    else appliedCompanies.size
 
-    if (applyCompanies.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                space = 16.dp,
-            )
-        ) {
-            items(
-                count = size,
-            ) { index ->
+    if (appliedCompanies.isNotEmpty()) {
+        Column {
+            repeat(size) { index ->
                 if (index == 0) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 ApplyCompany(
-                    company = applyCompanies[index].company,
-                    status = applyCompanies[index].applicationStatus.status,
+                    company = appliedCompanies[index].company,
+                    status = appliedCompanies[index].applicationStatus.status,
                 )
+                Spacer(modifier = Modifier.height(12.dp))
             }
         }
     } else {
@@ -293,7 +293,6 @@ private fun ApplyCompanies(
             isEmpty = true,
         )
     }
-
     Spacer(modifier = Modifier.height(18.dp))
 }
 
@@ -362,65 +361,52 @@ private fun MenuCardGroup(
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Card(
-            modifier = Modifier.weight(0.6f),
-            alignment = Alignment.BottomEnd,
+        MenuCard(
             text = stringResource(id = R.string.home_do_get_recruitment),
             drawable = R.drawable.ic_get_recruitment,
-            onClick = {
-                navController.navigate(JobisRoute.Recruitments)
-            }
+            onClick = { navController.navigate(JobisRoute.Recruitments) }
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Card(
-            modifier = Modifier.weight(0.4f),
-            alignment = Alignment.BottomCenter,
+        MenuCard(
             text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
-            onClick = {
-                navController.navigate(JobisRoute.Company)
-            },
+            onClick = { navController.navigate(JobisRoute.Company) },
         )
     }
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
-private fun Card(
-    modifier: Modifier = Modifier,
-    alignment: Alignment,
+private fun MenuCard(
     text: String,
-    @DrawableRes drawable: Int? = null,
+    @DrawableRes drawable: Int,
     onClick: () -> Unit,
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = alignment,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .shadow(
-                    shape = JobisSize.Shape.Large,
-                    elevation = 8.dp,
-                )
-                .clip(
-                    shape = JobisSize.Shape.Large,
-                )
-                .background(color = JobisColor.Gray100)
-                .jobisClickable(onClick = onClick)
-                .padding(
-                    horizontal = 22.dp,
-                    vertical = 14.dp,
-                ),
-        ) {
-            Body1(
-                text = text,
+    Column(
+        modifier = Modifier
+            .defaultMinSize(
+                minWidth = 140.dp,
+                minHeight = 180.dp,
             )
-        }
-        if (drawable != null) {
+            .clip(shape = JobisSize.Shape.Large)
+            .background(color = JobisColor.Gray100)
+            .padding(
+                horizontal = 22.dp,
+                vertical = 14.dp,
+            )
+            .jobisClickable(onClick = onClick),
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Body1(
+            modifier = Modifier.jobisClickable(onClick = onClick),
+            text = text,
+        )
+        Row(
+            modifier = Modifier.defaultMinSize(minWidth = 140.dp),
+            horizontalArrangement = Arrangement.End,
+        ) {
             JobisImage(
                 drawable = drawable,
+                onClick = onClick,
             )
         }
     }

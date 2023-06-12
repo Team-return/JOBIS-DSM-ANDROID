@@ -2,7 +2,7 @@ package team.retum.data.remote.response.applications
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.entity.applications.AppliedCompanyHistoriesEntity
-import team.retum.domain.entity.applications.AppliedCompanyHistoryEntity
+import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.applications.Status
 
 data class FetchAppliedCompanyHistoriesResponse(
@@ -20,7 +20,7 @@ fun FetchAppliedCompanyHistoriesResponse.toEntity() = AppliedCompanyHistoriesEnt
     applications = this.applications.map { it.toEntity() },
 )
 
-private fun AppliedHistory.toEntity() = AppliedCompanyHistoryEntity(
+private fun AppliedHistory.toEntity() = AppliedCompanyEntity(
     applicationId = this.applicationId,
     company = this.company,
     attachmentUrlList = this.attachmentUrlList,
