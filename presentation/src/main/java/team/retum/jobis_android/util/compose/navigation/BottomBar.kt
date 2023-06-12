@@ -30,7 +30,7 @@ fun BottomBar(
 
     val tabs = listOf(
         NavigationItem.Home,
-        NavigationItem.Recruitment,
+        NavigationItem.Bookmarked,
         NavigationItem.Profile,
         NavigationItem.Menu,
     )
