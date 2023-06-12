@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import team.retum.jobis_android.feature.home.BookmarkedScreen
 import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.navigation.BottomBar
@@ -26,7 +27,7 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         bottomBar = {
             BottomBar(
-                navController = navController,
+                navController = navHostController,
             )
         },
     ) {
@@ -34,12 +35,12 @@ fun MainScreen(
             navController = navHostController,
             startDestination = JobisRoute.Navigation.Home,
         ) {
-            composable(
-                route = JobisRoute.Navigation.Home,
-            ) {
-                HomeScreen(
-                    navController = navController,
-                )
+            composable(route = JobisRoute.Navigation.Home) {
+                HomeScreen(navController = navController)
+            }
+
+            composable(route = JobisRoute.Navigation.BookMarked){
+                BookmarkedScreen(navController = navController)
             }
         }
     }

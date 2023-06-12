@@ -1,6 +1,8 @@
 package team.retum.jobis_android.viewmodel.bookmark
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
@@ -18,16 +20,17 @@ import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 internal class BookmarkViewModel @Inject constructor(
     private val bookmarkRecruitmentUseCase: BookmarkRecruitmentUseCase,
     private val fetchBookmarkedRecruitmentsUseCase: FetchBookmarkedRecruitmentsUseCase,
-): BaseViewModel<BookmarkState, BookmarkSideEffect>() {
+) : BaseViewModel<BookmarkState, BookmarkSideEffect>() {
 
     override fun sendEvent(event: Event) {}
 
     override val container = container<BookmarkState, BookmarkSideEffect>(BookmarkState())
 
-    private fun bookmarkRecruitment(
+    internal fun bookmarkRecruitment(
         recruitmentId: Long,
     ) = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,8 +40,8 @@ internal class BookmarkViewModel @Inject constructor(
         }
     }
 
-    private fun fetchBookmarkedRecruitments() = intent{
-        viewModelScope.launch(Dispatchers.IO){
+    internal fun fetchBookmarkedRecruitments() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchBookmarkedRecruitmentsUseCase().onSuccess {
                 setBookmarkedRecruitments(bookmarkedRecruitments = it.bookmarks)
             }.onFailure {
@@ -49,7 +52,7 @@ internal class BookmarkViewModel @Inject constructor(
 
     private fun setBookmarkedRecruitments(
         bookmarkedRecruitments: List<BookmarkedRecruitmentEntity>,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 bookmarkedRecruitments = bookmarkedRecruitments,

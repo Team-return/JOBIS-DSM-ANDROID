@@ -14,7 +14,7 @@ interface BookmarkApi {
         @Path("recruitment-id") recruitmentId: Long,
     ): Response<Void>
 
-    @GET(JobisUrl.Recruitment.bookmark)
+    @GET(JobisUrl.bookmarks)
     suspend fun fetchBookmarkedRecruitments(): FetchBookmarkedRecruitmentsResponse
 
 }
