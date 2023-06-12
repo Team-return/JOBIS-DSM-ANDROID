@@ -22,13 +22,7 @@ class RecruitmentDataSourceImpl @Inject constructor(
         )
     }.sendRequest()
 
-    override suspend fun bookmarkRecruitment(
-        recruitmentId: Long,
-    ) = HttpHandler<Unit>().httpRequest {
-        recruitmentApi.bookmarkRecruitment(
-            recruitmentId = recruitmentId,
-        )
-    }.sendRequest()
+
 
     override suspend fun fetchRecruitmentDetails(
         recruitmentId: Long,

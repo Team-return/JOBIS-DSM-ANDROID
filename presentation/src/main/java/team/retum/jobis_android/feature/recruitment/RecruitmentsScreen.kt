@@ -48,6 +48,7 @@ import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.skeleton
+import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobis_android.viewmodel.recruitment.Recruitment
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobis_android.viewmodel.recruitment.toModel
@@ -67,6 +68,7 @@ import java.text.DecimalFormat
 internal fun RecruitmentsScreen(
     navController: NavController,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
     val recruitments = remember { mutableStateListOf<Recruitment>() }
@@ -129,6 +131,7 @@ internal fun RecruitmentsScreen(
             Recruitments(
                 recruitments = recruitments,
                 recruitmentViewModel = recruitmentViewModel,
+                bookmarkViewModel = bookmarkViewModel,
                 navController = navController,
             )
         }
@@ -202,6 +205,7 @@ internal fun Filter(
 private fun Recruitments(
     recruitments: List<Recruitment>,
     recruitmentViewModel: RecruitmentViewModel,
+    bookmarkViewModel: BookmarkViewModel,
     navController: NavController,
 ) {
 
@@ -254,11 +258,11 @@ private fun Recruitments(
                 isMilitarySupported = recruitment.military,
                 onBookmarked = {
                     isBookmarked = !isBookmarked
-                    recruitmentViewModel.sendEvent(
-                        event = RecruitmentEvent.BookmarkRecruitment(
-                            recruitmentId = recruitment.recruitId.toLong()
-                        )
-                    )
+//                    recruitmentViewModel.sendEvent(
+//                        event = RecruitmentEvent.BookmarkRecruitment(
+//                            recruitmentId = recruitment.recruitId.toLong()
+//                        )
+//                    )
                 },
                 onItemClicked = {
                     navController.currentBackStackEntry?.arguments?.putString(

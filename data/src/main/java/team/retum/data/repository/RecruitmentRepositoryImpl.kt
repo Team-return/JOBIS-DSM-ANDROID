@@ -20,14 +20,6 @@ class RecruitmentRepositoryImpl @Inject constructor(
         company = fetchRecruitmentListParam.company,
     ).toEntity()
 
-    override suspend fun bookmarkRecruitment(
-        recruitmentId: Long,
-    ) {
-        recruitmentDataSource.bookmarkRecruitment(
-            recruitmentId = recruitmentId,
-        )
-    }
-
     override suspend fun fetchRecruitmentDetails(
         recruitmentId: Long,
     ): RecruitmentDetailsEntity = recruitmentDataSource.fetchRecruitmentDetails(
