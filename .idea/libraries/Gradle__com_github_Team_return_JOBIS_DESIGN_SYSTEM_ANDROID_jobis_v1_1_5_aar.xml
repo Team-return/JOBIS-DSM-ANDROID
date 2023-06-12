@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:jobis:v1.1.5@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cb174b8c92724627856f89b09f25b32d/transformed/jetified-jobis-v1.1.5/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/cb174b8c92724627856f89b09f25b32d/transformed/jetified-jobis-v1.1.5/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cb174b8c92724627856f89b09f25b32d/transformed/jetified-jobis-v1.1.5/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6c78b956bc251d5d0f964b94b34f3dcb/transformed/jetified-jobis-v1.1.5/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6c78b956bc251d5d0f964b94b34f3dcb/transformed/jetified-jobis-v1.1.5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6c78b956bc251d5d0f964b94b34f3dcb/transformed/jetified-jobis-v1.1.5/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
