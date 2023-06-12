@@ -257,12 +257,9 @@ private fun Recruitments(
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = recruitment.military,
                 onBookmarked = {
+                    recruitments[recruitments.indexOf(recruitment)].bookmarked = !recruitments[recruitments.indexOf(recruitment)].bookmarked
                     isBookmarked = !isBookmarked
-//                    recruitmentViewModel.sendEvent(
-//                        event = RecruitmentEvent.BookmarkRecruitment(
-//                            recruitmentId = recruitment.recruitId.toLong()
-//                        )
-//                    )
+                    bookmarkViewModel.bookmarkRecruitment(recruitment.recruitId.toLong())
                 },
                 onItemClicked = {
                     navController.currentBackStackEntry?.arguments?.putString(
