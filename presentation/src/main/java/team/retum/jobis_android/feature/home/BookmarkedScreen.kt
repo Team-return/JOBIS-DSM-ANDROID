@@ -1,14 +1,20 @@
 package team.retum.jobis_android.feature.home
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,11 +36,16 @@ import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.icon.JobisIcon
+import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun BookmarkedScreen(
@@ -64,9 +75,36 @@ internal fun BookmarkedScreen(
             )
     ) {
         Header(text = stringResource(id = R.string.bookmarked_recruitments))
-        BookmarkedRecruitments(bookmarks = bookmarks) {
-            bookmarks.remove(it)
-            bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
+        Box {
+            BookmarkedRecruitments(bookmarks = bookmarks) {
+                bookmarks.remove(it)
+                bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 72.dp)
+                    .jobisClickable {
+                        navController.navigate(JobisRoute.Recruitments)
+                    },
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Body1(text = stringResource(id = R.string.bookmarked_not_exist))
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Caption(
+                        text = stringResource(id = R.string.bookamrked_get_recruitments),
+                        color = JobisColor.Gray600,
+                    )
+                    JobisImage(
+                        modifier = Modifier.size(14.dp).padding(top = 2.dp),
+                        drawable = JobisIcon.RightArrow,
+                    )
+                }
+            }
         }
     }
 }
@@ -82,7 +120,6 @@ private fun BookmarkedRecruitments(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(top = 30.dp)
     ) {
-
         items(
             items = bookmarks,
             key = { it.recruitmentId },
