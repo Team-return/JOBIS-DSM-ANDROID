@@ -14,7 +14,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        minSdk = ProjectProperties.COMPILE_SDK
+        minSdk = ProjectProperties.MIN_SDK
         targetSdk = ProjectProperties.COMPILE_SDK
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
