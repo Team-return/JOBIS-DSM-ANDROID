@@ -8,16 +8,13 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import team.retum.jobis_android.root.navigation.JobisRoute
+import androidx.navigation.compose.currentBackStackEntryAsState
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body4
 
@@ -26,14 +23,14 @@ fun BottomBar(
     navController: NavController,
 ) {
 
-    var currentSelectedItem by remember { mutableStateOf(JobisRoute.Navigation.Home) }
-
     val tabs = listOf(
         NavigationItem.Home,
         NavigationItem.Bookmarked,
         NavigationItem.Profile,
         NavigationItem.Menu,
     )
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     BottomNavigation(
         modifier = Modifier
@@ -48,12 +45,14 @@ fun BottomBar(
             ),
         backgroundColor = JobisColor.Gray100,
     ) {
+
+        val currentDestination = navBackStackEntry?.destination?.route
+
         tabs.forEach { tab ->
             BottomNavigationItem(
-                selected = currentSelectedItem == tab.route,
+                selected = currentDestination == tab.route,
                 onClick = {
                     navController.navigate(tab.route)
-                    currentSelectedItem = tab.route
                 },
                 icon = {
                     Icon(
