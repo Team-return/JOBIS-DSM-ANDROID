@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.home
 
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -76,33 +74,40 @@ internal fun BookmarkedScreen(
     ) {
         Header(text = stringResource(id = R.string.bookmarked_recruitments))
         Box {
-            BookmarkedRecruitments(bookmarks = bookmarks) {
+            BookmarkedRecruitments(
+                bookmarks = bookmarks,
+                navController = navController,
+            ) {
                 bookmarks.remove(it)
                 bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 72.dp)
-                    .jobisClickable {
-                        navController.navigate(JobisRoute.Recruitments)
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Body1(text = stringResource(id = R.string.bookmarked_not_exist))
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+            if (bookmarks.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 72.dp)
+                        .jobisClickable {
+                            navController.navigate(JobisRoute.Recruitments)
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                 ) {
-                    Caption(
-                        text = stringResource(id = R.string.bookamrked_get_recruitments),
-                        color = JobisColor.Gray600,
-                    )
-                    JobisImage(
-                        modifier = Modifier.size(14.dp).padding(top = 2.dp),
-                        drawable = JobisIcon.RightArrow,
-                    )
+                    Body1(text = stringResource(id = R.string.bookmarked_not_exist))
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Caption(
+                            text = stringResource(id = R.string.bookamrked_get_recruitments),
+                            color = JobisColor.Gray600,
+                        )
+                        JobisImage(
+                            modifier = Modifier
+                                .size(14.dp)
+                                .padding(top = 2.dp),
+                            drawable = JobisIcon.RightArrow,
+                        )
+                    }
                 }
             }
         }
@@ -113,6 +118,7 @@ internal fun BookmarkedScreen(
 @Composable
 private fun BookmarkedRecruitments(
     bookmarks: MutableList<BookmarkedRecruitmentEntity>,
+    navController: NavController,
     onSwipeItem: (BookmarkedRecruitmentEntity) -> Unit,
 ) {
     LazyColumn(
@@ -140,7 +146,9 @@ private fun BookmarkedRecruitments(
                         BookmarkedRecruitment(
                             companyName = item.companyName,
                             createdAt = item.createdAt,
-                        )
+                        ) {
+                            navController.navigate("RecruitmentDetails/${item.recruitmentId}")
+                        }
                     }
                 )
             }
@@ -152,6 +160,7 @@ private fun BookmarkedRecruitments(
 private fun BookmarkedRecruitment(
     companyName: String,
     createdAt: String,
+    onClickRecruitment: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -166,7 +175,10 @@ private fun BookmarkedRecruitment(
                 color = JobisColor.Gray100,
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding(16.dp),
+            .padding(16.dp)
+            .jobisClickable {
+                onClickRecruitment()
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
