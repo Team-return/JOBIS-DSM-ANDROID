@@ -1,15 +1,16 @@
-package team.retum.domain.usecase.recruitment
+package team.retum.domain.usecase.bookmark
 
+import team.retum.domain.repository.BookmarkRepository
 import team.retum.domain.repository.RecruitmentRepository
 import javax.inject.Inject
 
 class BookmarkRecruitmentUseCase @Inject constructor(
-    private val recruitmentRepository: RecruitmentRepository,
+    private val bookmarkRepository: BookmarkRepository
 ){
     suspend operator fun invoke(
         recruitmentId: Long,
     ) = runCatching{
-        recruitmentRepository.bookmarkRecruitment(
+        bookmarkRepository.bookmarkRecruitment(
             recruitmentId = recruitmentId,
         )
     }

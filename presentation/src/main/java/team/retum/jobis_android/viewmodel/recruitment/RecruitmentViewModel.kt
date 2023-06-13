@@ -12,7 +12,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
-import team.retum.domain.usecase.recruitment.BookmarkRecruitmentUseCase
+import team.retum.domain.usecase.bookmark.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
 import team.retum.jobis_android.contract.RecruitmentEvent
@@ -25,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 internal class RecruitmentViewModel @Inject constructor(
     private val fetchRecruitmentListUseCase: FetchRecruitmentListUseCase,
-    private val bookmarkRecruitmentUseCase: BookmarkRecruitmentUseCase,
     private val fetchRecruitmentDetailsUseCase: FetchRecruitmentDetailsUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
@@ -38,12 +37,6 @@ internal class RecruitmentViewModel @Inject constructor(
                     page = event.page,
                     code = event.code,
                     company = event.company,
-                )
-            }
-
-            is RecruitmentEvent.BookmarkRecruitment -> {
-                bookmarkRecruitment(
-                    recruitmentId = event.recruitmentId,
                 )
             }
         }
@@ -79,23 +72,7 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    private fun bookmarkRecruitment(
-        recruitmentId: Long,
-    ) = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            bookmarkRecruitmentUseCase(
-                recruitmentId = recruitmentId,
-            ).onFailure { throwable ->
-                postSideEffect(
-                    sideEffect = RecruitmentSideEffect.Exception(
-                        message = getStringFromException(
-                            throwable = throwable,
-                        )
-                    )
-                )
-            }
-        }
-    }
+
 
     private fun fetchRecruitmentDetails() = intent {
         viewModelScope.launch(Dispatchers.IO) {

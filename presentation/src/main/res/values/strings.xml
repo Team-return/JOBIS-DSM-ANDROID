@@ -151,5 +151,9 @@
     <string name="chose">선택됨 :</string>
     <string name="apply">적용</string>
 
+    <!--    Bookmarked Screen-->
+
+    <string name="bookmarked_recruitments">북마크한 모집의뢰서</string>
+    <string name="bookmarked_date">북마크한 날짜 : %s</string>
 
 </resources>

@@ -16,10 +16,10 @@ sealed class NavigationItem(
         route = JobisRoute.Navigation.Home,
     )
 
-    object Recruitment : NavigationItem(
+    object Bookmarked : NavigationItem(
         drawableId = R.drawable.ic_recruitment,
         stringResId = R.string.bottom_nav_recruitment,
-        route = JobisRoute.Navigation.Recruitment,
+        route = JobisRoute.Navigation.BookMarked,
     )
 
     object Profile : NavigationItem(

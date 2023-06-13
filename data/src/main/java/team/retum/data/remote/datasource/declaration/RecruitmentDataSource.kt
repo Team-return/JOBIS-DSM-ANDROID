@@ -10,10 +10,6 @@ interface RecruitmentDataSource {
         company: String?,
     ): RecruitmentsResponse
 
-    suspend fun bookmarkRecruitment(
-        recruitmentId: Long,
-    )
-
     suspend fun fetchRecruitmentDetails(
         recruitmentId: Long,
     ): FetchRecruitmentDetailsResponse
