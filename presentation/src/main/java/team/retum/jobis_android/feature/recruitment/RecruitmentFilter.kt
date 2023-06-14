@@ -82,6 +82,8 @@ internal fun RecruitmentFilter(
 
     LaunchedEffect(Unit) {
         codeViewModel.fetchCodes()
+        codeViewModel.setType(type = Type.TECH)
+        codeViewModel.fetchCodes()
     }
 
     var folded by remember { mutableStateOf(true) }
@@ -146,7 +148,6 @@ internal fun RecruitmentFilter(
                         keyboardActions = KeyboardActions {
                             folded = false
                         },
-                        enabled = state.parentCode != null
                     )
                     Positions(
                         folded = folded,
@@ -301,9 +302,7 @@ private fun Techs(
     onTechChecked: (String) -> Boolean,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(400.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(techs) { tech ->
