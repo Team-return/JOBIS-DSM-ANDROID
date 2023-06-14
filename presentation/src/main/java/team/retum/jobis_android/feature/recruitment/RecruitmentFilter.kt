@@ -146,12 +146,13 @@ internal fun RecruitmentFilter(
                         keyboardActions = KeyboardActions {
                             folded = false
                         },
-                        enabled = selectedTech.isNotEmpty()
+                        enabled = state.parentCode != null
                     )
                     Positions(
                         folded = folded,
                         positions = state.jobs,
                         codeViewModel = codeViewModel,
+                        selectedPositionCode = state.parentCode ?: 0,
                     ) {
                         positionsHeight = it.dp
                     }
@@ -222,10 +223,9 @@ private fun Positions(
     folded: Boolean,
     positions: List<CodeEntity>,
     codeViewModel: CodeViewModel,
+    selectedPositionCode: Long,
     setOnPositionsHeight: (Int) -> Unit,
 ) {
-
-    var selectedPosition by remember { mutableStateOf(-1) }
 
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         FlowRow(
@@ -239,17 +239,19 @@ private fun Positions(
             mainAxisSpacing = 4.dp,
         ) {
             repeat(positions.size) {
+
+                val code = positions[it].code
+
                 Position(
                     keyword = positions[it].keyword,
-                    selected = selectedPosition == it,
+                    selected = selectedPositionCode == code,
                 ) {
                     if (!folded) {
                         with(codeViewModel) {
                             setType(Type.TECH)
-                            setParentCode(positions[it].code)
+                            setParentCode(code)
                             fetchCodes()
                         }
-                        selectedPosition = it
                     }
                 }
             }
