@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.home
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,10 +22,14 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
@@ -32,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
@@ -57,11 +64,20 @@ internal fun BookmarkedScreen(
 
     LaunchedEffect(Unit) {
         bookmarkViewModel.fetchBookmarkedRecruitments()
-        bookmarkViewModel.container.stateFlow.collect {
+        bookmarkViewModel.container.stateFlow.drop(1).collectLatest {
             bookmarks.clear()
             bookmarks.addAll(it.bookmarkedRecruitments)
         }
     }
+
+    var bookmarkExists by remember {
+        mutableStateOf(true)
+    }
+
+    val bookmarkNotExistAlpha by animateFloatAsState(
+        targetValue = if (bookmarkExists) 0f
+        else 1f
+    )
 
     Column(
         modifier = Modifier
@@ -80,34 +96,34 @@ internal fun BookmarkedScreen(
             ) {
                 bookmarks.remove(it)
                 bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
+                bookmarkExists = bookmarks.isNotEmpty()
             }
-            if (bookmarks.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 72.dp)
-                        .jobisClickable {
-                            navController.navigate(JobisRoute.Recruitments)
-                        },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(bookmarkNotExistAlpha)
+                    .padding(bottom = 72.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Body1(text = stringResource(id = R.string.bookmarked_not_exist))
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.jobisClickable {
+                        navController.navigate(JobisRoute.Recruitments)
+                    },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Body1(text = stringResource(id = R.string.bookmarked_not_exist))
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Caption(
-                            text = stringResource(id = R.string.bookamrked_get_recruitments),
-                            color = JobisColor.Gray600,
-                        )
-                        JobisImage(
-                            modifier = Modifier
-                                .size(14.dp)
-                                .padding(top = 2.dp),
-                            drawable = JobisIcon.RightArrow,
-                        )
-                    }
+                    Caption(
+                        text = stringResource(id = R.string.bookamrked_get_recruitments),
+                        color = JobisColor.Gray600,
+                    )
+                    JobisImage(
+                        modifier = Modifier
+                            .size(14.dp)
+                            .padding(top = 2.dp),
+                        drawable = JobisIcon.RightArrow,
+                    )
                 }
             }
         }
