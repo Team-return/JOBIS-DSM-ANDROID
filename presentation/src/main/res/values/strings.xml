@@ -155,5 +155,7 @@
 
     <string name="bookmarked_recruitments">북마크한 모집의뢰서</string>
     <string name="bookmarked_date">북마크한 날짜 : %s</string>
+    <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
+    <string name="bookamrked_get_recruitments">모집의뢰서 보러가기</string>
 
 </resources>

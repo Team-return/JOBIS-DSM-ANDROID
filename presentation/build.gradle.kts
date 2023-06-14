@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = ProjectProperties.NAME_SPACE
-        minSdk = ProjectProperties.COMPILE_SDK
+        minSdk = ProjectProperties.MIN_SDK
         targetSdk = ProjectProperties.COMPILE_SDK
         versionCode = ProjectProperties.VERSION_CODE
         versionName = ProjectProperties.VERSION_NAME

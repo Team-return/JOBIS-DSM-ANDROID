@@ -7,6 +7,7 @@ object ProjectProperties {
     const val NAME_SPACE_DESIGN_SYSTEM = "com.jobis.design-system"
 
     const val COMPILE_SDK = 33
+    const val MIN_SDK = 33
 
     const val VERSION_CODE = 1
     const val VERSION_NAME = "1.0"
