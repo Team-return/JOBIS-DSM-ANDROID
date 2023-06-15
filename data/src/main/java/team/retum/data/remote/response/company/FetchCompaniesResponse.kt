@@ -13,6 +13,7 @@ data class Company(
     @SerializedName("name") val name: String,
     @SerializedName("logo_url") val logoUrl: String,
     @SerializedName("take") val take: Float,
+    @SerializedName("has_recruitment") val hasRecruitment: Boolean,
 )
 
 fun FetchCompaniesResponse.toEntity() = CompaniesEntity(
@@ -24,4 +25,5 @@ private fun Company.toEntity() = CompanyEntity(
     name = this.name,
     logoUrl = this.logoUrl,
     take = this.take,
+    hasRecruitment = this.hasRecruitment,
 )
