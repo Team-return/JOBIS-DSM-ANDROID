@@ -1,7 +1,6 @@
 package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
-import team.retum.data.remote.response.applications.toEntity
 import team.retum.data.remote.response.recruitment.toEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentsEntity
@@ -16,8 +15,9 @@ class RecruitmentRepositoryImpl @Inject constructor(
         fetchRecruitmentListParam: FetchRecruitmentListParam
     ): RecruitmentsEntity = recruitmentDataSource.fetchRecruitmentList(
         page = fetchRecruitmentListParam.page,
-        code = fetchRecruitmentListParam.code,
-        company = fetchRecruitmentListParam.company,
+        jobCode = fetchRecruitmentListParam.jobCode,
+        techCode = fetchRecruitmentListParam.techCode,
+        name = fetchRecruitmentListParam.name,
     ).toEntity()
 
     override suspend fun fetchRecruitmentDetails(

@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberModalBottomSheetState
@@ -36,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,14 +42,12 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.skeleton
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
-import team.retum.jobis_android.viewmodel.recruitment.Recruitment
+import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
-import team.retum.jobis_android.viewmodel.recruitment.toModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
@@ -71,20 +67,13 @@ internal fun RecruitmentsScreen(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
-    val recruitments = remember { mutableStateListOf<Recruitment>() }
+    val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
 
     LaunchedEffect(Unit) {
-        recruitmentViewModel.sendEvent(
-            event = RecruitmentEvent.FetchRecruitments(
-                page = 1,
-                code = null,
-                company = null,
-            )
-        )
-        recruitmentViewModel.container.sideEffectFlow.collect { it ->
-            when (it) {
-                is RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect -> {
-                    recruitments.addAll(it.recruitmentsEntity.recruitmentEntities.map { it.toModel() })
+        recruitmentViewModel.container.sideEffectFlow.collect{
+            when(it){
+                is RecruitmentSideEffect.SuccessFetchRecruitments -> {
+                    recruitments.addAll(it.recruitments)
                 }
 
                 else -> {
@@ -100,7 +89,11 @@ internal fun RecruitmentsScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            RecruitmentFilter()
+            RecruitmentFilter {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+            }
         },
         sheetShape = RoundedCornerShape(
             topStart = 16.dp,
@@ -129,7 +122,7 @@ internal fun RecruitmentsScreen(
                 }
             }
             Recruitments(
-                recruitments = recruitments,
+                recruitmentUiModels =  recruitments,
                 recruitmentViewModel = recruitmentViewModel,
                 bookmarkViewModel = bookmarkViewModel,
                 navController = navController,
@@ -203,13 +196,11 @@ internal fun Filter(
 
 @Composable
 private fun Recruitments(
-    recruitments: List<Recruitment>,
+    recruitmentUiModels: List<RecruitmentUiModel>,
     recruitmentViewModel: RecruitmentViewModel,
     bookmarkViewModel: BookmarkViewModel,
     navController: NavController,
 ) {
-
-    var page by remember { mutableStateOf(1) }
 
     val lazyListState = rememberLazyListState()
 
@@ -220,15 +211,9 @@ private fun Recruitments(
     }
 
     LaunchedEffect(lastIndex.value) {
-        if (recruitments.size - 1 == lastIndex.value && recruitments.size % page == 0) {
-            page += 1
-            recruitmentViewModel.sendEvent(
-                event = RecruitmentEvent.FetchRecruitments(
-                    page = page,
-                    code = null,
-                    company = null,
-                )
-            )
+        if (recruitmentUiModels.size - 1 == lastIndex.value) {
+            recruitmentViewModel.setPage()
+            recruitmentViewModel.fetchRecruitments()
         }
     }
 
@@ -239,7 +224,7 @@ private fun Recruitments(
         state = lazyListState,
     ) {
 
-        items(recruitments) { recruitment ->
+        items(recruitmentUiModels) { recruitment ->
 
             val position = recruitment.jobCodeList.replace(',', '/')
             val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
@@ -257,7 +242,8 @@ private fun Recruitments(
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = recruitment.military,
                 onBookmarked = {
-                    recruitments[recruitments.indexOf(recruitment)].bookmarked = !recruitments[recruitments.indexOf(recruitment)].bookmarked
+                    recruitmentUiModels[recruitmentUiModels.indexOf(recruitment)].bookmarked =
+                        !recruitmentUiModels[recruitmentUiModels.indexOf(recruitment)].bookmarked
                     isBookmarked = !isBookmarked
                     bookmarkViewModel.bookmarkRecruitment(recruitment.recruitId.toLong())
                 },

@@ -12,10 +12,8 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
-import team.retum.domain.usecase.bookmark.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
-import team.retum.jobis_android.contract.RecruitmentEvent
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
 import team.retum.jobis_android.util.mvi.Event
@@ -30,34 +28,25 @@ internal class RecruitmentViewModel @Inject constructor(
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
-    override fun sendEvent(event: Event) {
-        when (event) {
-            is RecruitmentEvent.FetchRecruitments -> {
-                fetchRecruitments(
-                    page = event.page,
-                    code = event.code,
-                    company = event.company,
-                )
-            }
-        }
+    init {
+        fetchRecruitments()
     }
 
-    private fun fetchRecruitments(
-        page: Int,
-        code: Long?,
-        company: String?,
-    ) = intent {
+    override fun sendEvent(event: Event) {}
+
+    internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentListUseCase(
                 fetchRecruitmentListParam = FetchRecruitmentListParam(
-                    page = page,
-                    code = code,
-                    company = company,
+                    page = state.page,
+                    jobCode = state.jobCode,
+                    techCode = state.techCode,
+                    name = state.name,
                 )
-            ).onSuccess {
+            ).onSuccess { it ->
                 postSideEffect(
-                    sideEffect = RecruitmentSideEffect.SuccessFetchRecruitmentsSideEffect(
-                        recruitmentsEntity = it,
+                    sideEffect = RecruitmentSideEffect.SuccessFetchRecruitments(
+                        recruitments = it.recruitmentEntities.map { it.toModel() },
                     )
                 )
             }.onFailure { throwable ->
@@ -124,6 +113,44 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
+    internal fun setPage() = intent{
+        reduce {
+            state.copy(
+                page = state.page+1,
+            )
+        }
+    }
+
+    internal fun setJobCode(
+        jobCode: Long?,
+    ) = intent {
+        reduce {
+            state.copy(
+                jobCode = jobCode,
+            )
+        }
+    }
+
+    internal fun setTechCode(
+        techCode: String?,
+    ) = intent{
+        reduce{
+            state.copy(
+                techCode = techCode,
+            )
+        }
+    }
+
+    internal fun setName(
+        name: String,
+    ) = intent{
+        reduce{
+            state.copy(
+                name = name,
+            )
+        }
+    }
+
     internal fun setRecruitmentId(
         recruitmentId: Long,
     ) = intent {
@@ -152,7 +179,7 @@ internal class RecruitmentViewModel @Inject constructor(
         }
 }
 
-internal data class Recruitment(
+data class RecruitmentUiModel(
     val recruitId: Int,
     val companyName: String,
     val companyProfileUrl: String,
@@ -163,7 +190,7 @@ internal data class Recruitment(
     var bookmarked: Boolean,
 )
 
-internal fun RecruitmentEntity.toModel() = Recruitment(
+internal fun RecruitmentEntity.toModel() = RecruitmentUiModel(
     recruitId = this.recruitId,
     companyName = this.companyName,
     companyProfileUrl = this.companyProfileUrl,

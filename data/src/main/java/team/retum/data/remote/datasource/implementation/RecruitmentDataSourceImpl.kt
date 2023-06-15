@@ -12,13 +12,15 @@ class RecruitmentDataSourceImpl @Inject constructor(
 ) : RecruitmentDataSource {
     override suspend fun fetchRecruitmentList(
         page: Int,
-        code: Long?,
-        company: String?
+        jobCode: Long?,
+        techCode: String?,
+        name: String?
     ): RecruitmentsResponse = HttpHandler<RecruitmentsResponse>().httpRequest {
         recruitmentApi.fetchRecruitmentList(
             page = page,
-            code = code,
-            company = company,
+            jobCode = jobCode,
+            techCode = techCode,
+            name = name,
         )
     }.sendRequest()
 

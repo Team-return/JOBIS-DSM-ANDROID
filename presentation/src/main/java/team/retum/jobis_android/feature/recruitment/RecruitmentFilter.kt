@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,6 +60,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun RecruitmentFilter(
     codeViewModel: CodeViewModel = hiltViewModel(),
+    onDismissDialog: () -> Unit,
 ) {
 
     val state by codeViewModel.container.stateFlow.collectAsState()
@@ -145,9 +145,6 @@ internal fun RecruitmentFilter(
                         value = state.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
-                        keyboardActions = KeyboardActions {
-                            folded = false
-                        },
                     )
                     Positions(
                         folded = folded,
@@ -213,8 +210,10 @@ internal fun RecruitmentFilter(
             JobisLargeButton(
                 text = stringResource(id = R.string.apply),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = {},
-            )
+                enabled = (state.parentCode != null || selectedTech.isNotEmpty())
+            ){
+                onDismissDialog()
+            }
         }
     }
 }
