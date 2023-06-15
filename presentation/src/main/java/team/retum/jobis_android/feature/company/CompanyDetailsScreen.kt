@@ -52,6 +52,7 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 fun CompanyDetailsScreen(
     navController: NavController,
     companyId: Int,
+    hasRecruitment: Boolean,
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
@@ -141,6 +142,7 @@ fun CompanyDetailsScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.company_details_see_recruitents),
             color = JobisButtonColor.MainSolidColor,
+            enabled = hasRecruitment,
         ){
             navController.navigate("RecruitmentDetails/${companyState.value.companyId}")
         }

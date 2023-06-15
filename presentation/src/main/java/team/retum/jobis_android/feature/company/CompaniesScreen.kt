@@ -81,7 +81,7 @@ private fun Companies(
                 take = item.take,
                 hasRecruitment = item.hasRecruitment,
             ) {
-                navController.navigate("CompanyDetails/${item.id}")
+                navController.navigate("CompanyDetails/${item.id}/${item.hasRecruitment}")
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

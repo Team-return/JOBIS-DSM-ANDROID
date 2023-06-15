@@ -161,7 +161,8 @@ class MainActivity : ComponentActivity() {
                 composable(
                     route = JobisRoute.CompanyDetails,
                     arguments = listOf(
-                        navArgument("company-id") { type = NavType.IntType }
+                        navArgument("company-id") { type = NavType.IntType },
+                        navArgument("has-recruitment") { type = NavType.BoolType }
                     ),
                     enterTransition = { slideInLeft() },
                     exitTransition = { slideOutLeft() },
@@ -171,6 +172,7 @@ class MainActivity : ComponentActivity() {
                     CompanyDetailsScreen(
                         navController = navController,
                         companyId = it.arguments?.getInt("company-id") ?: 0,
+                        hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
                     )
                 }
             }
