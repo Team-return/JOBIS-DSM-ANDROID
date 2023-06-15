@@ -95,7 +95,7 @@ internal fun RecruitmentDetailsScreen(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
             ){
-                navController.navigate("CompanyDetails/${details.companyId}")
+                navController.navigate("CompanyDetails/${details.companyId}/${true}")
             }
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
