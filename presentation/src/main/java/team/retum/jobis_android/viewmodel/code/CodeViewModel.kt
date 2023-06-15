@@ -29,18 +29,23 @@ internal class CodeViewModel @Inject constructor(
     override fun sendEvent(event: Event) {}
 
     internal fun fetchCodes() = intent {
+
+        val type = state.type
+
         viewModelScope.launch(Dispatchers.IO) {
             fetchCodesUseCase(
                 fetchCodesParam = FetchCodesParam(
                     keyword = state.keyword,
-                    type = state.type,
+                    type = type,
                     parentCode = state.parentCode,
                 )
             ).onSuccess {
-                when (state.type) {
-                    Type.JOB -> setJobs(
-                        jobs = it.codes,
-                    )
+                when (type) {
+                    Type.JOB -> {
+                        setJobs(
+                            jobs = it.codes,
+                        )
+                    }
 
                     Type.TECH -> {
                         setTechs(
@@ -126,7 +131,9 @@ internal class CodeViewModel @Inject constructor(
         val resultList = mutableListOf<CodeEntity>()
 
         techList.filter {
-            (keyword.length <= it.keyword.length && (keyword.uppercase() == it.keyword.substring(keyword.indices).uppercase()))
+            (keyword.length <= it.keyword.length && (keyword.uppercase() == it.keyword.substring(
+                keyword.indices
+            ).uppercase()))
         }.map {
             resultList.add(it)
         }

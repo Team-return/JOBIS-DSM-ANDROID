@@ -156,6 +156,9 @@ internal fun SignInScreen(
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.7f))
             Row(
+                modifier = Modifier.jobisClickable {
+                    navController.navigate(JobisRoute.SignUp)
+                },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Caption(
