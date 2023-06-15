@@ -382,7 +382,7 @@ private fun Recruitment(
                     if (isMilitarySupported) {
                         JobisImage(
                             modifier = Modifier.size(18.dp),
-                            drawable = R.drawable.ic_military_support,
+                            drawable = R.drawable.ic_military,
                         )
                     }
                 }
