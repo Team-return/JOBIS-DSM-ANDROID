@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -67,6 +69,8 @@ internal fun RecruitmentsScreen(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
+    val state by recruitmentViewModel.container.stateFlow.collectAsState()
+
     val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
 
     LaunchedEffect(Unit) {
@@ -89,9 +93,13 @@ internal fun RecruitmentsScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            RecruitmentFilter {
+            RecruitmentFilter { jobCode, techCode ->
                 coroutineScope.launch {
                     sheetState.hide()
+                    recruitmentViewModel.setJobCode(jobCode)
+                    recruitmentViewModel.setTechCode(techCode)
+                    recruitmentViewModel.fetchRecruitments()
+                    recruitmentViewModel.setPage(1)
                 }
             }
         },
@@ -204,6 +212,8 @@ private fun Recruitments(
 
     val lazyListState = rememberLazyListState()
 
+    var page by remember { mutableStateOf(1)}
+
     val lastIndex = remember {
         derivedStateOf {
             lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
@@ -212,7 +222,8 @@ private fun Recruitments(
 
     LaunchedEffect(lastIndex.value) {
         if (recruitmentUiModels.size - 1 == lastIndex.value) {
-            recruitmentViewModel.setPage()
+            page += 1
+            recruitmentViewModel.setPage(page+1)
             recruitmentViewModel.fetchRecruitments()
         }
     }

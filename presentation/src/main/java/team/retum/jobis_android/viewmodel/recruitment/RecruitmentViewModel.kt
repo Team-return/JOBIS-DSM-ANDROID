@@ -113,10 +113,12 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    internal fun setPage() = intent{
+    internal fun setPage(
+        page: Int,
+    ) = intent{
         reduce {
             state.copy(
-                page = state.page+1,
+                page = page,
             )
         }
     }

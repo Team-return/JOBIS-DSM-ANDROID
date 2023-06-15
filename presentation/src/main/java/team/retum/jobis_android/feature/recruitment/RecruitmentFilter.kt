@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.recruitment
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -60,22 +61,22 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun RecruitmentFilter(
     codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: () -> Unit,
+    onDismissDialog: (Long?, String?) -> Unit,
 ) {
 
     val state by codeViewModel.container.stateFlow.collectAsState()
 
     val techs = state.techs
 
-    val selectedTechs = remember { mutableStateListOf<String>() }
+    val selectedTechCodes = remember { mutableStateListOf<Pair<Long, String>>() }
 
     val onKeywordChanged = { keyword: String ->
         codeViewModel.setKeyword(keyword)
     }
 
     val selectedTech = StringBuilder().apply {
-        selectedTechs.forEach {
-            append(it)
+        selectedTechCodes.forEach {
+            append(it.second)
             append(" ")
         }
     }.toString().trim().replace(" ", " | ")
@@ -99,11 +100,11 @@ internal fun RecruitmentFilter(
         )
     )
 
-    val onTechChecked = { tech: String ->
-        if (selectedTechs.contains(tech)) {
-            selectedTechs.remove(tech)
+    val onTechChecked = { techCode: Long, techName: String ->
+        if (selectedTechCodes.contains(techCode to techName)) {
+            selectedTechCodes.remove(techCode to techName)
         } else {
-            selectedTechs.add(tech)
+            selectedTechCodes.add(techCode to techName)
         }
     }
 
@@ -201,7 +202,7 @@ internal fun RecruitmentFilter(
                         Spacer(modifier = Modifier.height(20.dp))
                         Techs(
                             techs = techs,
-                            selectedTechs = selectedTechs,
+                            selectedTechs = selectedTechCodes,
                             onTechChecked = onTechChecked,
                         )
                     }
@@ -211,8 +212,8 @@ internal fun RecruitmentFilter(
                 text = stringResource(id = R.string.apply),
                 color = JobisButtonColor.MainSolidColor,
                 enabled = (state.parentCode != null || selectedTech.isNotEmpty())
-            ){
-                onDismissDialog()
+            ) {
+                onDismissDialog(state.parentCode, getTechCode(selectedTechCodes))
             }
         }
     }
@@ -297,18 +298,22 @@ private fun Position(
 @Composable
 private fun Techs(
     techs: List<CodeEntity>,
-    selectedTechs: List<String>,
-    onTechChecked: (String) -> Boolean,
+    selectedTechs: List<Pair<Long, String>>,
+    onTechChecked: (Long, String) -> Boolean,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(techs) { tech ->
+
+            val code = tech.code
+            val keyword = tech.keyword
+
             Tech(
                 tech = tech.keyword,
-                checked = selectedTechs.contains(tech.keyword),
-                onTechChecked = { onTechChecked(tech.keyword) },
+                checked = selectedTechs.contains(code to keyword),
+                onTechChecked = { onTechChecked(code, keyword) },
             )
         }
     }
@@ -344,4 +349,10 @@ private fun Tech(
     }
 }
 
-val Int.toDp get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+private fun getTechCode(
+    techCodes: List<Pair<Long, String>>,
+): String {
+    return StringBuilder().apply { techCodes.forEach { append("${it.first} ") } }.toString().trim().replace(" ", ",")
+}
