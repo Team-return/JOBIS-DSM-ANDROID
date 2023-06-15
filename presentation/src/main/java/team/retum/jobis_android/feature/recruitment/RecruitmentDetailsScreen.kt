@@ -38,6 +38,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -60,6 +61,8 @@ internal fun RecruitmentDetailsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
+    var companyDetailsButtonShowed by remember { mutableStateOf(true) }
+
     val state = recruitmentViewModel.container.stateFlow.collectAsState()
 
     val details = state.value.details
@@ -67,6 +70,7 @@ internal fun RecruitmentDetailsScreen(
     val areas = state.value.details.areas
 
     LaunchedEffect(Unit) {
+        companyDetailsButtonShowed = navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
         )
@@ -94,7 +98,8 @@ internal fun RecruitmentDetailsScreen(
             CompanyInformation(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
-            ){
+                companyDetailsButtonShowed = companyDetailsButtonShowed,
+            ) {
                 navController.navigate("CompanyDetails/${details.companyId}/${true}")
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -122,6 +127,7 @@ internal fun RecruitmentDetailsScreen(
 private fun CompanyInformation(
     companyProfileUrl: String,
     companyName: String,
+    companyDetailsButtonShowed: Boolean,
     onGetCompanyButtonClicked: () -> Unit,
 ) {
     Row(
@@ -139,11 +145,13 @@ private fun CompanyInformation(
         Body1(text = companyName)
     }
     Spacer(modifier = Modifier.height(12.dp))
-    JobisLargeButton(
-        text = stringResource(id = R.string.recruitment_details_get_company),
-        color = JobisButtonColor.MainGrayColor,
-        onClick = onGetCompanyButtonClicked,
-    )
+    if(companyDetailsButtonShowed) {
+        JobisLargeButton(
+            text = stringResource(id = R.string.recruitment_details_get_company),
+            color = JobisButtonColor.MainGrayColor,
+            onClick = onGetCompanyButtonClicked,
+        )
+    }
 }
 
 @Composable
