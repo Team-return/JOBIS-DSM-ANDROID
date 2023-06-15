@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.recruitment
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -74,8 +74,8 @@ internal fun RecruitmentsScreen(
     val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
 
     LaunchedEffect(Unit) {
-        recruitmentViewModel.container.sideEffectFlow.collect{
-            when(it){
+        recruitmentViewModel.container.sideEffectFlow.collect {
+            when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitments -> {
                     recruitments.addAll(it.recruitments)
                 }
@@ -129,8 +129,31 @@ internal fun RecruitmentsScreen(
                     sheetState.show()
                 }
             }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Row(
+                    modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Caption(
+                        text = stringResource(id = R.string.search_result),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = " ${state.name}")
+                }
+                Caption(
+                    modifier = Modifier.alpha(
+                        if (state.jobCode != null || state.techCode != null) 1f
+                        else 0f,
+                    ),
+                    text = stringResource(id = R.string.filter_applied)
+                )
+            }
             Recruitments(
-                recruitmentUiModels =  recruitments,
+                recruitmentUiModels = recruitments,
                 recruitmentViewModel = recruitmentViewModel,
                 bookmarkViewModel = bookmarkViewModel,
                 navController = navController,
@@ -212,7 +235,7 @@ private fun Recruitments(
 
     val lazyListState = rememberLazyListState()
 
-    var page by remember { mutableStateOf(1)}
+    var page by remember { mutableStateOf(1) }
 
     val lastIndex = remember {
         derivedStateOf {
@@ -223,7 +246,7 @@ private fun Recruitments(
     LaunchedEffect(lastIndex.value) {
         if (recruitmentUiModels.size - 1 == lastIndex.value) {
             page += 1
-            recruitmentViewModel.setPage(page+1)
+            recruitmentViewModel.setPage(page + 1)
             recruitmentViewModel.fetchRecruitments()
         }
     }
