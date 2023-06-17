@@ -380,12 +380,11 @@ private fun Recruitment(
                     Caption(
                         text = trainPay,
                     )
-                    if (isMilitarySupported) {
-                        JobisImage(
-                            modifier = Modifier.size(18.dp),
-                            drawable = R.drawable.ic_military,
-                        )
-                    }
+                    JobisImage(
+                        modifier = Modifier.size(18.dp),
+                        drawable = if (isMilitarySupported) R.drawable.ic_military_true
+                        else R.drawable.ic_military_false,
+                    )
                 }
             }
         }
