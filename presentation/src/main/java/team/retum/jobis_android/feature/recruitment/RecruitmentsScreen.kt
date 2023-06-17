@@ -74,6 +74,7 @@ internal fun RecruitmentsScreen(
     val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
 
     LaunchedEffect(Unit) {
+        recruitmentViewModel.fetchRecruitments()
         recruitmentViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitments -> {

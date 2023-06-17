@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -47,6 +50,7 @@ import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
 val ReviewItemShape = RoundedCornerShape(size = 14.dp)
@@ -66,7 +70,8 @@ fun CompanyDetailsScreen(
     val reviewState = reviewViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        detailButtonShowed = navController.previousBackStackEntry?.destination?.route != JobisRoute.RecruitmentDetails
+        detailButtonShowed =
+            navController.previousBackStackEntry?.destination?.route != JobisRoute.RecruitmentDetails
 
         companyViewModel.setCompanyId(
             companyId = companyId,
@@ -145,7 +150,7 @@ fun CompanyDetailsScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
         }
-        if(detailButtonShowed) {
+        if (detailButtonShowed) {
             JobisLargeButton(
                 text = stringResource(id = R.string.company_details_see_recruitents),
                 color = JobisButtonColor.MainSolidColor,
@@ -164,6 +169,14 @@ private fun CompanyDetails(
     companyIntroduce: String,
     companyDetails: List<Pair<Int, String?>>,
 ) {
+
+    var showDetails by remember { mutableStateOf(false) }
+
+    val maxLines by animateIntAsState(
+        targetValue = if (showDetails) 20
+        else 3
+    )
+
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -181,7 +194,25 @@ private fun CompanyDetails(
         Caption(
             text = companyIntroduce,
             color = JobisColor.Gray700,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
         )
+        Spacer(modifier = Modifier.height(14.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Caption(
+                modifier = Modifier.jobisClickable {
+                    showDetails = !showDetails
+                },
+                text = if (showDetails) stringResource(id = R.string.recruitment_details_show_simply)
+                else stringResource(id = R.string.recruitment_details_show_detail),
+                color = JobisColor.Gray600,
+                overflow = TextOverflow.Ellipsis,
+                decoration = TextDecoration.Underline,
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         Divider(
             modifier = Modifier.fillMaxWidth(),
