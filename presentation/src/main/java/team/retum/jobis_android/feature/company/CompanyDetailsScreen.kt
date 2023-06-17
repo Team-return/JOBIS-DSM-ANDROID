@@ -156,7 +156,7 @@ fun CompanyDetailsScreen(
                 color = JobisButtonColor.MainSolidColor,
                 enabled = hasRecruitment,
             ) {
-                navController.navigate("RecruitmentDetails/${companyState.value.companyId}")
+                navController.navigate("RecruitmentDetails/${companyState.value.companyDetails.recruitmentId}")
             }
         }
     }
