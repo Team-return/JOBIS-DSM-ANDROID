@@ -10,13 +10,13 @@ object JobisRoute {
     const val SetPassword = "SetPassword"
     const val Recruitments = "Recruitments"
     const val RecruitmentDetails = "RecruitmentDetails/{recruitment-id}"
-    const val Company = "Companies"
+    const val Companies = "Companies"
     const val CompanyDetails = "CompanyDetails/{company-id}/{has-recruitment}"
 
     object Navigation {
         const val Home = "Home"
-        const val BookMarked = "Bookmarked"
-        const val Profile = "Profile"
+        const val BookmarkedRecruitments = "Bookmarked"
+        const val MyPage = "MyPage"
         const val Menu = "Menu"
     }
 }

@@ -54,7 +54,7 @@ internal fun MenuScreen(
                 drawableRes = R.drawable.ic_my_page,
                 content = stringResource(id = R.string.my_page),
             ) {
-                navController.navigate(JobisRoute.Navigation.Profile)
+                navController.navigate(JobisRoute.Navigation.MyPage)
             }
             Spacer(modifier = Modifier.height(40.dp))
             Body3(
@@ -73,14 +73,14 @@ internal fun MenuScreen(
                 drawableRes = R.drawable.ic_fetch_companies,
                 content = stringResource(id = R.string.fetch_companies)
             ){
-                navController.navigate(JobisRoute.Company)
+                navController.navigate(JobisRoute.Companies)
             }
             Spacer(modifier = Modifier.height(20.dp))
             Menu(
                 drawableRes = R.drawable.ic_fetch_bookmarked_recruitments,
                 content = stringResource(id = R.string.fetch_bookmarked_companies),
             ){
-                navHostController.navigate(JobisRoute.Navigation.BookMarked)
+                navHostController.navigate(JobisRoute.Navigation.BookmarkedRecruitments)
             }
         }
     }

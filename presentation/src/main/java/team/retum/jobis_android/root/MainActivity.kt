@@ -148,7 +148,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(
-                    route = JobisRoute.Company,
+                    route = JobisRoute.Companies,
                     exitTransition = { slideOutLeft() },
                     popEnterTransition = { slideInRight() },
                     popExitTransition = { fadeOut(tween(300)) }

@@ -14,7 +14,7 @@
 
     <string name="bottom_nav_home">홈</string>
     <string name="bottom_nav_recruitment">의뢰서</string>
-    <string name="bottom_nav_profile">프로필</string>
+    <string name="bottom_nav_my_page">프로필</string>
     <string name="bottom_nav_menu">메뉴</string>
 
     <!--    Exception Handling-->
@@ -158,7 +158,7 @@
     <string name="bookmarked_recruitments">북마크한 모집의뢰서</string>
     <string name="bookmarked_date">북마크한 날짜 : %s</string>
     <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
-    <string name="bookamrked_get_recruitments">모집의뢰서 보러가기</string>
+    <string name="bookmarked_get_recruitments">모집의뢰서 보러가기</string>
 
     <!--    메뉴-->
 

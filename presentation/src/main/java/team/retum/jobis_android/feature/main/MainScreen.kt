@@ -40,7 +40,7 @@ fun MainScreen(
                 HomeScreen(navController = navController)
             }
 
-            composable(route = JobisRoute.Navigation.BookMarked){
+            composable(route = JobisRoute.Navigation.BookmarkedRecruitments){
                 BookmarkedScreen(navController = navController)
             }
 
