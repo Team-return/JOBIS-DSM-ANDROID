@@ -160,4 +160,14 @@
     <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
     <string name="bookamrked_get_recruitments">모집의뢰서 보러가기</string>
 
+    <!--    메뉴-->
+
+    <string name="menu">메뉴</string>
+    <string name="user">사용자</string>
+    <string name="my_page">마이페이지</string>
+    <string name="company">기업</string>
+    <string name="fetch_recruitments">모집의뢰서 조회하기</string>
+    <string name="fetch_companies">기업 찾기</string>
+    <string name="fetch_bookmarked_companies">북마크한 기업 보기</string>
+
 </resources>

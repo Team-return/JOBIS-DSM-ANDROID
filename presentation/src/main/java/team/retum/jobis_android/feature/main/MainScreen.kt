@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import team.retum.jobis_android.feature.home.BookmarkedScreen
 import team.retum.jobis_android.feature.home.HomeScreen
+import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
@@ -41,6 +42,10 @@ fun MainScreen(
 
             composable(route = JobisRoute.Navigation.BookMarked){
                 BookmarkedScreen(navController = navController)
+            }
+
+            composable(route = JobisRoute.Navigation.Menu){
+                MenuScreen(navController = navController)
             }
         }
     }
