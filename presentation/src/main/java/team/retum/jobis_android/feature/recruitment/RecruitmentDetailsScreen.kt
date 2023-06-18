@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,12 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
+import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -65,12 +68,25 @@ internal fun RecruitmentDetailsScreen(
 
     val state = recruitmentViewModel.container.stateFlow.collectAsState()
 
+    var applicationDialogState by remember { mutableStateOf(false) }
+
     val details = state.value.details
 
     val areas = state.value.details.areas
 
+    BackHandler {
+        applicationDialogState = false
+    }
+
+    if (applicationDialogState) {
+        Dialog(onDismissRequest = { applicationDialogState = false }) {
+            RecruitmentApplicationDialog()
+        }
+    }
+
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed = navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
+        companyDetailsButtonShowed =
+            navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
         )
@@ -84,7 +100,10 @@ internal fun RecruitmentDetailsScreen(
                 start = 24.dp,
                 end = 24.dp,
                 bottom = 24.dp,
-            ),
+            )
+            .jobisClickable {
+                applicationDialogState = false
+            },
         contentAlignment = Alignment.BottomCenter,
     ) {
         Column(
@@ -118,8 +137,9 @@ internal fun RecruitmentDetailsScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_do_apply),
             color = JobisButtonColor.MainSolidColor,
-            onClick = {},
-        )
+        ) {
+            applicationDialogState = true
+        }
     }
 }
 
@@ -145,7 +165,7 @@ private fun CompanyInformation(
         Body1(text = companyName)
     }
     Spacer(modifier = Modifier.height(12.dp))
-    if(companyDetailsButtonShowed) {
+    if (companyDetailsButtonShowed) {
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_get_company),
             color = JobisButtonColor.MainGrayColor,
@@ -285,9 +305,7 @@ private fun PositionCard(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Animated(
-            visible = showDetails
-        ) {
+        Animated(visible = showDetails) {
             Caption(text = majorTask)
         }
         Spacer(modifier = Modifier.height(4.dp))
