@@ -54,7 +54,7 @@ internal fun MenuScreen(
                 drawableRes = R.drawable.ic_my_page,
                 content = stringResource(id = R.string.bottom_nav_my_page),
             ) {
-                navController.navigate(JobisRoute.Navigation.MyPage)
+                navHostController.navigate(JobisRoute.Navigation.MyPage)
             }
             Spacer(modifier = Modifier.height(40.dp))
             Body3(
