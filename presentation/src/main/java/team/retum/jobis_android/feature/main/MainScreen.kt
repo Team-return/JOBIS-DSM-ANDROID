@@ -45,7 +45,10 @@ fun MainScreen(
             }
 
             composable(route = JobisRoute.Navigation.Menu){
-                MenuScreen(navController = navController)
+                MenuScreen(
+                    navController = navController,
+                    navHostController = navHostController,
+                )
             }
         }
     }

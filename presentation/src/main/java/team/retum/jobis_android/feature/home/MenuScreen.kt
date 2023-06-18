@@ -17,16 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body3
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun MenuScreen(
     navController: NavController,
+    navHostController: NavHostController,
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +53,9 @@ internal fun MenuScreen(
             Menu(
                 drawableRes = R.drawable.ic_my_page,
                 content = stringResource(id = R.string.my_page),
-            )
+            ) {
+                navController.navigate(JobisRoute.Navigation.Profile)
+            }
             Spacer(modifier = Modifier.height(40.dp))
             Body3(
                 text = stringResource(id = R.string.company),
@@ -59,17 +65,23 @@ internal fun MenuScreen(
             Menu(
                 drawableRes = R.drawable.ic_fetch_recruitments,
                 content = stringResource(id = R.string.fetch_recruitments),
-            )
+            ){
+                navController.navigate(JobisRoute.Recruitments)
+            }
             Spacer(modifier = Modifier.height(20.dp))
             Menu(
                 drawableRes = R.drawable.ic_fetch_companies,
                 content = stringResource(id = R.string.fetch_companies)
-            )
+            ){
+                navController.navigate(JobisRoute.Company)
+            }
             Spacer(modifier = Modifier.height(20.dp))
             Menu(
                 drawableRes = R.drawable.ic_fetch_bookmarked_recruitments,
                 content = stringResource(id = R.string.fetch_bookmarked_companies),
-            )
+            ){
+                navHostController.navigate(JobisRoute.Navigation.BookMarked)
+            }
         }
     }
 }
@@ -78,9 +90,14 @@ internal fun MenuScreen(
 private fun Menu(
     @DrawableRes drawableRes: Int,
     content: String,
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .jobisClickable {
+                onClick()
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         JobisImage(drawable = drawableRes)
