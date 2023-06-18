@@ -11,7 +11,7 @@ object JobisRoute {
     const val Recruitments = "Recruitments"
     const val RecruitmentDetails = "RecruitmentDetails/{recruitment-id}"
     const val Company = "Companies"
-    const val CompanyDetails = "CompanyDetails/{company-id}"
+    const val CompanyDetails = "CompanyDetails/{company-id}/{has-recruitment}"
 
     object Navigation {
         const val Home = "Home"

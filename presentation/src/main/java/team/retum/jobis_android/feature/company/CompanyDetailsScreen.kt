@@ -1,7 +1,7 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,10 +23,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -35,15 +41,16 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
 val ReviewItemShape = RoundedCornerShape(size = 14.dp)
@@ -52,14 +59,20 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 fun CompanyDetailsScreen(
     navController: NavController,
     companyId: Int,
+    hasRecruitment: Boolean,
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
+
+    var detailButtonShowed by remember { mutableStateOf(true) }
 
     val companyState = companyViewModel.container.stateFlow.collectAsState()
     val reviewState = reviewViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
+        detailButtonShowed =
+            navController.previousBackStackEntry?.destination?.route != JobisRoute.RecruitmentDetails
+
         companyViewModel.setCompanyId(
             companyId = companyId,
         )
@@ -137,12 +150,14 @@ fun CompanyDetailsScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
         }
-
-        JobisLargeButton(
-            text = stringResource(id = R.string.company_details_see_recruitents),
-            color = JobisButtonColor.MainSolidColor,
-        ){
-            navController.navigate("RecruitmentDetails/${companyState.value.companyId}")
+        if (detailButtonShowed) {
+            JobisLargeButton(
+                text = stringResource(id = R.string.company_details_see_recruitents),
+                color = JobisButtonColor.MainSolidColor,
+                enabled = hasRecruitment,
+            ) {
+                navController.navigate("RecruitmentDetails/${companyState.value.companyDetails.recruitmentId}")
+            }
         }
     }
 }
@@ -154,7 +169,15 @@ private fun CompanyDetails(
     companyIntroduce: String,
     companyDetails: List<Pair<Int, String?>>,
 ) {
-    Column{
+
+    var showDetails by remember { mutableStateOf(false) }
+
+    val maxLines by animateIntAsState(
+        targetValue = if (showDetails) 20
+        else 3
+    )
+
+    Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -171,7 +194,25 @@ private fun CompanyDetails(
         Caption(
             text = companyIntroduce,
             color = JobisColor.Gray700,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
         )
+        Spacer(modifier = Modifier.height(14.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Caption(
+                modifier = Modifier.jobisClickable {
+                    showDetails = !showDetails
+                },
+                text = if (showDetails) stringResource(id = R.string.recruitment_details_show_simply)
+                else stringResource(id = R.string.recruitment_details_show_detail),
+                color = JobisColor.Gray600,
+                overflow = TextOverflow.Ellipsis,
+                decoration = TextDecoration.Underline,
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         Divider(
             modifier = Modifier.fillMaxWidth(),

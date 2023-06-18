@@ -9,4 +9,5 @@ data class CompanyEntity(
     val name: String,
     val logoUrl: String,
     val take: Float,
+    val hasRecruitment: Boolean,
 )

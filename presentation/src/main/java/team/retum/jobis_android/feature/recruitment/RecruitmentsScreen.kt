@@ -74,6 +74,7 @@ internal fun RecruitmentsScreen(
     val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
 
     LaunchedEffect(Unit) {
+        recruitmentViewModel.fetchRecruitments()
         recruitmentViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitments -> {
@@ -379,12 +380,11 @@ private fun Recruitment(
                     Caption(
                         text = trainPay,
                     )
-                    if (isMilitarySupported) {
-                        JobisImage(
-                            modifier = Modifier.size(18.dp),
-                            drawable = R.drawable.ic_military_support,
-                        )
-                    }
+                    JobisImage(
+                        modifier = Modifier.size(18.dp),
+                        drawable = if (isMilitarySupported) R.drawable.ic_military_true
+                        else R.drawable.ic_military_false,
+                    )
                 }
             }
         }

@@ -31,6 +31,7 @@ import team.retum.jobis_android.feature.recruitment.Filter
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -78,8 +79,9 @@ private fun Companies(
                 name = item.name,
                 logoUrl = item.logoUrl,
                 take = item.take,
+                hasRecruitment = item.hasRecruitment,
             ) {
-                navController.navigate("CompanyDetails/${item.id}")
+                navController.navigate("CompanyDetails/${item.id}/${item.hasRecruitment}")
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -91,6 +93,7 @@ private fun Company(
     name: String,
     logoUrl: String,
     take: Float,
+    hasRecruitment: Boolean,
     onClick: () -> Unit,
 ) {
     Column(
@@ -101,12 +104,14 @@ private fun Company(
             .jobisClickable(onClick = onClick),
     ) {
         Row(
-            modifier = Modifier.padding(
-                start = 8.dp,
-                end = 20.dp,
-                top = 8.dp,
-                bottom = 8.dp,
-            ),
+            modifier = Modifier
+                .padding(
+                    start = 8.dp,
+                    end = 20.dp,
+                    top = 8.dp,
+                    bottom = 8.dp,
+                )
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
@@ -122,6 +127,14 @@ private fun Company(
                     text = stringResource(id = R.string.company_list_million, take.toString()),
                     color = JobisColor.Gray600,
                 )
+                if(hasRecruitment) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.End,
+                    ) {
+                        JobisImage(drawable = R.drawable.ic_recruitment_exists)
+                    }
+                }
             }
         }
     }

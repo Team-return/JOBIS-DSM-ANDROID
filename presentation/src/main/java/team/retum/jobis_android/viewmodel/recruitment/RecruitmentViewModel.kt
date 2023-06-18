@@ -28,10 +28,6 @@ internal class RecruitmentViewModel @Inject constructor(
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
-    init {
-        fetchRecruitments()
-    }
-
     override fun sendEvent(event: Event) {}
 
     internal fun fetchRecruitments() = intent {
