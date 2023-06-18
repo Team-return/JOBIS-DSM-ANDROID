@@ -19,13 +19,13 @@ sealed class NavigationItem(
     object Bookmarked : NavigationItem(
         drawableId = R.drawable.ic_recruitment,
         stringResId = R.string.bottom_nav_recruitment,
-        route = JobisRoute.Navigation.BookMarked,
+        route = JobisRoute.Navigation.BookmarkedRecruitments,
     )
 
     object Profile : NavigationItem(
         drawableId = R.drawable.ic_profile,
-        stringResId = R.string.bottom_nav_profile,
-        route = JobisRoute.Navigation.Profile,
+        stringResId = R.string.bottom_nav_my_page,
+        route = JobisRoute.Navigation.MyPage,
     )
 
     object Menu : NavigationItem(

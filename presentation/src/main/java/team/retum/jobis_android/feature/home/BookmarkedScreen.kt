@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.home
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -106,7 +105,7 @@ internal fun BookmarkedScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Caption(
-                            text = stringResource(id = R.string.bookamrked_get_recruitments),
+                            text = stringResource(id = R.string.bookmarked_get_recruitments),
                             color = JobisColor.Gray600,
                         )
                         JobisImage(

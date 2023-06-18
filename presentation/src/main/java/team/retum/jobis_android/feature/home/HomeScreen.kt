@@ -370,7 +370,7 @@ private fun MenuCardGroup(
         MenuCard(
             text = stringResource(id = R.string.home_do_get_company),
             drawable = R.drawable.ic_get_company,
-            onClick = { navController.navigate(JobisRoute.Company) },
+            onClick = { navController.navigate(JobisRoute.Companies) },
         )
     }
 }
