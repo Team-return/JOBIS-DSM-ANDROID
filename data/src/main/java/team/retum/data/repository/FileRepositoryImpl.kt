@@ -13,9 +13,9 @@ class FileRepositoryImpl @Inject constructor(
 ): FileRepository {
     override suspend fun uploadFile(
         type: FileType,
-        file: List<File>,
+        files: List<File>,
     ): UploadFileEntity = fileDataSource.uploadFile(
         type = type,
-        file = file,
+        files = files,
     ).toEntity()
 }

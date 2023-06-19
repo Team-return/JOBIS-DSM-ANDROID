@@ -185,5 +185,6 @@
     <string name="url">URL</string>
     <string name="add_to_press_file">눌러서 파일 추가하기</string>
     <string name="add_to_press_url">URL 입력란 추가하기</string>
+    <string name="check">확인</string>
 
 </resources>

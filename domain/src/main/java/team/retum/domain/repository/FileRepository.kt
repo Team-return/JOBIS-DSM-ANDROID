@@ -7,6 +7,6 @@ import java.io.File
 interface FileRepository {
     suspend fun uploadFile(
         type: FileType,
-        file: List<File>,
+        files: List<File>,
     ): UploadFileEntity
 }
