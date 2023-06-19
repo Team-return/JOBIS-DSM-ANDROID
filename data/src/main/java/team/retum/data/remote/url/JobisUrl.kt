@@ -11,6 +11,7 @@ object JobisUrl {
     const val applications = "/applications"
     const val companies = "/companies"
     const val review = "/reviews"
+    const val files = "/files"
 
     object User {
         const val login = "$users/login"
