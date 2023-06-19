@@ -78,6 +78,7 @@ internal fun RecruitmentsScreen(
         recruitmentViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is RecruitmentSideEffect.SuccessFetchRecruitments -> {
+                    recruitments.clear()
                     recruitments.addAll(it.recruitments)
                 }
 
@@ -245,7 +246,8 @@ private fun Recruitments(
     }
 
     LaunchedEffect(lastIndex.value) {
-        if (recruitmentUiModels.size - 1 == lastIndex.value) {
+        val size = recruitmentUiModels.size
+        if (size - 1 == lastIndex.value && size > 5) {
             page += 1
             recruitmentViewModel.setPage(page + 1)
             recruitmentViewModel.fetchRecruitments()
@@ -266,9 +268,7 @@ private fun Recruitments(
 
             var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
-            Spacer(
-                modifier = Modifier.height(16.dp),
-            )
+            Spacer(modifier = Modifier.height(16.dp))
             Recruitment(
                 imageUrl = recruitment.companyProfileUrl,
                 position = position,
