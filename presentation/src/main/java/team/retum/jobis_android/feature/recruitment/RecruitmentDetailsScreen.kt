@@ -1,6 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
-import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -73,10 +74,6 @@ internal fun RecruitmentDetailsScreen(
     val details = state.value.details
 
     val areas = state.value.details.areas
-
-    BackHandler {
-        applicationDialogState = false
-    }
 
     if (applicationDialogState) {
         Dialog(onDismissRequest = { applicationDialogState = false }) {
@@ -191,7 +188,7 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
         ) {
             Caption(
                 modifier = Modifier.defaultMinSize(
@@ -201,13 +198,16 @@ private fun RecruitmentDetails(
                 color = JobisColor.Gray700,
             )
             Spacer(modifier = Modifier.width(24.dp))
-            areas.forEach {
-                PositionCard(
-                    position = it.job.replace(",", " / "),
-                    workerCount = it.hiring.toString(),
-                    majorTask = it.majorTask,
-                    mainSkill = it.tech,
-                )
+            Column {
+                areas.forEach {
+                    PositionCard(
+                        position = it.job.replace(",", " / "),
+                        workerCount = it.hiring.toString(),
+                        majorTask = it.majorTask,
+                        mainSkill = it.tech,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -265,6 +265,11 @@ private fun PositionCard(
 
     var showDetails by remember { mutableStateOf(false) }
 
+    val maxLines by animateIntAsState(
+        targetValue = if (showDetails) 100
+        else 1,
+    )
+
     Column(
         modifier = Modifier
             .defaultMinSize(minWidth = 200.dp)
@@ -305,9 +310,11 @@ private fun PositionCard(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Animated(visible = showDetails) {
-            Caption(text = majorTask)
-        }
+        Caption(
+            text = majorTask,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Animated(
             visible = showDetails,
