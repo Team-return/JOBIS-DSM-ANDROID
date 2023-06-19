@@ -7,6 +7,7 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 import team.retum.data.remote.response.file.UploadFileResponse
 import team.retum.data.remote.url.JobisUrl
+import team.retum.domain.entity.FileType
 
 interface FileApi {
     @Multipart
@@ -17,6 +18,3 @@ interface FileApi {
     ): UploadFileResponse
 }
 
-enum class FileType{
-    LOGO_IMAGE, EXTENSION_FILE
-}
