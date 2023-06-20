@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.FileType
@@ -26,13 +27,12 @@ internal class FileViewModel @Inject constructor(
     override val container = container<FileState, FileSideEffect>(FileState())
 
     internal fun uploadFile() = intent {
-
         viewModelScope.launch(Dispatchers.IO) {
             uploadFileUseCase(
                 type = state.type,
                 files = state.files,
             ).onSuccess {
-                setFileUrls(fileUrls = it.urls)
+                postSideEffect(sideEffect = FileSideEffect.SuccessUploadFile(it.urls))
             }.onFailure {
 
             }
@@ -58,16 +58,6 @@ internal class FileViewModel @Inject constructor(
         reduce {
             state.copy(
                 files = files,
-            )
-        }
-    }
-
-    private fun setFileUrls(
-        fileUrls: List<String>,
-    ) = intent {
-        reduce {
-            state.copy(
-                urls = fileUrls.toMutableList(),
             )
         }
     }

@@ -8,10 +8,9 @@ import java.io.File
 data class FileState(
     val type: FileType = FileType.EXTENSION_FILE,
     val files: MutableList<File> = mutableListOf(),
-    val fileUrls: MutableList<String> = mutableListOf(),
     val urls: MutableList<String> = mutableListOf(),
 ): State
 
 sealed class FileSideEffect: SideEffect{
-
+    class SuccessUploadFile(val fileUrls: List<String>): FileSideEffect()
 }
