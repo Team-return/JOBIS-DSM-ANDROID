@@ -16,7 +16,7 @@ interface ApplicationsApi {
     @GET(JobisUrl.Applications.students)
     suspend fun fetchAppliedCompanyHistories(): FetchAppliedCompanyHistoriesResponse
 
-    @POST(JobisUrl.applications)
+    @POST(JobisUrl.Applications.apply)
     suspend fun applyCompany(
         @Path("recruitment-id") recruitmentId: Long,
         @Body applyCompanyRequest: ApplyCompanyRequest,
