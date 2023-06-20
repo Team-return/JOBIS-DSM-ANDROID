@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -33,8 +34,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.ApplicationSideEffect
+import team.retum.jobis_android.contract.FileSideEffect
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.util.FileUtil
+import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -47,7 +51,10 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentApplicationDialog(
+    recruitmentId: Long,
     fileViewModel: FileViewModel = hiltViewModel(),
+    applicationViewModel: ApplicationViewModel = hiltViewModel(),
+    onDismissRequest: () -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -60,6 +67,33 @@ internal fun RecruitmentApplicationDialog(
 
     var fileCount by remember { mutableStateOf(0) }
     var urlCount by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        applicationViewModel.setRecruitmentId(recruitmentId = recruitmentId)
+        fileViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is FileSideEffect.SuccessUploadFile -> {
+                    applicationViewModel.setAttachments(
+                        fileUrls = it.fileUrls,
+                        urls = urls,
+                    )
+                    applicationViewModel.applyCompany()
+                }
+            }
+        }
+
+        applicationViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is ApplicationSideEffect.SuccessApplyCompany -> {
+                    onDismissRequest()
+                }
+            }
+        }
+    }
+
+    val onClickConfirmButton = {
+        fileViewModel.uploadFile()
+    }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -138,7 +172,7 @@ internal fun RecruitmentApplicationDialog(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
             ) {
-                fileViewModel.uploadFile()
+                onClickConfirmButton()
             }
         }
     }
@@ -168,9 +202,7 @@ private fun SubmitSpace(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        JobisImage(
-            drawable = JobisIcon.Upload,
-        )
+        JobisImage(drawable = JobisIcon.Upload)
         Caption(text = description)
     }
 }

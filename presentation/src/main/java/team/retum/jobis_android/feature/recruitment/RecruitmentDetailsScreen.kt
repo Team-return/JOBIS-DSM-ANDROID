@@ -83,7 +83,9 @@ internal fun RecruitmentDetailsScreen(
             onDismissRequest = { applicationDialogState = false },
             properties = DialogProperties(usePlatformDefaultWidth = true),
         ) {
-            RecruitmentApplicationDialog()
+            RecruitmentApplicationDialog(recruitmentId = recruitmentId){
+                applicationDialogState = false
+            }
         }
     }
 
