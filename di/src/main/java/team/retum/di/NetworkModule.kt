@@ -15,6 +15,7 @@ import team.retum.data.remote.api.ApplicationsApi
 import team.retum.data.remote.api.BookmarkApi
 import team.retum.data.remote.api.CodeApi
 import team.retum.data.remote.api.CompanyApi
+import team.retum.data.remote.api.FileApi
 import team.retum.data.remote.api.RecruitmentApi
 import team.retum.data.remote.api.ReviewApi
 import team.retum.data.remote.api.StudentsApi
@@ -107,4 +108,9 @@ object NetworkModule {
         retrofit: Retrofit,
     ): BookmarkApi = retrofit.create(BookmarkApi::class.java)
 
+    @Provides
+    @Singleton
+    fun provideFileApi(
+        retrofit: Retrofit,
+    ): FileApi = retrofit.create(FileApi::class.java)
 }

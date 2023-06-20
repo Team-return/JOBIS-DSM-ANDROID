@@ -8,6 +8,7 @@ import team.retum.data.repository.ApplicationsRepositoryImpl
 import team.retum.data.repository.BookmarkRepositoryImpl
 import team.retum.data.repository.CodeRepositoryImpl
 import team.retum.data.repository.CompanyRepositoryImpl
+import team.retum.data.repository.FileRepositoryImpl
 import team.retum.data.repository.RecruitmentRepositoryImpl
 import team.retum.data.repository.ReviewRepositoryImpl
 import team.retum.data.repository.StudentsRepositoryImpl
@@ -16,6 +17,7 @@ import team.retum.domain.repository.ApplicationsRepository
 import team.retum.domain.repository.BookmarkRepository
 import team.retum.domain.repository.CodeRepository
 import team.retum.domain.repository.CompanyRepository
+import team.retum.domain.repository.FileRepository
 import team.retum.domain.repository.RecruitmentRepository
 import team.retum.domain.repository.ReviewRepository
 import team.retum.domain.repository.StudentsRepository
@@ -73,4 +75,10 @@ abstract class RepositoryModule {
     abstract fun bindsBookmarkRepository(
         bookmarkRepositoryImpl: BookmarkRepositoryImpl,
     ): BookmarkRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsFileRepository(
+        fileRepositoryImpl: FileRepositoryImpl,
+    ): FileRepository
 }

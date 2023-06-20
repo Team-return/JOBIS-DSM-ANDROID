@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,18 +33,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
+import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
@@ -65,12 +72,26 @@ internal fun RecruitmentDetailsScreen(
 
     val state = recruitmentViewModel.container.stateFlow.collectAsState()
 
+    var applicationDialogState by remember { mutableStateOf(false) }
+
     val details = state.value.details
 
     val areas = state.value.details.areas
 
+    if (applicationDialogState) {
+        Dialog(
+            onDismissRequest = { applicationDialogState = false },
+            properties = DialogProperties(usePlatformDefaultWidth = true),
+        ) {
+            RecruitmentApplicationDialog(recruitmentId = recruitmentId){
+                applicationDialogState = false
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed = navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
+        companyDetailsButtonShowed =
+            navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
         )
@@ -84,7 +105,10 @@ internal fun RecruitmentDetailsScreen(
                 start = 24.dp,
                 end = 24.dp,
                 bottom = 24.dp,
-            ),
+            )
+            .jobisClickable {
+                applicationDialogState = false
+            },
         contentAlignment = Alignment.BottomCenter,
     ) {
         Column(
@@ -118,8 +142,9 @@ internal fun RecruitmentDetailsScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_do_apply),
             color = JobisButtonColor.MainSolidColor,
-            onClick = {},
-        )
+        ) {
+            applicationDialogState = true
+        }
     }
 }
 
@@ -145,7 +170,7 @@ private fun CompanyInformation(
         Body1(text = companyName)
     }
     Spacer(modifier = Modifier.height(12.dp))
-    if(companyDetailsButtonShowed) {
+    if (companyDetailsButtonShowed) {
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_get_company),
             color = JobisButtonColor.MainGrayColor,
@@ -171,7 +196,7 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
         ) {
             Caption(
                 modifier = Modifier.defaultMinSize(
@@ -181,13 +206,16 @@ private fun RecruitmentDetails(
                 color = JobisColor.Gray700,
             )
             Spacer(modifier = Modifier.width(24.dp))
-            areas.forEach {
-                PositionCard(
-                    position = it.job.replace(",", " / "),
-                    workerCount = it.hiring.toString(),
-                    majorTask = it.majorTask,
-                    mainSkill = it.tech,
-                )
+            Column {
+                areas.forEach {
+                    PositionCard(
+                        position = it.job.replace(",", " / "),
+                        workerCount = it.hiring.toString(),
+                        majorTask = it.majorTask,
+                        mainSkill = it.tech,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -245,6 +273,11 @@ private fun PositionCard(
 
     var showDetails by remember { mutableStateOf(false) }
 
+    val maxLines by animateIntAsState(
+        targetValue = if (showDetails) 100
+        else 1,
+    )
+
     Column(
         modifier = Modifier
             .defaultMinSize(minWidth = 200.dp)
@@ -285,11 +318,11 @@ private fun PositionCard(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Animated(
-            visible = showDetails
-        ) {
-            Caption(text = majorTask)
-        }
+        Caption(
+            text = majorTask,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Animated(
             visible = showDetails,

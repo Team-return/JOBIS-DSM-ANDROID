@@ -11,6 +11,7 @@ object JobisUrl {
     const val applications = "/applications"
     const val companies = "/companies"
     const val review = "/reviews"
+    const val files = "/files"
 
     object User {
         const val login = "$users/login"
@@ -41,6 +42,7 @@ object JobisUrl {
     object Applications{
         const val employment = "$applications/employment/count"
         const val students = "$applications/students"
+        const val apply = "$applications/{recruitment-id}"
     }
 
     object Company{
