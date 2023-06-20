@@ -26,6 +26,8 @@ internal class FileViewModel @Inject constructor(
 
     override val container = container<FileState, FileSideEffect>(FileState())
 
+    private val files = container.stateFlow.value.files
+
     internal fun uploadFile() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             uploadFileUseCase(
@@ -49,12 +51,21 @@ internal class FileViewModel @Inject constructor(
         }
     }
 
-    internal fun setFiles(
+    internal fun addFile(
         file: File,
     ) = intent {
-        val files = state.files
         files.add(file)
+        reduce {
+            state.copy(
+                files = files,
+            )
+        }
+    }
 
+    internal fun removeFile(
+        index: Int,
+    ) = intent {
+        files.removeAt(index)
         reduce {
             state.copy(
                 files = files,

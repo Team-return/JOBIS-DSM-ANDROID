@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.application
 
 import android.content.Intent
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -95,11 +96,15 @@ internal fun RecruitmentApplicationDialog(
         fileViewModel.uploadFile()
     }
 
+    val onRemoveFile = { index: Int ->
+        fileViewModel.removeFile(index)
+    }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         result.data?.data?.run {
-            fileViewModel.setFiles(
+            fileViewModel.addFile(
                 FileUtil.toFile(
                     context = context,
                     uri = this,
@@ -112,7 +117,6 @@ internal fun RecruitmentApplicationDialog(
     Column(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(14.dp))
-            .verticalScroll(rememberScrollState())
             .background(JobisColor.Gray100)
             .padding(
                 horizontal = 18.dp,
@@ -121,52 +125,61 @@ internal fun RecruitmentApplicationDialog(
         horizontalAlignment = Alignment.Start,
     ) {
         Header(text = stringResource(id = R.string.do_apply))
-        Spacer(modifier = Modifier.height(25.dp))
-        Caption(
-            text = stringResource(id = R.string.submitted_document, "없음"),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(14.dp))
-        Caption(
-            text = stringResource(id = R.string.attached_file),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        repeat(fileCount) {
-            AttachedFile(
-                fileName = files[it].name,
-                fileSize = (files[it].length() / 1024).toString(),
-            ) {
+        Column(
+            modifier = Modifier
+                .height(280.dp)
+                .padding(bottom = 8.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
 
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-        }
-        SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "*/*"
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            launcher.launch(intent)
-        }
-        Spacer(modifier = Modifier.height(18.dp))
-        Caption(
-            text = stringResource(id = R.string.url),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        repeat(urlCount) { index ->
-            AttachedUrl(
-                onValueChanged = {
-                    urls[index] = it
-                },
-                url = urls[index],
+            Spacer(modifier = Modifier.height(25.dp))
+            Caption(
+                text = stringResource(id = R.string.submitted_document, "없음"),
+                color = JobisColor.Gray600,
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            Caption(
+                text = stringResource(id = R.string.attached_file),
+                color = JobisColor.Gray600,
             )
             Spacer(modifier = Modifier.height(6.dp))
+            repeat(fileCount) {
+                AttachedFile(
+                    fileName = files[it].name,
+                    fileSize = (files[it].length() / 1024).toString(),
+                ) {
+                    Log.d("TEST", "fesifjisef")
+                    onRemoveFile(it)
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+            }
+            SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "*/*"
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                launcher.launch(intent)
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+            Caption(
+                text = stringResource(id = R.string.url),
+                color = JobisColor.Gray600,
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            repeat(urlCount) { index ->
+                AttachedUrl(
+                    onValueChanged = {
+                        urls[index] = it
+                    },
+                    url = urls[index],
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+            }
+            SubmitSpace(description = stringResource(id = R.string.add_to_press_url)) {
+                urlCount += 1
+                urls.add("")
+            }
+            Spacer(modifier = Modifier.height(32.dp))
         }
-        SubmitSpace(description = stringResource(id = R.string.add_to_press_url)) {
-            urlCount += 1
-            urls.add("")
-        }
-        Spacer(modifier = Modifier.height(32.dp))
         Box(modifier = Modifier.padding(horizontal = 96.dp)) {
             JobisMediumButton(
                 text = stringResource(id = R.string.check),
@@ -245,7 +258,7 @@ private fun AttachedFile(
         JobisImage(
             modifier = Modifier
                 .padding(top = 2.dp)
-                .jobisClickable { onClick() },
+                .jobisClickable(onClick = onClick),
             drawable = JobisIcon.Close,
         )
     }
