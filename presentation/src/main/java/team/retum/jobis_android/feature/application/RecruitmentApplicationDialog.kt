@@ -14,13 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,6 +41,7 @@ import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.icon.JobisIcon
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
@@ -56,19 +56,22 @@ internal fun RecruitmentApplicationDialog(
 
     val files = state.value.files
 
-    var size by remember { mutableStateOf(0) }
+    val urls = remember { mutableStateListOf<String>() }
+
+    var fileCount by remember { mutableStateOf(0) }
+    var urlCount by remember { mutableStateOf(0) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
     ) { result ->
-        result.data!!.data?.run {
+        result.data?.data?.run {
             fileViewModel.setFiles(
                 FileUtil.toFile(
                     context = context,
                     uri = this,
                 ),
             )
-            size += 1
+            fileCount += 1
         }
     }
 
@@ -90,9 +93,12 @@ internal fun RecruitmentApplicationDialog(
             color = JobisColor.Gray600,
         )
         Spacer(modifier = Modifier.height(14.dp))
-        Caption(text = stringResource(id = R.string.attached_file))
+        Caption(
+            text = stringResource(id = R.string.attached_file),
+            color = JobisColor.Gray600,
+        )
         Spacer(modifier = Modifier.height(6.dp))
-        repeat(size) {
+        repeat(fileCount) {
             AttachedFile(
                 fileName = files[it].name,
                 fileSize = (files[it].length() / 1024).toString(),
@@ -108,10 +114,23 @@ internal fun RecruitmentApplicationDialog(
             launcher.launch(intent)
         }
         Spacer(modifier = Modifier.height(18.dp))
-        Caption(text = stringResource(id = R.string.url))
+        Caption(
+            text = stringResource(id = R.string.url),
+            color = JobisColor.Gray600,
+        )
         Spacer(modifier = Modifier.height(6.dp))
+        repeat(urlCount) { index ->
+            AttachedUrl(
+                onValueChanged = {
+                    urls[index] = it
+                },
+                url = urls[index],
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+        }
         SubmitSpace(description = stringResource(id = R.string.add_to_press_url)) {
-
+            urlCount += 1
+            urls.add("")
         }
         Spacer(modifier = Modifier.height(32.dp))
         Box(modifier = Modifier.padding(horizontal = 96.dp)) {
@@ -198,4 +217,16 @@ private fun AttachedFile(
             drawable = JobisIcon.Close,
         )
     }
+}
+
+@Composable
+private fun AttachedUrl(
+    onValueChanged: (String) -> Unit,
+    url: String,
+) {
+    JobisBoxTextField(
+        onValueChanged = onValueChanged,
+        value = url,
+        hint = stringResource(id = R.string.input_url),
+    )
 }

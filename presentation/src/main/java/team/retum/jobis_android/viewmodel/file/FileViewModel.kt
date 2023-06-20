@@ -32,7 +32,7 @@ internal class FileViewModel @Inject constructor(
                 type = state.type,
                 files = state.files,
             ).onSuccess {
-
+                setFileUrls(fileUrls = it.urls)
             }.onFailure {
 
             }
@@ -52,13 +52,22 @@ internal class FileViewModel @Inject constructor(
     internal fun setFiles(
         file: File,
     ) = intent {
-
         val files = state.files
         files.add(file)
 
         reduce {
             state.copy(
                 files = files,
+            )
+        }
+    }
+
+    private fun setFileUrls(
+        fileUrls: List<String>,
+    ) = intent {
+        reduce {
+            state.copy(
+                urls = fileUrls.toMutableList(),
             )
         }
     }
