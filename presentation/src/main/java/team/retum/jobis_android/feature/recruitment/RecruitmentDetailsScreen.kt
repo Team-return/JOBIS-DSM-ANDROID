@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -47,6 +49,7 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
@@ -76,7 +79,10 @@ internal fun RecruitmentDetailsScreen(
     val areas = state.value.details.areas
 
     if (applicationDialogState) {
-        Dialog(onDismissRequest = { applicationDialogState = false }) {
+        Dialog(
+            onDismissRequest = { applicationDialogState = false },
+            properties = DialogProperties(usePlatformDefaultWidth = true),
+        ) {
             RecruitmentApplicationDialog()
         }
     }

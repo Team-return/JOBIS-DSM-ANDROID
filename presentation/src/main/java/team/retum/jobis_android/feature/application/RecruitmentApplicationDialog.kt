@@ -7,17 +7,28 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -41,21 +52,30 @@ internal fun RecruitmentApplicationDialog(
 
     val context = LocalContext.current
 
+    val state = fileViewModel.container.stateFlow.collectAsState()
+
+    val files = state.value.files
+
+    var size by remember { mutableStateOf(0) }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         result.data!!.data?.run {
-            fileViewModel.addFile(
+            fileViewModel.setFiles(
                 FileUtil.toFile(
                     context = context,
                     uri = this,
                 ),
             )
+            size += 1
         }
     }
 
     Column(
         modifier = Modifier
+            .clip(shape = RoundedCornerShape(14.dp))
+            .verticalScroll(rememberScrollState())
             .background(JobisColor.Gray100)
             .padding(
                 horizontal = 18.dp,
@@ -72,6 +92,15 @@ internal fun RecruitmentApplicationDialog(
         Spacer(modifier = Modifier.height(14.dp))
         Caption(text = stringResource(id = R.string.attached_file))
         Spacer(modifier = Modifier.height(6.dp))
+        repeat(size) {
+            AttachedFile(
+                fileName = files[it].name,
+                fileSize = (files[it].length() / 1024).toString(),
+            ) {
+
+            }
+            Spacer(modifier = Modifier.height(6.dp))
+        }
         SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
@@ -124,5 +153,49 @@ private fun SubmitSpace(
             drawable = JobisIcon.Upload,
         )
         Caption(text = description)
+    }
+}
+
+@Composable
+private fun AttachedFile(
+    fileName: String,
+    fileSize: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .clip(shape = RoundedCornerShape(8.dp))
+            .background(
+                color = JobisColor.Gray100,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .padding(
+                start = 20.dp,
+                end = 14.dp,
+                top = 8.dp,
+                bottom = 8.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row {
+            Caption(text = fileName)
+            Spacer(modifier = Modifier.width(2.dp))
+            Caption(
+                text = "$fileSize KB",
+                color = JobisColor.Gray700,
+            )
+        }
+        JobisImage(
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .jobisClickable { onClick() },
+            drawable = JobisIcon.Close,
+        )
     }
 }

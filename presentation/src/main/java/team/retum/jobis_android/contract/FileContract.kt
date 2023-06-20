@@ -7,7 +7,7 @@ import java.io.File
 
 data class FileState(
     val type: FileType = FileType.EXTENSION_FILE,
-    val files: List<File> = emptyList(),
+    val files: MutableList<File> = mutableListOf(),
 ): State
 
 sealed class FileSideEffect: SideEffect{
