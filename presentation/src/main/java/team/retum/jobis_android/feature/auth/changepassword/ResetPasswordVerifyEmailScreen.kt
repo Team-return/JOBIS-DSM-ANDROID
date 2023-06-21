@@ -32,7 +32,7 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading4
 
 @Composable
-internal fun ChangePasswordScreen(
+internal fun ChangePasswordVerifyEmailScreen(
     navController: NavController,
     changePasswordViewModel: ChangePasswordViewModel = hiltViewModel(),
 ) {

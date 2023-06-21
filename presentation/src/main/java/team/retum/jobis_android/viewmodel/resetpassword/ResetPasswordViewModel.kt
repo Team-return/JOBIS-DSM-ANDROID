@@ -1,4 +1,4 @@
-package team.retum.jobis_android.viewmodel.changepassword
+package team.retum.jobis_android.viewmodel.resetpassword
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,20 +14,20 @@ import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.contract.ChangePasswordSideEffect
-import team.retum.jobis_android.contract.ChangePasswordState
+import team.retum.jobis_android.contract.ResetPasswordSideEffect
+import team.retum.jobis_android.contract.ResetPasswordState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ChangePasswordViewModel @Inject constructor(
+internal class ResetPasswordViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verifyEmailUseCase: VerifyEmailUseCase,
-) : BaseViewModel<ChangePasswordState, ChangePasswordSideEffect>() {
+) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
-    override val container = container<ChangePasswordState, ChangePasswordSideEffect>(
-        ChangePasswordState()
+    override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
+        ResetPasswordState()
     )
 
     override fun sendEvent(event: Event) {}
@@ -43,7 +43,7 @@ internal class ChangePasswordViewModel @Inject constructor(
             ).onSuccess {
                 setSendAuthCodeState(sendAuthCodeErrorState = true)
             }.onFailure {
-                when(it){
+                when (it) {
                     is NotFoundException -> {
                         setEmailErrorState(emailErrorState = true)
                     }
@@ -60,7 +60,7 @@ internal class ChangePasswordViewModel @Inject constructor(
                     authCode = state.authCode,
                 )
             ).onSuccess {
-                postSideEffect(sideEffect = ChangePasswordSideEffect.SuccessVerification)
+                postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
                 setAuthCodeState(authCodeErrorState = false)
             }
@@ -98,6 +98,16 @@ internal class ChangePasswordViewModel @Inject constructor(
         }
     }
 
+    internal fun setPasswordRepeat(
+        passwordRepeat: String,
+    ) = intent {
+        reduce {
+            state.copy(
+                passwordRepeat = passwordRepeat,
+            )
+        }
+    }
+
     private fun setEmailErrorState(
         emailErrorState: Boolean,
     ) = intent {
@@ -110,8 +120,8 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     private fun setSendAuthCodeState(
         sendAuthCodeErrorState: Boolean,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 sendAuthCodeState = sendAuthCodeErrorState,
             )
@@ -120,7 +130,7 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     private fun setAuthCodeState(
         authCodeErrorState: Boolean,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 authCodeErrorState = authCodeErrorState,
