@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.signup.setpassword
+package team.retum.jobis_android.feature.auth.signup.setpassword
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

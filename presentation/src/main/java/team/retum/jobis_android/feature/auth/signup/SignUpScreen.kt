@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.signup
+package team.retum.jobis_android.feature.auth.signup
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -31,9 +31,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignUpEvent
-import team.retum.jobis_android.feature.signup.setpassword.SetPasswordScreen
-import team.retum.jobis_android.feature.signup.studentinfo.StudentInfoScreen
-import team.retum.jobis_android.feature.signup.verifyemail.VerifyEmailScreen
+import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
+import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
+import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel

@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.signin
+package team.retum.jobis_android.feature.auth.signin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

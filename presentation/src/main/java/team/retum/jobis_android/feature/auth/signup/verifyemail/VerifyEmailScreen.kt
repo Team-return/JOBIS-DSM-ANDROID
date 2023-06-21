@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.signup.verifyemail
+package team.retum.jobis_android.feature.auth.signup.verifyemail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

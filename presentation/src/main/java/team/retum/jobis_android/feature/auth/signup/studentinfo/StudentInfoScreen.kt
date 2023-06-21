@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.signup.studentinfo
+package team.retum.jobis_android.feature.auth.signup.studentinfo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
