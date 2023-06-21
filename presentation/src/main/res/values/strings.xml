@@ -188,7 +188,7 @@
     <string name="check">확인</string>
     <string name="input_url">URL 입력</string>
 
-    <!--    Change Password-->
+    <!--    Reset Password Email Verify Screen-->
 
     <string name="self_verification">본인인증</string>
     <string name="self_verification_explain">먼저 이메일 인증을 통해 본인임을 증명하세요.</string>
@@ -196,5 +196,15 @@
     <string name="check_personal_information">이메일이 오지 않나요? 입력하신 정보가 맞는지 확인해 주세요.</string>
     <string name="do_verify">인증하기</string>
     <string name="auth_code_mismatch">인증번호가 일치하지 않습니다</string>
+
+    <!--    Reset Password Screen-->
+
+    <string name="reset_password">비밀번호 재설정</string>
+    <string name="reset_password_explain">새로운 비밀번호로 변경하세요.</string>
+    <string name="input_new_password">새로운 비밀번호를 입력하세요</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="password_format_error">8~16자, 영문자, 숫자, 특수문자 포함</string>
+    <string name="password_repeat_error">비밀번호가 일치하지 않습니료</string>
+    <string name="complete">완료</string>
 
 </resources>

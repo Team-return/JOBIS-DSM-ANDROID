@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.ChangePasswordSideEffect
-import team.retum.jobis_android.viewmodel.changepassword.ChangePasswordViewModel
+import team.retum.jobis_android.contract.ResetPasswordSideEffect
+import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -32,19 +32,19 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading4
 
 @Composable
-internal fun ChangePasswordVerifyEmailScreen(
+internal fun ResetPasswordVerifyEmailScreen(
     navController: NavController,
-    changePasswordViewModel: ChangePasswordViewModel = hiltViewModel(),
+    resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
 
-    val state = changePasswordViewModel.container.stateFlow.collectAsState()
+    val state = resetPasswordViewModel.container.stateFlow.collectAsState()
 
     val onEmailChanged = { email: String ->
-        changePasswordViewModel.setEmail(email = email)
+        resetPasswordViewModel.setEmail(email = email)
     }
 
     val onAuthCodeChanged = { authCode: String ->
-        changePasswordViewModel.setAuthCode(authCode = authCode)
+        resetPasswordViewModel.setAuthCode(authCode = authCode)
     }
 
     val email = state.value.email
@@ -52,9 +52,9 @@ internal fun ChangePasswordVerifyEmailScreen(
     val sendAuthCodeState = state.value.sendAuthCodeState
 
     LaunchedEffect(Unit) {
-        changePasswordViewModel.container.sideEffectFlow.collect {
+        resetPasswordViewModel.container.sideEffectFlow.collect {
             when (it) {
-                is ChangePasswordSideEffect.SuccessVerification -> {
+                is ResetPasswordSideEffect.SuccessVerification -> {
 //                    navController.navigate()
                 }
             }
@@ -81,7 +81,7 @@ internal fun ChangePasswordVerifyEmailScreen(
             color = JobisColor.Gray600,
         )
         Spacer(modifier = Modifier.height(26.dp))
-        JobisImage(drawable = R.drawable.ic_change_password)
+        JobisImage(drawable = R.drawable.ic_reset_password_verify_email)
         Spacer(modifier = Modifier.height(30.dp))
         ChangePasswordInputs(
             email = email,
@@ -92,20 +92,20 @@ internal fun ChangePasswordVerifyEmailScreen(
             sendAuthCodeState = sendAuthCodeState,
             onAuthCodeChanged = onAuthCodeChanged,
         ) {
-            changePasswordViewModel.sendVerificationCode()
+            resetPasswordViewModel.sendVerificationCode()
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.7f))
         Caption(
             text = stringResource(id = R.string.check_personal_information),
             color = JobisColor.Gray600,
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         JobisLargeButton(
             text = stringResource(id = R.string.do_verify),
             color = JobisButtonColor.MainSolidColor,
             enabled = email.isNotEmpty() && authCode.isNotEmpty() && sendAuthCodeState,
         ) {
-            changePasswordViewModel.verifyEmail()
+            resetPasswordViewModel.verifyEmail()
         }
     }
 }

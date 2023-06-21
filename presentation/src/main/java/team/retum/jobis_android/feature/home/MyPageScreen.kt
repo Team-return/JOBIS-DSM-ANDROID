@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
@@ -143,7 +141,7 @@ private fun UserProfile(
 
         }
         Menu(content = stringResource(id = R.string.change_password)) {
-            navController.navigate(JobisRoute.ChangePassword)
+            navController.navigate(JobisRoute.ResetPassword)
         }
         Menu(
             content = stringResource(id = R.string.log_out),

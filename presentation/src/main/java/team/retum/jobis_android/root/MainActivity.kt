@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,7 +23,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
-import team.retum.jobis_android.feature.auth.changepassword.ChangePasswordScreen
+import team.retum.jobis_android.feature.auth.changepassword.ResetPasswordScreen
+import team.retum.jobis_android.feature.auth.changepassword.ResetPasswordVerifyEmailScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
@@ -179,11 +179,17 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(
-                    route = JobisRoute.ChangePassword,
+                    route = JobisRoute.ResetPasswordVerifyEmail,
                 ){
-                    ChangePasswordScreen(
+                    ResetPasswordVerifyEmailScreen(
                         navController = navController,
                     )
+                }
+
+                composable(
+                    route = JobisRoute.ResetPassword,
+                ){
+                    ResetPasswordScreen(navController = navController)
                 }
             }
         }
