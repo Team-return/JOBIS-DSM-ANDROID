@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -25,12 +26,14 @@ import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Heading6
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun MyPageScreen(
@@ -63,8 +66,8 @@ internal fun MyPageScreen(
             name = studentInformation.studentName,
             department = studentInformation.department,
             studentGcn = studentInformation.studentGcn,
+            navController = navController,
         )
-
     }
 }
 
@@ -74,6 +77,7 @@ private fun UserProfile(
     name: String,
     department: Department,
     studentGcn: String,
+    navController: NavController,
 ) {
 
     var grade = ""
@@ -132,17 +136,21 @@ private fun UserProfile(
             modifier = Modifier.fillMaxWidth(),
             color = JobisColor.Gray400,
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.bug_report))
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.choose_interests))
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.change_password))
-        Spacer(modifier = Modifier.height(16.dp))
+        Menu(content = stringResource(id = R.string.bug_report)) {
+
+        }
+        Menu(content = stringResource(id = R.string.choose_interests)) {
+
+        }
+        Menu(content = stringResource(id = R.string.change_password)) {
+            navController.navigate(JobisRoute.ChangePassword)
+        }
         Menu(
             content = stringResource(id = R.string.log_out),
             contentColor = JobisColor.Red,
-        )
+        ) {
+
+        }
     }
 }
 
@@ -150,9 +158,15 @@ private fun UserProfile(
 private fun Menu(
     content: String,
     contentColor: Color = JobisColor.LightBlue,
+    onClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .jobisClickable(rippleEnabled = true) {
+                onClick()
+            }
+            .padding(top = 16.dp),
         horizontalAlignment = Alignment.Start,
     ) {
         Body4(
