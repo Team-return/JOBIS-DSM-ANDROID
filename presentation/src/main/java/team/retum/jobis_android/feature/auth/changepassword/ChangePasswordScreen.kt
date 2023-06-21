@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.ChangePasswordSideEffect
+import team.retum.jobis_android.viewmodel.changepassword.ChangePasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -29,7 +34,32 @@ import team.returm.jobisdesignsystem.theme.Heading4
 @Composable
 internal fun ChangePasswordScreen(
     navController: NavController,
+    changePasswordViewModel: ChangePasswordViewModel = hiltViewModel(),
 ) {
+
+    val state = changePasswordViewModel.container.stateFlow.collectAsState()
+
+    val onEmailChanged = { email: String ->
+        changePasswordViewModel.setEmail(email = email)
+    }
+
+    val onAuthCodeChanged = { authCode: String ->
+        changePasswordViewModel.setAuthCode(authCode = authCode)
+    }
+
+    val email = state.value.email
+    val authCode = state.value.authCode
+
+    LaunchedEffect(Unit){
+        changePasswordViewModel.container.sideEffectFlow.collect{
+            when(it){
+                is ChangePasswordSideEffect.SuccessVerification -> {
+//                    navController.navigate()
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,12 +83,13 @@ internal fun ChangePasswordScreen(
         JobisImage(drawable = R.drawable.ic_change_password)
         Spacer(modifier = Modifier.height(30.dp))
         ChangePasswordInputs(
-            accountId = "",
-            onAccountIdChange = {},
-            verificationCode = "",
-            onVerificationCode = {}
+            email = email,
+            emailErrorState = state.value.emailErrorState,
+            onEmailChanged = onEmailChanged,
+            verificationCode = authCode,
+            onAuthCodeChanged = onAuthCodeChanged,
         ) {
-
+            changePasswordViewModel.sendVerificationCode()
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.7f))
         Caption(
@@ -69,7 +100,8 @@ internal fun ChangePasswordScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.do_verify),
             color = JobisButtonColor.MainSolidColor,
-        ){
+            enabled = email.isNotEmpty() && authCode.isNotEmpty(),
+        ) {
 
         }
     }
@@ -77,25 +109,28 @@ internal fun ChangePasswordScreen(
 
 @Composable
 private fun ChangePasswordInputs(
-    accountId: String,
-    onAccountIdChange: (String) -> Unit,
+    email: String,
+    emailErrorState: Boolean,
+    onEmailChanged: (String) -> Unit,
     verificationCode: String,
-    onVerificationCode: (String) -> Unit,
+    onAuthCodeChanged: (String) -> Unit,
     onRequestVerification: () -> Unit,
 ) {
     Column {
         JobisBoxTextField(
-            onValueChanged = onAccountIdChange,
-            value = accountId,
-            hint = stringResource(id = R.string.please_enter_id),
+            onValueChanged = onEmailChanged,
+            value = email,
+            hint = stringResource(id = R.string.please_enter_email),
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.weight(0.7f)) {
                 JobisBoxTextField(
-                    onValueChanged = onVerificationCode,
+                    onValueChanged = onAuthCodeChanged,
                     value = verificationCode,
                     hint = stringResource(id = R.string.verification_code),
+                    error = emailErrorState,
+                    errorText = stringResource(id = R.string.auth_code_mismatch),
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -103,6 +138,7 @@ private fun ChangePasswordInputs(
                 JobisSmallButton(
                     text = stringResource(id = R.string.email_verification_request_verify),
                     color = JobisButtonColor.MainSolidColor,
+                    enabled = email.isNotEmpty(),
                 ) {
                     onRequestVerification()
                 }

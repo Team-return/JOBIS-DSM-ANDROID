@@ -192,9 +192,9 @@
 
     <string name="self_verification">본인인증</string>
     <string name="self_verification_explain">먼저 이메일 인증을 통해 본인임을 증명하세요.</string>
-    <string name="please_enter_id">아이디를 입력하세요</string>
     <string name="verification_code">인증코드 6자리</string>
     <string name="check_personal_information">이메일이 오지 않나요? 입력하신 정보가 맞는지 확인해 주세요.</string>
     <string name="do_verify">인증하기</string>
+    <string name="auth_code_mismatch">인증번호가 일치하지 않습니다</string>
 
 </resources>
