@@ -97,7 +97,7 @@ internal fun SignInScreen(
         signInViewModel.setPasswordError(false)
     }
 
-    val onSignInCheckChange = {
+    val onSignInCheckChanged = {
         signInViewModel.setAutoSignIn(!state.value.autoSignIn)
     }
 
@@ -151,8 +151,9 @@ internal fun SignInScreen(
             Spacer(modifier = Modifier.height(22.dp))
             SignInOptions(
                 autoSignInChecked = state.value.autoSignIn,
+                onSignInCheckChanged = onSignInCheckChanged,
             ) {
-                onSignInCheckChange()
+                 navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.7f))
             Row(
@@ -217,6 +218,7 @@ private fun SignInInputs(
 private fun SignInOptions(
     autoSignInChecked: Boolean,
     onSignInCheckChanged: () -> Unit,
+    onResetPasswordClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -236,6 +238,7 @@ private fun SignInOptions(
             Caption(text = stringResource(id = R.string.sign_in_auto_sign_in))
         }
         Caption(
+            modifier = Modifier.jobisClickable { onResetPasswordClicked() },
             text = stringResource(id = R.string.sign_in_reset_password),
             color = JobisColor.Gray600,
         )

@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -37,6 +40,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun MyPageScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    showDialog: () -> Unit,
 ) {
 
     val state = homeViewModel.container.stateFlow.collectAsState()
@@ -65,10 +69,12 @@ internal fun MyPageScreen(
             department = studentInformation.department,
             studentGcn = studentInformation.studentGcn,
             navController = navController,
+            showDialog = showDialog,
         )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun UserProfile(
     profileImageUrl: String,
@@ -76,6 +82,7 @@ private fun UserProfile(
     department: Department,
     studentGcn: String,
     navController: NavController,
+    showDialog: () -> Unit,
 ) {
 
     var grade = ""
@@ -87,6 +94,8 @@ private fun UserProfile(
         classRoom = studentGcn[1].toString().ifEmpty { "" }
         number = studentGcn.substring((if (studentGcn[2].toInt() == 0) 3 else 2)..3)
     }
+
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
@@ -138,10 +147,10 @@ private fun UserProfile(
 
         }
         Menu(content = stringResource(id = R.string.choose_interests)) {
-
+            showDialog()
         }
         Menu(content = stringResource(id = R.string.change_password)) {
-            navController.navigate(JobisRoute.ResetPassword)
+
         }
         Menu(
             content = stringResource(id = R.string.log_out),
