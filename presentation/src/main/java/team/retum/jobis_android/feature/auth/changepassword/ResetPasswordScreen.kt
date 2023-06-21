@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.changepassword
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -48,39 +49,43 @@ internal fun ResetPasswordScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = 100.dp,
+                top = 80.dp,
                 start = 30.dp,
-                end = 30.dp
+                end = 30.dp,
+                bottom = 32.dp,
             ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Heading4(
-            modifier = Modifier.align(Alignment.Start),
-            text = stringResource(id = R.string.reset_password),
-        )
-        Body4(
-            modifier = Modifier.align(Alignment.Start),
-            text = stringResource(id = R.string.reset_password_explain),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(26.dp))
-        JobisImage(drawable = R.drawable.ic_reset_password)
-        Spacer(modifier = Modifier.height(30.dp))
-        ResetPasswordInput(
-            password = password,
-            passwordRepeat = passwordRepeat,
-            passwordFormatErrorState = state.value.passwordFormatErrorState,
-            passwordRepeatErrorState = state.value.passwordRepeatErrorState,
-            onPasswordChanged = onPasswordChanged,
-            onPasswordRepeatChanged = onPasswordRepeatChanged,
-        )
-        Spacer(modifier = Modifier.fillMaxHeight(0.72f))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Heading4(
+                modifier = Modifier.align(Alignment.Start),
+                text = stringResource(id = R.string.reset_password),
+            )
+            Body4(
+                modifier = Modifier.align(Alignment.Start),
+                text = stringResource(id = R.string.reset_password_explain),
+                color = JobisColor.Gray600,
+            )
+            Spacer(modifier = Modifier.height(26.dp))
+            JobisImage(drawable = R.drawable.ic_reset_password)
+            Spacer(modifier = Modifier.height(30.dp))
+            ResetPasswordInput(
+                password = password,
+                passwordRepeat = passwordRepeat,
+                passwordFormatErrorState = state.value.passwordFormatErrorState,
+                passwordRepeatErrorState = state.value.passwordRepeatErrorState,
+                onPasswordChanged = onPasswordChanged,
+                onPasswordRepeatChanged = onPasswordRepeatChanged,
+            )
+            Spacer(modifier = Modifier.fillMaxHeight(0.72f))
+        }
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
             color = JobisButtonColor.MainSolidColor,
-            //enabled = password.isNotEmpty() && passwordRepeat.isNotEmpty(),
+            enabled = password.isNotEmpty() && passwordRepeat.isNotEmpty(),
         ) {
-            navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
+
         }
     }
 }

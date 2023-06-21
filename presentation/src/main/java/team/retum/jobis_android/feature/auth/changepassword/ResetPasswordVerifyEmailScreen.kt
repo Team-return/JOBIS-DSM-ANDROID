@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.changepassword
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,44 +63,46 @@ internal fun ResetPasswordVerifyEmailScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = 100.dp,
-                start = 30.dp,
-                end = 30.dp
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize().padding(
+            top = 80.dp,
+            start = 30.dp,
+            end = 30.dp,
+            bottom = 32.dp,
+        ),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Heading4(
-            modifier = Modifier.align(Alignment.Start),
-            text = stringResource(id = R.string.self_verification),
-        )
-        Body4(
-            modifier = Modifier.align(Alignment.Start),
-            text = stringResource(id = R.string.self_verification_explain),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(26.dp))
-        JobisImage(drawable = R.drawable.ic_reset_password_verify_email)
-        Spacer(modifier = Modifier.height(30.dp))
-        ChangePasswordInputs(
-            email = email,
-            emailErrorState = state.value.emailErrorState,
-            onEmailChanged = onEmailChanged,
-            authCode = authCode,
-            authCodeErrorState = state.value.authCodeErrorState,
-            sendAuthCodeState = sendAuthCodeState,
-            onAuthCodeChanged = onAuthCodeChanged,
-        ) {
-            resetPasswordViewModel.sendVerificationCode()
+        Column(horizontalAlignment = Alignment.CenterHorizontally){
+            Heading4(
+                modifier = Modifier.align(Alignment.Start),
+                text = stringResource(id = R.string.self_verification),
+            )
+            Body4(
+                modifier = Modifier.align(Alignment.Start),
+                text = stringResource(id = R.string.self_verification_explain),
+                color = JobisColor.Gray600,
+            )
+            Spacer(modifier = Modifier.height(26.dp))
+            JobisImage(drawable = R.drawable.ic_reset_password_verify_email)
+            Spacer(modifier = Modifier.height(30.dp))
+            ChangePasswordInputs(
+                email = email,
+                emailErrorState = state.value.emailErrorState,
+                onEmailChanged = onEmailChanged,
+                authCode = authCode,
+                authCodeErrorState = state.value.authCodeErrorState,
+                sendAuthCodeState = sendAuthCodeState,
+                onAuthCodeChanged = onAuthCodeChanged,
+            ) {
+                resetPasswordViewModel.sendVerificationCode()
+            }
+            Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+            Caption(
+                text = stringResource(id = R.string.check_personal_information),
+                color = JobisColor.Gray600,
+            )
+            Spacer(modifier = Modifier.height(6.dp))
         }
-        Spacer(modifier = Modifier.fillMaxHeight(0.7f))
-        Caption(
-            text = stringResource(id = R.string.check_personal_information),
-            color = JobisColor.Gray600,
-        )
-        Spacer(modifier = Modifier.height(6.dp))
         JobisLargeButton(
             text = stringResource(id = R.string.do_verify),
             color = JobisButtonColor.MainSolidColor,
