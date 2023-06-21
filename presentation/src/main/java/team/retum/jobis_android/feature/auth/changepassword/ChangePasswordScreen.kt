@@ -49,10 +49,11 @@ internal fun ChangePasswordScreen(
 
     val email = state.value.email
     val authCode = state.value.authCode
+    val sendAuthCodeState = state.value.sendAuthCodeState
 
-    LaunchedEffect(Unit){
-        changePasswordViewModel.container.sideEffectFlow.collect{
-            when(it){
+    LaunchedEffect(Unit) {
+        changePasswordViewModel.container.sideEffectFlow.collect {
+            when (it) {
                 is ChangePasswordSideEffect.SuccessVerification -> {
 //                    navController.navigate()
                 }
@@ -86,7 +87,9 @@ internal fun ChangePasswordScreen(
             email = email,
             emailErrorState = state.value.emailErrorState,
             onEmailChanged = onEmailChanged,
-            verificationCode = authCode,
+            authCode = authCode,
+            authCodeErrorState = state.value.authCodeErrorState,
+            sendAuthCodeState = sendAuthCodeState,
             onAuthCodeChanged = onAuthCodeChanged,
         ) {
             changePasswordViewModel.sendVerificationCode()
@@ -100,9 +103,9 @@ internal fun ChangePasswordScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.do_verify),
             color = JobisButtonColor.MainSolidColor,
-            enabled = email.isNotEmpty() && authCode.isNotEmpty(),
+            enabled = email.isNotEmpty() && authCode.isNotEmpty() && sendAuthCodeState,
         ) {
-
+            changePasswordViewModel.verifyEmail()
         }
     }
 }
@@ -112,8 +115,10 @@ private fun ChangePasswordInputs(
     email: String,
     emailErrorState: Boolean,
     onEmailChanged: (String) -> Unit,
-    verificationCode: String,
+    authCode: String,
+    authCodeErrorState: Boolean,
     onAuthCodeChanged: (String) -> Unit,
+    sendAuthCodeState: Boolean,
     onRequestVerification: () -> Unit,
 ) {
     Column {
@@ -121,22 +126,27 @@ private fun ChangePasswordInputs(
             onValueChanged = onEmailChanged,
             value = email,
             hint = stringResource(id = R.string.please_enter_email),
+            error = emailErrorState,
+            errorText = stringResource(id = R.string.sign_in_email_error),
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.weight(0.7f)) {
                 JobisBoxTextField(
                     onValueChanged = onAuthCodeChanged,
-                    value = verificationCode,
+                    value = authCode,
                     hint = stringResource(id = R.string.verification_code),
-                    error = emailErrorState,
+                    error = authCodeErrorState,
                     errorText = stringResource(id = R.string.auth_code_mismatch),
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Box(modifier = Modifier.weight(0.3f)) {
                 JobisSmallButton(
-                    text = stringResource(id = R.string.email_verification_request_verify),
+                    text = stringResource(
+                        id = if (sendAuthCodeState) R.string.email_verification_resend
+                        else R.string.email_verification_request_verify,
+                    ),
                     color = JobisButtonColor.MainSolidColor,
                     enabled = email.isNotEmpty(),
                 ) {

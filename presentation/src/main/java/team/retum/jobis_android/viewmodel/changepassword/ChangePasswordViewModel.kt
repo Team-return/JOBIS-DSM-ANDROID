@@ -8,9 +8,12 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.SendVerificationCodeParam
+import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
+import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.ChangePasswordSideEffect
 import team.retum.jobis_android.contract.ChangePasswordState
 import team.retum.jobis_android.util.mvi.Event
@@ -20,8 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ChangePasswordViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
-
-    ) : BaseViewModel<ChangePasswordState, ChangePasswordSideEffect>() {
+    private val verifyEmailUseCase: VerifyEmailUseCase,
+) : BaseViewModel<ChangePasswordState, ChangePasswordSideEffect>() {
 
     override val container = container<ChangePasswordState, ChangePasswordSideEffect>(
         ChangePasswordState()
@@ -29,18 +32,37 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     override fun sendEvent(event: Event) {}
 
-    internal fun sendVerificationCode() = intent{
-        viewModelScope.launch(Dispatchers.IO){
+    internal fun sendVerificationCode() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = state.email,
                     authCodeType = AuthCodeType.PASSWORD,
-                    userName = "sefsef",
+                    userName = "테스트",
+                )
+            ).onSuccess {
+                setSendAuthCodeState(sendAuthCodeErrorState = true)
+            }.onFailure {
+                when(it){
+                    is NotFoundException -> {
+                        setEmailErrorState(emailErrorState = true)
+                    }
+                }
+            }
+        }
+    }
+
+    internal fun verifyEmail() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            verifyEmailUseCase(
+                verifyEmailParam = VerifyEmailParam(
+                    email = state.email,
+                    authCode = state.authCode,
                 )
             ).onSuccess {
                 postSideEffect(sideEffect = ChangePasswordSideEffect.SuccessVerification)
             }.onFailure {
-                setEmailErrorState(emailErrorState = true)
+                setAuthCodeState(authCodeErrorState = false)
             }
         }
     }
@@ -58,8 +80,8 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     internal fun setAuthCode(
         authCode: String,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 authCode = authCode,
             )
@@ -68,8 +90,8 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     internal fun setPassword(
         password: String,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 password = password,
             )
@@ -78,7 +100,7 @@ internal class ChangePasswordViewModel @Inject constructor(
 
     private fun setEmailErrorState(
         emailErrorState: Boolean,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 emailErrorState = emailErrorState,
@@ -86,4 +108,23 @@ internal class ChangePasswordViewModel @Inject constructor(
         }
     }
 
+    private fun setSendAuthCodeState(
+        sendAuthCodeErrorState: Boolean,
+    ) = intent{
+        reduce{
+            state.copy(
+                sendAuthCodeState = sendAuthCodeErrorState,
+            )
+        }
+    }
+
+    private fun setAuthCodeState(
+        authCodeErrorState: Boolean,
+    ) = intent{
+        reduce {
+            state.copy(
+                authCodeErrorState = authCodeErrorState,
+            )
+        }
+    }
 }

@@ -8,6 +8,8 @@ data class ChangePasswordState(
     val authCode: String = "",
     val password: String = "",
     val emailErrorState: Boolean = false,
+    val authCodeErrorState: Boolean = false,
+    val sendAuthCodeState: Boolean = false,
 ): State
 
 sealed class ChangePasswordSideEffect: SideEffect{
