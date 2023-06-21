@@ -12,6 +12,7 @@ object JobisRoute {
     const val RecruitmentDetails = "RecruitmentDetails/{recruitment-id}"
     const val Companies = "Companies"
     const val CompanyDetails = "CompanyDetails/{company-id}/{has-recruitment}"
+    const val ChangePassword = "ChangePassword"
 
     object Navigation {
         const val Home = "Home"

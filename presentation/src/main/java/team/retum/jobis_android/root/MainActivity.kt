@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,13 +24,14 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.auth.changepassword.ChangePasswordScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
-import team.retum.jobis_android.feature.signin.SignInScreen
-import team.retum.jobis_android.feature.signup.SignUpScreen
+import team.retum.jobis_android.feature.auth.signin.SignInScreen
+import team.retum.jobis_android.feature.auth.signup.SignUpScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.slideInLeft
@@ -175,6 +177,14 @@ class MainActivity : ComponentActivity() {
                         hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
                     )
                 }
+
+                composable(
+                    route = JobisRoute.ChangePassword,
+                ){
+                    ChangePasswordScreen(
+                        navController = navController,
+                    )
+                }
             }
         }
     }
@@ -183,7 +193,10 @@ class MainActivity : ComponentActivity() {
     private fun SetWindowStatus() {
         window.statusBarColor = JobisColor.Gray100.toArgb()
         window.navigationBarColor = JobisColor.Gray100.toArgb()
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {
