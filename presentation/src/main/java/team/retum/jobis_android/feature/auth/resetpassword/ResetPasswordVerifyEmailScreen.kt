@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.auth.changepassword
+package team.retum.jobis_android.feature.auth.resetpassword
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
