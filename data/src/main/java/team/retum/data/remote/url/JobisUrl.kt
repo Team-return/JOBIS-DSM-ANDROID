@@ -23,6 +23,7 @@ object JobisUrl {
         const val recruit = "$student/recruit"
         const val exists = "$student/exists"
         const val my = "$student/my"
+        const val password = "$student/password"
     }
 
     object Code {
