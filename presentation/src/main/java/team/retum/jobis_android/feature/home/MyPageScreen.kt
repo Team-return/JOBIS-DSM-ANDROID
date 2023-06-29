@@ -150,7 +150,7 @@ private fun UserProfile(
             showDialog()
         }
         Menu(content = stringResource(id = R.string.change_password)) {
-
+            navController.navigate(JobisRoute.ComparePassword)
         }
         Menu(
             content = stringResource(id = R.string.log_out),

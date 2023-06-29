@@ -13,8 +13,9 @@ data class ResetPasswordState(
     val sendAuthCodeState: Boolean = false,
     val passwordFormatErrorState: Boolean = false,
     val passwordRepeatErrorState: Boolean = false,
-): State
+    val comparePasswordErrorState: Boolean = false,
+) : State
 
-sealed class ResetPasswordSideEffect: SideEffect{
-    object SuccessVerification: ResetPasswordSideEffect()
+sealed class ResetPasswordSideEffect : SideEffect {
+    object SuccessVerification : ResetPasswordSideEffect()
 }

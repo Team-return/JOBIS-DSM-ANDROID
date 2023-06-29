@@ -9,9 +9,11 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.exception.NotFoundException
+import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
+import team.retum.domain.usecase.student.ComparePasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
@@ -24,6 +26,7 @@ import javax.inject.Inject
 internal class ResetPasswordViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verifyEmailUseCase: VerifyEmailUseCase,
+    private val comparePasswordUseCase: ComparePasswordUseCase,
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
@@ -63,6 +66,24 @@ internal class ResetPasswordViewModel @Inject constructor(
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
                 setAuthCodeState(authCodeErrorState = false)
+            }
+        }
+    }
+
+    internal fun comparePassword() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            comparePasswordUseCase(
+                password = state.password,
+            ).onSuccess {
+                postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
+            }.onFailure {
+                when (it) {
+                    is UnAuthorizationException -> {
+                        setComparePasswordErrorState(
+                            comparePasswordErrorState = true,
+                        )
+                    }
+                }
             }
         }
     }
@@ -134,6 +155,16 @@ internal class ResetPasswordViewModel @Inject constructor(
         reduce {
             state.copy(
                 authCodeErrorState = authCodeErrorState,
+            )
+        }
+    }
+
+    internal fun setComparePasswordErrorState(
+        comparePasswordErrorState: Boolean,
+    ) = intent {
+        reduce {
+            state.copy(
+                comparePasswordErrorState = comparePasswordErrorState,
             )
         }
     }

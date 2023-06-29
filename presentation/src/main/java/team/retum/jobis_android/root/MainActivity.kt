@@ -24,6 +24,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordVerifyEmailScreen
 import team.retum.jobis_android.feature.auth.signin.SignInScreen
@@ -195,6 +196,12 @@ class MainActivity : ComponentActivity() {
                     route = JobisRoute.ResetPassword,
                 ) {
                     ResetPasswordScreen(navController = navController)
+                }
+
+                composable(
+                    route = JobisRoute.ComparePassword,
+                ){
+                    ComparePasswordScreen(navController = navController)
                 }
             }
         }
