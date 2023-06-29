@@ -13,4 +13,8 @@ class StudentsDataSourceImpl @Inject constructor(
         HttpHandler<FetchStudentInformationResponse>().httpRequest {
             studentsApi.fetchStudentInformation()
         }.sendRequest()
+
+    override suspend fun comparePassword(password: String) = HttpHandler<Unit>().httpRequest {
+        studentsApi.comparePassword(password = password)
+    }.sendRequest()
 }
