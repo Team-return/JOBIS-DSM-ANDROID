@@ -11,4 +11,10 @@ class StudentsRepositoryImpl @Inject constructor(
 ): StudentsRepository {
     override suspend fun fetchStudentInformation(): StudentInformationEntity =
         studentsDataSource.fetchStudentInformation().toEntity()
+
+    override suspend fun comparePassword(
+        password: String,
+    ) {
+        studentsDataSource.comparePassword(password = password)
+    }
 }
