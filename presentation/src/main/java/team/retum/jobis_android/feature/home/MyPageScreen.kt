@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,17 +27,20 @@ import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.feature.recruitment.Header
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Heading6
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun MyPageScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    showDialog: () -> Unit,
 ) {
 
     val state = homeViewModel.container.stateFlow.collectAsState()
@@ -63,17 +68,21 @@ internal fun MyPageScreen(
             name = studentInformation.studentName,
             department = studentInformation.department,
             studentGcn = studentInformation.studentGcn,
+            navController = navController,
+            showDialog = showDialog,
         )
-
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun UserProfile(
     profileImageUrl: String,
     name: String,
     department: Department,
     studentGcn: String,
+    navController: NavController,
+    showDialog: () -> Unit,
 ) {
 
     var grade = ""
@@ -85,6 +94,8 @@ private fun UserProfile(
         classRoom = studentGcn[1].toString().ifEmpty { "" }
         number = studentGcn.substring((if (studentGcn[2].toInt() == 0) 3 else 2)..3)
     }
+
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
@@ -132,17 +143,21 @@ private fun UserProfile(
             modifier = Modifier.fillMaxWidth(),
             color = JobisColor.Gray400,
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.bug_report))
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.choose_interests))
-        Spacer(modifier = Modifier.height(16.dp))
-        Menu(content = stringResource(id = R.string.change_password))
-        Spacer(modifier = Modifier.height(16.dp))
+        Menu(content = stringResource(id = R.string.bug_report)) {
+
+        }
+        Menu(content = stringResource(id = R.string.choose_interests)) {
+            showDialog()
+        }
+        Menu(content = stringResource(id = R.string.change_password)) {
+            navController.navigate(JobisRoute.ComparePassword)
+        }
         Menu(
             content = stringResource(id = R.string.log_out),
             contentColor = JobisColor.Red,
-        )
+        ) {
+
+        }
     }
 }
 
@@ -150,9 +165,15 @@ private fun UserProfile(
 private fun Menu(
     content: String,
     contentColor: Color = JobisColor.LightBlue,
+    onClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .jobisClickable(rippleEnabled = true) {
+                onClick()
+            }
+            .padding(top = 16.dp),
         horizontalAlignment = Alignment.Start,
     ) {
         Body4(

@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,13 +24,16 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordVerifyEmailScreen
+import team.retum.jobis_android.feature.auth.signin.SignInScreen
+import team.retum.jobis_android.feature.auth.signup.SignUpScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
-import team.retum.jobis_android.feature.signin.SignInScreen
-import team.retum.jobis_android.feature.signup.SignUpScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.slideInLeft
@@ -37,6 +41,7 @@ import team.retum.jobis_android.util.compose.slideInRight
 import team.retum.jobis_android.util.compose.slideOutLeft
 import team.retum.jobis_android.util.compose.slideOutRight
 import team.retum.jobis_android.viewmodel.main.MainViewModel
+import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisColor
 
@@ -175,6 +180,39 @@ class MainActivity : ComponentActivity() {
                         hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
                     )
                 }
+
+                composable(
+                    route = JobisRoute.ResetPasswordVerifyEmail,
+                    enterTransition = { fadeIn(tween(300)) },
+                    exitTransition = { fadeOut(tween(300)) },
+                    popEnterTransition = { fadeIn(tween(300)) },
+                    popExitTransition = { fadeOut(tween(300)) },
+                ) {
+                    ResetPasswordVerifyEmailScreen(
+                        navController = navController,
+                    )
+                }
+
+                val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
+
+                composable(
+                    route = JobisRoute.ResetPassword,
+                ) {
+                    ResetPasswordScreen(
+                        navController = navController,
+                        resetPasswordViewModel = resetPasswordViewModel,
+                    )
+                }
+
+                composable(
+                    route = JobisRoute.ComparePassword,
+
+                ) {
+                    ComparePasswordScreen(
+                        navController = navController,
+                        resetPasswordViewModel = resetPasswordViewModel,
+                    )
+                }
             }
         }
     }
@@ -183,7 +221,10 @@ class MainActivity : ComponentActivity() {
     private fun SetWindowStatus() {
         window.statusBarColor = JobisColor.Gray100.toArgb()
         window.navigationBarColor = JobisColor.Gray100.toArgb()
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
 
         @Suppress("DEPRECATION")
         if (MaterialTheme.colors.surface.luminance() > 0.5f) {
