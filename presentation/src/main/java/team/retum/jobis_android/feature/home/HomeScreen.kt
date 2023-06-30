@@ -49,6 +49,7 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading3
 import team.returm.jobisdesignsystem.util.JobisSize
 import team.returm.jobisdesignsystem.util.jobisClickable
+import java.text.DecimalFormat
 
 @Stable
 val ApplyCompaniesItemShape = RoundedCornerShape(
@@ -140,7 +141,7 @@ private fun RecruitmentStatus(
     val appliedString = "$approvedCount / $totalStudentCount"
 
     if (approvedCount != 0L) {
-        employmentRate = (approvedCount.toFloat() / totalStudentCount.toFloat() * 100)
+        employmentRate = DecimalFormat("##0.0").format(approvedCount.toFloat() / totalStudentCount.toFloat() * 100).toFloat()
     }
 
     Column(
