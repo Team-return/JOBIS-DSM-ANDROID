@@ -29,7 +29,7 @@ import team.returm.jobisdesignsystem.theme.Heading4
 @Composable
 internal fun ComparePasswordScreen(
     navController: NavController,
-    resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
+    resetPasswordViewModel: ResetPasswordViewModel,
 ) {
 
     val state = resetPasswordViewModel.container.stateFlow.collectAsState()
@@ -40,13 +40,17 @@ internal fun ComparePasswordScreen(
                 is ResetPasswordSideEffect.SuccessVerification -> {
                     navController.navigate(JobisRoute.ResetPassword)
                 }
+
+                else -> {
+
+                }
             }
         }
     }
 
     val onPasswordChanged = { password: String ->
-        resetPasswordViewModel.setPassword(password)
-        if(state.value.password.length != password.length){
+        resetPasswordViewModel.setCurrentPassword(password)
+        if(state.value.currentPassword.length != password.length){
             resetPasswordViewModel.setComparePasswordErrorState(
                 comparePasswordErrorState = false,
             )
@@ -76,7 +80,7 @@ internal fun ComparePasswordScreen(
         }
         Spacer(modifier = Modifier.height(28.dp))
         JobisBoxTextField(
-            value = state.value.password,
+            value = state.value.currentPassword,
             onValueChanged = onPasswordChanged,
             hint = stringResource(id = R.string.hint_original_password),
             textFieldType = TextFieldType.PASSWORD,
@@ -87,7 +91,7 @@ internal fun ComparePasswordScreen(
         Spacer(modifier = Modifier.weight(1f))
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
-            enabled = state.value.password.isNotEmpty() && !state.value.comparePasswordErrorState,
+            enabled = state.value.currentPassword.isNotEmpty() && !state.value.comparePasswordErrorState,
         ){
             resetPasswordViewModel.comparePassword()
         }

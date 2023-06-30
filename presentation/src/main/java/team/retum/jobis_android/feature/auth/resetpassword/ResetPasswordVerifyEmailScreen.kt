@@ -54,11 +54,11 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is ResetPasswordSideEffect.SuccessVerification -> {
-//                    navController.navigate()
-                }
-            }
+//            when (it) {
+//                is ResetPasswordSideEffect.SuccessVerification -> {
+////                    navController.navigate()
+//                }
+//            }
         }
     }
 
