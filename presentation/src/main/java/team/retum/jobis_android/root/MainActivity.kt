@@ -41,6 +41,7 @@ import team.retum.jobis_android.util.compose.slideInRight
 import team.retum.jobis_android.util.compose.slideOutLeft
 import team.retum.jobis_android.util.compose.slideOutRight
 import team.retum.jobis_android.viewmodel.main.MainViewModel
+import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisColor
 
@@ -192,16 +193,25 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
+                val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
+
                 composable(
                     route = JobisRoute.ResetPassword,
                 ) {
-                    ResetPasswordScreen(navController = navController)
+                    ResetPasswordScreen(
+                        navController = navController,
+                        resetPasswordViewModel = resetPasswordViewModel,
+                    )
                 }
 
                 composable(
                     route = JobisRoute.ComparePassword,
-                ){
-                    ComparePasswordScreen(navController = navController)
+
+                ) {
+                    ComparePasswordScreen(
+                        navController = navController,
+                        resetPasswordViewModel = resetPasswordViewModel,
+                    )
                 }
             }
         }

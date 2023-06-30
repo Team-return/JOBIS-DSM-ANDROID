@@ -27,6 +27,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import java.util.regex.Pattern
 
+// TODO 패스워드 에러 관리 로직 리팩토링
 @Stable
 val passwordRegex =
     "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#\$%^&*()+|=])[A-Za-z\\d~!@#\$%^&*()+|=]{8,16}\$"

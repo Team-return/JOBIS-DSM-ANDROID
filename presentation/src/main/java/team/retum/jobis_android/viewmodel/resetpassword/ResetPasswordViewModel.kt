@@ -1,5 +1,6 @@
 package team.retum.jobis_android.viewmodel.resetpassword
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,23 +11,31 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
+import team.retum.domain.param.students.ResetPasswordParam
 import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.student.ComparePasswordUseCase
+import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
 import team.retum.jobis_android.contract.ResetPasswordState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
+import java.util.regex.Pattern
 import javax.inject.Inject
+
+@Stable
+private val passwordRegex =
+    "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-z0-9!@#\$%^&*]{8,16}\$"
 
 @HiltViewModel
 internal class ResetPasswordViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verifyEmailUseCase: VerifyEmailUseCase,
     private val comparePasswordUseCase: ComparePasswordUseCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase,
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
@@ -73,7 +82,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     internal fun comparePassword() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             comparePasswordUseCase(
-                password = state.password,
+                password = state.currentPassword,
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
@@ -86,6 +95,25 @@ internal class ResetPasswordViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    internal fun resetPassword() = intent{
+        viewModelScope.launch(Dispatchers.IO){
+            resetPasswordUseCase(
+                resetPasswordParam = ResetPasswordParam(
+                    currentPassword = state.currentPassword,
+                    newPassword = state.newPassword,
+                )
+            ).onSuccess {
+                postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessResetPassword)
+            }.onFailure {
+
+            }
+        }
+    }
+
+    private fun checkPasswordRepeat(){
+
     }
 
     internal fun setEmail(
@@ -109,12 +137,25 @@ internal class ResetPasswordViewModel @Inject constructor(
         }
     }
 
-    internal fun setPassword(
-        password: String,
+    internal fun setCurrentPassword(
+        currentPassword: String,
     ) = intent {
         reduce {
             state.copy(
-                password = password,
+                currentPassword = currentPassword,
+            )
+        }
+    }
+
+    internal fun setNewPassword(
+        newPassword: String,
+    ) = intent{
+        setPasswordFormatErrorState(
+            passwordFormatErrorState = newPassword.isEmpty() || !Pattern.matches(passwordRegex, newPassword),
+        )
+        reduce{
+            state.copy(
+                newPassword = newPassword,
             )
         }
     }
@@ -123,6 +164,9 @@ internal class ResetPasswordViewModel @Inject constructor(
         passwordRepeat: String,
     ) = intent {
         reduce {
+            setPasswordRepeatErrorState(
+                passwordRepeatErrorState = passwordRepeat.isEmpty() || state.newPassword != passwordRepeat,
+            )
             state.copy(
                 passwordRepeat = passwordRepeat,
             )
@@ -165,6 +209,26 @@ internal class ResetPasswordViewModel @Inject constructor(
         reduce {
             state.copy(
                 comparePasswordErrorState = comparePasswordErrorState,
+            )
+        }
+    }
+
+    internal fun setPasswordRepeatErrorState(
+        passwordRepeatErrorState: Boolean,
+    ) = intent{
+        reduce{
+            state.copy(
+                passwordRepeatErrorState = passwordRepeatErrorState,
+            )
+        }
+    }
+
+    internal fun setPasswordFormatErrorState(
+        passwordFormatErrorState: Boolean,
+    ) = intent{
+        reduce{
+            state.copy(
+                passwordFormatErrorState = passwordFormatErrorState,
             )
         }
     }
