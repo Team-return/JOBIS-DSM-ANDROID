@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,8 @@ internal fun SignInScreen(
 
     var show by remember { mutableStateOf(false) }
 
+    val focusManager = LocalFocusManager.current
+
     val email = state.value.email
     val password = state.value.password
     val emailError = state.value.emailError
@@ -64,8 +67,8 @@ internal fun SignInScreen(
         signInViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignInSideEffect.MoveToMain -> {
-                    navController.navigate(JobisRoute.Main){
-                        popUpTo(JobisRoute.SignIn){
+                    navController.navigate(JobisRoute.Main) {
+                        popUpTo(JobisRoute.SignIn) {
                             inclusive = true
                         }
                     }
@@ -99,6 +102,7 @@ internal fun SignInScreen(
 
     val onSignInCheckChanged = {
         signInViewModel.setAutoSignIn(!state.value.autoSignIn)
+        focusManager.clearFocus()
     }
 
     Box {
@@ -116,6 +120,7 @@ internal fun SignInScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .jobisClickable { focusManager.clearFocus() }
                 .padding(
                     top = 112.dp,
                     start = 20.dp,
@@ -153,7 +158,7 @@ internal fun SignInScreen(
                 autoSignInChecked = state.value.autoSignIn,
                 onSignInCheckChanged = onSignInCheckChanged,
             ) {
-                 navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
+                navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.7f))
             Row(

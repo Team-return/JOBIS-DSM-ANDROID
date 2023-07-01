@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +48,6 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
-import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
@@ -83,7 +81,7 @@ internal fun RecruitmentDetailsScreen(
             onDismissRequest = { applicationDialogState = false },
             properties = DialogProperties(usePlatformDefaultWidth = true),
         ) {
-            RecruitmentApplicationDialog(recruitmentId = recruitmentId){
+            RecruitmentApplicationDialog(recruitmentId = recruitmentId) {
                 applicationDialogState = false
             }
         }
@@ -222,16 +220,26 @@ private fun RecruitmentDetails(
         repeat(details.size - 1) { index ->
             RecruitmentDetail(
                 title = stringResource(details[index + 1].first),
-                content = if (index == 6) {
-                    StringBuilder().apply {
+                content = when (index) {
+
+                    1 -> {
+                        details[index+1].second.toString().replace("[", " ")
+                            .replace("]", " ").trim().ifEmpty { 
+                                stringResource(id = R.string.company_details_null)
+                            }
+                    }
+
+                    6 -> StringBuilder().apply {
                         repeat(hiringProgress.size) { index ->
                             append("${index + 1}. ${hiringProgress[index].value}")
                             if (index != hiringProgress.lastIndex) append("\n")
                         }
                     }.toString()
-                } else {
-                    (details[index + 1].second
-                        ?: stringResource(id = R.string.company_details_null)).toString()
+
+                    else -> {
+                        (details[index + 1].second
+                            ?: stringResource(id = R.string.company_details_null)).toString()
+                    }
                 },
             )
             Spacer(modifier = Modifier.height(10.dp))
