@@ -21,7 +21,7 @@ interface UserApi {
     @POST(JobisUrl.Auth.code)
     suspend fun sendVerificationCode(
         @Body sendVerificationCodeRequest: SendVerificationCodeRequest,
-    ): Response<Void>
+    )
 
     @GET(JobisUrl.Student.exists)
     suspend fun checkStudentExists(
