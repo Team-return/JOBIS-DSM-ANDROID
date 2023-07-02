@@ -9,6 +9,7 @@ import team.retum.data.remote.request.user.SendVerificationCodeRequest
 import team.retum.data.remote.request.user.SignInRequest
 import team.retum.data.remote.request.user.SignUpRequest
 import team.retum.data.remote.response.user.SignInResponse
+import team.retum.data.remote.response.user.SignUpResponse
 import team.retum.data.remote.url.JobisUrl
 
 interface UserApi {
@@ -37,5 +38,5 @@ interface UserApi {
     @POST(JobisUrl.student)
     suspend fun signUp(
         @Body signUpRequest: SignUpRequest,
-    )
+    ): SignUpResponse
 }
