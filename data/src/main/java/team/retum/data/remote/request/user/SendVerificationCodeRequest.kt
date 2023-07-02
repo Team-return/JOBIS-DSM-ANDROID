@@ -6,10 +6,10 @@ import team.retum.domain.param.user.SendVerificationCodeParam
 
 data class SendVerificationCodeRequest(
     @SerializedName("email") val email: String,
-    @SerializedName("type") val type: AuthCodeType,
+    @SerializedName("auth_code_type") val authCodeType: AuthCodeType,
 )
 
 fun SendVerificationCodeParam.toRequest() = SendVerificationCodeRequest(
     email = this.email,
-    type = this.type,
+    authCodeType = this.authCodeType,
 )
