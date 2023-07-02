@@ -15,12 +15,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
+import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -31,6 +34,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading4
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordVerifyEmailScreen(
@@ -40,12 +44,24 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     val state = resetPasswordViewModel.container.stateFlow.collectAsState()
 
+    val focusManager = LocalFocusManager.current
+
     val onEmailChanged = { email: String ->
         resetPasswordViewModel.setEmail(email = email)
     }
 
     val onAuthCodeChanged = { authCode: String ->
         resetPasswordViewModel.setAuthCode(authCode = authCode)
+        authCode.take(6)
+        if(authCode.length == 6) focusManager.clearFocus()
+    }
+
+    val onRequestVerification = {
+        resetPasswordViewModel.sendVerificationCode()
+    }
+
+    val onVerifyButtonClicked = {
+        resetPasswordViewModel.verifyEmail()
     }
 
     val email = state.value.email
@@ -54,25 +70,26 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.container.sideEffectFlow.collect {
-//            when (it) {
-//                is ResetPasswordSideEffect.SuccessVerification -> {
-////                    navController.navigate()
-//                }
-//            }
+            when(it){
+                is ResetPasswordSideEffect.SuccessVerification -> {
+                    navController.navigate(JobisRoute.ResetPassword)
+                }
+
+                else -> {}
+            }
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(
-            top = 80.dp,
-            start = 30.dp,
-            end = 30.dp,
-            bottom = 32.dp,
-        ),
+        modifier = Modifier.jobisClickable { focusManager.clearFocus() },
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally){
+        Spacer(modifier = Modifier.height(80.dp))
+        Column(
+            modifier = Modifier.padding(horizontal = 30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ){
             Heading4(
                 modifier = Modifier.align(Alignment.Start),
                 text = stringResource(id = R.string.self_verification),
@@ -93,22 +110,21 @@ internal fun ResetPasswordVerifyEmailScreen(
                 authCodeErrorState = state.value.authCodeErrorState,
                 sendAuthCodeState = sendAuthCodeState,
                 onAuthCodeChanged = onAuthCodeChanged,
-            ) {
-                resetPasswordViewModel.sendVerificationCode()
-            }
+                onRequestVerification = onRequestVerification
+            )
             Spacer(modifier = Modifier.fillMaxHeight(0.7f))
             Caption(
                 text = stringResource(id = R.string.check_personal_information),
                 color = JobisColor.Gray600,
             )
             Spacer(modifier = Modifier.height(6.dp))
-        }
-        JobisLargeButton(
-            text = stringResource(id = R.string.do_verify),
-            color = JobisButtonColor.MainSolidColor,
-            enabled = email.isNotEmpty() && authCode.isNotEmpty() && sendAuthCodeState,
-        ) {
-            resetPasswordViewModel.verifyEmail()
+            JobisLargeButton(
+                text = stringResource(id = R.string.do_verify),
+                color = JobisButtonColor.MainSolidColor,
+                enabled = email.isNotEmpty() && authCode.isNotEmpty() && sendAuthCodeState,
+                onClick = onVerifyButtonClicked,
+            )
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -133,27 +149,31 @@ private fun ChangePasswordInputs(
             errorText = stringResource(id = R.string.sign_in_email_error),
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.weight(0.7f)) {
+        Row(verticalAlignment = Alignment.Top) {
+            Box(modifier = Modifier.weight(0.75f)) {
                 JobisBoxTextField(
                     onValueChanged = onAuthCodeChanged,
                     value = authCode,
                     hint = stringResource(id = R.string.verification_code),
                     error = authCodeErrorState,
                     errorText = stringResource(id = R.string.auth_code_mismatch),
+                    keyboardType = KeyboardType.NumberPassword,
+                    enabled = sendAuthCodeState,
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Box(modifier = Modifier.weight(0.3f)) {
-                JobisSmallButton(
-                    text = stringResource(
-                        id = if (sendAuthCodeState) R.string.email_verification_resend
-                        else R.string.email_verification_request_verify,
-                    ),
-                    color = JobisButtonColor.MainSolidColor,
-                    enabled = email.isNotEmpty(),
-                ) {
-                    onRequestVerification()
+            Box(modifier = Modifier.weight(0.25f)) {
+                Column {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    JobisSmallButton(
+                        text = stringResource(
+                            id = if (sendAuthCodeState) R.string.email_verification_resend
+                            else R.string.email_verification_request_verify,
+                        ),
+                        color = JobisButtonColor.MainSolidColor,
+                        enabled = email.isNotEmpty(),
+                        onClick = onRequestVerification,
+                    )
                 }
             }
         }

@@ -9,7 +9,6 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.students.ResetPasswordParam
 import team.retum.domain.param.user.AuthCodeType
@@ -49,17 +48,13 @@ internal class ResetPasswordViewModel @Inject constructor(
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = state.email,
-                    authCodeType = AuthCodeType.PASSWORD,
-                    userName = "테스트",
+                    type = AuthCodeType.PASSWORD,
                 )
             ).onSuccess {
                 setSendAuthCodeState(sendAuthCodeErrorState = true)
             }.onFailure {
-                when (it) {
-                    is NotFoundException -> {
-                        setEmailErrorState(emailErrorState = true)
-                    }
-                }
+                setSendAuthCodeState(sendAuthCodeErrorState = false)
+                setEmailErrorState(emailErrorState = true)
             }
         }
     }

@@ -107,7 +107,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.SignIn,
-                    exitTransition = { fadeOut(tween(500)) },
+                    exitTransition = { slideOutLeft() },
+                    popEnterTransition = { slideInRight() },
+                    popExitTransition = { slideOutRight() },
                 ) {
                     SignInScreen(
                         navController = navController,
@@ -183,10 +185,10 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.ResetPasswordVerifyEmail,
-                    enterTransition = { fadeIn(tween(300)) },
-                    exitTransition = { fadeOut(tween(300)) },
+                    enterTransition = { slideInLeft() },
+                    exitTransition = { slideOutRight() },
                     popEnterTransition = { fadeIn(tween(300)) },
-                    popExitTransition = { fadeOut(tween(300)) },
+                    popExitTransition = { slideOutRight() },
                 ) {
                     ResetPasswordVerifyEmailScreen(
                         navController = navController,
@@ -207,7 +209,7 @@ class MainActivity : ComponentActivity() {
                 composable(
                     route = JobisRoute.ComparePassword,
 
-                ) {
+                    ) {
                     ComparePasswordScreen(
                         navController = navController,
                         resetPasswordViewModel = resetPasswordViewModel,
