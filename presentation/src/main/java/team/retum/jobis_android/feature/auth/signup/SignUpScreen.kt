@@ -1,6 +1,6 @@
 package team.retum.jobis_android.feature.auth.signup
 
-import androidx.activity.compose.BackHandler
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -17,6 +17,7 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,12 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.SignUpEvent
+import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
@@ -55,33 +56,41 @@ val titleList = listOf(
 
 @Composable
 fun SignUpScreen(
-    navHostController: NavController,
+    navHostController: NavHostController,
     signUpViewModel: SignUpViewModel,
-    moveToSignIn: () -> Unit,
-    moveToMain: () -> Unit,
 ) {
 
-    var currentProgress by remember { mutableStateOf(0) }
+    var currentProgress by remember { mutableStateOf(1) }
 
-    var buttonEnabled by remember { mutableStateOf(false) }
+    val state by signUpViewModel.container.stateFlow.collectAsState()
 
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
 
-    BackHandler {
-        currentProgress = navigatePopBackStack(
-            currentProgress = currentProgress,
-            moveToSignIn = moveToSignIn,
-        )
-    }
+    LaunchedEffect(Unit) {
+        signUpViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
+                    navController.navigate(JobisRoute.VerifyEmail)
+                    currentProgress = 2
+                }
 
-    LaunchedEffect(currentProgress) {
-        buttonEnabled = false
-        when (currentProgress) {
-            0 -> navController.navigate(JobisRoute.StudentInfo)
-            1 -> navController.navigate(JobisRoute.VerifyEmail)
-            2 -> navController.navigate(JobisRoute.SetPassword)
+                is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
+                    navController.navigate(JobisRoute.SetPassword)
+                    currentProgress = 3
+                }
+
+                is SignUpSideEffect.SetPassword.SignUpSuccess -> {
+                    navHostController.navigate(JobisRoute.Main) {
+                        popUpTo(JobisRoute.Main) {
+                            inclusive = true
+                        }
+                    }
+                }
+
+                else -> {}
+            }
         }
     }
 
@@ -95,31 +104,15 @@ fun SignUpScreen(
     )
 
     val onTopBarClicked = {
-        currentProgress = navigatePopBackStack(
-            currentProgress = currentProgress,
-            moveToSignIn = moveToSignIn,
-        )
+        navController.popBackStack()
+        Unit
     }
 
     val onNextButtonClicked = {
         when (currentProgress) {
-            0 -> {
-                signUpViewModel.sendEvent(
-                    event = SignUpEvent.CheckStudentExists,
-                )
-            }
-
-            1 -> {
-                signUpViewModel.sendEvent(
-                    event = SignUpEvent.VerifyEmail,
-                )
-            }
-
-            2 -> {
-                signUpViewModel.sendEvent(
-                    event = SignUpEvent.SignUp,
-                )
-            }
+            1 -> signUpViewModel.checkStudentExists()
+            2 -> signUpViewModel.verifyEmail()
+            3 -> signUpViewModel.signUp()
         }
     }
 
@@ -133,14 +126,12 @@ fun SignUpScreen(
             ),
         contentAlignment = Alignment.BottomCenter,
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(36.dp))
-            AuthLayoutHeaders(
+            SignUpHeader(
                 currentProgress = currentProgress,
                 titleList = titleList,
-                onTopBarClicked = onTopBarClicked
+                onTopBarClicked = onTopBarClicked,
             )
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
@@ -153,9 +144,7 @@ fun SignUpScreen(
                     StudentInfoScreen(
                         signUpViewModel = signUpViewModel,
                         navigate = { currentProgress++ },
-                    ) {
-                        buttonEnabled = it
-                    }
+                    )
                 }
 
                 composable(
@@ -164,13 +153,7 @@ fun SignUpScreen(
                     VerifyEmailScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                        changeButtonState = {
-                            println(it)
-                            buttonEnabled = it
-                        }
-                    ) {
-                        currentProgress++
-                    }
+                    )
                 }
 
                 composable(
@@ -179,21 +162,17 @@ fun SignUpScreen(
                     SetPasswordScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
-                        moveToMain = moveToMain,
-                    ) {
-                        buttonEnabled = it
-                    }
+                    )
                 }
             }
         }
         ProgressBarWithButton(
             currentProgress = currentProgress,
             progress = progressAnimation,
-            buttonEnabled = buttonEnabled,
+            buttonEnabled = state.signUpButtonEnabled,
             isSuccessVerifyEmail = isSuccessVerifyEmail,
-        ) {
-            onNextButtonClicked()
-        }
+            onClick = onNextButtonClicked,
+        )
     }
 }
 
@@ -224,43 +203,29 @@ private fun ProgressBarWithButton(
         Spacer(modifier = Modifier.height(20.dp))
         JobisLargeButton(
             text = stringResource(
-                id = if (currentProgress == 1 && !isSuccessVerifyEmail) R.string.verification
+                id = if (currentProgress == 2 && !isSuccessVerifyEmail) R.string.verification
                 else R.string.next,
             ),
             color = JobisButtonColor.MainSolidColor,
             enabled = buttonEnabled,
-        ) {
-            onClick()
-        }
+            onClick = onClick,
+        )
     }
 }
 
 @Composable
-private fun AuthLayoutHeaders(
+private fun SignUpHeader(
     currentProgress: Int,
     titleList: List<Int>,
     onTopBarClicked: () -> Unit,
 ) {
     TopBar(
         text = stringResource(id = R.string.sign_up),
-    ) {
-        onTopBarClicked()
-    }
+        onClick = onTopBarClicked,
+    )
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
-        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress])
+        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress - 1])
         else stringResource(titleList.first()),
     )
-}
-
-private fun navigatePopBackStack(
-    currentProgress: Int,
-    moveToSignIn: () -> Unit,
-): Int {
-    if (currentProgress > 0) {
-        return currentProgress - 1
-    } else {
-        moveToSignIn()
-        return 0
-    }
 }

@@ -93,16 +93,11 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.SignUp,
+                    enterTransition = { slideInLeft() }
                 ) {
                     SignUpScreen(
                         navHostController = navController,
-                        signUpViewModel = signUpViewModel,
-                        moveToSignIn = {
-                            navController.popBackStack()
-                        }
-                    ) {
-                        navController.navigate(JobisRoute.Main)
-                    }
+                        signUpViewModel = signUpViewModel)
                 }
 
                 composable(
