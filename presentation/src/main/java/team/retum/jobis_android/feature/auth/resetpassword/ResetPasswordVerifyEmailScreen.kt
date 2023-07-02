@@ -134,7 +134,7 @@ private fun ChangePasswordInputs(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.weight(0.7f)) {
+            Box(modifier = Modifier.weight(0.75f)) {
                 JobisBoxTextField(
                     onValueChanged = onAuthCodeChanged,
                     value = authCode,
@@ -144,7 +144,7 @@ private fun ChangePasswordInputs(
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Box(modifier = Modifier.weight(0.3f)) {
+            Box(modifier = Modifier.weight(0.25f)) {
                 JobisSmallButton(
                     text = stringResource(
                         id = if (sendAuthCodeState) R.string.email_verification_resend

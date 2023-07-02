@@ -161,8 +161,7 @@ class SignUpViewModel @Inject constructor(
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = email,
-                    authCodeType = authCodeType,
-                    userName = userName,
+                    type = authCodeType,
                 )
             ).onSuccess {
                 postSideEffect(
