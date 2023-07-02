@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -19,92 +16,42 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.SignUpEvent
-import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
-import java.util.regex.Pattern
-
-// TODO 패스워드 에러 관리 로직 리팩토링
-@Stable
-val passwordRegex =
-    "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#\$%^&*()+|=])[A-Za-z\\d~!@#\$%^&*()+|=]{8,16}\$"
 
 @Composable
 fun SetPasswordScreen(
     navController: NavController,
     signUpViewModel: SignUpViewModel,
-    moveToMain: () -> Unit,
-    changeButtonStatus: (Boolean) -> Unit,
 ) {
+
+    val state by signUpViewModel.container.stateFlow.collectAsState()
 
     val focusManager = LocalFocusManager.current
 
-    var password by remember { mutableStateOf("") }
-    var repeatPassword by remember { mutableStateOf("") }
-
-    var isPasswordError by remember { mutableStateOf(false) }
-    var isRepeatPasswordError by remember { mutableStateOf(false) }
-
-    val onPasswordChanged = { value: String ->
-        password = value
-        changeButtonStatus(
-            checkPassword(
-                password = password,
-                repeatPassword = repeatPassword,
-            )
-        )
-        isPasswordError = !Pattern.matches(passwordRegex, password)
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetPassword(
-                password = password,
-            )
-        )
+    val onPasswordChanged = { password: String ->
+        signUpViewModel.setPassword(password = password)
     }
 
-    val onRepeatPasswordChanged = { value: String ->
-        repeatPassword = value
-        changeButtonStatus(
-            checkPassword(
-                password = password,
-                repeatPassword = repeatPassword,
-            )
-        )
-        isRepeatPasswordError = password != repeatPassword
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetRepeatPassword(
-                repeatPassword = repeatPassword,
-            )
-        )
+    val onRepeatPasswordChanged = { repeatPassword: String ->
+       signUpViewModel.setRepeatPassword(repeatPassword = repeatPassword)
     }
 
     LaunchedEffect(Unit) {
         signUpViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is SignUpSideEffect.SignUpSuccess -> {
-                    moveToMain()
-                }
 
-                is SignUpSideEffect.SignUpConflict -> {
-
-                }
-
-                else -> {
-
-                }
-            }
         }
     }
 
     PasswordFields(
-        password = password,
-        repeatPassword = repeatPassword,
+        password = state.password,
+        repeatPassword = state.repeatPassword,
         onPasswordChanged = onPasswordChanged,
         onRepeatPasswordChanged = onRepeatPasswordChanged,
-        isPasswordError = isPasswordError,
-        isRepeatPasswordError = isRepeatPasswordError,
+        isPasswordError = state.passwordError,
+        isRepeatPasswordError = state.repeatPasswordError,
         focusManager = focusManager,
     )
 }
@@ -147,8 +94,3 @@ private fun PasswordFields(
         )
     }
 }
-
-private fun checkPassword(
-    password: String,
-    repeatPassword: String,
-): Boolean = (password.isNotEmpty() && repeatPassword.isNotEmpty() && password == repeatPassword)
