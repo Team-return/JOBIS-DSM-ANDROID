@@ -11,12 +11,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
 import team.retum.domain.param.user.Sex
-import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
@@ -38,34 +36,20 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 fun StudentInfoScreen(
     signUpViewModel: SignUpViewModel,
     navigate: () -> Unit,
-    changeButtonStatus: (Boolean) -> Unit,
 ) {
 
+    val state by signUpViewModel.container.stateFlow.collectAsState()
+
     val focusManager = LocalFocusManager.current
-
-    var sex by rememberSaveable { mutableStateOf(Sex.MAN) }
-    var name by rememberSaveable { mutableStateOf("") }
-    var grade by rememberSaveable { mutableStateOf("") }
-    var `class` by rememberSaveable { mutableStateOf("") }
-    var number by rememberSaveable { mutableStateOf("") }
-
-    LaunchedEffect(sex) {
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetSex(
-                sex = sex,
-            )
-        )
-    }
 
     LaunchedEffect(Unit) {
         signUpViewModel.container.sideEffectFlow.collect { sideEffect ->
             when (sideEffect) {
-                is SignUpSideEffect.CheckStudentExistsSuccess -> {
-                    changeButtonStatus(true)
+                is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
                     navigate()
                 }
 
-                is SignUpSideEffect.CheckStudentExistsNotFound -> {
+                is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
                     // TODO 토스트 처리
 
                 }
@@ -78,63 +62,31 @@ fun StudentInfoScreen(
     }
 
     val onManSelected = {
-        sex = Sex.MAN
+        signUpViewModel.setSex(sex = Sex.MAN)
     }
 
     val onWomanSelected = {
-        sex = Sex.WOMAN
+        signUpViewModel.setSex(sex = Sex.WOMAN)
     }
 
-    val changeButtonStatus = {
-        changeButtonStatus(
-            name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank(),
-        )
+    val onNameChanged = { name: String ->
+        signUpViewModel.setName(name = name)
     }
 
-    val onNameChanged = { value: String ->
-        name = value
-        changeButtonStatus()
-        signUpViewModel.sendEvent(
-            event = SignUpEvent.SetName(
-                name = name,
-            )
-        )
+    val onGradeChanged = { grade: String ->
+        signUpViewModel.setGrade(grade = grade)
+        if (grade.length == 1) focusManager.moveFocus(FocusDirection.Next)
+
     }
 
-    val onGradeChanged = { value: String ->
-        grade = value
-        changeButtonStatus()
-        if (grade.isNotBlank()) {
-            signUpViewModel.sendEvent(
-                event = SignUpEvent.SetGrade(
-                    grade = Integer.parseInt(grade),
-                )
-            )
-        }
+    val onClassChanged = { `class`: String ->
+        signUpViewModel.setClass(`class` = `class`)
+        if (`class`.length == 1) focusManager.moveFocus(FocusDirection.Next)
     }
 
-    val onClassChanged = { value: String ->
-        `class` = value
-        changeButtonStatus()
-        if (`class`.isNotBlank()) {
-            signUpViewModel.sendEvent(
-                event = SignUpEvent.SetClass(
-                    `class` = Integer.parseInt(`class`),
-                )
-            )
-        }
-    }
-
-    val onNumberChanged = { value: String ->
-        number = value
-        changeButtonStatus()
-        if (number.isNotBlank()) {
-            signUpViewModel.sendEvent(
-                event = SignUpEvent.SetNumber(
-                    number = number.toInt(),
-                )
-            )
-        }
+    val onNumberChanged = { number: String ->
+        signUpViewModel.setNumber(number = number)
+        if (number.length == 2) focusManager.clearFocus()
     }
 
     Column(
@@ -143,14 +95,15 @@ fun StudentInfoScreen(
         SelectGender(
             onManSelected = onManSelected,
             onWomanSelected = onWomanSelected,
-            sex = sex,
+            sex = state.sex,
         )
         Spacer(modifier = Modifier.height(28.dp))
         InformationFields(
-            name = name,
-            grade = grade,
-            `class` = `class`,
-            number = number,
+            name = state.name,
+            grade = state.grade,
+            `class` = state.`class`,
+            number = state.number,
+            studentNotFound = state.studentNotFound,
             onNameChanged = onNameChanged,
             onGradeChanged = onGradeChanged,
             onClassChanged = onClassChanged,
@@ -217,6 +170,7 @@ private fun InformationFields(
     grade: String,
     `class`: String,
     number: String,
+    studentNotFound: Boolean,
     onNameChanged: (String) -> Unit,
     onGradeChanged: (String) -> Unit,
     onClassChanged: (String) -> Unit,
@@ -229,13 +183,14 @@ private fun InformationFields(
         onValueChanged = onNameChanged,
         value = name,
         imeAction = ImeAction.Next,
+        error = studentNotFound,
     )
-    Spacer(modifier = Modifier.height(6.dp))
+    Spacer(modifier = Modifier.height(12.dp))
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(0.9f),
         ) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
@@ -243,12 +198,13 @@ private fun InformationFields(
                 onValueChanged = onGradeChanged,
                 value = grade,
                 imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.NumberPassword,
+                error = studentNotFound,
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(0.9f),
         ) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
@@ -256,22 +212,22 @@ private fun InformationFields(
                 onValueChanged = onClassChanged,
                 value = `class`,
                 imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.NumberPassword,
+                error = studentNotFound,
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(0.9f),
         ) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
                 hint = stringResource(id = R.string.input_hint_number),
                 onValueChanged = onNumberChanged,
                 value = number,
-                keyboardType = KeyboardType.Number,
-                keyboardActions = KeyboardActions {
-                    focusManager.clearFocus()
-                },
+                keyboardType = KeyboardType.NumberPassword,
+                keyboardActions = KeyboardActions { focusManager.clearFocus() },
+                error = studentNotFound,
             )
         }
     }
