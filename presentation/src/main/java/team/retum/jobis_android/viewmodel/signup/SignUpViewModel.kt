@@ -168,7 +168,7 @@ class SignUpViewModel @Inject constructor(
         setSignUpButtonEnabled(!repeatPasswordError)
     }
 
-    private fun setSignUpButtonEnabled(
+    internal fun setSignUpButtonEnabled(
         signUpButtonEnabled: Boolean,
     ) = intent {
         reduce {

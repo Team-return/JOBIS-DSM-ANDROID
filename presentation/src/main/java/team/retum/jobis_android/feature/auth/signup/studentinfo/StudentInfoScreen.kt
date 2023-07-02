@@ -31,6 +31,7 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
+import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 fun StudentInfoScreen(
@@ -43,6 +44,9 @@ fun StudentInfoScreen(
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
+        signUpViewModel.setSignUpButtonEnabled(
+            state.name.isNotBlank() && state.grade.isNotBlank() && state.`class`.isNotBlank() && state.number.isNotBlank()
+        )
         signUpViewModel.container.sideEffectFlow.collect { sideEffect ->
             when (sideEffect) {
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
@@ -90,6 +94,7 @@ fun StudentInfoScreen(
     }
 
     Column(
+        modifier = Modifier.jobisClickable { focusManager.clearFocus() },
         horizontalAlignment = Alignment.Start,
     ) {
         SelectGender(

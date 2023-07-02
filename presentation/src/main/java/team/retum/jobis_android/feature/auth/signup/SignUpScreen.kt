@@ -1,6 +1,6 @@
 package team.retum.jobis_android.feature.auth.signup
 
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -67,6 +67,15 @@ fun SignUpScreen(
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
+
+    BackHandler {
+        currentProgress -= 1
+        if(navController.currentDestination?.route == JobisRoute.StudentInfo){
+            navHostController.popBackStack()
+        }else {
+            navController.popBackStack()
+        }
+    }
 
     LaunchedEffect(Unit) {
         signUpViewModel.container.sideEffectFlow.collect {
