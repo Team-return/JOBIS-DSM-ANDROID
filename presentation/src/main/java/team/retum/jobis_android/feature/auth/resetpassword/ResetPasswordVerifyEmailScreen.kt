@@ -60,6 +60,10 @@ internal fun ResetPasswordVerifyEmailScreen(
         resetPasswordViewModel.sendVerificationCode()
     }
 
+    val onVerifyButtonClicked = {
+        resetPasswordViewModel.verifyEmail()
+    }
+
     val email = state.value.email
     val authCode = state.value.authCode
     val sendAuthCodeState = state.value.sendAuthCodeState
@@ -118,9 +122,8 @@ internal fun ResetPasswordVerifyEmailScreen(
                 text = stringResource(id = R.string.do_verify),
                 color = JobisButtonColor.MainSolidColor,
                 enabled = email.isNotEmpty() && authCode.isNotEmpty() && sendAuthCodeState,
-            ) {
-                resetPasswordViewModel.verifyEmail()
-            }
+                onClick = onVerifyButtonClicked,
+            )
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
@@ -169,9 +172,8 @@ private fun ChangePasswordInputs(
                         ),
                         color = JobisButtonColor.MainSolidColor,
                         enabled = email.isNotEmpty(),
-                    ) {
-                        onRequestVerification()
-                    }
+                        onClick = onRequestVerification,
+                    )
                 }
             }
         }
