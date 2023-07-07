@@ -48,7 +48,7 @@ internal class ResetPasswordViewModel @Inject constructor(
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = state.email,
-                    type = AuthCodeType.PASSWORD,
+                    authCodeType = AuthCodeType.PASSWORD,
                 )
             ).onSuccess {
                 setSendAuthCodeState(sendAuthCodeErrorState = true)

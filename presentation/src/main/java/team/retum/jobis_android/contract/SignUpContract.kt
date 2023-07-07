@@ -1,52 +1,46 @@
 package team.retum.jobis_android.contract
 
-import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.Sex
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
 data class SignUpState(
-    var email: String = "",
-    var authCode: String = "",
-    var password: String = "",
-    var repeatPassword: String = "",
-    var grade: Int = 0,
-    var name: String = "",
-    var gender: Sex = Sex.MAN,
-    var `class`: Int = 0,
-    var number: Int = 0,
+    val email: String = "",
+    val emailError: Boolean = false,
+    val verifyCode: String = "",
+    val verifyCodeError: Boolean = false,
+    val password: String = "",
+    val passwordError: Boolean = false,
+    val repeatPassword: String = "",
+    val repeatPasswordError: Boolean = false,
+    val grade: String = "",
+    val name: String = "",
+    val sex: Sex = Sex.MAN,
+    val `class`: String = "",
+    val number: String = "",
+    val studentNotFound: Boolean = false,
+    val sendVerifyCodeButtonEnabled: Boolean = false,
+    val authCodeEnabled: Boolean = false,
+    val signUpButtonEnabled: Boolean = false,
 ) : State
 
 sealed class SignUpSideEffect() : SideEffect {
-    object CheckStudentExistsSuccess : SignUpSideEffect()
-    object CheckStudentExistsNotFound : SignUpSideEffect()
-    object SendVerificationCodeSuccess : SignUpSideEffect()
-    object EmailConflict : SignUpSideEffect()
-    object VerifyEmailSuccess : SignUpSideEffect()
-    object VerifyEmailUnAuthorized : SignUpSideEffect()
-    object VerifyEmailNotFound : SignUpSideEffect()
-    object SignUpSuccess : SignUpSideEffect()
-    object SignUpConflict : SignUpSideEffect()
-    class Exception(val message: String) : SignUpSideEffect()
-}
+    sealed class StudentInfo {
+        object CheckStudentExistsSuccess : SignUpSideEffect()
+        object CheckStudentExistsNotFound : SignUpSideEffect()
+    }
 
-sealed class SignUpEvent : Event {
-    class SetSex(val sex: Sex) : SignUpEvent()
-    class SetName(val name: String) : SignUpEvent()
-    class SetGrade(val grade: Int) : SignUpEvent()
-    class SetClass(val `class`: Int) : SignUpEvent()
-    class SetNumber(val number: Int) : SignUpEvent()
-    class SetEmail(val email: String) : SignUpEvent()
-    class SetVerifyCode(val verifyCode: String) : SignUpEvent()
-    class SetPassword(val password: String) : SignUpEvent()
-    class SetRepeatPassword(val repeatPassword: String) : SignUpEvent()
-    object CheckStudentExists: SignUpEvent()
-    class SendVerificationCode(
-        val email: String,
-        val authCodeType: AuthCodeType,
-        val userName: String,
-    ) : SignUpEvent()
-    object VerifyEmail: SignUpEvent()
-    object SignUp: SignUpEvent()
+    sealed class VerifyEmail {
+        object EmailConflict : SignUpSideEffect()
+        object VerifyEmailSuccess : SignUpSideEffect()
+        object VerifyCodeMismatch : SignUpSideEffect()
+        object VerifyEmailNotFound : SignUpSideEffect()
+    }
+
+    sealed class SetPassword {
+        object SignUpSuccess : SignUpSideEffect()
+        object SignUpConflict : SignUpSideEffect()
+    }
+
+    class Exception(val message: String) : SignUpSideEffect()
 }

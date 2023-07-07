@@ -2,7 +2,7 @@ package team.retum.domain.param.user
 
 data class SendVerificationCodeParam(
     val email: String,
-    val type: AuthCodeType,
+    val authCodeType: AuthCodeType,
 )
 
 enum class AuthCodeType {

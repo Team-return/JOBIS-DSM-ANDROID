@@ -1,5 +1,6 @@
 package team.retum.jobis_android.viewmodel.signup
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,102 +21,192 @@ import team.retum.domain.usecase.user.CheckStudentExistUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.SignUpUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.contract.SignUpEvent
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.contract.SignUpState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
+import java.util.regex.Pattern
 import javax.inject.Inject
+
+private const val passwordRegex =
+    "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#\$%^&*()+|=])[A-Za-z\\d~!@#\$%^&*()+|=]{8,16}\$"
+
+private const val emailRegex = "^.+@dsm.hs.kr$"
+
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val checkStudentExistUseCase: CheckStudentExistUseCase,
-    private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
-    private val verifyEmailUseCase: VerifyEmailUseCase,
-    private val signUpUseCase: SignUpUseCase,
+    internal val checkStudentExistUseCase: CheckStudentExistUseCase,
+    internal val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
+    internal val verifyEmailUseCase: VerifyEmailUseCase,
+    internal val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpState, SignUpSideEffect>() {
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
 
-    private val state = container.stateFlow.value
+    internal val state = container.stateFlow.value
 
-    override fun sendEvent(event: Event) {
-        when (event) {
-            is SignUpEvent.SetSex -> setSex(event.sex)
-            is SignUpEvent.SetName -> setName(event.name)
-            is SignUpEvent.SetGrade -> setGrade(event.grade)
-            is SignUpEvent.SetClass -> setClass(event.`class`)
-            is SignUpEvent.SetNumber -> setNumber(event.number)
-            is SignUpEvent.SetEmail -> setEmail(event.email)
-            is SignUpEvent.SetVerifyCode -> setVerifyCode(event.verifyCode)
-            is SignUpEvent.SetPassword -> setPassword(event.password)
-            is SignUpEvent.SetRepeatPassword -> setRepeatPassword(event.repeatPassword)
-            is SignUpEvent.CheckStudentExists -> checkStudentExists()
-            is SignUpEvent.SendVerificationCode -> sendVerificationCode(
-                email = event.email,
-                authCodeType = event.authCodeType,
-                userName = event.userName,
-            )
-            is SignUpEvent.VerifyEmail -> verifyEmail()
-            is SignUpEvent.SignUp -> signUp()
-        }
-    }
+    override fun sendEvent(event: Event) {}
 
-    private fun setSex(
+    internal fun setSex(
         sex: Sex,
     ) = intent {
-        reduce { state.copy(gender = sex) }
+        reduce { state.copy(sex = sex) }
     }
 
-    private fun setName(
+    internal fun setName(
         name: String
     ) = intent {
-        reduce { state.copy(name = name) }
+        reduce { state.copy(name = name.trim()) }
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = name,
+                grade = state.grade,
+                `class` = state.`class`,
+                number = state.number,
+            )
+        )
     }
 
-    private fun setGrade(
-        grade: Int,
+    internal fun setGrade(
+        grade: String,
     ) = intent {
         reduce { state.copy(grade = grade) }
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = state.name,
+                grade = state.grade,
+                `class` = state.`class`,
+                number = state.number,
+            )
+        )
     }
 
-    private fun setClass(
-        `class`: Int,
+    internal fun setClass(
+        `class`: String,
     ) = intent {
         reduce { state.copy(`class` = `class`) }
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = state.name,
+                grade = state.grade,
+                `class` = `class`,
+                number = state.number,
+            )
+        )
     }
 
-    private fun setNumber(
-        number: Int,
+    internal fun setNumber(
+        number: String,
     ) = intent {
         reduce { state.copy(number = number) }
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = state.name,
+                grade = state.grade,
+                `class` = state.`class`,
+                number = number,
+            )
+        )
     }
 
-    private fun setEmail(
+    internal fun setEmail(
         email: String,
     ) = intent {
         reduce { state.copy(email = email) }
+        setEmailError(!Pattern.matches(emailRegex, email) || email.isBlank())
+        setSignUpButtonEnabled(email.isNotBlank() && state.verifyCode.isNotBlank() && !state.emailError && !state.verifyCodeError)
     }
 
-    private fun setVerifyCode(
+    private fun setEmailError(
+        emailError: Boolean,
+    ) = intent {
+        reduce { state.copy(emailError = emailError) }
+        setSendVerifyCodeButtonEnabled(!emailError)
+    }
+
+    internal fun setVerifyCode(
         verifyCode: String,
     ) = intent {
-        reduce { state.copy(authCode = verifyCode) }
+        reduce { state.copy(verifyCode = verifyCode) }
+        setVerifyCodeError(false)
+        setSignUpButtonEnabled(state.email.isNotBlank() || verifyCode.isNotBlank() || !state.emailError || !state.verifyCodeError)
     }
 
-    private fun setPassword(
+    private fun setVerifyCodeError(
+        verifyCodeError: Boolean,
+    ) = intent {
+        reduce { state.copy(verifyCodeError = verifyCodeError) }
+        setSignUpButtonEnabled(!verifyCodeError)
+    }
+
+    internal fun setPassword(
         password: String,
     ) = intent {
         reduce { state.copy(password = password) }
+        setPasswordError(!Pattern.matches(passwordRegex, password))
     }
 
-    private fun setRepeatPassword(
+    private fun setPasswordError(
+        passwordError: Boolean,
+    ) = intent {
+        reduce { state.copy(passwordError = passwordError) }
+        setSignUpButtonEnabled(!passwordError)
+    }
+
+    internal fun setRepeatPassword(
         repeatPassword: String,
     ) = intent {
         reduce { state.copy(repeatPassword = repeatPassword) }
+        setRepeatPasswordError(state.password != repeatPassword)
     }
 
-    private fun checkStudentExists() = intent {
+    private fun setRepeatPasswordError(
+        repeatPasswordError: Boolean,
+    ) = intent {
+        reduce { state.copy(repeatPasswordError = repeatPasswordError) }
+        setSignUpButtonEnabled(!repeatPasswordError)
+    }
+
+    internal fun setSignUpButtonEnabled(
+        signUpButtonEnabled: Boolean,
+    ) = intent {
+        reduce {
+            state.copy(signUpButtonEnabled = signUpButtonEnabled)
+        }
+    }
+
+    private fun setStudentNotFound(
+        studentNotFound: Boolean,
+    ) = intent {
+        reduce {
+            state.copy(studentNotFound = studentNotFound)
+        }
+    }
+
+    private fun setSendVerifyCodeButtonEnabled(
+        sendVerifyCodeButtonEnabled: Boolean,
+    ) = intent {
+        reduce { state.copy(sendVerifyCodeButtonEnabled = sendVerifyCodeButtonEnabled) }
+    }
+
+    private fun setAuthCodeEnabled(
+        authCodeEnabled: Boolean,
+    ) = intent {
+        reduce { state.copy(authCodeEnabled = authCodeEnabled) }
+    }
+
+    private fun checkAvailableValues(
+        name: String,
+        grade: String,
+        `class`: String,
+        number: String,
+    ): Boolean {
+        setStudentNotFound(false)
+        return name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank()
+    }
+
+    internal fun checkStudentExists() = intent {
         viewModelScope.launch {
             checkStudentExistUseCase(
                 checkStudentExistsParam = CheckStudentExistsParam(
@@ -127,15 +218,14 @@ class SignUpViewModel @Inject constructor(
                     name = container.stateFlow.value.name,
                 )
             ).onSuccess {
-                postSideEffect(
-                    sideEffect = SignUpSideEffect.CheckStudentExistsSuccess,
-                )
+                postSideEffect(SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess)
+                setSignUpButtonEnabled(false)
             }.onFailure { throwable ->
+                setSignUpButtonEnabled(signUpButtonEnabled = false)
                 when (throwable) {
                     is NotFoundException -> {
-                        postSideEffect(
-                            sideEffect = SignUpSideEffect.CheckStudentExistsNotFound,
-                        )
+                        postSideEffect(SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound)
+                        setStudentNotFound(studentNotFound = true)
                     }
 
                     else -> {
@@ -152,25 +242,19 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun sendVerificationCode(
-        email: String,
-        authCodeType: AuthCodeType,
-        userName: String,
-    ) = intent {
+    internal fun sendVerificationCode() = intent {
         viewModelScope.launch {
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
-                    email = email,
-                    type = authCodeType,
+                    email = state.email,
+                    authCodeType = AuthCodeType.SIGN_UP,
                 )
             ).onSuccess {
-                postSideEffect(
-                    sideEffect = SignUpSideEffect.SendVerificationCodeSuccess,
-                )
+                setAuthCodeEnabled(true)
             }.onFailure { throwable ->
                 when (throwable) {
                     is ConflictException -> {
-                        postSideEffect(SignUpSideEffect.EmailConflict)
+                        postSideEffect(SignUpSideEffect.VerifyEmail.EmailConflict)
                     }
 
                     else -> {
@@ -187,29 +271,29 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun verifyEmail() = intent {
+    internal fun verifyEmail() = intent {
         viewModelScope.launch {
             verifyEmailUseCase(
                 verifyEmailParam = VerifyEmailParam(
                     email = state.email,
-                    authCode = state.authCode,
+                    authCode = state.verifyCode,
                 )
             ).onSuccess {
-                postSideEffect(
-                    sideEffect = SignUpSideEffect.VerifyEmailSuccess,
-                )
+                postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailSuccess)
+                setSignUpButtonEnabled(false)
             }.onFailure { throwable ->
                 when (throwable) {
                     is UnAuthorizationException -> {
-                        postSideEffect(
-                            sideEffect = SignUpSideEffect.VerifyEmailUnAuthorized,
-                        )
+                        setVerifyCodeError(true)
                     }
 
                     is NotFoundException -> {
-                        postSideEffect(
-                            sideEffect = SignUpSideEffect.VerifyEmailNotFound,
-                        )
+                        postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailNotFound)
+                    }
+
+                    is NullPointerException -> {
+                        postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailSuccess)
+                        setSignUpButtonEnabled(false)
                     }
 
                     else -> {
@@ -226,47 +310,68 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun signUp() = intent {
+    internal fun signUp() = intent {
         viewModelScope.launch {
-            signUpUseCase(
-                signUpParam = SignUpParam(
-                    email = state.email,
+            if (
+                !checkPassword(
                     password = state.password,
-                    grade = state.grade,
-                    name = state.name,
-                    gender = state.gender,
-                    classRoom = state.`class`,
-                    number = state.number,
+                    repeatPassword = state.repeatPassword,
                 )
-            ).onSuccess {
-                postSideEffect(
-                    sideEffect = SignUpSideEffect.SignUpSuccess,
-                )
-            }.onFailure { throwable ->
-                when(throwable){
-                    is ConflictException -> {
-                        postSideEffect(
-                            sideEffect = SignUpSideEffect.SignUpConflict,
-                        )
-                    }
+            ) {
+                signUpUseCase(
+                    signUpParam = SignUpParam(
+                        email = state.email,
+                        password = state.password,
+                        grade = state.grade.toInt(),
+                        name = state.name,
+                        gender = state.sex,
+                        classRoom = state.`class`.toInt(),
+                        number = state.number.toInt(),
+                    )
+                ).onSuccess {
+                    postSideEffect(
+                        sideEffect = SignUpSideEffect.SetPassword.SignUpSuccess,
+                    )
+                }.onFailure { throwable ->
+                    when (throwable) {
+                        is ConflictException -> {
+                            postSideEffect(
+                                sideEffect = SignUpSideEffect.SetPassword.SignUpConflict,
+                            )
+                        }
 
-                    else -> {
-                        postSideEffect(
-                            sideEffect = SignUpSideEffect.Exception(
-                                message = getStringFromException(
-                                    throwable = throwable,
+                        else -> {
+                            postSideEffect(
+                                sideEffect = SignUpSideEffect.Exception(
+                                    message = getStringFromException(
+                                        throwable = throwable,
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun checkPassword(
+        password: String,
+        repeatPassword: String,
+    ): Boolean {
+
+        val passwordError = !Pattern.matches(passwordRegex, password)
+        val repeatPasswordError = password != repeatPassword
+
+        setPasswordError(passwordError)
+        setRepeatPasswordError(repeatPasswordError)
+
+        return passwordError || repeatPasswordError
     }
 
     private fun returnGcn(
-        grade: Int,
-        `class`: Int,
-        number: Int,
-    ) = Integer.parseInt("$grade$`class`${number.toString().padStart(2, '0')}")
+        grade: String,
+        `class`: String,
+        number: String,
+    ) = Integer.parseInt("$grade$`class`${number.padStart(2, '0')}")
 }
