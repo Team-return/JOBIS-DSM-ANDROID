@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -70,9 +71,9 @@ fun SignUpScreen(
 
     BackHandler {
         currentProgress -= 1
-        if(navController.currentDestination?.route == JobisRoute.StudentInfo){
+        if (navController.currentDestination?.route == JobisRoute.StudentInfo) {
             navHostController.popBackStack()
-        }else {
+        } else {
             navController.popBackStack()
         }
     }
@@ -175,13 +176,17 @@ fun SignUpScreen(
                 }
             }
         }
-        ProgressBarWithButton(
-            currentProgress = currentProgress,
-            progress = progressAnimation,
-            buttonEnabled = state.signUpButtonEnabled,
-            isSuccessVerifyEmail = isSuccessVerifyEmail,
-            onClick = onNextButtonClicked,
-        )
+        Column(
+            modifier = Modifier.imePadding(),
+        ) {
+            ProgressBarWithButton(
+                currentProgress = currentProgress,
+                progress = progressAnimation,
+                buttonEnabled = state.signUpButtonEnabled,
+                isSuccessVerifyEmail = isSuccessVerifyEmail,
+                onClick = onNextButtonClicked,
+            )
+        }
     }
 }
 
