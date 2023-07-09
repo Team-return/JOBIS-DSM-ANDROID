@@ -9,6 +9,7 @@
     <string name="sign_up">회원가입</string>
     <string name="next">다음</string>
     <string name="verification">인증</string>
+    <string name="cancel">취소</string>
 
     <!--    Bottom Navigation-->
 
@@ -212,5 +213,9 @@
     <string name="check_original_password">기존 비밀번호 확인</string>
     <string name="enter_original_password">기존 비밀번호를 입력해주세요.</string>
     <string name="hint_original_password">기존 비밀번호를 입력하세요</string>
+
+    <!--    SignOut Dialog-->
+
+    <string name="sign_out_dialog_title">로그아웃 하시겠습니까?</string>
 
 </resources>
