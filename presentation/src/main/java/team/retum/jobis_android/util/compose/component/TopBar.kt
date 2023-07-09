@@ -1,4 +1,4 @@
-package team.retum.jobis_android.util.compose
+package team.retum.jobis_android.util.compose.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

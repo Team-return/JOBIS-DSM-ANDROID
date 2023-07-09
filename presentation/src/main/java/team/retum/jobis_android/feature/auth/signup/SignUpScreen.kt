@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.auth.signup
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -38,7 +37,7 @@ import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScree
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.TopBar
+import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor

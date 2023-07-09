@@ -36,10 +36,10 @@ import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.slideInLeft
-import team.retum.jobis_android.util.compose.slideInRight
-import team.retum.jobis_android.util.compose.slideOutLeft
-import team.retum.jobis_android.util.compose.slideOutRight
+import team.retum.jobis_android.util.compose.animation.slideInLeft
+import team.retum.jobis_android.util.compose.animation.slideInRight
+import team.retum.jobis_android.util.compose.animation.slideOutLeft
+import team.retum.jobis_android.util.compose.animation.slideOutRight
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel

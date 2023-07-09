@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2

@@ -35,8 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
-import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
