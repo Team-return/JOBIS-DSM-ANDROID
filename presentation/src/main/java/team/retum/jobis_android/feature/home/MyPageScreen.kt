@@ -1,31 +1,48 @@
 package team.retum.jobis_android.feature.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
+import team.retum.jobis_android.contract.HomeSideEffect
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.skeleton
@@ -45,7 +62,59 @@ internal fun MyPageScreen(
 
     val state = homeViewModel.container.stateFlow.collectAsState()
 
+    LaunchedEffect(Unit){
+        homeViewModel.container.sideEffectFlow.collect{
+            when(it){
+                is HomeSideEffect.SuccessSignOut -> {
+                    navController.navigate(JobisRoute.SignIn){
+                        popUpTo(JobisRoute.Main){
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     val studentInformation = state.value.studentInformation
+
+    var showSignOutDialog by remember { mutableStateOf(false) }
+
+    val onSignOutMainBtnClick = {
+        homeViewModel.signOut()
+    }
+
+    val onSignOutSubBtnClick = {
+        showSignOutDialog = false
+    }
+
+    val onBugReportClicked = {
+
+    }
+
+    val onInterestClicked = {
+
+    }
+
+    val onChangePasswordClicked = {
+        navController.navigate(JobisRoute.ComparePassword)
+    }
+
+    val onSignOutClicked = {
+        showSignOutDialog = true
+    }
+
+    if (showSignOutDialog) {
+        Dialog(onDismissRequest = { showSignOutDialog = false }) {
+            SignOutDialog(
+                title = stringResource(id = R.string.sign_out_dialog_title),
+                mainBtnText = stringResource(id = R.string.check),
+                subBtnText = stringResource(id = R.string.cancel),
+                onMainBtnClick = onSignOutMainBtnClick,
+                onSubBtnClick = onSignOutSubBtnClick,
+            )
+        }
+    }
 
     runBlocking {
         homeViewModel.fetchStudentInformations()
@@ -70,6 +139,13 @@ internal fun MyPageScreen(
             studentGcn = studentInformation.studentGcn,
             navController = navController,
             showDialog = showDialog,
+        )
+        Spacer(modifier = Modifier.height(80.dp))
+        UserMenu(
+            onBugReportClicked = onBugReportClicked,
+            onInterestClicked = onInterestClicked,
+            onChangePasswordClicked = onChangePasswordClicked,
+            onSignOutClicked = onSignOutClicked
         )
     }
 }
@@ -138,27 +214,37 @@ private fun UserProfile(
             else "",
             color = JobisColor.Gray700,
         )
-        Spacer(modifier = Modifier.height(80.dp))
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            color = JobisColor.Gray400,
-        )
-        Menu(content = stringResource(id = R.string.bug_report)) {
-
-        }
-        Menu(content = stringResource(id = R.string.choose_interests)) {
-            showDialog()
-        }
-        Menu(content = stringResource(id = R.string.change_password)) {
-            navController.navigate(JobisRoute.ComparePassword)
-        }
-        Menu(
-            content = stringResource(id = R.string.log_out),
-            contentColor = JobisColor.Red,
-        ) {
-
-        }
     }
+}
+
+@Composable
+private fun UserMenu(
+    onBugReportClicked: () -> Unit,
+    onInterestClicked: () -> Unit,
+    onChangePasswordClicked: () -> Unit,
+    onSignOutClicked: () -> Unit,
+) {
+    Divider(
+        modifier = Modifier.fillMaxWidth(),
+        color = JobisColor.Gray400,
+    )
+    Menu(
+        content = stringResource(id = R.string.bug_report),
+        onClick = onBugReportClicked,
+    )
+    Menu(
+        content = stringResource(id = R.string.choose_interests),
+        onClick = onInterestClicked,
+    )
+    Menu(
+        content = stringResource(id = R.string.change_password),
+        onClick = onChangePasswordClicked,
+    )
+    Menu(
+        content = stringResource(id = R.string.log_out),
+        contentColor = JobisColor.Red,
+        onClick = onSignOutClicked,
+    )
 }
 
 @Composable
@@ -185,5 +271,80 @@ private fun Menu(
             modifier = Modifier.fillMaxWidth(),
             color = JobisColor.Gray400,
         )
+    }
+}
+
+// TODO move to design system
+@Composable
+private fun SignOutDialog(
+    title: String,
+    mainBtnText: String,
+    subBtnText: String,
+    onMainBtnClick: () -> Unit,
+    onSubBtnClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(horizontal = 12.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(JobisColor.Gray100),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(40.dp))
+        Body2(
+            text = title,
+            color = JobisColor.Red,
+        )
+        Spacer(modifier = Modifier.height(26.dp))
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp)
+                .padding(horizontal = 12.dp),
+            color = JobisColor.Gray400,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(40.dp)
+                    .jobisClickable(
+                        onClick = onSubBtnClick,
+                        rippleEnabled = true
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Body4(
+                    text = subBtnText,
+                    color = JobisColor.Gray600,
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(40.dp)
+                    .padding(vertical = 4.dp),
+            )
+            Box(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(40.dp)
+                    .jobisClickable(
+                        onClick = onMainBtnClick,
+                        rippleEnabled = true,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Body4(
+                    text = mainBtnText,
+                    color = JobisColor.Gray800,
+                )
+            }
+        }
     }
 }

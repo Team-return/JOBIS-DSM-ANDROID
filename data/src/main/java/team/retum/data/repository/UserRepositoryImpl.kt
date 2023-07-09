@@ -95,4 +95,8 @@ class UserRepositoryImpl @Inject constructor(
             accountId = accountId,
             password = password,
         )
+
+    override suspend fun signOut() {
+        userDataSource.signOut()
+    }
 }

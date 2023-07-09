@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signup
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -69,13 +70,16 @@ fun SignUpScreen(
 
     val navController = rememberNavController()
 
-    BackHandler {
-        currentProgress -= 1
-        if (navController.currentDestination?.route == JobisRoute.StudentInfo) {
-            navHostController.popBackStack()
-        } else {
-            navController.popBackStack()
+    val moveToBack = {
+        when(currentProgress){
+            1 -> navHostController.popBackStack()
+            else -> navController.popBackStack()
         }
+        currentProgress -= 1
+    }
+
+    BackHandler {
+        moveToBack()
     }
 
     LaunchedEffect(Unit) {
@@ -114,8 +118,7 @@ fun SignUpScreen(
     )
 
     val onTopBarClicked = {
-        navController.popBackStack()
-        Unit
+        moveToBack()
     }
 
     val onNextButtonClicked = {
@@ -137,7 +140,7 @@ fun SignUpScreen(
         contentAlignment = Alignment.BottomCenter,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(56.dp))
             SignUpHeader(
                 currentProgress = currentProgress,
                 titleList = titleList,

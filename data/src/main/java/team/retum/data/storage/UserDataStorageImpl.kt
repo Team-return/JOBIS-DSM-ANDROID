@@ -57,6 +57,16 @@ class UserDataStorageImpl @Inject constructor(
         getPreference(key).edit().putString(key, value).apply()
     }
 
+    override fun clearUserInformation() {
+        run {
+            getPreference(UserPersonalKey.ACCESS_TOKEN)
+            getPreference(UserPersonalKey.REFRESH_TOKEN)
+            getPreference(UserPersonalKey.ACCESS_TOKEN_EXPIRES_AT)
+            getPreference(UserPersonalKey.REFRESH_TOKEN_EXPIRES_AT)
+            getPreference(UserPersonalKey.AUTO_SIGN_IN)
+        }.edit().clear().apply()
+    }
+
     private object UserPersonalKey {
         const val ACCESS_TOKEN = "accessToken"
         const val REFRESH_TOKEN = "refreshKey"
