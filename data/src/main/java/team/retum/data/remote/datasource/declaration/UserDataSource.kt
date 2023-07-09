@@ -30,4 +30,6 @@ interface UserDataSource {
     suspend fun setAutoSignInOption(autoSignInOption: Boolean)
 
     suspend fun fetchAutoSignInOption(): Boolean
+
+    suspend fun signOut()
 }

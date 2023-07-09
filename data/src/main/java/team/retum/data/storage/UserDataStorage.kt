@@ -33,4 +33,5 @@ interface UserDataStorage {
         value: String,
     )
 
+    fun clearUserInformation()
 }

@@ -87,4 +87,8 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun fetchAutoSignInOption(): Boolean {
         return userDataStorage.fetchAutoSignInOption()
     }
+
+    override suspend fun signOut() {
+        userDataStorage.clearUserInformation()
+    }
 }
