@@ -23,6 +23,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +42,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
+import team.retum.jobis_android.contract.HomeSideEffect
 import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.skeleton
@@ -60,12 +62,26 @@ internal fun MyPageScreen(
 
     val state = homeViewModel.container.stateFlow.collectAsState()
 
+    LaunchedEffect(Unit){
+        homeViewModel.container.sideEffectFlow.collect{
+            when(it){
+                is HomeSideEffect.SuccessSignOut -> {
+                    navController.navigate(JobisRoute.SignIn){
+                        popUpTo(JobisRoute.Main){
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     val studentInformation = state.value.studentInformation
 
-    var showSignOutDialog by remember { mutableStateOf(true) }
+    var showSignOutDialog by remember { mutableStateOf(false) }
 
     val onSignOutMainBtnClick = {
-
+        homeViewModel.signOut()
     }
 
     val onSignOutSubBtnClick = {

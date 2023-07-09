@@ -23,6 +23,5 @@ data class HomeState(
 ) : State
 
 sealed class HomeSideEffect : SideEffect {
-    object FetchHomeInformationSuccess : HomeSideEffect()
-    object FetchHomeInformationFailure : HomeSideEffect()
+    object SuccessSignOut: HomeSideEffect()
 }
