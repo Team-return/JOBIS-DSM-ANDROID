@@ -87,7 +87,7 @@ internal fun MyPageScreen(
     }
 
     val onBugReportClicked = {
-
+        navController.navigate(JobisRoute.MainNavigation.BugReport)
     }
 
     val onInterestClicked = {

@@ -29,6 +29,7 @@ import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordVerifyEmailScreen
 import team.retum.jobis_android.feature.auth.signin.SignInScreen
 import team.retum.jobis_android.feature.auth.signup.SignUpScreen
+import team.retum.jobis_android.feature.bugreport.BugReportScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
@@ -205,12 +206,17 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.ComparePassword,
-
-                    ) {
+                ) {
                     ComparePasswordScreen(
                         navController = navController,
                         resetPasswordViewModel = resetPasswordViewModel,
                     )
+                }
+
+                composable(
+                    route = JobisRoute.MainNavigation.BugReport,
+                ) {
+                    BugReportScreen()
                 }
             }
         }
