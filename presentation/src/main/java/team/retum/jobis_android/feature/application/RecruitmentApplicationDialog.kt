@@ -37,8 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.ApplicationSideEffect
 import team.retum.jobis_android.contract.FileSideEffect
-import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.util.FileUtil
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor

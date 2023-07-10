@@ -1,4 +1,4 @@
-package team.retum.jobis_android.util.compose
+package team.retum.jobis_android.util.compose.animation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

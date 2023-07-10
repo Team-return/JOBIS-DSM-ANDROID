@@ -29,6 +29,7 @@ import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordVerifyEmailScreen
 import team.retum.jobis_android.feature.auth.signin.SignInScreen
 import team.retum.jobis_android.feature.auth.signup.SignUpScreen
+import team.retum.jobis_android.feature.bugreport.BugReportScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
@@ -36,10 +37,10 @@ import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.slideInLeft
-import team.retum.jobis_android.util.compose.slideInRight
-import team.retum.jobis_android.util.compose.slideOutLeft
-import team.retum.jobis_android.util.compose.slideOutRight
+import team.retum.jobis_android.util.compose.animation.slideInLeft
+import team.retum.jobis_android.util.compose.animation.slideInRight
+import team.retum.jobis_android.util.compose.animation.slideOutLeft
+import team.retum.jobis_android.util.compose.animation.slideOutRight
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -205,12 +206,17 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     route = JobisRoute.ComparePassword,
-
-                    ) {
+                ) {
                     ComparePasswordScreen(
                         navController = navController,
                         resetPasswordViewModel = resetPasswordViewModel,
                     )
+                }
+
+                composable(
+                    route = JobisRoute.MainNavigation.BugReport,
+                ) {
+                    BugReportScreen()
                 }
             }
         }

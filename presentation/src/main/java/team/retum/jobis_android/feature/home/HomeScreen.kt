@@ -37,7 +37,7 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.skeleton
+import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
@@ -141,7 +141,7 @@ private fun RecruitmentStatus(
     val appliedString = "$approvedCount / $totalStudentCount"
 
     if (approvedCount != 0L) {
-        employmentRate = DecimalFormat("##0.0").format(approvedCount.toFloat() / totalStudentCount.toFloat() * 100).toFloat()
+        employmentRate = DecimalFormat("##0.0").format(passCount.toFloat() / totalStudentCount.toFloat() * 100).toFloat()
     }
 
     Column(

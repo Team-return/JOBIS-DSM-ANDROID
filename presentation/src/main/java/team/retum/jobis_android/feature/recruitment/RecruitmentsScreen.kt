@@ -47,7 +47,8 @@ import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
-import team.retum.jobis_android.util.compose.skeleton
+import team.retum.jobis_android.util.compose.animation.skeleton
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
@@ -162,30 +163,6 @@ internal fun RecruitmentsScreen(
                 navController = navController,
             )
         }
-    }
-}
-
-@Composable
-internal fun Header(
-    text: String,
-) {
-    Column {
-        Body2(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(
-                    alignment = Alignment.Start,
-                ),
-            text = text,
-            color = JobisColor.Gray600,
-        )
-        Spacer(
-            modifier = Modifier.height(10.dp),
-        )
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            color = JobisColor.Gray400,
-        )
     }
 }
 

@@ -40,8 +40,8 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.contract.CompanySideEffect
-import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor

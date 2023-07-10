@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,9 +41,9 @@ import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.contract.HomeSideEffect
-import team.retum.jobis_android.feature.recruitment.Header
 import team.retum.jobis_android.root.navigation.JobisRoute
-import team.retum.jobis_android.util.compose.skeleton
+import team.retum.jobis_android.util.compose.animation.skeleton
+import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
@@ -89,7 +87,7 @@ internal fun MyPageScreen(
     }
 
     val onBugReportClicked = {
-
+        navController.navigate(JobisRoute.MainNavigation.BugReport)
     }
 
     val onInterestClicked = {

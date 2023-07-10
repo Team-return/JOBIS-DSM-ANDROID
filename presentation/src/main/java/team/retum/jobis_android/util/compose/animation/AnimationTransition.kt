@@ -1,4 +1,4 @@
-package team.retum.jobis_android.util.compose
+package team.retum.jobis_android.util.compose.animation
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing

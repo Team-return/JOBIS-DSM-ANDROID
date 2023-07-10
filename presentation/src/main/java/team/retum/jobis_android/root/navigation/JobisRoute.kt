@@ -22,4 +22,8 @@ object JobisRoute {
         const val MyPage = "MyPage"
         const val Menu = "Menu"
     }
+
+    object MainNavigation{
+        const val BugReport = "BugReport"
+    }
 }
