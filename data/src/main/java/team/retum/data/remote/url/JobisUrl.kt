@@ -53,10 +53,12 @@ object JobisUrl {
 
     object Review{
         const val reviews = "$review/${Properties.companyId}"
+        const val reviewDetails = "$review/details/${Properties.reviewId}"
     }
 
     object Properties{
         const val recruitmentId = "{recruitment-id}"
         const val companyId = "{company-id}"
+        const val reviewId = "{review-id}"
     }
 }
