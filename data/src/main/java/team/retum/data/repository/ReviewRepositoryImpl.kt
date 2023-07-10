@@ -2,6 +2,7 @@ package team.retum.data.repository
 
 import team.retum.data.remote.datasource.declaration.ReviewDataSource
 import team.retum.data.remote.response.review.toEntity
+import team.retum.domain.entity.review.ReviewDetailsEntity
 import team.retum.domain.entity.review.ReviewsEntity
 import team.retum.domain.repository.ReviewRepository
 import javax.inject.Inject
@@ -13,4 +14,10 @@ class ReviewRepositoryImpl @Inject constructor(
         reviewDataSource.fetchReviews(
             companyId = companyId,
         ).toEntity()
+
+    override suspend fun fetchReviewDetails(
+        reviewId: String,
+    ): ReviewDetailsEntity = reviewDataSource.fetchReviewDetails(
+        reviewId = reviewId,
+    ).toEntity()
 }
