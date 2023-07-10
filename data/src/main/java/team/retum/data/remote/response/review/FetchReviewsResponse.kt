@@ -12,7 +12,6 @@ data class Review(
     @SerializedName("review_id") val reviewId: String,
     @SerializedName("year") val year: Int,
     @SerializedName("writer") val writer: String,
-    @SerializedName("created_date") val createdDate: String,
 )
 
 fun FetchReviewsResponse.toEntity() = ReviewsEntity(
@@ -23,5 +22,4 @@ private fun Review.toEntity() = ReviewEntity(
     reviewId = this.reviewId,
     year = this.year,
     writer = this.writer,
-    createdDate = this.createdDate,
 )
