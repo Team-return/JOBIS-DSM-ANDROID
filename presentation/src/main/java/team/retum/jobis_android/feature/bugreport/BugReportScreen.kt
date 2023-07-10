@@ -21,21 +21,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.viewmodel.bugreport.BugReportViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisDropDownColor
@@ -48,31 +46,30 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-internal fun BugReportScreen() {
-    val uriList = remember { mutableStateListOf<Uri>() }
+internal fun BugReportScreen(
+    bugReportViewModel: BugReportViewModel = hiltViewModel(),
+) {
+
+    val state by bugReportViewModel.container.stateFlow.collectAsState()
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-    ) {
-        if(it != null) {
-            uriList.add(it)
-        }
+    ) { uri: Uri? ->
+        bugReportViewModel.addUri(uri)
     }
 
     val focusManager = LocalFocusManager.current
 
-    var currentSelectedItem by remember { mutableStateOf(Position.All) }
-
     val onTitleChanged = { title: String ->
-
+        bugReportViewModel.setTitle(title)
     }
 
     val onContentChanged = { content: String ->
-
+        bugReportViewModel.setContent(content)
     }
 
     val addScreenshot = {
-        if (uriList.size <= 5) {
+        if (state.uriList.size <= 5) {
             activityResultLauncher.launch(
                 PickVisualMediaRequest(
                     mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly,
@@ -82,8 +79,7 @@ internal fun BugReportScreen() {
     }
 
     val removeScreenshot = { index: Int ->
-        uriList.removeAt(index)
-        Unit
+        bugReportViewModel.removeUri(index)
     }
 
     val dropDownList = listOf(
@@ -95,12 +91,11 @@ internal fun BugReportScreen() {
     )
 
     val onItemSelected = { index: Int ->
-        runCatching {
-            currentSelectedItem = Position.valueOf(dropDownList[index])
-        }.onFailure {
-            currentSelectedItem = Position.All
-        }
-        Unit
+        bugReportViewModel.setPosition(dropDownList[index])
+    }
+
+    val onCompleteButtonClicked = {
+
     }
 
     Column(
@@ -119,17 +114,18 @@ internal fun BugReportScreen() {
                 Spacer(modifier = Modifier.height(14.dp))
                 ContentInputs(
                     onTitleChanged = onTitleChanged,
-                    title = "",
+                    title = state.title,
                     onContentChanged = onContentChanged,
-                    content = "",
-                    titleError = false,
-                    contentError = false,
+                    content = state.content,
+                    titleError = state.titleError,
+                    contentError = state.contentError,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ScreenShots(
-                    uriList = uriList,
+                    uriList = state.uriList,
                     addScreenshot = addScreenshot,
                     removeScreenshot = removeScreenshot,
+                    screenShotCount = state.uriList.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Column(
@@ -138,7 +134,7 @@ internal fun BugReportScreen() {
                     JobisLargeButton(
                         text = stringResource(id = R.string.complete),
                         color = JobisButtonColor.MainSolidColor,
-                        onClick = {},
+                        onClick = onCompleteButtonClicked,
                     )
                     Spacer(modifier = Modifier.height(44.dp))
                 }
@@ -198,19 +194,18 @@ private fun ScreenShots(
     uriList: List<Uri>,
     addScreenshot: () -> Unit,
     removeScreenshot: (Int) -> Unit,
+    screenShotCount: Int,
 ) {
-    val currentScreenshotCount = uriList.size
-
     Column {
         Caption(
-            text = "${stringResource(id = R.string.bug_report_screenshots)} ($currentScreenshotCount/5)",
+            text = "${stringResource(id = R.string.bug_report_screenshots)} ($screenShotCount/5)",
             color = JobisColor.Gray700,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Box(
             modifier = Modifier.height(150.dp)
         ) {
-            if (currentScreenshotCount == 0) {
+            if (screenShotCount == 0) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -261,7 +256,7 @@ private fun ScreenShots(
                         }
                     }
                 }
-                if (currentScreenshotCount in 1..4) {
+                if (screenShotCount in 1..4) {
                     item {
                         Row(
                             modifier = Modifier.fillMaxHeight(),
@@ -279,8 +274,4 @@ private fun ScreenShots(
             }
         }
     }
-}
-
-enum class Position {
-    All, Server, iOS, Android, Web
 }
