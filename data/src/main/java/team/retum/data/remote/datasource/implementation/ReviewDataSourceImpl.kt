@@ -2,6 +2,7 @@ package team.retum.data.remote.datasource.implementation
 
 import team.retum.data.remote.api.ReviewApi
 import team.retum.data.remote.datasource.declaration.ReviewDataSource
+import team.retum.data.remote.response.review.FetchReviewDetailsResponse
 import team.retum.data.remote.response.review.FetchReviewsResponse
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
@@ -14,6 +15,14 @@ class ReviewDataSourceImpl @Inject constructor(
     ): FetchReviewsResponse = HttpHandler<FetchReviewsResponse>().httpRequest {
         reviewApi.fetchReviews(
             companyId = companyId,
+        )
+    }.sendRequest()
+
+    override suspend fun fetchReviewDetails(
+        reviewId: String,
+    ): FetchReviewDetailsResponse = HttpHandler<FetchReviewDetailsResponse>().httpRequest {
+        reviewApi.fetchReviewDetails(
+            reviewId = reviewId,
         )
     }.sendRequest()
 }
