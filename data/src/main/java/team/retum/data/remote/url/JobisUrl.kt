@@ -19,7 +19,7 @@ object JobisUrl {
     }
 
     object Student {
-        const val signup = "$student/signup"
+        const val signup = student
         const val recruit = "$student/recruit"
         const val exists = "$student/exists"
         const val my = "$student/my"
