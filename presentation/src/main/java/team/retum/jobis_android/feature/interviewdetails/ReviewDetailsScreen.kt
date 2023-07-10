@@ -10,63 +10,57 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 
 @Composable
-internal fun InterviewDetailsScreen(
+internal fun ReviewDetailsScreen(
     reviewId: String,
+    reviewViewModel: ReviewViewModel = hiltViewModel(),
     navController: NavController,
 ) {
 
-    val list = listOf(
-        InterviewEntity(
-            position = "position",
-            title = "title",
-            content = "content",
-        ),
-        InterviewEntity(
-            position = "position",
-            title = "title",
-            content = "content",
-        ),
-        InterviewEntity(
-            position = "position",
-            title = "title",
-            content = "content",
-        ),
-    )
+    LaunchedEffect(Unit){
+        reviewViewModel.setReviewId(reviewId)
+        reviewViewModel.fetchReviewDetails()
+    }
+
+    val state by reviewViewModel.container.stateFlow.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
         Header(text = "header")
         Spacer(modifier = Modifier.height(30.dp))
-        InterviewReviews(
-            interviewEntities = list,
-        )
+        InterviewReviews(interviewEntities = state.reviewDetails)
     }
 }
 
 @Composable
 private fun InterviewReviews(
-    interviewEntities: List<InterviewEntity>,
+    interviewEntities: List<ReviewDetailEntity>,
 ){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ){
         items(interviewEntities){
             InterviewReview(
-                position = it.position,
-                title = it.title,
-                content = it.content,
+                position = it.question,
+                title = it.answer,
+                content = it.area,
             )
         }
     }
@@ -104,9 +98,3 @@ private fun InterviewReview(
         )
     }
 }
-
-data class InterviewEntity(
-    val position: String,
-    val title: String,
-    val content: String,
-)
