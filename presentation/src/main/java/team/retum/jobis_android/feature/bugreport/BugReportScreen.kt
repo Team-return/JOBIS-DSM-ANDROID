@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,10 +54,14 @@ internal fun BugReportScreen(
 
     val state by bugReportViewModel.container.stateFlow.collectAsState()
 
+    val uriList = remember { mutableStateListOf<Uri>() }
+
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-        bugReportViewModel.addUri(uri)
+        if(uri != null){
+            uriList.add(uri)
+        }
     }
 
     val focusManager = LocalFocusManager.current
@@ -69,7 +75,7 @@ internal fun BugReportScreen(
     }
 
     val addScreenshot = {
-        if (state.uriList.size <= 5) {
+        if (uriList.size <= 5) {
             activityResultLauncher.launch(
                 PickVisualMediaRequest(
                     mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly,
@@ -79,7 +85,8 @@ internal fun BugReportScreen(
     }
 
     val removeScreenshot = { index: Int ->
-        bugReportViewModel.removeUri(index)
+        uriList.removeAt(index)
+        Unit
     }
 
     val dropDownList = listOf(
@@ -95,7 +102,7 @@ internal fun BugReportScreen(
     }
 
     val onCompleteButtonClicked = {
-
+        bugReportViewModel.setUriList(uriList = uriList)
     }
 
     Column(
@@ -122,10 +129,10 @@ internal fun BugReportScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ScreenShots(
-                    uriList = state.uriList,
+                    uriList = uriList,
                     addScreenshot = addScreenshot,
                     removeScreenshot = removeScreenshot,
-                    screenShotCount = state.uriList.size,
+                    screenShotCount = uriList.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Column(

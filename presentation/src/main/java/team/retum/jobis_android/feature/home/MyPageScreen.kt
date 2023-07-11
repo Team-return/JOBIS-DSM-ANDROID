@@ -204,6 +204,10 @@ private fun UserProfile(
                 modifier = Modifier
                     .size(26.dp)
                     .clip(CircleShape)
+                    .skeleton(
+                        show = profileImageUrl.isEmpty(),
+                        shape = CircleShape,
+                    )
                     .background(JobisColor.LightBlue),
                 contentAlignment = Alignment.Center,
             ) {

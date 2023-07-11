@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,7 @@ import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
+import team.retum.jobis_android.util.compose.component.Filter
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
@@ -167,45 +169,6 @@ internal fun RecruitmentsScreen(
 }
 
 @Composable
-internal fun Filter(
-    onFilterClicked: () -> Unit,
-) {
-
-    val keyword by remember { mutableStateOf("") }
-
-    val onKeywordChanged = { _: String ->
-
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier.weight(0.9f),
-        ) {
-            JobisBoxTextField(
-                color = JobisTextFieldColor.MainColor,
-                onValueChanged = onKeywordChanged,
-                value = keyword,
-                hint = stringResource(id = R.string.search_recruitment_filter_hint),
-            )
-        }
-        Spacer(modifier = Modifier.width(10.dp))
-        JobisMediumIconButton(
-            drawable = R.drawable.ic_filter,
-            color = JobisButtonColor.MainSolidColor,
-            onClick = onFilterClicked,
-            shape = RoundedCornerShape(
-                size = 4.dp,
-            )
-        )
-    }
-}
-
-@Composable
 private fun Recruitments(
     recruitmentUiModels: List<RecruitmentUiModel>,
     recruitmentViewModel: RecruitmentViewModel,
@@ -233,10 +196,9 @@ private fun Recruitments(
     }
 
     LazyColumn(
-        contentPadding = PaddingValues(
-            bottom = 16.dp,
-        ),
         state = lazyListState,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(vertical = 20.dp)
     ) {
 
         items(recruitmentUiModels) { recruitment ->
@@ -246,7 +208,6 @@ private fun Recruitments(
 
             var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
-            Spacer(modifier = Modifier.height(16.dp))
             Recruitment(
                 imageUrl = recruitment.companyProfileUrl,
                 position = position,
@@ -293,6 +254,10 @@ private fun Recruitment(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp,
+                shape = ApplyCompaniesItemShape,
+            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(onClick = onItemClicked),

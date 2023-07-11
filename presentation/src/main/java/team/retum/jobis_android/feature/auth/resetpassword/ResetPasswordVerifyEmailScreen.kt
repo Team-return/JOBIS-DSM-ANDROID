@@ -1,12 +1,12 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -53,7 +53,7 @@ internal fun ResetPasswordVerifyEmailScreen(
     val onAuthCodeChanged = { authCode: String ->
         resetPasswordViewModel.setAuthCode(authCode = authCode)
         authCode.take(6)
-        if(authCode.length == 6) focusManager.clearFocus()
+        if (authCode.length == 6) focusManager.clearFocus()
     }
 
     val onRequestVerification = {
@@ -70,7 +70,7 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.container.sideEffectFlow.collect {
-            when(it){
+            when (it) {
                 is ResetPasswordSideEffect.SuccessVerification -> {
                     navController.navigate(JobisRoute.ResetPassword)
                 }
@@ -89,7 +89,7 @@ internal fun ResetPasswordVerifyEmailScreen(
         Column(
             modifier = Modifier.padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-        ){
+        ) {
             Heading4(
                 modifier = Modifier.align(Alignment.Start),
                 text = stringResource(id = R.string.self_verification),
@@ -164,7 +164,7 @@ private fun ChangePasswordInputs(
             Spacer(modifier = Modifier.width(8.dp))
             Box(modifier = Modifier.weight(0.25f)) {
                 Column {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     JobisSmallButton(
                         text = stringResource(
                             id = if (sendAuthCodeState) R.string.email_verification_resend
