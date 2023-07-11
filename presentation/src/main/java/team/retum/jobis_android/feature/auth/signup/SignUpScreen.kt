@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -70,7 +69,7 @@ fun SignUpScreen(
     val navController = rememberNavController()
 
     val moveToBack = {
-        when(currentProgress){
+        when (currentProgress) {
             1 -> navHostController.popBackStack()
             else -> navController.popBackStack()
         }
@@ -178,17 +177,13 @@ fun SignUpScreen(
                 }
             }
         }
-        Column(
-            modifier = Modifier.imePadding(),
-        ) {
-            ProgressBarWithButton(
-                currentProgress = currentProgress,
-                progress = progressAnimation,
-                buttonEnabled = state.signUpButtonEnabled,
-                isSuccessVerifyEmail = isSuccessVerifyEmail,
-                onClick = onNextButtonClicked,
-            )
-        }
+        ProgressBarWithButton(
+            currentProgress = currentProgress,
+            progress = progressAnimation,
+            buttonEnabled = state.signUpButtonEnabled,
+            isSuccessVerifyEmail = isSuccessVerifyEmail,
+            onClick = onNextButtonClicked,
+        )
     }
 }
 
