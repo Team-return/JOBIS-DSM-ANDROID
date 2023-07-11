@@ -35,7 +35,7 @@ object Version {
 
     const val ORBIT_MVI = "4.5.0"
 
-    const val DESIGN_SYSTEM = "v1.1.5"
+    const val DESIGN_SYSTEM = "v1.1.6"
 
     const val SHIMMER = "1.0.5"
 }
