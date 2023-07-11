@@ -120,6 +120,7 @@ class CompanyViewModel @Inject constructor(
                 name = name,
             )
         }
+        fetchCompanies()
     }
 
     internal fun setCompanyId(

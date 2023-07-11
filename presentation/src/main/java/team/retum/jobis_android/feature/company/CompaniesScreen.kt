@@ -28,11 +28,12 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
-import team.retum.jobis_android.util.compose.component.Filter
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
+import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -44,6 +45,10 @@ fun CompaniesScreen(
 ) {
 
     val state = companyViewModel.container.stateFlow.collectAsState().value
+
+    val onCompanyNameChanged = { name: String ->
+        companyViewModel.setCompanyName(name)
+    }
 
     LaunchedEffect(Unit) {
         companyViewModel.fetchCompanies()
@@ -61,10 +66,33 @@ fun CompaniesScreen(
     ) {
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
-        Filter(onFilterClicked = {})
+        CompanyInput(
+            companyName = state.name ?: "",
+            onCompanyNameChanged = onCompanyNameChanged,
+        )
         Companies(
             companies = state.companies,
             navController = navController,
+        )
+    }
+}
+
+@Composable
+private fun CompanyInput(
+    companyName: String,
+    onCompanyNameChanged: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        JobisBoxTextField(
+            color = JobisTextFieldColor.MainColor,
+            onValueChanged = onCompanyNameChanged,
+            value = companyName,
+            hint = stringResource(id = R.string.search_recruitment_filter_hint),
         )
     }
 }
@@ -132,7 +160,7 @@ private fun Company(
                     text = stringResource(id = R.string.company_list_million, take.toString()),
                     color = JobisColor.Gray600,
                 )
-                if(hasRecruitment) {
+                if (hasRecruitment) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.End,
