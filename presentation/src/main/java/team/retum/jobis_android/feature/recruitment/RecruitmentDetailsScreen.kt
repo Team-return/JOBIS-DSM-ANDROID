@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
+import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
@@ -131,7 +132,7 @@ internal fun RecruitmentDetailsScreen(
             )
             Spacer(modifier = Modifier.height(20.dp))
             RecruitmentDetails(
-                details = recruitmentViewModel.getRecruitmentDetails(),
+                details = details,
                 areas = areas,
                 hiringProgress = details.hiringProgress,
             )
@@ -179,7 +180,7 @@ private fun CompanyInformation(
 
 @Composable
 private fun RecruitmentDetails(
-    details: List<Pair<Int, Any?>>,
+    details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
     hiringProgress: List<HiringProgress>,
 ) {
@@ -188,62 +189,60 @@ private fun RecruitmentDetails(
         horizontalAlignment = Alignment.Start,
     ) {
         RecruitmentDetail(
-            title = stringResource(details[0].first),
-            content = details[0].second.toString(),
+            title = stringResource(R.string.recruitment_details_get_company),
+            content = "${details.startDate}~${details.endDate}",
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top,
-        ) {
-            Caption(
-                modifier = Modifier.defaultMinSize(
-                    minWidth = 68.dp,
-                ),
-                text = stringResource(id = R.string.recruitment_details_position),
-                color = JobisColor.Gray700,
-            )
-            Spacer(modifier = Modifier.width(24.dp))
-            Column {
-                areas.forEach {
-                    PositionCard(
-                        position = it.job.replace(",", " / "),
-                        workerCount = it.hiring.toString(),
-                        majorTask = it.majorTask,
-                        mainSkill = it.tech,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
-        }
+        Positions(areas = areas)
         Spacer(modifier = Modifier.height(10.dp))
-        repeat(details.size - 1) { index ->
-            RecruitmentDetail(
-                title = stringResource(details[index + 1].first),
-                content = when (index) {
-
-                    1 -> {
-                        details[index+1].second.toString().replace("[", " ")
-                            .replace("]", " ").trim().ifEmpty { 
-                                stringResource(id = R.string.company_details_null)
-                            }
-                    }
-
-                    6 -> StringBuilder().apply {
-                        repeat(hiringProgress.size) { index ->
-                            append("${index + 1}. ${hiringProgress[index].value}")
-                            if (index != hiringProgress.lastIndex) append("\n")
-                        }
-                    }.toString()
-
-                    else -> {
-                        (details[index + 1].second
-                            ?: stringResource(id = R.string.company_details_null)).toString()
-                    }
-                },
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-        }
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_preferential_treatment),
+            content = details.preferentialTreatment ?: stringResource(id = R.string.company_details_null),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_licenses),
+            content = StringBuilder().apply {
+                details.requiredLicenses?.forEach {
+                    append(it)
+                    append(" ")
+                } ?: stringResource(id = R.string.company_details_null)
+            }.toString().trim().replace(" ", ", "),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_required_grade),
+            content = "${details.requiredGrade}%",
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_worker_time),
+            content = "${details.workHours}시간",
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_benefits),
+            content = "${details.benefits}",
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_hiring_progress),
+            content = StringBuilder().apply {
+                repeat(details.hiringProgress.size){
+                    append("${it+1}.${details.hiringProgress[it].value}\n")
+                }
+            }.toString(),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_required_documents),
+            content = details.submitDocument,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        RecruitmentDetail(
+            title = stringResource(id = R.string.recruitment_details_etc),
+            content = details.etc ?: stringResource(id = R.string.company_details_null)
+        )
     }
 
 }
@@ -268,6 +267,36 @@ private fun RecruitmentDetail(
             text = content,
             color = JobisColor.Gray900,
         )
+    }
+}
+
+@Composable
+private fun Positions(
+    areas: List<AreasEntity>,
+){
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.Top,
+    ) {
+        Caption(
+            modifier = Modifier.defaultMinSize(
+                minWidth = 68.dp,
+            ),
+            text = stringResource(id = R.string.recruitment_details_position),
+            color = JobisColor.Gray700,
+        )
+        Spacer(modifier = Modifier.width(24.dp))
+        Column {
+            areas.forEach {
+                PositionCard(
+                    position = it.job.replace(",", " / "),
+                    workerCount = it.hiring.toString(),
+                    majorTask = it.majorTask,
+                    mainSkill = it.tech,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
     }
 }
 
