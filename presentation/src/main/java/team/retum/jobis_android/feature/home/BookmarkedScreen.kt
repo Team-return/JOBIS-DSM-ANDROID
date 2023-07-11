@@ -1,5 +1,7 @@
 package team.retum.jobis_android.feature.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +41,7 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.util.compose.vibrate
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
@@ -48,16 +52,25 @@ import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 internal fun BookmarkedScreen(
     navController: NavController,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
+    val context = LocalContext.current
+
     val state by bookmarkViewModel.container.stateFlow.collectAsState()
 
     val bookmarks = remember {
         mutableStateListOf<BookmarkedRecruitmentEntity>()
+    }
+
+    val removeRecruitments = { it: BookmarkedRecruitmentEntity ->
+        bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
+        bookmarks.remove(it)
+        vibrate(context = context)
     }
 
     LaunchedEffect(Unit) {
@@ -85,10 +98,8 @@ internal fun BookmarkedScreen(
             BookmarkedRecruitments(
                 bookmarks = bookmarks,
                 navController = navController,
-            ) {
-                bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
-                bookmarks.remove(it)
-            }
+                onSwipeItem = removeRecruitments,
+            )
             if(!state.bookmarkExists) {
                 Column(
                     modifier = Modifier
