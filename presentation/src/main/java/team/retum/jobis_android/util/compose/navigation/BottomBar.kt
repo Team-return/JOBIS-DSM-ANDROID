@@ -1,5 +1,7 @@
 package team.retum.jobis_android.util.compose.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,18 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import team.retum.jobis_android.util.compose.vibrate
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body4
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun BottomBar(
     navController: NavController,
 ) {
+
+    val context = LocalContext.current
 
     val tabs = listOf(
         NavigationItem.Home,
@@ -53,6 +60,7 @@ fun BottomBar(
                 selected = currentDestination == tab.route,
                 onClick = {
                     navController.navigate(tab.route)
+                    vibrate(context = context)
                 },
                 icon = {
                     Icon(

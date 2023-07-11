@@ -40,11 +40,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     name = state.name,
                 )
             ).onSuccess { it ->
-                postSideEffect(
-                    sideEffect = RecruitmentSideEffect.SuccessFetchRecruitments(
-                        recruitments = it.recruitmentEntities.map { it.toModel() },
-                    )
-                )
+                setRecruitments(it.recruitmentEntities.map { it.toModel() })
             }.onFailure { throwable ->
                 postSideEffect(
                     sideEffect = RecruitmentSideEffect.Exception(
@@ -56,7 +52,6 @@ internal class RecruitmentViewModel @Inject constructor(
             }
         }
     }
-
 
 
     private fun fetchRecruitmentDetails() = intent {
@@ -111,7 +106,7 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun setPage(
         page: Int,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 page = page,
@@ -131,8 +126,8 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun setTechCode(
         techCode: String?,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 techCode = techCode,
             )
@@ -141,12 +136,13 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun setName(
         name: String,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 name = name,
             )
         }
+        fetchRecruitments()
     }
 
     internal fun setRecruitmentId(
@@ -161,7 +157,7 @@ internal class RecruitmentViewModel @Inject constructor(
     }
 
     internal fun getRecruitmentDetails(): List<Pair<Int, Any?>> =
-        with(container.stateFlow.value.details){
+        with(container.stateFlow.value.details) {
             return listOf(
                 R.string.recruitment_details_recruit_period to "$startDate ~ $endDate",
                 R.string.recruitment_details_preferential_treatment to benefits,
@@ -175,6 +171,16 @@ internal class RecruitmentViewModel @Inject constructor(
                 R.string.recruitment_details_etc to etc,
             )
         }
+
+    private fun setRecruitments(
+        recruitments: List<RecruitmentUiModel>,
+    ) = intent {
+        reduce {
+            state.copy(
+                recruitments = recruitments,
+            )
+        }
+    }
 }
 
 data class RecruitmentUiModel(

@@ -29,12 +29,11 @@ data class RecruitmentState(
         submitDocument = "",
         trainPay = 0,
         workHours = 0,
-    )
+    ),
+    val recruitments: List<RecruitmentUiModel> = emptyList(),
 ): State
 
 sealed class RecruitmentSideEffect: SideEffect{
-    class SuccessFetchRecruitments(val recruitments: List<RecruitmentUiModel>): RecruitmentSideEffect()
-
     class Exception(
         val message: String,
     ): RecruitmentSideEffect()

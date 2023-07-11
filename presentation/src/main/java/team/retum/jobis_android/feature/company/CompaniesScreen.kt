@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
@@ -28,11 +30,12 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
-import team.retum.jobis_android.util.compose.component.Filter
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
+import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
+import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -44,6 +47,10 @@ fun CompaniesScreen(
 ) {
 
     val state = companyViewModel.container.stateFlow.collectAsState().value
+
+    val onCompanyNameChanged = { name: String ->
+        companyViewModel.setCompanyName(name)
+    }
 
     LaunchedEffect(Unit) {
         companyViewModel.fetchCompanies()
@@ -61,10 +68,49 @@ fun CompaniesScreen(
     ) {
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
-        Filter(onFilterClicked = {})
+        CompanyInput(
+            companyName = state.name ?: "",
+            onCompanyNameChanged = onCompanyNameChanged,
+        )
+
+        Row(
+            modifier = Modifier
+                .alpha(if (state.name != null) 1f else 0f)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            if (state.name?.isNotBlank() == true) {
+                Caption(
+                    text = stringResource(id = R.string.search_result),
+                    color = JobisColor.Gray600,
+                )
+                Caption(text = " ${state.name}")
+            }
+        }
         Companies(
             companies = state.companies,
             navController = navController,
+        )
+    }
+}
+
+@Composable
+private fun CompanyInput(
+    companyName: String,
+    onCompanyNameChanged: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        JobisBoxTextField(
+            color = JobisTextFieldColor.MainColor,
+            onValueChanged = onCompanyNameChanged,
+            value = companyName,
+            hint = stringResource(id = R.string.search_recruitment_filter_hint),
         )
     }
 }
@@ -132,7 +178,7 @@ private fun Company(
                     text = stringResource(id = R.string.company_list_million, take.toString()),
                     color = JobisColor.Gray600,
                 )
-                if(hasRecruitment) {
+                if (hasRecruitment) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.End,

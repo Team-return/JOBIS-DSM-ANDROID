@@ -141,7 +141,9 @@ private fun RecruitmentStatus(
     val appliedString = "$approvedCount / $totalStudentCount"
 
     if (approvedCount != 0L) {
-        employmentRate = DecimalFormat("##0.0").format(passCount.toFloat() / totalStudentCount.toFloat() * 100).toFloat()
+        employmentRate =
+            DecimalFormat("##0.0").format(passCount.toFloat() / totalStudentCount.toFloat() * 100)
+                .toFloat()
     }
 
     Column(
@@ -177,7 +179,6 @@ private fun RecruitmentStatus(
                 verticalAlignment = Alignment.Bottom,
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(0.7f),
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Heading3(
@@ -193,12 +194,11 @@ private fun RecruitmentStatus(
                         color = JobisColor.Gray100,
                     )
                 }
+                Spacer(modifier = Modifier.weight(1f))
                 Caption(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            bottom = 4.dp,
-                        ),
+                    modifier = Modifier.padding(
+                        bottom = 4.dp,
+                    ),
                     text = "${stringResource(id = R.string.home_count_success_candidate)} : $passString",
                     color = JobisColor.Gray100,
                 )
@@ -207,10 +207,10 @@ private fun RecruitmentStatus(
                 verticalAlignment = Alignment.Bottom,
             ) {
                 Body4(
-                    modifier = Modifier.fillMaxWidth(0.7f),
                     text = stringResource(id = R.string.home_employment_rate),
                     color = JobisColor.Gray100,
                 )
+                Spacer(modifier = Modifier.weight(1f))
                 Caption(
                     text = "${stringResource(id = R.string.home_count_apply_candidate)} : $appliedString",
                     color = JobisColor.Gray100,
