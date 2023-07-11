@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DismissDirection
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
@@ -156,7 +157,8 @@ private fun BookmarkedRecruitments(
                         ) {
                             navController.navigate("RecruitmentDetails/${item.recruitmentId}")
                         }
-                    }
+                    },
+                    directions = setOf(DismissDirection.EndToStart),
                 )
             }
         )
