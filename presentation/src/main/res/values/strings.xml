@@ -231,4 +231,8 @@
     <string name="bug_report_content">내용</string>
     <string name="bug_report_screenshots">스크린샷</string>
 
+    <!--    Review Details-->
+
+    <string name="review_details_review">%s님의 후기</string>
+
 </resources>

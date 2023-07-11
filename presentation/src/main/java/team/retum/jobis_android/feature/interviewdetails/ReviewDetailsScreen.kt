@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -15,9 +16,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
@@ -43,9 +46,14 @@ internal fun ReviewDetailsScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        Header(text = "header")
-        Spacer(modifier = Modifier.height(30.dp))
-        InterviewReviews(interviewEntities = state.reviewDetails)
+        Column(
+            modifier = Modifier.padding(horizontal = 24.dp),
+        ) {
+            Spacer(modifier = Modifier.height(48.dp))
+            Header(text = stringResource(id = R.string.review_details_review, state.writer))
+            Spacer(modifier = Modifier.height(30.dp))
+            InterviewReviews(interviewEntities = state.reviewDetails)
+        }
     }
 }
 

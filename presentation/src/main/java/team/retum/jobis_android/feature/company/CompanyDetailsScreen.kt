@@ -146,7 +146,10 @@ fun CompanyDetailsScreen(
                     color = JobisColor.Gray700,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                Reviews(reviews = reviewState.value.reviews)
+                Reviews(
+                    reviews = reviewState.value.reviews,
+                    navController = navController,
+                )
             }
             Spacer(modifier = Modifier.height(80.dp))
         }
@@ -249,6 +252,7 @@ private fun CompanyDetails(
 @Composable
 private fun Reviews(
     reviews: List<ReviewEntity>,
+    navController: NavController,
 ) {
     Column(
         modifier = Modifier
@@ -260,9 +264,12 @@ private fun Reviews(
         repeat(reviews.size) { index ->
             val item = reviews[index]
             Review(
+                reviewId = item.reviewId,
                 writer = item.writer,
-                year = item.year.toString()
-            )
+                year = item.year.toString(),
+            ){
+                navController.navigate("ReviewDetails/${item.reviewId}")
+            }
             Spacer(modifier = Modifier.height(10.dp))
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))
@@ -271,8 +278,10 @@ private fun Reviews(
 
 @Composable
 private fun Review(
+    reviewId: String,
     writer: String,
     year: String,
+    onClick: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -280,6 +289,10 @@ private fun Review(
             .defaultMinSize(minHeight = 50.dp)
             .clip(
                 shape = ReviewItemShape,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = { onClick(reviewId) },
             )
             .border(
                 width = 1.dp,

@@ -25,6 +25,6 @@ object JobisRoute {
 
     object MainNavigation{
         const val BugReport = "BugReport"
-        const val InterviewDetails = "InterviewDetails/{review-id}"
+        const val ReviewDetails = "ReviewDetails/{review-id}"
     }
 }
