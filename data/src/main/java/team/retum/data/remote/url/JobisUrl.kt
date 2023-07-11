@@ -19,7 +19,7 @@ object JobisUrl {
     }
 
     object Student {
-        const val signup = "$student/signup"
+        const val signup = student
         const val recruit = "$student/recruit"
         const val exists = "$student/exists"
         const val my = "$student/my"
@@ -53,10 +53,12 @@ object JobisUrl {
 
     object Review{
         const val reviews = "$review/${Properties.companyId}"
+        const val reviewDetails = "$review/details/${Properties.reviewId}"
     }
 
     object Properties{
         const val recruitmentId = "{recruitment-id}"
         const val companyId = "{company-id}"
+        const val reviewId = "{review-id}"
     }
 }

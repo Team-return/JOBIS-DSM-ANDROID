@@ -32,6 +32,7 @@ import team.retum.jobis_android.feature.auth.signup.SignUpScreen
 import team.retum.jobis_android.feature.bugreport.BugReportScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
+import team.retum.jobis_android.feature.interviewdetails.ReviewDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
@@ -217,6 +218,20 @@ class MainActivity : ComponentActivity() {
                     route = JobisRoute.MainNavigation.BugReport,
                 ) {
                     BugReportScreen()
+                }
+
+                composable(
+                    route = JobisRoute.MainNavigation.ReviewDetails,
+                    arguments = listOf(
+                        navArgument("review-id") { type = NavType.StringType }
+                    ),
+                    enterTransition = { slideInLeft() },
+                    exitTransition = { slideOutRight() }
+                ){
+                    ReviewDetailsScreen(
+                        reviewId = it.arguments?.getString("review-id") ?: "",
+                        navController = navController,
+                    )
                 }
             }
         }
