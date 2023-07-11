@@ -7,7 +7,7 @@ import team.retum.domain.entity.review.ReviewDetailsEntity
 data class FetchReviewDetailsResponse(
     @SerializedName("year") val year: Long,
     @SerializedName("writer") val writer: String,
-    @SerializedName("qna_response") val qnaResponses: List<QnaResponse>,
+    @SerializedName("qna_responses") val qnaResponses: List<QnaResponse>,
 )
 
 data class QnaResponse(
