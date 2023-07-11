@@ -240,8 +240,8 @@ private fun CompanyDetails(
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 Caption(
-                    text = companyDetails[index].second
-                        ?: stringResource(id = R.string.company_details_null),
+                    text = companyDetails[index].second.toString()
+                        .ifBlank { stringResource(id = R.string.company_details_null) },
                     color = JobisColor.Gray900,
                 )
             }
@@ -267,7 +267,7 @@ private fun Reviews(
                 reviewId = item.reviewId,
                 writer = item.writer,
                 year = item.year.toString(),
-            ){
+            ) {
                 navController.navigate("ReviewDetails/${item.reviewId}")
             }
             Spacer(modifier = Modifier.height(10.dp))
