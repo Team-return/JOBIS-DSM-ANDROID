@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,7 @@ import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Heading6
@@ -60,12 +62,12 @@ internal fun MyPageScreen(
 
     val state = homeViewModel.container.stateFlow.collectAsState()
 
-    LaunchedEffect(Unit){
-        homeViewModel.container.sideEffectFlow.collect{
-            when(it){
+    LaunchedEffect(Unit) {
+        homeViewModel.container.sideEffectFlow.collect {
+            when (it) {
                 is HomeSideEffect.SuccessSignOut -> {
-                    navController.navigate(JobisRoute.SignIn){
-                        popUpTo(JobisRoute.Main){
+                    navController.navigate(JobisRoute.SignIn) {
+                        popUpTo(JobisRoute.Main) {
                             inclusive = true
                         }
                     }
@@ -163,6 +165,10 @@ private fun UserProfile(
     var classRoom = ""
     var number = ""
 
+    val onProfileImageClicked = {
+
+    }
+
     if (studentGcn.isNotEmpty()) {
         grade = studentGcn[0].toString().ifEmpty { "" }
         classRoom = studentGcn[1].toString().ifEmpty { "" }
@@ -171,47 +177,73 @@ private fun UserProfile(
 
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        AsyncImage(
-            modifier = Modifier
-                .size(62.dp)
-                .skeleton(
-                    show = profileImageUrl.isEmpty(),
-                    shape = CircleShape,
-                ),
-            model = profileImageUrl,
-            contentDescription = null,
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        Heading6(
-            modifier = Modifier
-                .defaultMinSize(minWidth = 56.dp)
-                .skeleton(show = name.isEmpty()),
-            text = name,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Body2(
-            modifier = Modifier
-                .defaultMinSize(minWidth = 164.dp)
-                .skeleton(show = department == Department.DEFAULT),
-            text = department.department,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Body4(
-            modifier = Modifier
-                .defaultMinSize(minWidth = 82.dp)
-                .skeleton(
-                    show = grade.isEmpty()
-                ),
-            text = if (grade.isNotEmpty()) stringResource(
-                id = R.string.student_gcn,
-                grade,
-                classRoom,
-                number
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            contentAlignment = Alignment.BottomEnd,
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .size(84.dp)
+                    .clip(CircleShape)
+                    .jobisClickable(
+                        rippleEnabled = true,
+                        onClick = onProfileImageClicked,
+                    )
+                    .skeleton(
+                        show = profileImageUrl.isEmpty(),
+                        shape = CircleShape,
+                    ),
+                model = profileImageUrl,
+                contentDescription = null,
             )
-            else "",
-            color = JobisColor.Gray700,
-        )
+            Box(
+                modifier = Modifier
+                    .size(26.dp)
+                    .clip(CircleShape)
+                    .background(JobisColor.LightBlue),
+                contentAlignment = Alignment.Center,
+            ) {
+                JobisImage(
+                    drawable = R.drawable.ic_edit,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.width(22.dp))
+        Column {
+            Heading6(
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 56.dp)
+                    .skeleton(show = name.isEmpty()),
+                text = name,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Body2(
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 164.dp)
+                    .skeleton(show = department == Department.DEFAULT),
+                text = department.department,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Body4(
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 82.dp)
+                    .skeleton(
+                        show = grade.isEmpty()
+                    ),
+                text = if (grade.isNotEmpty()) stringResource(
+                    id = R.string.student_gcn,
+                    grade,
+                    classRoom,
+                    number
+                )
+                else "",
+                color = JobisColor.Gray700,
+            )
+        }
     }
 }
 
