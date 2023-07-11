@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
@@ -70,6 +72,22 @@ fun CompaniesScreen(
             companyName = state.name ?: "",
             onCompanyNameChanged = onCompanyNameChanged,
         )
+
+        Row(
+            modifier = Modifier
+                .alpha(if (state.name != null) 1f else 0f)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            if (state.name?.isNotBlank() == true) {
+                Caption(
+                    text = stringResource(id = R.string.search_result),
+                    color = JobisColor.Gray600,
+                )
+                Caption(text = " ${state.name}")
+            }
+        }
         Companies(
             companies = state.companies,
             navController = navController,

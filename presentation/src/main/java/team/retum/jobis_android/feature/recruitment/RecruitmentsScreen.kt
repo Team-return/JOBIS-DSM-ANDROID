@@ -134,11 +134,13 @@ internal fun RecruitmentsScreen(
                     modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Caption(
-                        text = stringResource(id = R.string.search_result),
-                        color = JobisColor.Gray600,
-                    )
-                    Caption(text = " ${state.name}")
+                    if(state.name?.isNotBlank() == true) {
+                        Caption(
+                            text = stringResource(id = R.string.search_result),
+                            color = JobisColor.Gray600,
+                        )
+                        Caption(text = " ${state.name}")
+                    }
                 }
                 Caption(
                     modifier = Modifier.alpha(
