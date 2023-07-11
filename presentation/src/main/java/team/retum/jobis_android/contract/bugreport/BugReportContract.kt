@@ -9,8 +9,8 @@ internal data class BugReportState(
     val content: String = "",
     val titleError: Boolean = false,
     val contentError: Boolean = false,
-    val uriList: MutableList<Uri> = mutableListOf(),
     val selectedPosition: Position = Position.All,
+    val uriList: List<Uri> = listOf()
 ) : State
 
 sealed class BugReportSideEffect : SideEffect {

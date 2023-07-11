@@ -1,6 +1,7 @@
 package team.retum.jobis_android.viewmodel.bugreport
 
 import android.net.Uri
+import android.util.Log
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
@@ -13,14 +14,11 @@ import javax.inject.Inject
 
 internal class BugReportViewModel @Inject constructor(
 
-
 ): BaseViewModel<BugReportState, BugReportSideEffect>(){
 
     override fun sendEvent(event: Event) {}
 
     override val container = container<BugReportState, BugReportSideEffect>(BugReportState())
-
-    private val mutableUriList = mutableListOf<Uri>()
 
     internal fun setTitle(
         title: String,
@@ -42,30 +40,6 @@ internal class BugReportViewModel @Inject constructor(
         }
     }
 
-    internal fun addUri(
-        uri: Uri?,
-    ) = intent{
-        if(uri != null) {
-            mutableUriList.add(uri)
-            reduce {
-                state.copy(
-                    uriList = mutableUriList,
-                )
-            }
-        }
-    }
-
-    internal fun removeUri(
-        index: Int,
-    ) = intent{
-        mutableUriList.removeAt(index)
-        reduce {
-            state.copy(
-                uriList = mutableUriList,
-            )
-        }
-    }
-
     internal fun setPosition(
         position: String,
     ) = intent{
@@ -81,6 +55,16 @@ internal class BugReportViewModel @Inject constructor(
                     selectedPosition = Position.All,
                 )
             }
+        }
+    }
+
+    internal fun setUriList(
+        uriList: List<Uri>,
+    ) = intent{
+        reduce{
+            state.copy(
+                uriList = uriList,
+            )
         }
     }
 }
