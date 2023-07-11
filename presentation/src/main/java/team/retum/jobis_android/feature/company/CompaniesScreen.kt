@@ -28,7 +28,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
-import team.retum.jobis_android.feature.recruitment.Filter
+import team.retum.jobis_android.util.compose.component.Filter
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
@@ -100,7 +100,10 @@ private fun Company(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(elevation = 8.dp)
+            .shadow(
+                elevation = 8.dp,
+                shape = ApplyCompaniesItemShape,
+            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(onClick = onClick),
