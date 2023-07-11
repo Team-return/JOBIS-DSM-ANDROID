@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -28,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,10 +44,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
-import team.retum.jobis_android.util.compose.component.Filter
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
@@ -75,27 +71,24 @@ internal fun RecruitmentsScreen(
 
     val state by recruitmentViewModel.container.stateFlow.collectAsState()
 
-    val recruitments = remember { mutableStateListOf<RecruitmentUiModel>() }
-
     LaunchedEffect(Unit) {
         recruitmentViewModel.fetchRecruitments()
-        recruitmentViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is RecruitmentSideEffect.SuccessFetchRecruitments -> {
-                    recruitments.clear()
-                    recruitments.addAll(it.recruitments)
-                }
-
-                else -> {
-
-                }
-            }
-        }
     }
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
+
+    val onFilterClicked = {
+        coroutineScope.launch {
+            sheetState.show()
+        }
+        Unit
+    }
+
+    val onNameChanged = { name: String ->
+        recruitmentViewModel.setName(name)
+    }
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -114,8 +107,7 @@ internal fun RecruitmentsScreen(
             topEnd = 16.dp,
         ),
         sheetState = sheetState,
-
-        ) {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -126,15 +118,13 @@ internal fun RecruitmentsScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Header(
-                text = stringResource(id = R.string.search_recruitment_header),
-            )
+            Header(text = stringResource(id = R.string.search_recruitment_header),)
             Spacer(modifier = Modifier.height(12.dp))
-            Filter {
-                coroutineScope.launch {
-                    sheetState.show()
-                }
-            }
+            RecruitmentInput(
+                onFilterClicked = onFilterClicked,
+                onKeywordChanged = onNameChanged,
+                name = state.name ?: "",
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -155,16 +145,50 @@ internal fun RecruitmentsScreen(
                         if (state.jobCode != null || state.techCode != null) 1f
                         else 0f,
                     ),
-                    text = stringResource(id = R.string.filter_applied)
+                    text = stringResource(id = R.string.filter_applied),
                 )
             }
             Recruitments(
-                recruitmentUiModels = recruitments,
+                recruitmentUiModels = state.recruitments,
                 recruitmentViewModel = recruitmentViewModel,
                 bookmarkViewModel = bookmarkViewModel,
                 navController = navController,
             )
         }
+    }
+}
+
+@Composable
+private fun RecruitmentInput(
+    name: String,
+    onFilterClicked: () -> Unit,
+    onKeywordChanged: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.weight(0.9f),
+        ) {
+            JobisBoxTextField(
+                color = JobisTextFieldColor.MainColor,
+                onValueChanged = onKeywordChanged,
+                value = name,
+                hint = stringResource(id = R.string.search_recruitment_filter_hint),
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        JobisMediumIconButton(
+            drawable = R.drawable.ic_filter,
+            color = JobisButtonColor.MainSolidColor,
+            onClick = onFilterClicked,
+            shape = RoundedCornerShape(
+                size = 4.dp,
+            )
+        )
     }
 }
 
