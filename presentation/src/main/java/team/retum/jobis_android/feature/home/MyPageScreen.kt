@@ -200,20 +200,18 @@ private fun UserProfile(
                 model = profileImageUrl,
                 contentDescription = null,
             )
-            Box(
-                modifier = Modifier
-                    .size(26.dp)
-                    .clip(CircleShape)
-                    .skeleton(
-                        show = profileImageUrl.isEmpty(),
-                        shape = CircleShape,
+            if (profileImageUrl.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clip(CircleShape)
+                        .background(JobisColor.LightBlue),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    JobisImage(
+                        drawable = R.drawable.ic_edit,
                     )
-                    .background(JobisColor.LightBlue),
-                contentAlignment = Alignment.Center,
-            ) {
-                JobisImage(
-                    drawable = R.drawable.ic_edit,
-                )
+                }
             }
         }
         Spacer(modifier = Modifier.width(22.dp))
