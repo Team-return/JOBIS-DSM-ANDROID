@@ -19,6 +19,7 @@ import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.contract.CompanyState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
+import team.retum.jobis_android.viewmodel.recruitment.toModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,9 +40,10 @@ class CompanyViewModel @Inject constructor(
                     name = state.name,
                 )
             ).onSuccess {
-                setCompanies(
-                    companies = it.companies,
-                )
+                state.companies.addAll(it.companies)
+//                setCompanies(
+//                    companies = it.companies,
+//                )
             }.onFailure { throwable ->
                 when (throwable) {
                     is NotFoundException -> postSideEffect(
@@ -93,7 +95,7 @@ class CompanyViewModel @Inject constructor(
     }
 
     private fun setCompanies(
-        companies: List<CompanyEntity>,
+        companies: MutableList<CompanyEntity>,
     ) = intent {
         reduce {
             state.copy(
