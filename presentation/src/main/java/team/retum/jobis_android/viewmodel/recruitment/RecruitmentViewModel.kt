@@ -39,8 +39,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     name = state.name,
                 )
             ).onSuccess { it ->
-                state.recruitments.addAll(it.recruitmentEntities.map { it.toModel() })
-                //setRecruitments(it.recruitmentEntities.map { it.toModel() })
+                setRecruitments(it.recruitmentEntities.map { it.toModel() })
             }.onFailure { throwable ->
                 postSideEffect(
                     sideEffect = RecruitmentSideEffect.Exception(
@@ -157,7 +156,7 @@ internal class RecruitmentViewModel @Inject constructor(
     }
 
     private fun setRecruitments(
-        recruitments: MutableList<RecruitmentUiModel>,
+        recruitments: List<RecruitmentUiModel>,
     ) = intent {
         reduce {
             state.copy(

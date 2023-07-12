@@ -40,10 +40,9 @@ class CompanyViewModel @Inject constructor(
                     name = state.name,
                 )
             ).onSuccess {
-                state.companies.addAll(it.companies)
-//                setCompanies(
-//                    companies = it.companies,
-//                )
+                setCompanies(
+                    companies = it.companies,
+                )
             }.onFailure { throwable ->
                 when (throwable) {
                     is NotFoundException -> postSideEffect(
@@ -95,7 +94,7 @@ class CompanyViewModel @Inject constructor(
     }
 
     private fun setCompanies(
-        companies: MutableList<CompanyEntity>,
+        companies: List<CompanyEntity>,
     ) = intent {
         reduce {
             state.copy(
