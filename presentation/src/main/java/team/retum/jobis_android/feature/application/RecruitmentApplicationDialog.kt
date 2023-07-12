@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.application
 
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -25,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.ApplicationSideEffect
 import team.retum.jobis_android.contract.FileSideEffect
 import team.retum.jobis_android.util.FileUtil
@@ -60,9 +62,10 @@ internal fun RecruitmentApplicationDialog(
 
     val context = LocalContext.current
 
-    val state = fileViewModel.container.stateFlow.collectAsState()
+    val fileState = fileViewModel.container.stateFlow.collectAsState()
+    val applicationState = applicationViewModel.container.stateFlow.collectAsState()
 
-    val files = state.value.files
+    val files = fileState.value.files
 
     val urls = remember { mutableStateListOf<String>() }
 
@@ -92,8 +95,19 @@ internal fun RecruitmentApplicationDialog(
         }
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     val onClickConfirmButton = {
         fileViewModel.uploadFile()
+        applicationViewModel.setButtonState(
+            buttonState = false,
+        )
+        coroutineScope.launch{
+            delay(3000)
+            applicationViewModel.setButtonState(
+                buttonState = true,
+            )
+        }
     }
 
     val onRemoveFile = { index: Int ->
@@ -148,7 +162,6 @@ internal fun RecruitmentApplicationDialog(
                     fileName = files[it].name,
                     fileSize = (files[it].length() / 1024).toString(),
                 ) {
-                    Log.d("TEST", "fesifjisef")
                     onRemoveFile(it)
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -184,6 +197,7 @@ internal fun RecruitmentApplicationDialog(
             JobisMediumButton(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
+                enabled = applicationState.value.buttonState,
             ) {
                 onClickConfirmButton()
             }
