@@ -1,7 +1,6 @@
 package team.retum.jobis_android.viewmodel.recruitment
 
 import androidx.lifecycle.viewModelScope
-import com.jobis.jobis_android.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -155,22 +154,6 @@ internal class RecruitmentViewModel @Inject constructor(
         }
         fetchRecruitmentDetails()
     }
-
-    internal fun getRecruitmentDetails(): List<Pair<Int, Any?>> =
-        with(container.stateFlow.value.details) {
-            return listOf(
-                R.string.recruitment_details_recruit_period to "$startDate ~ $endDate",
-                R.string.recruitment_details_preferential_treatment to benefits,
-                R.string.recruitment_details_licenses to requiredLicenses,
-                R.string.recruitment_details_required_grade to requiredGrade,
-                R.string.recruitment_details_worker_time to workHours,
-                R.string.recruitment_details_hiring to pay,
-                R.string.recruitment_details_benefits to benefits,
-                R.string.recruitment_details_hiring_progress to hiringProgress,
-                R.string.recruitment_details_required_documents to submitDocument,
-                R.string.recruitment_details_etc to etc,
-            )
-        }
 
     private fun setRecruitments(
         recruitments: List<RecruitmentUiModel>,

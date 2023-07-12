@@ -216,7 +216,7 @@ private fun Recruitments(
         val size = recruitmentUiModels.size
         if (size - 1 == lastIndex.value && size > 5) {
             page += 1
-            recruitmentViewModel.setPage(page + 1)
+            recruitmentViewModel.setPage(page)
             recruitmentViewModel.fetchRecruitments()
         }
     }

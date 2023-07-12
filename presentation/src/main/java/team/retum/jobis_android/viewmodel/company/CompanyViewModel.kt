@@ -19,6 +19,7 @@ import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.contract.CompanyState
 import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
+import team.retum.jobis_android.viewmodel.recruitment.toModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -164,22 +165,4 @@ class CompanyViewModel @Inject constructor(
             }
         }
     }
-
-    internal fun getCompanyDetails(): List<Pair<Int, String?>> =
-        with(container.stateFlow.value.companyDetails) {
-            return listOf(
-                R.string.company_details_representative_name to representativeName,
-                R.string.company_details_founded_at to foundedAt,
-                R.string.company_details_worker_number to workerNumber.toString(),
-                R.string.company_details_take to take.toString(),
-                R.string.company_details_address1 to address1,
-                R.string.company_details_address2 to address2,
-                R.string.company_details_manager1 to manager1,
-                R.string.company_details_phone_number1 to phoneNumber1,
-                R.string.company_details_manager2 to manager2,
-                R.string.company_details_phone_number2 to phoneNumber2,
-                R.string.company_details_email to email,
-                R.string.company_details_fax to fax,
-            )
-        }
 }

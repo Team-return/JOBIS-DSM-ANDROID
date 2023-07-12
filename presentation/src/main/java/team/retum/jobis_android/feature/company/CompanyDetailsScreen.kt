@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.contract.CompanySideEffect
 import team.retum.jobis_android.root.navigation.JobisRoute
@@ -126,12 +127,7 @@ fun CompanyDetailsScreen(
         ) {
             Header(text = stringResource(id = R.string.company_list_search_company))
             Spacer(modifier = Modifier.height(16.dp))
-            CompanyDetails(
-                companyProfileUrl = companyState.value.companyDetails.companyProfileUrl,
-                companyName = companyState.value.companyDetails.companyName,
-                companyIntroduce = companyState.value.companyDetails.companyIntroduce,
-                companyDetails = companyViewModel.getCompanyDetails()
-            )
+            CompanyDetails(details = companyState.value.companyDetails)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = JobisColor.Gray400,
@@ -167,10 +163,7 @@ fun CompanyDetailsScreen(
 
 @Composable
 private fun CompanyDetails(
-    companyProfileUrl: String,
-    companyName: String,
-    companyIntroduce: String,
-    companyDetails: List<Pair<Int, String?>>,
+    details: CompanyDetailsEntity,
 ) {
 
     var showDetails by remember { mutableStateOf(false) }
@@ -187,15 +180,15 @@ private fun CompanyDetails(
         ) {
             AsyncImage(
                 modifier = Modifier.size(80.dp),
-                model = companyProfileUrl,
+                model = details.companyProfileUrl,
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.width(16.dp))
-            Body1(text = companyName)
+            Body1(text = details.companyName)
         }
         Spacer(modifier = Modifier.height(12.dp))
         Caption(
-            text = companyIntroduce,
+            text = details.companyIntroduce,
             color = JobisColor.Gray700,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
@@ -221,31 +214,67 @@ private fun CompanyDetails(
             modifier = Modifier.fillMaxWidth(),
             color = JobisColor.Gray400,
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        repeat(companyDetails.size) { index ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        bottom = 10.dp,
-                    ),
-                verticalAlignment = Alignment.Top,
-            ) {
-                Caption(
-                    modifier = Modifier.defaultMinSize(
-                        minWidth = 52.dp,
-                    ),
-                    text = stringResource(companyDetails[index].first),
-                    color = JobisColor.Gray700,
-                )
-                Spacer(modifier = Modifier.width(24.dp))
-                Caption(
-                    text = companyDetails[index].second.toString()
-                        .ifBlank { stringResource(id = R.string.company_details_null) },
-                    color = JobisColor.Gray900,
-                )
-            }
-        }
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_representative_name),
+            content = details.representativeName,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_founded_at),
+            content = details.foundedAt,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_worker_number),
+            content = "${details.workerNumber}명",
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_take),
+            content = "${details.take.toInt()}억",
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_address1),
+            content = details.address1,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_address2),
+            content = details.address2 ?: stringResource(id = R.string.company_details_null),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_manager1),
+            content = details.manager1,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_phone_number1),
+            content = details.phoneNumber1,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_manager2),
+            content = details.manager2 ?: stringResource(id = R.string.company_details_null),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_phone_number2),
+            content = details.phoneNumber2 ?: stringResource(id = R.string.company_details_null),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_email),
+            content = details.email,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        CompanyDetail(
+            title = stringResource(id = R.string.company_details_fax),
+            content = details.fax ?: stringResource(id = R.string.company_details_null),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
@@ -275,6 +304,30 @@ private fun Reviews(
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))
     }
 }
+
+@Composable
+private fun CompanyDetail(
+    title: String,
+    content: String,
+) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+    ) {
+        Caption(
+            modifier = Modifier.defaultMinSize(
+                minWidth = 68.dp,
+            ),
+            text = title,
+            color = JobisColor.Gray700,
+        )
+        Spacer(modifier = Modifier.width(24.dp))
+        Caption(
+            text = content,
+            color = JobisColor.Gray900,
+        )
+    }
+}
+
 
 @Composable
 private fun Review(

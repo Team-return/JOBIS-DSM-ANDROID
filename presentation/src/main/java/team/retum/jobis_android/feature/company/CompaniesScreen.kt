@@ -13,10 +13,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -52,45 +59,71 @@ fun CompaniesScreen(
         companyViewModel.setCompanyName(name)
     }
 
+    val navigateToCompanyDetails = { id: Int, hasRecruitment: Boolean ->
+        navController.navigate("CompanyDetails/${id}/${hasRecruitment}")
+    }
+
     LaunchedEffect(Unit) {
         companyViewModel.fetchCompanies()
+    }
+
+    val lazyListState = rememberLazyListState()
+
+    val lastIndex = remember {
+        derivedStateOf {
+            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        }
+    }
+
+    var page by remember { mutableStateOf(1) }
+
+    LaunchedEffect(lastIndex.value) {
+        val size = state.companies.size
+        if (size - 1 == lastIndex.value && size > 5) {
+            page += 1
+            companyViewModel.setPage(page + 1)
+            companyViewModel.fetchCompanies()
+        }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = 48.dp,
                 start = 24.dp,
                 end = 24.dp,
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
         CompanyInput(
             companyName = state.name ?: "",
             onCompanyNameChanged = onCompanyNameChanged,
         )
-
         Row(
-            modifier = Modifier
-                .alpha(if (state.name != null) 1f else 0f)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(24.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            if (state.name?.isNotBlank() == true) {
-                Caption(
-                    text = stringResource(id = R.string.search_result),
-                    color = JobisColor.Gray600,
-                )
-                Caption(text = " ${state.name}")
+            Row(
+                modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if(state.name?.isNotBlank() == true) {
+                    Caption(
+                        text = stringResource(id = R.string.search_result),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = " ${state.name}")
+                }
             }
         }
         Companies(
             companies = state.companies,
-            navController = navController,
+            lazyListState = lazyListState,
+            navigateToCompanyDetails = navigateToCompanyDetails,
         )
     }
 }
@@ -118,18 +151,21 @@ private fun CompanyInput(
 @Composable
 private fun Companies(
     companies: List<CompanyEntity>,
-    navController: NavController,
+    lazyListState: LazyListState,
+    navigateToCompanyDetails: (Int, Boolean) -> Unit,
 ) {
-    LazyColumn(contentPadding = PaddingValues(vertical = 20.dp)) {
+    LazyColumn(
+        state = lazyListState,
+        contentPadding = PaddingValues(vertical = 20.dp),
+    ) {
         items(companies) { item ->
             Company(
                 name = item.name,
                 logoUrl = item.logoUrl,
                 take = item.take,
                 hasRecruitment = item.hasRecruitment,
-            ) {
-                navController.navigate("CompanyDetails/${item.id}/${item.hasRecruitment}")
-            }
+                onClick = { navigateToCompanyDetails(item.id, item.hasRecruitment) },
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

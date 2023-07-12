@@ -82,4 +82,14 @@ internal class ApplicationViewModel @Inject constructor(
             )
         }
     }
+
+    internal fun setButtonState(
+        buttonState: Boolean,
+    ) = intent{
+        reduce{
+            state.copy(
+                buttonState = buttonState,
+            )
+        }
+    }
 }
