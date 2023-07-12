@@ -103,18 +103,21 @@ fun CompaniesScreen(
             onCompanyNameChanged = onCompanyNameChanged,
         )
         Row(
-            modifier = Modifier
-                .alpha(if (state.name != null) 1f else 0f)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(24.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            if (state.name?.isNotBlank() == true) {
-                Caption(
-                    text = stringResource(id = R.string.search_result),
-                    color = JobisColor.Gray600,
-                )
-                Caption(text = " ${state.name}")
+            Row(
+                modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if(state.name?.isNotBlank() == true) {
+                    Caption(
+                        text = stringResource(id = R.string.search_result),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = " ${state.name}")
+                }
             }
         }
         Companies(
@@ -153,7 +156,7 @@ private fun Companies(
 ) {
     LazyColumn(
         state = lazyListState,
-        contentPadding = PaddingValues(top = 20.dp),
+        contentPadding = PaddingValues(vertical = 20.dp),
     ) {
         items(companies) { item ->
             Company(
