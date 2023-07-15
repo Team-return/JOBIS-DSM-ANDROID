@@ -68,6 +68,6 @@ object Dependency {
 
     object DESIGNSYSTEM {
         const val JOBIS =
-            "com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:jobis:${Version.DESIGN_SYSTEM}"
+            "com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:designsystem:${Version.DESIGN_SYSTEM}"
     }
 }

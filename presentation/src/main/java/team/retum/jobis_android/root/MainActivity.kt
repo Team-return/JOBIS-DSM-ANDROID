@@ -1,5 +1,6 @@
 package team.retum.jobis_android.root
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -11,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,7 +24,6 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
@@ -42,6 +43,7 @@ import team.retum.jobis_android.util.compose.animation.slideInLeft
 import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
 import team.retum.jobis_android.util.compose.animation.slideOutRight
+import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -52,6 +54,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +63,12 @@ class MainActivity : ComponentActivity() {
 
             SetWindowStatus()
 
-            val navController = rememberAnimatedNavController()
-
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             val state = mainViewModel.container.stateFlow.collectAsState()
+
+            val appState = rememberAppState()
+            val navController = appState.navController
 
             LaunchedEffect(Unit) {
                 mainViewModel.fetchAutoSignInOption()
@@ -81,157 +85,163 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            // TODO 토스트 시스템 구현
-            AnimatedNavHost(
-                navController = navController,
-                startDestination = JobisRoute.Splash,
+            Scaffold(
+                scaffoldState = appState.scaffoldState,
+                snackbarHost = {
+                    JobisSnackBarHost(appState)
+                }
             ) {
-                composable(
-                    route = JobisRoute.Splash,
-                    exitTransition = { fadeOut(tween(300)) },
+                AnimatedNavHost(
+                    navController = navController,
+                    startDestination = JobisRoute.Splash,
                 ) {
-                    SplashScreen(moveToScreenBySignInOption = moveToScreenBySignInOption)
-                }
-
-                composable(
-                    route = JobisRoute.SignUp,
-                    enterTransition = { slideInLeft() },
-                    popExitTransition = { slideOutRight() },
-                ) {
-                    SignUpScreen(
-                        navHostController = navController,
-                        signUpViewModel = signUpViewModel
-                    )
-                }
-
-                composable(
-                    route = JobisRoute.SignIn,
-                    exitTransition = { slideOutLeft() },
-                    popEnterTransition = { slideInRight() },
-                    popExitTransition = { slideOutRight() },
-                ) {
-                    SignInScreen(
-                        navController = navController,
-                    )
-                }
-
-                composable(
-                    route = JobisRoute.Main,
-                    exitTransition = {
-                        fadeOut()
+                    composable(
+                        route = JobisRoute.Splash,
+                        exitTransition = { fadeOut(tween(300)) },
+                    ) {
+                        SplashScreen(moveToScreenBySignInOption = moveToScreenBySignInOption)
                     }
-                ) {
-                    MainScreen(
-                        navController = navController,
-                    )
-                }
 
-                composable(
-                    route = JobisRoute.Recruitments,
-                    exitTransition = { slideOutLeft() },
-                    popEnterTransition = { slideInRight() },
-                    popExitTransition = { fadeOut(tween(300)) }
-                ) {
-                    RecruitmentsScreen(
-                        navController = navController,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.SignUp,
+                        enterTransition = { slideInLeft() },
+                        popExitTransition = { slideOutRight() },
+                    ) {
+                        SignUpScreen(
+                            navHostController = navController,
+                            signUpViewModel = signUpViewModel
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.RecruitmentDetails,
-                    arguments = listOf(
-                        navArgument("recruitment-id") { type = NavType.LongType }
-                    ),
-                    enterTransition = { slideInLeft() },
-                    exitTransition = { slideOutLeft() },
-                    popEnterTransition = { slideInRight() },
-                    popExitTransition = { slideOutRight() }
-                ) {
-                    RecruitmentDetailsScreen(
-                        navController = navController,
-                        recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.SignIn,
+                        exitTransition = { slideOutLeft() },
+                        popEnterTransition = { slideInRight() },
+                        popExitTransition = { slideOutRight() },
+                    ) {
+                        SignInScreen(
+                            navController = navController,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.Companies,
-                    exitTransition = { slideOutLeft() },
-                    popEnterTransition = { slideInRight() },
-                    popExitTransition = { fadeOut(tween(300)) }
-                ) {
-                    CompaniesScreen(
-                        navController = navController,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.Main,
+                        exitTransition = {
+                            fadeOut()
+                        }
+                    ) {
+                        MainScreen(
+                            navController = navController,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.CompanyDetails,
-                    arguments = listOf(
-                        navArgument("company-id") { type = NavType.IntType },
-                        navArgument("has-recruitment") { type = NavType.BoolType }
-                    ),
-                    enterTransition = { slideInLeft() },
-                    exitTransition = { slideOutLeft() },
-                    popEnterTransition = { slideInRight() },
-                    popExitTransition = { slideOutRight() }
-                ) {
-                    CompanyDetailsScreen(
-                        navController = navController,
-                        companyId = it.arguments?.getInt("company-id") ?: 0,
-                        hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.Recruitments,
+                        exitTransition = { slideOutLeft() },
+                        popEnterTransition = { slideInRight() },
+                        popExitTransition = { fadeOut(tween(300)) }
+                    ) {
+                        RecruitmentsScreen(
+                            navController = navController,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.ResetPasswordVerifyEmail,
-                    enterTransition = { slideInLeft() },
-                    exitTransition = { slideOutRight() },
-                    popEnterTransition = { fadeIn(tween(300)) },
-                    popExitTransition = { slideOutRight() },
-                ) {
-                    ResetPasswordVerifyEmailScreen(
-                        navController = navController,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.RecruitmentDetails,
+                        arguments = listOf(
+                            navArgument("recruitment-id") { type = NavType.LongType }
+                        ),
+                        enterTransition = { slideInLeft() },
+                        exitTransition = { slideOutLeft() },
+                        popEnterTransition = { slideInRight() },
+                        popExitTransition = { slideOutRight() }
+                    ) {
+                        RecruitmentDetailsScreen(
+                            navController = navController,
+                            recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
+                        )
+                    }
 
-                val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
+                    composable(
+                        route = JobisRoute.Companies,
+                        exitTransition = { slideOutLeft() },
+                        popEnterTransition = { slideInRight() },
+                        popExitTransition = { fadeOut(tween(300)) }
+                    ) {
+                        CompaniesScreen(
+                            navController = navController,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.ResetPassword,
-                ) {
-                    ResetPasswordScreen(
-                        navController = navController,
-                        resetPasswordViewModel = resetPasswordViewModel,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.CompanyDetails,
+                        arguments = listOf(
+                            navArgument("company-id") { type = NavType.IntType },
+                            navArgument("has-recruitment") { type = NavType.BoolType }
+                        ),
+                        enterTransition = { slideInLeft() },
+                        exitTransition = { slideOutLeft() },
+                        popEnterTransition = { slideInRight() },
+                        popExitTransition = { slideOutRight() }
+                    ) {
+                        CompanyDetailsScreen(
+                            navController = navController,
+                            companyId = it.arguments?.getInt("company-id") ?: 0,
+                            hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.ComparePassword,
-                ) {
-                    ComparePasswordScreen(
-                        navController = navController,
-                        resetPasswordViewModel = resetPasswordViewModel,
-                    )
-                }
+                    composable(
+                        route = JobisRoute.ResetPasswordVerifyEmail,
+                        enterTransition = { slideInLeft() },
+                        exitTransition = { slideOutRight() },
+                        popEnterTransition = { fadeIn(tween(300)) },
+                        popExitTransition = { slideOutRight() },
+                    ) {
+                        ResetPasswordVerifyEmailScreen(
+                            navController = navController,
+                        )
+                    }
 
-                composable(
-                    route = JobisRoute.MainNavigation.BugReport,
-                ) {
-                    BugReportScreen()
-                }
+                    val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
 
-                composable(
-                    route = JobisRoute.MainNavigation.ReviewDetails,
-                    arguments = listOf(
-                        navArgument("review-id") { type = NavType.StringType }
-                    ),
-                    enterTransition = { slideInLeft() },
-                    exitTransition = { slideOutRight() }
-                ){
-                    ReviewDetailsScreen(
-                        reviewId = it.arguments?.getString("review-id") ?: "",
-                        navController = navController,
-                    )
+                    composable(
+                        route = JobisRoute.ResetPassword,
+                    ) {
+                        ResetPasswordScreen(
+                            navController = navController,
+                            resetPasswordViewModel = resetPasswordViewModel,
+                        )
+                    }
+
+                    composable(
+                        route = JobisRoute.ComparePassword,
+                    ) {
+                        ComparePasswordScreen(
+                            navController = navController,
+                            resetPasswordViewModel = resetPasswordViewModel,
+                        )
+                    }
+
+                    composable(
+                        route = JobisRoute.MainNavigation.BugReport,
+                    ) {
+                        BugReportScreen()
+                    }
+
+                    composable(
+                        route = JobisRoute.MainNavigation.ReviewDetails,
+                        arguments = listOf(
+                            navArgument("review-id") { type = NavType.StringType }
+                        ),
+                        enterTransition = { slideInLeft() },
+                        exitTransition = { slideOutRight() }
+                    ) {
+                        ReviewDetailsScreen(
+                            reviewId = it.arguments?.getString("review-id") ?: "",
+                            navController = navController,
+                        )
+                    }
                 }
             }
         }
