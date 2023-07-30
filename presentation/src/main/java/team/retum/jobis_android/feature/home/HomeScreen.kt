@@ -266,6 +266,11 @@ private fun UserInformation(
                 color = JobisColor.Gray600,
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
+        JobisImage(
+            modifier = Modifier.size(24.dp),
+            drawable = R.drawable.ic_notification,
+        )
     }
 }
 
