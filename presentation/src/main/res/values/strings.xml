@@ -87,6 +87,7 @@
     <string name="search_recruitment_train_pay">실습 수당 %s 원</string>
     <string name="search_recruitment_more_details">더보기</string>
     <string name="search_recruitment_filter_hint">회사검색</string>
+    <string name="recruitments_not_exist">모집의뢰서가 존재하지 않습니다</string>
 
     <!--    Recruitment Details-->
 

@@ -342,9 +342,7 @@ private fun ApplyCompany(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Body3(
-                        text = company!!
-                    )
+                    Body3(text = company!!)
                     Body3(
                         text = " $status ",
                         color = JobisColor.LightBlue,

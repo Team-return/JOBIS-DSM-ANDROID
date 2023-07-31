@@ -56,6 +56,7 @@ import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
+import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -90,6 +91,8 @@ internal fun RecruitmentsScreen(
         recruitmentViewModel.setName(name)
     }
 
+    val recruitments = state.recruitments
+
     ModalBottomSheetLayout(
         sheetContent = {
             RecruitmentFilter { jobCode, techCode ->
@@ -108,54 +111,44 @@ internal fun RecruitmentsScreen(
         ),
         sheetState = sheetState,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = 48.dp,
-                    start = 24.dp,
-                    end = 24.dp,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Header(text = stringResource(id = R.string.search_recruitment_header),)
-            Spacer(modifier = Modifier.height(12.dp))
-            RecruitmentInput(
-                onFilterClicked = onFilterClicked,
-                onKeywordChanged = onNameChanged,
-                name = state.name ?: "",
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Row(
-                    modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if(state.name?.isNotBlank() == true) {
-                        Caption(
-                            text = stringResource(id = R.string.search_result),
-                            color = JobisColor.Gray600,
-                        )
-                        Caption(text = " ${state.name}")
-                    }
-                }
-                Caption(
-                    modifier = Modifier.alpha(
-                        if (state.jobCode != null || state.techCode != null) 1f
-                        else 0f,
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = 48.dp,
+                        start = 24.dp,
+                        end = 24.dp,
                     ),
-                    text = stringResource(id = R.string.filter_applied),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Header(text = stringResource(id = R.string.search_recruitment_header))
+                Spacer(modifier = Modifier.height(12.dp))
+                if (recruitments.isNotEmpty()) {
+                    RecruitmentInput(
+                        name = state.name ?: "",
+                        jobCode = state.jobCode,
+                        techCode = state.techCode,
+                        onFilterClicked = onFilterClicked,
+                        onKeywordChanged = onNameChanged,
+                    )
+                }
+                Recruitments(
+                    recruitmentUiModels = recruitments,
+                    recruitmentViewModel = recruitmentViewModel,
+                    bookmarkViewModel = bookmarkViewModel,
+                    navController = navController,
                 )
             }
-            Recruitments(
-                recruitmentUiModels = state.recruitments,
-                recruitmentViewModel = recruitmentViewModel,
-                bookmarkViewModel = bookmarkViewModel,
-                navController = navController,
-            )
+            recruitments.ifEmpty {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Body1(text = stringResource(id = R.string.recruitments_not_exist))
+                }
+            }
         }
     }
 }
@@ -163,6 +156,8 @@ internal fun RecruitmentsScreen(
 @Composable
 private fun RecruitmentInput(
     name: String,
+    jobCode: Long?,
+    techCode: String?,
     onFilterClicked: () -> Unit,
     onKeywordChanged: (String) -> Unit,
 ) {
@@ -190,6 +185,31 @@ private fun RecruitmentInput(
             shape = RoundedCornerShape(
                 size = 4.dp,
             )
+        )
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row(
+            modifier = Modifier.alpha(if (name.isNotBlank()) 1f else 0f),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (name.isNotBlank()) {
+                Caption(
+                    text = stringResource(id = R.string.search_result),
+                    color = JobisColor.Gray600,
+                )
+                Caption(text = " $name")
+            }
+        }
+        Caption(
+            modifier = Modifier.alpha(
+                if (jobCode != null || techCode != null) 1f
+                else 0f,
+            ),
+            text = stringResource(id = R.string.filter_applied),
         )
     }
 }
@@ -224,9 +244,8 @@ private fun Recruitments(
     LazyColumn(
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(vertical = 20.dp)
+        contentPadding = PaddingValues(vertical = 20.dp),
     ) {
-
         items(recruitmentUiModels) { recruitment ->
 
             val position = recruitment.jobCodeList.replace(',', '/')
