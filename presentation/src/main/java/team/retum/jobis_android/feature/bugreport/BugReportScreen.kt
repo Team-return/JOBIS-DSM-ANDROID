@@ -34,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.util.compose.component.AddButton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bugreport.BugReportViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisDropDownColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.button.JobisSmallIconButton
 import team.returm.jobisdesignsystem.dropdown.JobisDropDown
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
@@ -252,9 +252,11 @@ private fun ScreenShots(
                                 end = 6.dp,
                             ),
                         ) {
-                            AddButton(
+                            JobisSmallIconButton(
                                 drawable = R.drawable.ic_trash_red,
                                 onClick = { removeScreenshot(index) },
+                                color = JobisButtonColor.MainShadowColor,
+                                shadow = true,
                             )
                         }
                     }
@@ -265,9 +267,11 @@ private fun ScreenShots(
                             modifier = Modifier.fillMaxHeight(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            AddButton(
+                            JobisSmallIconButton(
                                 drawable = R.drawable.ic_add_blue,
                                 onClick = addScreenshot,
+                                color = JobisButtonColor.MainShadowColor,
+                                shadow = true,
                             )
                         }
                     }

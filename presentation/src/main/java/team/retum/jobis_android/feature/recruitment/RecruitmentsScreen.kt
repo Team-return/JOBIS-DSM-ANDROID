@@ -126,7 +126,7 @@ internal fun RecruitmentsScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 if (recruitments.isNotEmpty()) {
                     RecruitmentInput(
-                        name = state.name ?: "",
+                        name = state.name,
                         jobCode = state.jobCode,
                         techCode = state.techCode,
                         onFilterClicked = onFilterClicked,
@@ -155,7 +155,7 @@ internal fun RecruitmentsScreen(
 
 @Composable
 private fun RecruitmentInput(
-    name: String,
+    name: String?,
     jobCode: Long?,
     techCode: String?,
     onFilterClicked: () -> Unit,
@@ -173,7 +173,7 @@ private fun RecruitmentInput(
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
                 onValueChanged = onKeywordChanged,
-                value = name,
+                value = name ?: "",
                 hint = stringResource(id = R.string.search_recruitment_filter_hint),
             )
         }
@@ -193,10 +193,10 @@ private fun RecruitmentInput(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
-            modifier = Modifier.alpha(if (name.isNotBlank()) 1f else 0f),
+            modifier = Modifier.alpha(if (name.isNullOrBlank()) 1f else 0f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (name.isNotBlank()) {
+            if (name.isNullOrBlank()) {
                 Caption(
                     text = stringResource(id = R.string.search_result),
                     color = JobisColor.Gray600,

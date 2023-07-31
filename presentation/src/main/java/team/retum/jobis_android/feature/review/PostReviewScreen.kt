@@ -24,12 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.util.compose.component.AddButton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisDropDownColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.button.JobisSmallIconButton
 import team.returm.jobisdesignsystem.dropdown.JobisDropDown
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Heading6
@@ -138,9 +138,11 @@ private fun ReviewInputs(
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
-                    AddButton(
+                    JobisSmallIconButton(
                         drawable = R.drawable.ic_add_blue,
                         onClick = onAddButtonClicked,
+                        color = JobisButtonColor.MainShadowColor,
+                        shadow = true,
                     )
                 }
             }

@@ -295,9 +295,7 @@ private fun ApplyCompanies(
             }
         }
     } else {
-        ApplyCompany(
-            isEmpty = true,
-        )
+        ApplyCompany(isEmpty = true)
     }
     Spacer(modifier = Modifier.height(18.dp))
 }

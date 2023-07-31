@@ -100,7 +100,7 @@ internal fun BookmarkedScreen(
                 navController = navController,
                 onSwipeItem = removeRecruitments,
             )
-            if(state.bookmarkExists) {
+            if(!state.bookmarkExists) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

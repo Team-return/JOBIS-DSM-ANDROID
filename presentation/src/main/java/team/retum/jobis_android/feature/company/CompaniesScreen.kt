@@ -105,7 +105,7 @@ fun CompaniesScreen(
             Spacer(modifier = Modifier.height(12.dp))
             if (companies.isNotEmpty()) {
                 CompanyInput(
-                    companyName = state.name ?: "",
+                    companyName = state.name,
                     onCompanyNameChanged = onCompanyNameChanged,
                 )
             }
@@ -147,7 +147,7 @@ fun CompaniesScreen(
 
 @Composable
 private fun CompanyInput(
-    companyName: String,
+    companyName: String?,
     onCompanyNameChanged: (String) -> Unit,
 ) {
     Row(
@@ -159,7 +159,7 @@ private fun CompanyInput(
         JobisBoxTextField(
             color = JobisTextFieldColor.MainColor,
             onValueChanged = onCompanyNameChanged,
-            value = companyName,
+            value = companyName ?: "",
             hint = stringResource(id = R.string.search_recruitment_filter_hint),
         )
     }
