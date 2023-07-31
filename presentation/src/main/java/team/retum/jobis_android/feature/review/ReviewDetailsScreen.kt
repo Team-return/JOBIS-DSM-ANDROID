@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.interviewdetails
+package team.retum.jobis_android.feature.review
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -2,6 +2,7 @@ package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,7 @@ import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
+import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -75,6 +77,8 @@ fun CompaniesScreen(
         }
     }
 
+    val companies = state.companies
+
     var page by remember { mutableStateOf(1) }
 
     LaunchedEffect(lastIndex.value) {
@@ -86,51 +90,64 @@ fun CompaniesScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = 24.dp,
-                end = 24.dp,
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Spacer(modifier = Modifier.height(48.dp))
-        Header(text = stringResource(id = R.string.company_list_search_company))
-        Spacer(modifier = Modifier.height(12.dp))
-        CompanyInput(
-            companyName = state.name ?: "",
-            onCompanyNameChanged = onCompanyNameChanged,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth().height(24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = 24.dp,
+                    end = 24.dp,
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(48.dp))
+            Header(text = stringResource(id = R.string.company_list_search_company))
+            Spacer(modifier = Modifier.height(12.dp))
+            if (companies.isNotEmpty()) {
+                CompanyInput(
+                    companyName = state.name,
+                    onCompanyNameChanged = onCompanyNameChanged,
+                )
+            }
             Row(
-                modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                if(state.name?.isNotBlank() == true) {
-                    Caption(
-                        text = stringResource(id = R.string.search_result),
-                        color = JobisColor.Gray600,
-                    )
-                    Caption(text = " ${state.name}")
+                Row(
+                    modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (state.name?.isNotBlank() == true) {
+                        Caption(
+                            text = stringResource(id = R.string.search_result),
+                            color = JobisColor.Gray600,
+                        )
+                        Caption(text = " ${state.name}")
+                    }
                 }
             }
+            Companies(
+                companies = companies,
+                lazyListState = lazyListState,
+                navigateToCompanyDetails = navigateToCompanyDetails,
+            )
         }
-        Companies(
-            companies = state.companies,
-            lazyListState = lazyListState,
-            navigateToCompanyDetails = navigateToCompanyDetails,
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Body1(text = stringResource(id = R.string.companies_not_exits))
+        }
     }
 }
 
 @Composable
 private fun CompanyInput(
-    companyName: String,
+    companyName: String?,
     onCompanyNameChanged: (String) -> Unit,
 ) {
     Row(
@@ -142,7 +159,7 @@ private fun CompanyInput(
         JobisBoxTextField(
             color = JobisTextFieldColor.MainColor,
             onValueChanged = onCompanyNameChanged,
-            value = companyName,
+            value = companyName ?: "",
             hint = stringResource(id = R.string.search_recruitment_filter_hint),
         )
     }

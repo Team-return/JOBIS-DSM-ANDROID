@@ -87,6 +87,7 @@
     <string name="search_recruitment_train_pay">실습 수당 %s 원</string>
     <string name="search_recruitment_more_details">더보기</string>
     <string name="search_recruitment_filter_hint">회사검색</string>
+    <string name="recruitments_not_exist">모집의뢰서가 존재하지 않습니다</string>
 
     <!--    Recruitment Details-->
 
@@ -118,6 +119,7 @@
 
     <string name="company_list_million">%s억</string>
     <string name="company_list_search_company">기업 조회하기</string>
+    <string name="companies_not_exits">기업이 존재하지 않습니다</string>
 
     <!--    Company Details-->
 
@@ -234,5 +236,16 @@
     <!--    Review Details-->
 
     <string name="review_details_review">%s님의 후기</string>
+
+    <!--    Post Review-->
+
+    <string name="post_review_header">면접후기 작성</string>
+    <string name="post_review_position">직무</string>
+
+    <string name="post_review_question">면접질문</string>
+    <string name="post_review_question_hint">면접에서 답변했던 질문을 작성해주세요</string>
+
+    <string name="post_review_answer">답변내용</string>
+    <string name="post_review_answer_hint">해당 질문에 답변했던 내용을 작성해주세요</string>
 
 </resources>

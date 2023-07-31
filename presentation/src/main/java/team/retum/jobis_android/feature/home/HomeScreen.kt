@@ -295,9 +295,7 @@ private fun ApplyCompanies(
             }
         }
     } else {
-        ApplyCompany(
-            isEmpty = true,
-        )
+        ApplyCompany(isEmpty = true)
     }
     Spacer(modifier = Modifier.height(18.dp))
 }
@@ -342,9 +340,7 @@ private fun ApplyCompany(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Body3(
-                        text = company!!
-                    )
+                    Body3(text = company!!)
                     Body3(
                         text = " $status ",
                         color = JobisColor.LightBlue,

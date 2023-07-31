@@ -59,7 +59,7 @@ internal fun BugReportScreen(
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-        if(uri != null){
+        if (uri != null) {
             uriList.add(uri)
         }
     }
@@ -254,9 +254,7 @@ private fun ScreenShots(
                         ) {
                             JobisSmallIconButton(
                                 drawable = R.drawable.ic_trash_red,
-                                onClick = {
-                                    removeScreenshot(index)
-                                },
+                                onClick = { removeScreenshot(index) },
                                 color = JobisButtonColor.MainShadowColor,
                                 shadow = true,
                             )

@@ -48,7 +48,7 @@ import team.returm.jobisdesignsystem.theme.Heading5
 const val maxProgress = 3
 
 @Stable
-val titleList = listOf(
+private val titleList = listOf(
     R.string.input_personal_information,
     R.string.email_verification,
     R.string.set_password,
