@@ -119,6 +119,7 @@
 
     <string name="company_list_million">%s억</string>
     <string name="company_list_search_company">기업 조회하기</string>
+    <string name="companies_not_exits">기업이 존재하지 않습니다</string>
 
     <!--    Company Details-->
 
