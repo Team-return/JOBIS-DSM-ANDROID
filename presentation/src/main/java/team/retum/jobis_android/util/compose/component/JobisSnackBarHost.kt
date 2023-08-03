@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.root.JobisBasicToast
-import team.returm.jobisdesignsystem.toast.ToastType
+import team.retum.jobis_android.root.ToastState
 
 @Composable
 internal fun JobisSnackBarHost(
@@ -18,12 +18,12 @@ internal fun JobisSnackBarHost(
 
     val coroutineScope = rememberCoroutineScope()
 
-    var toastType: ToastType = ToastType.Normal
+    var toastState = ToastState()
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         coroutineScope.launch {
-            appState.toastState.collect{
-                toastType = it.toastType
+            appState.toastState.collect {
+                toastState = it
             }
         }
     }
@@ -39,7 +39,8 @@ internal fun JobisSnackBarHost(
         ToastLayout {
             JobisBasicToast(
                 message = it.message,
-                toastType = toastType,
+                title = toastState.title,
+                toastType = toastState.toastType,
                 dismissToToast = dismissToToast,
             )
         }
