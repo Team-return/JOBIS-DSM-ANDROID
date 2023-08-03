@@ -8,7 +8,8 @@ data class SignInState(
     val password: String = "",
     val autoSignIn: Boolean = false,
     val emailError: Boolean = false,
-    val passwordError: Boolean= false,
+    val passwordError: Boolean = false,
+    val signInButtonEnabled: Boolean = false,
 ) : State
 
 sealed class SignInSideEffect : SideEffect {
@@ -17,5 +18,5 @@ sealed class SignInSideEffect : SideEffect {
     object NotFound : SignInSideEffect()
     class Exception(
         val message: String,
-    ): SignInSideEffect()
+    ) : SignInSideEffect()
 }

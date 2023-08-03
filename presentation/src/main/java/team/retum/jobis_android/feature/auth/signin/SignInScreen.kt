@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -42,28 +43,25 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading1
+import team.returm.jobisdesignsystem.toast.ToastType
 import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
+    appState: JobisAppState,
     navController: NavController,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
 
-    val state = signInViewModel.container.stateFlow.collectAsState()
+    val state by signInViewModel.container.stateFlow.collectAsState()
 
-    var show by remember { mutableStateOf(false) }
+    var showBackgroundIcon by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
-    val email = state.value.email
-    val password = state.value.password
-    val emailError = state.value.emailError
-    val passwordError = state.value.passwordError
-
     LaunchedEffect(Unit) {
-        show = true
+        showBackgroundIcon = true
         signInViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignInSideEffect.MoveToMain -> {
@@ -82,8 +80,11 @@ internal fun SignInScreen(
                     signInViewModel.setEmailError(true)
                 }
 
-                else -> {
-                    // TODO 토스트
+                is SignInSideEffect.Exception -> {
+                    appState.showToast(
+                        message = it.message,
+                        toastType = ToastType.Error,
+                    )
                 }
             }
         }
@@ -91,7 +92,7 @@ internal fun SignInScreen(
     }
 
     val onEmailChanged = { email: String ->
-        signInViewModel.setUserId(email)
+        signInViewModel.setEmail(email)
         signInViewModel.setEmailError(false)
     }
 
@@ -101,13 +102,25 @@ internal fun SignInScreen(
     }
 
     val onSignInCheckChanged = {
-        signInViewModel.setAutoSignIn(!state.value.autoSignIn)
+        signInViewModel.setAutoSignIn(!state.autoSignIn)
         focusManager.clearFocus()
+    }
+
+    val onResetPasswordClicked = {
+        navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
+    }
+
+    val onDoSignUpClicked = {
+        navController.navigate(JobisRoute.SignUp)
+    }
+
+    val postLogin = {
+        signInViewModel.postLogin()
     }
 
     Box {
         Column {
-            Animated(visible = show) {
+            Animated(visible = showBackgroundIcon) {
                 JobisImage(
                     modifier = Modifier.offset(
                         x = 120.dp,
@@ -146,25 +159,22 @@ internal fun SignInScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
             SignInInputs(
-                email = email,
-                password = password,
+                email = state.email,
+                password = state.password,
                 onEmailChanged = onEmailChanged,
                 onPasswordChanged = onPasswordChanged,
-                emailError = emailError,
-                passwordError = passwordError,
+                emailError = state.emailError,
+                passwordError = state.passwordError,
             )
             Spacer(modifier = Modifier.height(22.dp))
             SignInOptions(
-                autoSignInChecked = state.value.autoSignIn,
+                autoSignInChecked = state.autoSignIn,
                 onSignInCheckChanged = onSignInCheckChanged,
-            ) {
-                navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
-            }
+                onResetPasswordClicked = onResetPasswordClicked,
+            )
             Spacer(modifier = Modifier.fillMaxHeight(0.7f))
             Row(
-                modifier = Modifier.jobisClickable {
-                    navController.navigate(JobisRoute.SignUp)
-                },
+                modifier = Modifier.jobisClickable(onClick = onDoSignUpClicked),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Caption(
@@ -181,10 +191,8 @@ internal fun SignInScreen(
             JobisLargeButton(
                 text = stringResource(id = R.string.sign_in),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = {
-                    signInViewModel.postLogin()
-                },
-                enabled = email.isNotEmpty() && password.isNotEmpty() && !emailError && !passwordError,
+                onClick = postLogin,
+                enabled = state.signInButtonEnabled,
             )
         }
     }
@@ -243,7 +251,7 @@ private fun SignInOptions(
             Caption(text = stringResource(id = R.string.sign_in_auto_sign_in))
         }
         Caption(
-            modifier = Modifier.jobisClickable { onResetPasswordClicked() },
+            modifier = Modifier.jobisClickable(onClick = onResetPasswordClicked),
             text = stringResource(id = R.string.sign_in_reset_password),
             color = JobisColor.Gray600,
         )

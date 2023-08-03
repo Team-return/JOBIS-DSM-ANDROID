@@ -33,11 +33,11 @@ import team.retum.jobis_android.feature.auth.signup.SignUpScreen
 import team.retum.jobis_android.feature.bugreport.BugReportScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
-import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.review.PostReviewScreen
+import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.animation.slideInLeft
@@ -121,6 +121,7 @@ class MainActivity : ComponentActivity() {
                         popExitTransition = { slideOutRight() },
                     ) {
                         SignInScreen(
+                            appState = appState,
                             navController = navController,
                         )
                     }
