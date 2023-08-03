@@ -35,6 +35,7 @@ import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
+import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -43,6 +44,7 @@ import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading5
+import team.returm.jobisdesignsystem.toast.ToastType
 
 @Stable
 const val maxProgress = 3
@@ -55,7 +57,8 @@ private val titleList = listOf(
 )
 
 @Composable
-fun SignUpScreen(
+internal fun SignUpScreen(
+    appState: JobisAppState,
     navHostController: NavHostController,
     signUpViewModel: SignUpViewModel,
 ) {
@@ -67,6 +70,14 @@ fun SignUpScreen(
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
+
+    val notFoundToastMessage = stringResource(id = R.string.student_info_not_found_student)
+    val sendAuthCodeSuccessToastTitle =
+        stringResource(id = R.string.email_verification_send_auth_code_success_title)
+    val sendAuthCodeSuccessToastMessage =
+        stringResource(id = R.string.email_verification_send_auth_code_success_message)
+    val emailConflict = stringResource(id = R.string.email_verification_conflict)
+    val signUpAccountConflict = stringResource(id = R.string.sign_up_account_conflict)
 
     val moveToBack = {
         when (currentProgress) {
@@ -84,13 +95,42 @@ fun SignUpScreen(
         signUpViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navController.navigate(JobisRoute.VerifyEmail)
+                    navController.navigate(JobisRoute.StudentInfo)
                     currentProgress = 2
+                }
+
+                is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
+                    appState.showToast(
+                        message = notFoundToastMessage,
+                        toastType = ToastType.Error,
+                    )
                 }
 
                 is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
                     navController.navigate(JobisRoute.SetPassword)
                     currentProgress = 3
+                }
+
+                is SignUpSideEffect.VerifyEmail.EmailConflict -> {
+                    appState.showToast(
+                        message = emailConflict,
+                        toastType = ToastType.Error,
+                    )
+                }
+
+                is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
+                    appState.showToast(
+                        title = sendAuthCodeSuccessToastTitle,
+                        message = sendAuthCodeSuccessToastMessage,
+                        toastType = ToastType.Success,
+                    )
+                }
+
+                is SignUpSideEffect.SetPassword.SignUpConflict -> {
+                    appState.showToast(
+                        message = signUpAccountConflict,
+                        toastType = ToastType.Error,
+                    )
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpSuccess -> {
@@ -101,18 +141,22 @@ fun SignUpScreen(
                     }
                 }
 
-                else -> {}
+                is SignUpSideEffect.Exception -> {
+                    appState.showToast(
+                        message = it.message,
+                        toastType = ToastType.Error,
+                    )
+                }
             }
         }
     }
 
 
     val progressAnimation by animateFloatAsState(
-        targetValue = (currentProgress.toFloat() / maxProgress.toFloat()),
-        animationSpec = tween(
+        targetValue = (currentProgress.toFloat() / maxProgress.toFloat()), animationSpec = tween(
             durationMillis = 300,
             easing = FastOutSlowInEasing,
-        )
+        ), label = ""
     )
 
     val onTopBarClicked = {
@@ -141,21 +185,17 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(56.dp))
             SignUpHeader(
                 currentProgress = currentProgress,
-                titleList = titleList,
                 onTopBarClicked = onTopBarClicked,
             )
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.StudentInfo,
+                startDestination = JobisRoute.VerifyEmail,
             ) {
                 composable(
                     route = JobisRoute.StudentInfo,
                 ) {
-                    StudentInfoScreen(
-                        signUpViewModel = signUpViewModel,
-                        navigate = { currentProgress++ },
-                    )
+                    StudentInfoScreen(signUpViewModel = signUpViewModel)
                 }
 
                 composable(
@@ -170,10 +210,7 @@ fun SignUpScreen(
                 composable(
                     route = JobisRoute.SetPassword,
                 ) {
-                    SetPasswordScreen(
-                        navController = navController,
-                        signUpViewModel = signUpViewModel,
-                    )
+                    SetPasswordScreen(signUpViewModel = signUpViewModel)
                 }
             }
         }
@@ -227,7 +264,6 @@ private fun ProgressBarWithButton(
 @Composable
 private fun SignUpHeader(
     currentProgress: Int,
-    titleList: List<Int>,
     onTopBarClicked: () -> Unit,
 ) {
     TopBar(

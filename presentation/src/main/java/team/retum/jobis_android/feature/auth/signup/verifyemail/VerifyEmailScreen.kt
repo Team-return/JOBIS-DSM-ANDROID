@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,18 +40,12 @@ fun VerifyEmailScreen(
 
     val onVerifyCodeChanged = { verifyCode: String ->
         signUpViewModel.setVerifyCode(verifyCode = verifyCode)
-        if(verifyCode.length == 6) focusManager.clearFocus()
+        if (verifyCode.length == 6) focusManager.clearFocus()
     }
 
     val onSendVerificationCodeButtonClicked = {
         signUpViewModel.sendVerificationCode()
         focusManager.clearFocus()
-    }
-
-    LaunchedEffect(Unit) {
-        signUpViewModel.container.sideEffectFlow.collect {
-
-        }
     }
 
     Column {

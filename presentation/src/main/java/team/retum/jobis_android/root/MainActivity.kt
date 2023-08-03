@@ -109,8 +109,9 @@ class MainActivity : ComponentActivity() {
                         popExitTransition = { slideOutRight() },
                     ) {
                         SignUpScreen(
+                            appState = appState,
                             navHostController = navController,
-                            signUpViewModel = signUpViewModel
+                            signUpViewModel = signUpViewModel,
                         )
                     }
 

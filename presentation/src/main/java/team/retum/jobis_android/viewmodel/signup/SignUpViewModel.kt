@@ -62,7 +62,7 @@ class SignUpViewModel @Inject constructor(
             checkAvailableValues(
                 name = name,
                 grade = state.grade,
-                `class` = state.`class`,
+                `class` = state.classRoom,
                 number = state.number,
             )
         )
@@ -76,7 +76,7 @@ class SignUpViewModel @Inject constructor(
             checkAvailableValues(
                 name = state.name,
                 grade = state.grade,
-                `class` = state.`class`,
+                `class` = state.classRoom,
                 number = state.number,
             )
         )
@@ -85,7 +85,7 @@ class SignUpViewModel @Inject constructor(
     internal fun setClass(
         `class`: String,
     ) = intent {
-        reduce { state.copy(`class` = `class`) }
+        reduce { state.copy(classRoom = `class`) }
         setSignUpButtonEnabled(
             checkAvailableValues(
                 name = state.name,
@@ -104,7 +104,7 @@ class SignUpViewModel @Inject constructor(
             checkAvailableValues(
                 name = state.name,
                 grade = state.grade,
-                `class` = state.`class`,
+                `class` = state.classRoom,
                 number = number,
             )
         )
@@ -212,7 +212,7 @@ class SignUpViewModel @Inject constructor(
                 checkStudentExistsParam = CheckStudentExistsParam(
                     gcn = returnGcn(
                         grade = state.grade,
-                        `class` = state.`class`,
+                        `class` = state.classRoom,
                         number = state.number,
                     ),
                     name = container.stateFlow.value.name,
@@ -251,6 +251,7 @@ class SignUpViewModel @Inject constructor(
                 )
             ).onSuccess {
                 setAuthCodeEnabled(true)
+                postSideEffect(SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess)
             }.onFailure { throwable ->
                 when (throwable) {
                     is ConflictException -> {
@@ -287,10 +288,6 @@ class SignUpViewModel @Inject constructor(
                         setVerifyCodeError(true)
                     }
 
-                    is NotFoundException -> {
-                        postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailNotFound)
-                    }
-
                     is NullPointerException -> {
                         postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailSuccess)
                         setSignUpButtonEnabled(false)
@@ -325,7 +322,7 @@ class SignUpViewModel @Inject constructor(
                         grade = state.grade.toInt(),
                         name = state.name,
                         gender = state.sex,
-                        classRoom = state.`class`.toInt(),
+                        classRoom = state.classRoom.toInt(),
                         number = state.number.toInt(),
                     )
                 ).onSuccess {

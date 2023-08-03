@@ -52,6 +52,8 @@
     <string name="input_hint_class">반</string>
     <string name="input_hint_number">번호</string>
 
+    <string name="student_info_not_found_student">존재하지 않는 학생입니다</string>
+
     <!--    Email Verification-->
 
     <string name="email_verification">이메일 인증</string>
@@ -61,6 +63,10 @@
     <string name="email_verification_request_verify">인증요청</string>
     <string name="email_verification_resend">재발송</string>
 
+    <string name="email_verification_conflict">중복된 이메일 입니다</string>
+    <string name="email_verification_send_auth_code_success_title">인증번호 발송 완료</string>
+    <string name="email_verification_send_auth_code_success_message">이메일을 확인해 주세요</string>
+
     <!--    Set Password-->
 
     <string name="set_password">비밀번호 설정</string>
@@ -69,6 +75,8 @@
     <string name="set_password_mismatch_password">비밀번호가 일치하지 않습니다</string>
 
     <string name="set_password_hint_password">8 ~ 16자, 영문자, 숫자, 특수문자 포함</string>
+
+    <string name="sign_up_account_conflict">이미 존재하는 계정입니다</string>
 
 
     <!--    Home-->
