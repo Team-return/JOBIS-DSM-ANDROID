@@ -221,6 +221,7 @@ class MainActivity : ComponentActivity() {
                         route = JobisRoute.ComparePassword,
                     ) {
                         ComparePasswordScreen(
+                            appState = appState,
                             navController = navController,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )

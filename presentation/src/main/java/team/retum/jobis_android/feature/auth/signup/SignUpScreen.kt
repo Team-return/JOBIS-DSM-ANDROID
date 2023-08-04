@@ -95,7 +95,7 @@ internal fun SignUpScreen(
         signUpViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navController.navigate(JobisRoute.StudentInfo)
+                    navController.navigate(JobisRoute.VerifyEmail)
                     currentProgress = 2
                 }
 
@@ -190,7 +190,7 @@ internal fun SignUpScreen(
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.VerifyEmail,
+                startDestination = JobisRoute.StudentInfo,
             ) {
                 composable(
                     route = JobisRoute.StudentInfo,

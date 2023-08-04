@@ -20,4 +20,6 @@ data class ResetPasswordState(
 sealed class ResetPasswordSideEffect : SideEffect {
     object SuccessVerification : ResetPasswordSideEffect()
     object SuccessResetPassword : ResetPasswordSideEffect()
+    object PasswordMismatch: ResetPasswordSideEffect()
+    class Exception(val message: String): ResetPasswordSideEffect()
 }
