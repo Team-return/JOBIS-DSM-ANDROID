@@ -212,6 +212,7 @@ class MainActivity : ComponentActivity() {
                         route = JobisRoute.ResetPassword,
                     ) {
                         ResetPasswordScreen(
+                            appState = appState,
                             navController = navController,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )
