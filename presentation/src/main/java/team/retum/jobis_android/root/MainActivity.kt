@@ -202,6 +202,7 @@ class MainActivity : ComponentActivity() {
                         popExitTransition = { slideOutRight() },
                     ) {
                         ResetPasswordVerifyEmailScreen(
+                            appState = appState,
                             navController = navController,
                         )
                     }

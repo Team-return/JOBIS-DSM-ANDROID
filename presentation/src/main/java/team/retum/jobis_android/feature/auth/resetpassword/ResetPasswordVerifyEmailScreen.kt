@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
+import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -34,15 +35,17 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading4
+import team.returm.jobisdesignsystem.toast.ToastType
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordVerifyEmailScreen(
+    appState: JobisAppState,
     navController: NavController,
     resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
 
-    val state = resetPasswordViewModel.container.stateFlow.collectAsState()
+    val state by resetPasswordViewModel.container.stateFlow.collectAsState()
 
     val focusManager = LocalFocusManager.current
 
@@ -64,15 +67,22 @@ internal fun ResetPasswordVerifyEmailScreen(
         resetPasswordViewModel.verifyEmail()
     }
 
-    val email = state.value.email
-    val authCode = state.value.authCode
-    val sendAuthCodeState = state.value.sendAuthCodeState
+    val email = state.email
+    val authCode = state.authCode
+    val sendAuthCodeState = state.sendAuthCodeState
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is ResetPasswordSideEffect.SuccessVerification -> {
                     navController.navigate(JobisRoute.ResetPassword)
+                }
+
+                is ResetPasswordSideEffect.Exception -> {
+                    appState.showToast(
+                        message = it.message,
+                        toastType = ToastType.Error,
+                    )
                 }
 
                 else -> {}
@@ -87,7 +97,7 @@ internal fun ResetPasswordVerifyEmailScreen(
     ) {
         Spacer(modifier = Modifier.height(80.dp))
         Column(
-            modifier = Modifier.padding(horizontal = 30.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Heading4(
@@ -104,10 +114,10 @@ internal fun ResetPasswordVerifyEmailScreen(
             Spacer(modifier = Modifier.height(30.dp))
             ChangePasswordInputs(
                 email = email,
-                emailErrorState = state.value.emailErrorState,
+                emailErrorState = state.emailErrorState,
                 onEmailChanged = onEmailChanged,
                 authCode = authCode,
-                authCodeErrorState = state.value.authCodeErrorState,
+                authCodeErrorState = state.authCodeErrorState,
                 sendAuthCodeState = sendAuthCodeState,
                 onAuthCodeChanged = onAuthCodeChanged,
                 onRequestVerification = onRequestVerification
