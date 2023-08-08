@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
 import team.retum.domain.param.user.Sex
-import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor
@@ -34,35 +33,25 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-fun StudentInfoScreen(
+internal fun StudentInfoScreen(
     signUpViewModel: SignUpViewModel,
-    navigate: () -> Unit,
 ) {
 
     val state by signUpViewModel.container.stateFlow.collectAsState()
 
     val focusManager = LocalFocusManager.current
 
+    val clearFocus = {
+        focusManager.clearFocus()
+    }
+
     LaunchedEffect(Unit) {
         signUpViewModel.setSignUpButtonEnabled(
-            state.name.isNotBlank() && state.grade.isNotBlank() && state.`class`.isNotBlank() && state.number.isNotBlank()
+            state.name.isNotBlank() &&
+                    state.grade.isNotBlank() &&
+                    state.classRoom.isNotBlank() &&
+                    state.number.isNotBlank()
         )
-        signUpViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navigate()
-                }
-
-                is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
-                    // TODO 토스트 처리
-
-                }
-
-                else -> {
-                    // TODO 토스트 처리
-                }
-            }
-        }
     }
 
     val onManSelected = {
@@ -90,11 +79,11 @@ fun StudentInfoScreen(
 
     val onNumberChanged = { number: String ->
         signUpViewModel.setNumber(number = number)
-        if (number.length == 2) focusManager.clearFocus()
+        if (number.length == 2) clearFocus()
     }
 
     Column(
-        modifier = Modifier.jobisClickable { focusManager.clearFocus() },
+        modifier = Modifier.jobisClickable(onClick = clearFocus),
         horizontalAlignment = Alignment.Start,
     ) {
         SelectGender(
@@ -106,7 +95,7 @@ fun StudentInfoScreen(
         InformationFields(
             name = state.name,
             grade = state.grade,
-            `class` = state.`class`,
+            classRoom = state.classRoom,
             number = state.number,
             studentNotFound = state.studentNotFound,
             onNameChanged = onNameChanged,
@@ -150,9 +139,8 @@ private fun SelectGender(
                 text = Sex.MAN.value,
                 color = manButtonColor,
                 shadow = true,
-            ) {
-                onManSelected()
-            }
+                onClick = onManSelected,
+            )
         }
         Spacer(modifier = Modifier.width(12.dp))
         Box(
@@ -162,9 +150,8 @@ private fun SelectGender(
                 text = Sex.WOMAN.value,
                 color = womanButtonColor,
                 shadow = true,
-            ) {
-                onWomanSelected()
-            }
+                onClick = onWomanSelected,
+            )
         }
     }
 }
@@ -173,7 +160,7 @@ private fun SelectGender(
 private fun InformationFields(
     name: String,
     grade: String,
-    `class`: String,
+    classRoom: String,
     number: String,
     studentNotFound: Boolean,
     onNameChanged: (String) -> Unit,
@@ -215,7 +202,7 @@ private fun InformationFields(
                 color = JobisTextFieldColor.MainColor,
                 hint = stringResource(id = R.string.input_hint_class),
                 onValueChanged = onClassChanged,
-                value = `class`,
+                value = classRoom,
                 imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.NumberPassword,
                 error = studentNotFound,

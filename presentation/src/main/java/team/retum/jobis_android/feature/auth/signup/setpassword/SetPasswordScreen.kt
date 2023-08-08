@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -14,7 +13,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisTextFieldColor
@@ -23,7 +21,6 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 
 @Composable
 fun SetPasswordScreen(
-    navController: NavController,
     signUpViewModel: SignUpViewModel,
 ) {
 
@@ -36,13 +33,7 @@ fun SetPasswordScreen(
     }
 
     val onRepeatPasswordChanged = { repeatPassword: String ->
-       signUpViewModel.setRepeatPassword(repeatPassword = repeatPassword)
-    }
-
-    LaunchedEffect(Unit) {
-        signUpViewModel.container.sideEffectFlow.collect {
-
-        }
+        signUpViewModel.setRepeatPassword(repeatPassword = repeatPassword)
     }
 
     PasswordFields(

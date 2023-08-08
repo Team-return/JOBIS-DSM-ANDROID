@@ -44,7 +44,6 @@ import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
-import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -109,18 +108,18 @@ fun CompaniesScreen(
                     onCompanyNameChanged = onCompanyNameChanged,
                 )
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(24.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
+            if (state.name?.isNotBlank() == true) {
                 Row(
-                    modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(24.dp),
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    if (state.name?.isNotBlank() == true) {
+                    Row(
+                        modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Caption(
                             text = stringResource(id = R.string.search_result),
                             color = JobisColor.Gray600,
@@ -134,13 +133,6 @@ fun CompaniesScreen(
                 lazyListState = lazyListState,
                 navigateToCompanyDetails = navigateToCompanyDetails,
             )
-        }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Body1(text = stringResource(id = R.string.companies_not_exits))
         }
     }
 }

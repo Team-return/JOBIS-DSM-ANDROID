@@ -69,15 +69,17 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    internal fun setUserId(
-        id: String,
+    internal fun setEmail(
+        email: String,
     ) = intent {
-        reduce { state.copy(email = id) }
+        setSignInButtonEnabled()
+        reduce { state.copy(email = email) }
     }
 
     internal fun setPassword(
         password: String,
     ) = intent {
+        setSignInButtonEnabled()
         reduce { state.copy(password = password) }
     }
 
@@ -90,12 +92,24 @@ class SignInViewModel @Inject constructor(
     internal fun setEmailError(
         emailError: Boolean,
     ) = intent {
+        setSignInButtonEnabled()
         reduce { state.copy(emailError = emailError) }
     }
 
     internal fun setPasswordError(
         passwordError: Boolean,
     ) = intent {
+        setSignInButtonEnabled()
         reduce { state.copy(passwordError = passwordError) }
+    }
+
+    private fun setSignInButtonEnabled() = intent {
+        with(state) {
+            reduce {
+                copy(
+                    signInButtonEnabled = email.isNotBlank() && password.isNotBlank() && !emailError && !passwordError,
+                )
+            }
+        }
     }
 }

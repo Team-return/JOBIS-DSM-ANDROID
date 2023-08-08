@@ -16,7 +16,7 @@ data class SignUpState(
     val grade: String = "",
     val name: String = "",
     val sex: Sex = Sex.MAN,
-    val `class`: String = "",
+    val classRoom: String = "",
     val number: String = "",
     val studentNotFound: Boolean = false,
     val sendVerifyCodeButtonEnabled: Boolean = false,
@@ -33,8 +33,7 @@ sealed class SignUpSideEffect() : SideEffect {
     sealed class VerifyEmail {
         object EmailConflict : SignUpSideEffect()
         object VerifyEmailSuccess : SignUpSideEffect()
-        object VerifyCodeMismatch : SignUpSideEffect()
-        object VerifyEmailNotFound : SignUpSideEffect()
+        object SendAuthCodeSuccess : SignUpSideEffect()
     }
 
     sealed class SetPassword {

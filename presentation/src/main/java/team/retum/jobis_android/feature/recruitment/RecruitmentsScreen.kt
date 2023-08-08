@@ -56,7 +56,6 @@ import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
-import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -139,15 +138,6 @@ internal fun RecruitmentsScreen(
                     bookmarkViewModel = bookmarkViewModel,
                     navController = navController,
                 )
-            }
-            recruitments.ifEmpty {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Body1(text = stringResource(id = R.string.recruitments_not_exist))
-                }
             }
         }
     }

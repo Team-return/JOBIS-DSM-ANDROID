@@ -3,10 +3,13 @@ package team.retum.jobis_android.feature.home
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -56,6 +58,12 @@ val ApplyCompaniesItemShape = RoundedCornerShape(
     size = 10.dp,
 )
 
+@Stable
+private val recruitmentStatusShape = RoundedCornerShape(
+    bottomStart = 34.dp,
+    bottomEnd = 34.dp,
+)
+
 @Composable
 internal fun HomeScreen(
     navController: NavController,
@@ -75,10 +83,19 @@ internal fun HomeScreen(
     val studentCounts = state.studentCounts
     val studentInformation = state.studentInformation
 
+    val onRecruitmentsMenuClicked = {
+        navController.navigate(JobisRoute.Recruitments)
+    }
+
+    val onCompaniesMenuClicked = {
+        navController.navigate(JobisRoute.Companies)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(JobisColor.Gray300),
+            .background(JobisColor.Gray100)
+            .padding(bottom = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
@@ -87,7 +104,10 @@ internal fun HomeScreen(
             approvedCount = studentCounts.approvedCount,
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp),
             ) {
@@ -98,32 +118,31 @@ internal fun HomeScreen(
                     department = studentInformation.department
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                Column(
-                    modifier = Modifier
-                        .background(
-                            color = JobisColor.Gray100,
-                            shape = JobisSize.Shape.Large,
-                        )
-                        .padding(16.dp),
-                ) {
-                    Caption(
-                        text = stringResource(id = R.string.home_apply_status),
-                        color = JobisColor.Gray600,
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    ApplyCompanies(appliedCompanies = state.appliedCompanyHistories)
-                }
+                Caption(
+                    text = stringResource(id = R.string.home_apply_status),
+                    color = JobisColor.Gray600,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                ApplyCompanies(appliedCompanies = state.appliedCompanyHistories)
             }
+
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.background(JobisColor.Gray300),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom,
             ) {
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp),
+                    color = JobisColor.Gray400,
+                )
                 Spacer(modifier = Modifier.height(26.dp))
                 MenuCardGroup(
-                    navController = navController,
+                    onRecruitmentsMenuClicked = onRecruitmentsMenuClicked,
+                    onCompaniesMenuClicked = onCompaniesMenuClicked,
                 )
-                Spacer(modifier = Modifier.height(84.dp))
+                Spacer(modifier = Modifier.height(60.dp))
             }
         }
     }
@@ -149,20 +168,17 @@ private fun RecruitmentStatus(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 14.dp,
-            )
             .shadow(
-                elevation = 48.dp,
+                shape = recruitmentStatusShape,
+                elevation = 4.dp,
             )
-            .clip(
-                shape = RoundedCornerShape(
-                    bottomStart = 34.dp,
-                    bottomEnd = 34.dp,
-                ),
-            )
+            .clip(shape = recruitmentStatusShape)
             .background(
-                brush = Brush.horizontalGradient(listOf(JobisColor.Blue, JobisColor.LightBlue)),
+                brush = Brush.horizontalGradient(
+                    listOf(
+                        JobisColor.Blue, JobisColor.LightBlue
+                    )
+                )
             ),
         verticalArrangement = Arrangement.Center,
     ) {
@@ -328,11 +344,10 @@ private fun ApplyCompany(
             )
         } else {
             Column(
-                modifier = Modifier
-                    .padding(
-                        horizontal = 18.dp,
-                        vertical = 10.dp,
-                    ),
+                modifier = Modifier.padding(
+                    horizontal = 18.dp,
+                    vertical = 10.dp,
+                ),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(
@@ -353,27 +368,34 @@ private fun ApplyCompany(
 
 @Composable
 private fun MenuCardGroup(
-    navController: NavController,
+    onRecruitmentsMenuClicked: () -> Unit,
+    onCompaniesMenuClicked: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .height(200.dp)
-            .padding(
-                horizontal = 24.dp,
-            ),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.padding(horizontal = 24.dp),
+        horizontalArrangement = Arrangement.Center,
     ) {
-        MenuCard(
-            text = stringResource(id = R.string.home_do_get_recruitment),
-            drawable = R.drawable.ic_get_recruitment,
-            onClick = { navController.navigate(JobisRoute.Recruitments) }
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        MenuCard(
-            text = stringResource(id = R.string.home_do_get_company),
-            drawable = R.drawable.ic_get_company,
-            onClick = { navController.navigate(JobisRoute.Companies) },
-        )
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            MenuCard(
+                text = stringResource(id = R.string.home_do_get_recruitment),
+                drawable = R.drawable.ic_get_recruitment,
+                onClick = onRecruitmentsMenuClicked,
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            MenuCard(
+                text = stringResource(id = R.string.home_do_get_company),
+                drawable = R.drawable.ic_get_company,
+                onClick = onCompaniesMenuClicked,
+            )
+        }
     }
 }
 
@@ -383,33 +405,35 @@ private fun MenuCard(
     @DrawableRes drawable: Int,
     onClick: () -> Unit,
 ) {
+
+    val interactionSource = MutableInteractionSource()
+
     Column(
         modifier = Modifier
-            .defaultMinSize(
-                minWidth = 140.dp,
-                minHeight = 180.dp,
-            )
+            .aspectRatio(0.8f)
             .clip(shape = JobisSize.Shape.Large)
-            .background(color = JobisColor.Gray100)
-            .padding(
-                horizontal = 22.dp,
-                vertical = 14.dp,
+            .shadow(
+                shape = JobisSize.Shape.Large,
+                elevation = 80.dp,
             )
-            .jobisClickable(onClick = onClick),
+            .background(
+                color = JobisColor.Gray100,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                interactionSource = interactionSource,
+                onClick = onClick,
+            )
+            .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Body1(
             modifier = Modifier.jobisClickable(onClick = onClick),
             text = text,
         )
-        Row(
-            modifier = Modifier.defaultMinSize(minWidth = 140.dp),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            JobisImage(
-                drawable = drawable,
-                onClick = onClick,
-            )
-        }
+        JobisImage(
+            drawable = drawable,
+            onClick = onClick,
+        )
     }
 }
