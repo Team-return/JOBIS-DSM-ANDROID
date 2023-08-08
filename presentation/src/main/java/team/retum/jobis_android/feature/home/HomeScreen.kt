@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.home
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -427,13 +429,10 @@ private fun MenuCard(
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        Body1(
-            modifier = Modifier.jobisClickable(onClick = onClick),
-            text = text,
-        )
-        JobisImage(
-            drawable = drawable,
-            onClick = onClick,
+        Body1(text = text)
+        Image(
+            painter = painterResource(id = drawable),
+            contentDescription = null,
         )
     }
 }
