@@ -123,15 +123,13 @@ internal fun RecruitmentsScreen(
             ) {
                 Header(text = stringResource(id = R.string.search_recruitment_header))
                 Spacer(modifier = Modifier.height(12.dp))
-                if (recruitments.isNotEmpty()) {
-                    RecruitmentInput(
-                        name = state.name,
-                        jobCode = state.jobCode,
-                        techCode = state.techCode,
-                        onFilterClicked = onFilterClicked,
-                        onKeywordChanged = onNameChanged,
-                    )
-                }
+                RecruitmentInput(
+                    name = state.name,
+                    jobCode = state.jobCode,
+                    techCode = state.techCode,
+                    onFilterClicked = onFilterClicked,
+                    onKeywordChanged = onNameChanged,
+                )
                 Recruitments(
                     recruitmentUiModels = recruitments,
                     recruitmentViewModel = recruitmentViewModel,
@@ -151,6 +149,10 @@ private fun RecruitmentInput(
     onFilterClicked: () -> Unit,
     onKeywordChanged: (String) -> Unit,
 ) {
+
+    val searchResultTextAlpha = if (name.isNullOrBlank()) 0f else 1f
+    val filterAppliedTextAlpha = if (jobCode != null || techCode != null) 1f else 0f
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,25 +182,15 @@ private fun RecruitmentInput(
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Row(
-            modifier = Modifier.alpha(if (name.isNullOrBlank()) 1f else 0f),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (name.isNullOrBlank()) {
-                Caption(
-                    text = stringResource(id = R.string.search_result),
-                    color = JobisColor.Gray600,
-                )
-                Caption(text = " $name")
-            }
-        }
         Caption(
-            modifier = Modifier.alpha(
-                if (jobCode != null || techCode != null) 1f
-                else 0f,
-            ),
+            modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+            text = stringResource(id = R.string.search_result),
+            color = JobisColor.Gray600,
+        )
+        Caption(text = name ?: "")
+        Caption(
+            modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
             text = stringResource(id = R.string.filter_applied),
         )
     }
@@ -243,8 +235,7 @@ private fun Recruitments(
 
             var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
-            Recruitment(
-                imageUrl = recruitment.companyProfileUrl,
+            Recruitment(imageUrl = recruitment.companyProfileUrl,
                 position = position,
                 isBookmarked = isBookmarked,
                 companyName = recruitment.companyName,
@@ -258,12 +249,10 @@ private fun Recruitments(
                 },
                 onItemClicked = {
                     navController.currentBackStackEntry?.arguments?.putString(
-                        "companyName",
-                        recruitment.companyName
+                        "companyName", recruitment.companyName
                     )
                     navController.navigate("RecruitmentDetails/${recruitment.recruitId}")
-                }
-            )
+                })
         }
     }
 }
@@ -295,7 +284,10 @@ private fun Recruitment(
             )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
-            .jobisClickable(onClick = onItemClicked),
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = onItemClicked,
+            ),
     ) {
         Row(
             modifier = Modifier.padding(
@@ -319,11 +311,7 @@ private fun Recruitment(
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Column(
-                modifier = Modifier.padding(
-                    vertical = 12.dp,
-                )
-            ) {
+            Column(modifier = Modifier.padding(vertical = 12.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -335,32 +323,26 @@ private fun Recruitment(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    JobisImage(
-                        modifier = Modifier.size(18.dp),
+                    JobisImage(modifier = Modifier.size(18.dp),
                         drawable = if (bookmarked) R.drawable.ic_bookmarked_on
                         else R.drawable.ic_bookmarked_off,
                         onClick = {
                             onBookmarked()
                             isItemClicked = !isItemClicked
                             bookmarked = !bookmarked
-                        }
-                    )
+                        })
                 }
                 Caption(
                     text = companyName,
                     color = JobisColor.Gray600,
                 )
-                Spacer(
-                    modifier = Modifier.height(8.dp),
-                )
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Caption(
-                        text = trainPay,
-                    )
+                    Caption(text = trainPay)
                     JobisImage(
                         modifier = Modifier.size(18.dp),
                         drawable = if (isMilitarySupported) R.drawable.ic_military_true

@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -54,7 +53,7 @@ fun CompaniesScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
-    val state = companyViewModel.container.stateFlow.collectAsState().value
+    val state by companyViewModel.container.stateFlow.collectAsState()
 
     val onCompanyNameChanged = { name: String ->
         companyViewModel.setCompanyName(name)
@@ -80,6 +79,8 @@ fun CompaniesScreen(
 
     var page by remember { mutableStateOf(1) }
 
+    val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
+
     LaunchedEffect(lastIndex.value) {
         val size = state.companies.size
         if (size - 1 == lastIndex.value && size > 5) {
@@ -102,31 +103,20 @@ fun CompaniesScreen(
             Spacer(modifier = Modifier.height(48.dp))
             Header(text = stringResource(id = R.string.company_list_search_company))
             Spacer(modifier = Modifier.height(12.dp))
-            if (companies.isNotEmpty()) {
-                CompanyInput(
-                    companyName = state.name,
-                    onCompanyNameChanged = onCompanyNameChanged,
+            CompanyInput(
+                companyName = state.name,
+                onCompanyNameChanged = onCompanyNameChanged,
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Caption(
+                    modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                    text = stringResource(id = R.string.search_result),
+                    color = JobisColor.Gray600,
                 )
-            }
-            if (state.name?.isNotBlank() == true) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(24.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Row(
-                        modifier = Modifier.alpha(if (state.name != null) 1f else 0f),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Caption(
-                            text = stringResource(id = R.string.search_result),
-                            color = JobisColor.Gray600,
-                        )
-                        Caption(text = " ${state.name}")
-                    }
-                }
+                Caption(text = state.name ?: "")
             }
             Companies(
                 companies = companies,
@@ -197,7 +187,10 @@ private fun Company(
             )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
-            .jobisClickable(onClick = onClick),
+            .jobisClickable(
+                onClick = onClick,
+                rippleEnabled = true,
+            ),
     ) {
         Row(
             modifier = Modifier
