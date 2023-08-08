@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
@@ -69,6 +70,7 @@ private val recruitmentStatusShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
+    navHostController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
@@ -91,6 +93,10 @@ internal fun HomeScreen(
 
     val onCompaniesMenuClicked = {
         navController.navigate(JobisRoute.Companies)
+    }
+
+    val navigateToMyPage = {
+        navHostController.navigate(JobisRoute.Navigation.MyPage)
     }
 
     Column(
@@ -117,7 +123,8 @@ internal fun HomeScreen(
                     profileImageUrl = studentInformation.profileImageUrl,
                     name = studentInformation.studentName,
                     gcn = studentInformation.studentGcn,
-                    department = studentInformation.department
+                    department = studentInformation.department,
+                    navigateToMyPage = navigateToMyPage,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Caption(
@@ -244,10 +251,21 @@ private fun UserInformation(
     name: String,
     gcn: String,
     department: Department,
+    navigateToMyPage: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(shape = JobisSize.Shape.Large)
+            .border(
+                width = 1.dp,
+                color = JobisColor.Gray400,
+                shape = JobisSize.Shape.Large,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = navigateToMyPage,
+            )
             .background(
                 color = JobisColor.Gray100,
                 shape = JobisSize.Shape.Large,
@@ -332,7 +350,7 @@ private fun ApplyCompany(
                 shape = ApplyCompaniesItemShape,
             )
             .border(
-                width = 2.dp,
+                width = 1.dp,
                 color = JobisColor.Gray400,
                 shape = ApplyCompaniesItemShape,
             ),
@@ -414,10 +432,6 @@ private fun MenuCard(
         modifier = Modifier
             .aspectRatio(0.8f)
             .clip(shape = JobisSize.Shape.Large)
-            .shadow(
-                shape = JobisSize.Shape.Large,
-                elevation = 80.dp,
-            )
             .background(
                 color = JobisColor.Gray100,
             )

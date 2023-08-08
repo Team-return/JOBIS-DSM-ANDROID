@@ -62,7 +62,10 @@ fun MainScreen(
                 startDestination = JobisRoute.Navigation.Home,
             ) {
                 composable(route = JobisRoute.Navigation.Home) {
-                    HomeScreen(navController = navController)
+                    HomeScreen(
+                        navController = navController,
+                        navHostController = navHostController,
+                    )
                 }
 
                 composable(route = JobisRoute.Navigation.BookmarkedRecruitments) {
