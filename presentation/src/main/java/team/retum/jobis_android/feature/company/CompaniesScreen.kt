@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,7 +43,6 @@ import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.retum.jobisui.colors.JobisTextFieldColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
@@ -61,10 +62,6 @@ fun CompaniesScreen(
 
     val navigateToCompanyDetails = { id: Int, hasRecruitment: Boolean ->
         navController.navigate("CompanyDetails/${id}/${hasRecruitment}")
-    }
-
-    LaunchedEffect(Unit) {
-        companyViewModel.fetchCompanies()
     }
 
     val lazyListState = rememberLazyListState()
@@ -221,7 +218,10 @@ private fun Company(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.End,
                     ) {
-                        JobisImage(drawable = R.drawable.ic_recruitment_exists)
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_recruitment_exists),
+                            contentDescription = null,
+                        )
                     }
                 }
             }
