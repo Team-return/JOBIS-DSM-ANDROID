@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -102,8 +104,7 @@ internal fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(JobisColor.Gray100)
-            .padding(bottom = 64.dp),
+            .background(JobisColor.Gray100),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
@@ -113,7 +114,9 @@ internal fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(30.dp))
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
@@ -136,7 +139,9 @@ internal fun HomeScreen(
             }
 
             Column(
-                modifier = Modifier.background(JobisColor.Gray300),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(JobisColor.Gray300),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom,
             ) {
@@ -151,7 +156,7 @@ internal fun HomeScreen(
                     onRecruitmentsMenuClicked = onRecruitmentsMenuClicked,
                     onCompaniesMenuClicked = onCompaniesMenuClicked,
                 )
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(48.dp))
             }
         }
     }

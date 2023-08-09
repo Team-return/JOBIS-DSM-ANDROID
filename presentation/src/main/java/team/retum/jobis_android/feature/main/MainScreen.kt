@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.main
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -9,6 +10,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,12 +54,11 @@ fun MainScreen(
         Scaffold(
             scaffoldState = scaffoldState,
             bottomBar = {
-                BottomBar(
-                    navController = navHostController,
-                )
+                BottomBar(navController = navHostController)
             },
         ) {
             NavHost(
+                modifier = Modifier.padding(it),
                 navController = navHostController,
                 startDestination = JobisRoute.Navigation.Home,
             ) {

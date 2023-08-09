@@ -62,12 +62,13 @@ internal fun MenuScreen(
         Box(modifier = Modifier.padding(horizontal = 24.dp)) {
             Header(text = stringResource(id = R.string.menu))
         }
-        Spacer(modifier = Modifier.height(36.dp))
+
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
         ) {
+            Spacer(modifier = Modifier.height(36.dp))
             Body3(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 text = stringResource(id = R.string.user),
@@ -103,6 +104,7 @@ internal fun MenuScreen(
                 content = stringResource(id = R.string.fetch_bookmarked_companies),
                 onClick = navigateToBookmarkedRecruitments,
             )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
