@@ -51,7 +51,7 @@ internal fun MenuScreen(
     }
 
     val navigateToBookmarkedRecruitments = {
-        navHostController.navigate(JobisRoute.Navigation.BookmarkedRecruitments)
+        navHostController.navigate(JobisRoute.Navigation.BookmarkRecruitments)
     }
 
     Column(

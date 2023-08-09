@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.feature.home.BookmarkedScreen
+import team.retum.jobis_android.feature.home.BookmarkRecruitmentsScreen
 import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.feature.home.MyPageScreen
@@ -68,8 +68,8 @@ fun MainScreen(
                     )
                 }
 
-                composable(route = JobisRoute.Navigation.BookmarkedRecruitments) {
-                    BookmarkedScreen(navController = navController)
+                composable(route = JobisRoute.Navigation.BookmarkRecruitments) {
+                    BookmarkRecruitmentsScreen(navController = navController)
                 }
 
                 composable(route = JobisRoute.Navigation.MyPage) {

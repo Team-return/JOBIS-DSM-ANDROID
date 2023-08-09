@@ -1,7 +1,8 @@
 package team.retum.jobis_android.feature.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
@@ -33,7 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -45,16 +49,13 @@ import team.retum.jobis_android.util.compose.vibrate
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
-import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-internal fun BookmarkedScreen(
+internal fun BookmarkRecruitmentsScreen(
     navController: NavController,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
@@ -62,6 +63,10 @@ internal fun BookmarkedScreen(
     val context = LocalContext.current
 
     val state by bookmarkViewModel.container.stateFlow.collectAsState()
+
+    LaunchedEffect(Unit) {
+        bookmarkViewModel.fetchBookmarkedRecruitments()
+    }
 
     val bookmarks = remember {
         mutableStateListOf<BookmarkedRecruitmentEntity>()
@@ -73,15 +78,16 @@ internal fun BookmarkedScreen(
         vibrate(context = context)
     }
 
+    val navigateToRecruitmentDetails = { recruitmentId: Long ->
+        navController.navigate("RecruitmentDetails/${recruitmentId}")
+        vibrate(context = context)
+    }
+
     LaunchedEffect(Unit) {
         bookmarkViewModel.container.stateFlow.collect {
             bookmarks.clear()
             bookmarks.addAll(it.bookmarkedRecruitments)
         }
-    }
-
-    LaunchedEffect(Unit) {
-        bookmarkViewModel.fetchBookmarkedRecruitments()
     }
 
     Column(
@@ -97,10 +103,10 @@ internal fun BookmarkedScreen(
         Box {
             BookmarkedRecruitments(
                 bookmarks = bookmarks,
-                navController = navController,
-                onSwipeItem = removeRecruitments,
+                removeItem = removeRecruitments,
+                navigateToRecruitmentDetails = navigateToRecruitmentDetails,
             )
-            if(!state.bookmarkExists) {
+            if (!state.bookmarkExists) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -120,11 +126,12 @@ internal fun BookmarkedScreen(
                             text = stringResource(id = R.string.bookmarked_get_recruitments),
                             color = JobisColor.Gray600,
                         )
-                        JobisImage(
+                        Image(
                             modifier = Modifier
                                 .size(14.dp)
                                 .padding(top = 2.dp),
-                            drawable = JobisIcon.RightArrow,
+                            painter = painterResource(JobisIcon.RightArrow),
+                            contentDescription = null,
                         )
                     }
                 }
@@ -137,42 +144,105 @@ internal fun BookmarkedScreen(
 @Composable
 private fun BookmarkedRecruitments(
     bookmarks: MutableList<BookmarkedRecruitmentEntity>,
-    navController: NavController,
-    onSwipeItem: (BookmarkedRecruitmentEntity) -> Unit,
+    removeItem: (BookmarkedRecruitmentEntity) -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(top = 30.dp)
     ) {
-        items(
-            items = bookmarks,
-            key = { it.recruitmentId },
-            itemContent = { item ->
-                val dismissState = rememberDismissState(
-                    confirmStateChange = {
-                        onSwipeItem(item)
+        items(items = bookmarks, key = { it.recruitmentId }, itemContent = { item ->
+
+            val dismissState = rememberDismissState(confirmStateChange = {
+                when (it) {
+                    DismissValue.Default -> {
+                        false
+                    }
+
+                    DismissValue.DismissedToStart -> {
+                        removeItem(item)
                         true
                     }
-                )
 
-                SwipeToDismiss(
-                    state = dismissState,
-                    background = {
-                        SwipeToDismiss()
-                    },
-                    dismissContent = {
-                        BookmarkedRecruitment(
-                            companyName = item.companyName,
-                            createdAt = item.createdAt,
-                        ) {
-                            navController.navigate("RecruitmentDetails/${item.recruitmentId}")
-                        }
-                    },
-                    directions = setOf(DismissDirection.EndToStart),
+                    DismissValue.DismissedToEnd -> {
+                        navigateToRecruitmentDetails(item.recruitmentId)
+                        false
+                    }
+                }
+            })
+            SwipeToDismiss(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(
+                        elevation = 16.dp,
+                        shape = RoundedCornerShape(12.dp),
+                    )
+                    .jobisClickable(
+                        onClick = { navigateToRecruitmentDetails(item.recruitmentId) },
+                        rippleEnabled = true,
+                    )
+                    .clip(RoundedCornerShape(12.dp)),
+                state = dismissState,
+                background = {
+
+                    val currentDismissState = dismissState.targetValue
+
+                    val backgroundColor by animateColorAsState(
+                        targetValue = when (currentDismissState) {
+                            DismissValue.DismissedToStart -> JobisColor.Red
+                            DismissValue.DismissedToEnd -> JobisColor.Green
+                            else -> JobisColor.Gray500
+                        }, animationSpec = tween(durationMillis = 200), label = ""
+                    )
+
+                    val dismissStartText = when (currentDismissState) {
+                        DismissValue.DismissedToStart -> ""
+                        DismissValue.DismissedToEnd -> stringResource(id = R.string.bookmark_recruitment_details)
+                        else -> stringResource(id = R.string.cancel)
+                    }
+
+                    val dismissEndText = when (currentDismissState) {
+                        DismissValue.DismissedToStart -> stringResource(id = R.string.bookmark_remove)
+                        DismissValue.DismissedToEnd -> ""
+                        else -> stringResource(id = R.string.cancel)
+                    }
+
+                    val dismissTextColor by animateColorAsState(
+                        targetValue = when (currentDismissState) {
+                            DismissValue.DismissedToStart -> JobisColor.Gray100
+                            DismissValue.DismissedToEnd -> JobisColor.Gray100
+                            else -> JobisColor.Gray900
+                        },
+                        label = ""
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(backgroundColor)
+                            .padding(horizontal = 26.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Caption(
+                            text = dismissStartText,
+                            color = dismissTextColor,
+                        )
+                        Caption(
+                            text = dismissEndText,
+                            color = dismissTextColor,
+                        )
+                    }
+                },
+                dismissThresholds = { FractionalThreshold(0.25f) },
+            ) {
+                BookmarkedRecruitment(
+                    companyName = item.companyName,
+                    createdAt = item.createdAt,
                 )
             }
-        )
+        })
     }
 }
 
@@ -180,25 +250,16 @@ private fun BookmarkedRecruitments(
 private fun BookmarkedRecruitment(
     companyName: String,
     createdAt: String,
-    onClickRecruitment: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 50.dp)
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(12.dp)
-            )
             .clip(shape = RoundedCornerShape(12.dp))
             .background(
-                color = JobisColor.Gray100,
-                shape = RoundedCornerShape(12.dp)
+                color = JobisColor.Gray100, shape = RoundedCornerShape(12.dp)
             )
-            .padding(16.dp)
-            .jobisClickable {
-                onClickRecruitment()
-            },
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -206,28 +267,8 @@ private fun BookmarkedRecruitment(
         Caption(
             text = stringResource(id = R.string.bookmarked_date, createdAt.split('T')[0]),
             color = JobisColor.Gray600,
-        )
-    }
-}
-
-@Composable
-private fun SwipeToDismiss() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 50.dp)
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(
-                color = JobisColor.Red,
-                shape = RoundedCornerShape(12.dp),
-            )
-            .padding(end = 16.dp),
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Body3(
-            text = "삭제",
-            color = JobisColor.Gray100,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
         )
     }
 }
