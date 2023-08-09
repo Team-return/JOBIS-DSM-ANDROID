@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -172,7 +175,7 @@ internal fun SignInScreen(
                 onSignInCheckChanged = onSignInCheckChanged,
                 onResetPasswordClicked = onResetPasswordClicked,
             )
-            Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+            Spacer(modifier = Modifier.weight(1f))
             Row(
                 modifier = Modifier.jobisClickable(onClick = onDoSignUpClicked),
                 verticalAlignment = Alignment.CenterVertically,
@@ -194,6 +197,7 @@ internal fun SignInScreen(
                 onClick = postLogin,
                 enabled = state.signInButtonEnabled,
             )
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

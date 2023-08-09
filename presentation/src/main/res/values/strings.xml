@@ -164,12 +164,14 @@
     <string name="search_result">검색결과 :</string>
     <string name="filter_applied">필터 적용됨</string>
 
-    <!--    Bookmarked Screen-->
+    <!--Bookmark Recruitments Screen-->
 
     <string name="bookmarked_recruitments">북마크한 모집의뢰서</string>
     <string name="bookmarked_date">북마크한 날짜 : %s</string>
     <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
     <string name="bookmarked_get_recruitments">모집의뢰서 보러가기</string>
+    <string name="bookmark_remove">삭제</string>
+    <string name="bookmark_recruitment_details">상세보기</string>
 
     <!--   Menu Screen-->
 

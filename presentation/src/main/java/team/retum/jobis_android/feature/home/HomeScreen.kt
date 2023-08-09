@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.home
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,8 +18,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,10 +33,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
@@ -67,6 +72,7 @@ private val recruitmentStatusShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navController: NavController,
+    navHostController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
@@ -91,11 +97,14 @@ internal fun HomeScreen(
         navController.navigate(JobisRoute.Companies)
     }
 
+    val navigateToMyPage = {
+        navHostController.navigate(JobisRoute.Navigation.MyPage)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(JobisColor.Gray100)
-            .padding(bottom = 64.dp),
+            .background(JobisColor.Gray100),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecruitmentStatus(
@@ -105,7 +114,9 @@ internal fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(30.dp))
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
@@ -115,7 +126,8 @@ internal fun HomeScreen(
                     profileImageUrl = studentInformation.profileImageUrl,
                     name = studentInformation.studentName,
                     gcn = studentInformation.studentGcn,
-                    department = studentInformation.department
+                    department = studentInformation.department,
+                    navigateToMyPage = navigateToMyPage,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Caption(
@@ -127,7 +139,9 @@ internal fun HomeScreen(
             }
 
             Column(
-                modifier = Modifier.background(JobisColor.Gray300),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(JobisColor.Gray300),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom,
             ) {
@@ -142,7 +156,7 @@ internal fun HomeScreen(
                     onRecruitmentsMenuClicked = onRecruitmentsMenuClicked,
                     onCompaniesMenuClicked = onCompaniesMenuClicked,
                 )
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(48.dp))
             }
         }
     }
@@ -242,10 +256,21 @@ private fun UserInformation(
     name: String,
     gcn: String,
     department: Department,
+    navigateToMyPage: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(shape = JobisSize.Shape.Large)
+            .border(
+                width = 1.dp,
+                color = JobisColor.Gray400,
+                shape = JobisSize.Shape.Large,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = navigateToMyPage,
+            )
             .background(
                 color = JobisColor.Gray100,
                 shape = JobisSize.Shape.Large,
@@ -330,7 +355,7 @@ private fun ApplyCompany(
                 shape = ApplyCompaniesItemShape,
             )
             .border(
-                width = 2.dp,
+                width = 1.dp,
                 color = JobisColor.Gray400,
                 shape = ApplyCompaniesItemShape,
             ),
@@ -412,10 +437,6 @@ private fun MenuCard(
         modifier = Modifier
             .aspectRatio(0.8f)
             .clip(shape = JobisSize.Shape.Large)
-            .shadow(
-                shape = JobisSize.Shape.Large,
-                elevation = 80.dp,
-            )
             .background(
                 color = JobisColor.Gray100,
             )
@@ -427,13 +448,10 @@ private fun MenuCard(
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        Body1(
-            modifier = Modifier.jobisClickable(onClick = onClick),
-            text = text,
-        )
-        JobisImage(
-            drawable = drawable,
-            onClick = onClick,
+        Body1(text = text)
+        Image(
+            painter = painterResource(id = drawable),
+            contentDescription = null,
         )
     }
 }

@@ -18,7 +18,7 @@ object JobisRoute {
 
     object Navigation {
         const val Home = "Home"
-        const val BookmarkedRecruitments = "Bookmarked"
+        const val BookmarkRecruitments = "BookmarkRecruitments"
         const val MyPage = "MyPage"
         const val Menu = "Menu"
     }

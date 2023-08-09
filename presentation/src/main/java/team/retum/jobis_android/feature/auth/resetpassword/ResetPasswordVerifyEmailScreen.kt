@@ -1,11 +1,9 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -92,7 +90,6 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     Column(
         modifier = Modifier.jobisClickable { focusManager.clearFocus() },
-        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(80.dp))
@@ -122,7 +119,7 @@ internal fun ResetPasswordVerifyEmailScreen(
                 onAuthCodeChanged = onAuthCodeChanged,
                 onRequestVerification = onRequestVerification
             )
-            Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+            Spacer(modifier = Modifier.weight(1f))
             Caption(
                 text = stringResource(id = R.string.check_personal_information),
                 color = JobisColor.Gray600,

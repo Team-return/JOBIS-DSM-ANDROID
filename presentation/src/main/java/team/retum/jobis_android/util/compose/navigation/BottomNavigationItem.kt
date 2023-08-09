@@ -19,7 +19,7 @@ sealed class NavigationItem(
     object Bookmarked : NavigationItem(
         drawableId = R.drawable.ic_recruitment,
         stringResId = R.string.bottom_nav_recruitment,
-        route = JobisRoute.Navigation.BookmarkedRecruitments,
+        route = JobisRoute.Navigation.BookmarkRecruitments,
     )
 
     object Profile : NavigationItem(

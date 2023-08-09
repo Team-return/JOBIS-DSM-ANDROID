@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -131,22 +133,25 @@ internal fun MyPageScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Header(text = stringResource(id = R.string.bottom_nav_my_page))
-        Spacer(modifier = Modifier.height(50.dp))
-        UserProfile(
-            profileImageUrl = studentInformation.profileImageUrl,
-            name = studentInformation.studentName,
-            department = studentInformation.department,
-            studentGcn = studentInformation.studentGcn,
-            navController = navController,
-            showDialog = showDialog,
-        )
-        Spacer(modifier = Modifier.height(80.dp))
-        UserMenu(
-            onBugReportClicked = onBugReportClicked,
-            onInterestClicked = onInterestClicked,
-            onChangePasswordClicked = onChangePasswordClicked,
-            onSignOutClicked = onSignOutClicked
-        )
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Spacer(modifier = Modifier.height(50.dp))
+            UserProfile(
+                profileImageUrl = studentInformation.profileImageUrl,
+                name = studentInformation.studentName,
+                department = studentInformation.department,
+                studentGcn = studentInformation.studentGcn,
+                navController = navController,
+                showDialog = showDialog,
+            )
+            Spacer(modifier = Modifier.height(80.dp))
+            UserMenu(
+                onBugReportClicked = onBugReportClicked,
+                onInterestClicked = onInterestClicked,
+                onChangePasswordClicked = onChangePasswordClicked,
+                onSignOutClicked = onSignOutClicked
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 
@@ -237,10 +242,7 @@ private fun UserProfile(
                         show = grade.isEmpty()
                     ),
                 text = if (grade.isNotEmpty()) stringResource(
-                    id = R.string.student_gcn,
-                    grade,
-                    classRoom,
-                    number
+                    id = R.string.student_gcn, grade, classRoom, number
                 )
                 else "",
                 color = JobisColor.Gray700,
@@ -346,8 +348,7 @@ private fun SignOutDialog(
                     .weight(0.5f)
                     .height(40.dp)
                     .jobisClickable(
-                        onClick = onSubBtnClick,
-                        rippleEnabled = true
+                        onClick = onSubBtnClick, rippleEnabled = true
                     ),
                 contentAlignment = Alignment.Center,
             ) {

@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -174,12 +173,7 @@ internal fun SignUpScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                bottom = 36.dp,
-                start = 20.dp,
-                end = 20.dp,
-            ),
-        contentAlignment = Alignment.BottomCenter,
+            .padding(horizontal = 20.dp),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(56.dp))
@@ -192,35 +186,31 @@ internal fun SignUpScreen(
                 navController = navController,
                 startDestination = JobisRoute.StudentInfo,
             ) {
-                composable(
-                    route = JobisRoute.StudentInfo,
-                ) {
+                composable(route = JobisRoute.StudentInfo) {
                     StudentInfoScreen(signUpViewModel = signUpViewModel)
                 }
-
-                composable(
-                    route = JobisRoute.VerifyEmail,
-                ) {
+                composable(route = JobisRoute.VerifyEmail) {
                     VerifyEmailScreen(
                         navController = navController,
                         signUpViewModel = signUpViewModel,
                     )
                 }
-
-                composable(
-                    route = JobisRoute.SetPassword,
-                ) {
+                composable(route = JobisRoute.SetPassword) {
                     SetPasswordScreen(signUpViewModel = signUpViewModel)
                 }
             }
         }
-        ProgressBarWithButton(
-            currentProgress = currentProgress,
-            progress = progressAnimation,
-            buttonEnabled = state.signUpButtonEnabled,
-            isSuccessVerifyEmail = isSuccessVerifyEmail,
-            onClick = onNextButtonClicked,
-        )
+        Column(modifier = Modifier.fillMaxSize()) {
+            Spacer(modifier = Modifier.weight(1f))
+            ProgressBarWithButton(
+                currentProgress = currentProgress,
+                progress = progressAnimation,
+                buttonEnabled = state.signUpButtonEnabled,
+                isSuccessVerifyEmail = isSuccessVerifyEmail,
+                onClick = onNextButtonClicked,
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 
@@ -237,9 +227,7 @@ private fun ProgressBarWithButton(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            Caption(
-                text = "$currentProgress / $maxProgress",
-            )
+            Caption(text = "$currentProgress / $maxProgress")
         }
         Spacer(modifier = Modifier.height(4.dp))
         LinearProgressIndicator(
@@ -272,7 +260,9 @@ private fun SignUpHeader(
     )
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
-        text = if (currentProgress in 1..3) stringResource(titleList[currentProgress - 1])
-        else stringResource(titleList.first()),
+        text = stringResource(
+            id = if (currentProgress in 1..3) titleList[currentProgress - 1]
+            else titleList.first()
+        ),
     )
 }
