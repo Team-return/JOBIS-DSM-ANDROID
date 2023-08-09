@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.home
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +33,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
@@ -83,6 +85,10 @@ internal fun BookmarkRecruitmentsScreen(
         vibrate(context = context)
     }
 
+    val navigateToRecruitments = {
+        navController.navigate(JobisRoute.Recruitments)
+    }
+
     LaunchedEffect(Unit) {
         bookmarkViewModel.container.stateFlow.collect {
             bookmarks.clear()
@@ -90,15 +96,18 @@ internal fun BookmarkRecruitmentsScreen(
         }
     }
 
+    val bookmarkNotExistTextAlpha by animateFloatAsState(
+        targetValue = if (!state.bookmarkExists) 1f
+        else 0f,
+        label = "",
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-            )
+            .padding(horizontal = 24.dp)
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.bookmarked_recruitments))
         Box {
             BookmarkedRecruitments(
@@ -106,36 +115,44 @@ internal fun BookmarkRecruitmentsScreen(
                 removeItem = removeRecruitments,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
             )
-            if (!state.bookmarkExists) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 72.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Body1(text = stringResource(id = R.string.bookmarked_not_exist))
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier.jobisClickable {
-                            navController.navigate(JobisRoute.Recruitments)
-                        },
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Caption(
-                            text = stringResource(id = R.string.bookmarked_get_recruitments),
-                            color = JobisColor.Gray600,
-                        )
-                        Image(
-                            modifier = Modifier
-                                .size(14.dp)
-                                .padding(top = 2.dp),
-                            painter = painterResource(JobisIcon.RightArrow),
-                            contentDescription = null,
-                        )
-                    }
-                }
-            }
+            BookmarkNotExistText(
+                navigateToRecruitments = navigateToRecruitments,
+                bookmarkNotExistTextAlpha = bookmarkNotExistTextAlpha,
+            )
+        }
+    }
+}
+
+@Composable
+private fun BookmarkNotExistText(
+    navigateToRecruitments: () -> Unit,
+    bookmarkNotExistTextAlpha: Float,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 72.dp)
+            .alpha(bookmarkNotExistTextAlpha),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Body1(text = stringResource(id = R.string.bookmarked_not_exist))
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.jobisClickable(onClick = navigateToRecruitments),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Caption(
+                text = stringResource(id = R.string.bookmarked_get_recruitments),
+                color = JobisColor.Gray600,
+            )
+            Image(
+                modifier = Modifier
+                    .size(14.dp)
+                    .padding(top = 2.dp),
+                painter = painterResource(JobisIcon.RightArrow),
+                contentDescription = null,
+            )
         }
     }
 }
@@ -153,13 +170,9 @@ private fun BookmarkedRecruitments(
         contentPadding = PaddingValues(top = 30.dp)
     ) {
         items(items = bookmarks, key = { it.recruitmentId }, itemContent = { item ->
-
             val dismissState = rememberDismissState(confirmStateChange = {
                 when (it) {
-                    DismissValue.Default -> {
-                        false
-                    }
-
+                    DismissValue.Default -> false
                     DismissValue.DismissedToStart -> {
                         removeItem(item)
                         true
@@ -257,7 +270,8 @@ private fun BookmarkedRecruitment(
             .defaultMinSize(minHeight = 50.dp)
             .clip(shape = RoundedCornerShape(12.dp))
             .background(
-                color = JobisColor.Gray100, shape = RoundedCornerShape(12.dp)
+                color = JobisColor.Gray100,
+                shape = RoundedCornerShape(12.dp),
             )
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
