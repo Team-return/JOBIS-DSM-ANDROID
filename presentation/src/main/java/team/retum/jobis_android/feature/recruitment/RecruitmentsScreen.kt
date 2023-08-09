@@ -14,13 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,6 +57,7 @@ import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.JobisSize
 import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
 
@@ -71,19 +71,14 @@ internal fun RecruitmentsScreen(
 
     val state by recruitmentViewModel.container.stateFlow.collectAsState()
 
-    LaunchedEffect(Unit) {
-        recruitmentViewModel.fetchRecruitments()
-    }
-
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
 
-    val onFilterClicked = {
+    val onFilterClicked: () -> Unit = {
         coroutineScope.launch {
             sheetState.show()
         }
-        Unit
     }
 
     val onNameChanged = { name: String ->
@@ -96,11 +91,13 @@ internal fun RecruitmentsScreen(
         sheetContent = {
             RecruitmentFilter { jobCode, techCode ->
                 coroutineScope.launch {
+                    with(recruitmentViewModel) {
+                        setJobCode(jobCode)
+                        setTechCode(techCode)
+                        fetchRecruitments()
+                        setPage(1)
+                    }
                     sheetState.hide()
-                    recruitmentViewModel.setJobCode(jobCode)
-                    recruitmentViewModel.setTechCode(techCode)
-                    recruitmentViewModel.fetchRecruitments()
-                    recruitmentViewModel.setPage(1)
                 }
             }
         },
@@ -174,9 +171,7 @@ private fun RecruitmentInput(
             drawable = R.drawable.ic_filter,
             color = JobisButtonColor.MainSolidColor,
             onClick = onFilterClicked,
-            shape = RoundedCornerShape(
-                size = 4.dp,
-            )
+            shape = RoundedCornerShape(size = 4.dp)
         )
     }
     Row(
@@ -214,6 +209,19 @@ private fun Recruitments(
         }
     }
 
+    val onBookmarked = { index: Int, recruitmentId: Long, setBookmark: () -> Unit ->
+        recruitmentUiModels[index].bookmarked = !recruitmentUiModels[index].bookmarked
+        bookmarkViewModel.bookmarkRecruitment(recruitmentId = recruitmentId)
+        setBookmark()
+    }
+
+    val onRecruitmentClicked = { recruitment: RecruitmentUiModel ->
+        navController.currentBackStackEntry?.arguments?.putString(
+            "companyName", recruitment.companyName
+        )
+        navController.navigate("RecruitmentDetails/${recruitment.recruitId}")
+    }
+
     LaunchedEffect(lastIndex.value) {
         val size = recruitmentUiModels.size
         if (size - 1 == lastIndex.value && size > 5) {
@@ -228,31 +236,27 @@ private fun Recruitments(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 20.dp),
     ) {
-        items(recruitmentUiModels) { recruitment ->
+        itemsIndexed(recruitmentUiModels) { index, recruitment ->
 
             val position = recruitment.jobCodeList.replace(',', '/')
             val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
 
             var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
-            Recruitment(imageUrl = recruitment.companyProfileUrl,
+            val setBookmark = {
+                isBookmarked = !isBookmarked
+            }
+
+            Recruitment(
+                imageUrl = recruitment.companyProfileUrl,
                 position = position,
                 isBookmarked = isBookmarked,
                 companyName = recruitment.companyName,
                 trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
                 isMilitarySupported = recruitment.military,
-                onBookmarked = {
-                    recruitmentUiModels[recruitmentUiModels.indexOf(recruitment)].bookmarked =
-                        !recruitmentUiModels[recruitmentUiModels.indexOf(recruitment)].bookmarked
-                    isBookmarked = !isBookmarked
-                    bookmarkViewModel.bookmarkRecruitment(recruitment.recruitId.toLong())
-                },
-                onItemClicked = {
-                    navController.currentBackStackEntry?.arguments?.putString(
-                        "companyName", recruitment.companyName
-                    )
-                    navController.navigate("RecruitmentDetails/${recruitment.recruitId}")
-                })
+                onBookmarked = { onBookmarked(index, recruitment.recruitId.toLong(), setBookmark) },
+                onItemClicked = { onRecruitmentClicked(recruitment) },
+            )
         }
     }
 }
@@ -274,6 +278,17 @@ private fun Recruitment(
     }
 
     var bookmarked = isBookmarked
+    val bookmarkIcon = if (isBookmarked) R.drawable.ic_bookmarked_filled
+    else R.drawable.ic_bookmarked_outlined
+
+    val militaryIcon = if (isMilitarySupported) R.drawable.ic_military_filled
+    else R.drawable.ic_military_outlined
+
+    val onBookmarkClicked = {
+        onBookmarked()
+        isItemClicked = !isItemClicked
+        bookmarked = !bookmarked
+    }
 
     Column(
         modifier = Modifier
@@ -291,25 +306,21 @@ private fun Recruitment(
     ) {
         Row(
             modifier = Modifier.padding(
-                start = 8.dp,
                 end = 20.dp,
                 top = 8.dp,
                 bottom = 8.dp,
             ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Surface(
-                modifier = Modifier.size(90.dp),
-                contentColor = JobisColor.Gray400,
-            ) {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .skeleton(show = imageUrl.isEmpty()),
-                    model = imageUrl,
-                    contentDescription = null,
-                )
-            }
+            Spacer(modifier = Modifier.width(8.dp))
+            AsyncImage(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(shape = JobisSize.Shape.Large)
+                    .skeleton(show = imageUrl.isEmpty()),
+                model = imageUrl,
+                contentDescription = null,
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.padding(vertical = 12.dp)) {
                 Row(
@@ -323,14 +334,11 @@ private fun Recruitment(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    JobisImage(modifier = Modifier.size(18.dp),
-                        drawable = if (bookmarked) R.drawable.ic_bookmarked_on
-                        else R.drawable.ic_bookmarked_off,
-                        onClick = {
-                            onBookmarked()
-                            isItemClicked = !isItemClicked
-                            bookmarked = !bookmarked
-                        })
+                    JobisImage(
+                        modifier = Modifier.size(18.dp),
+                        drawable = bookmarkIcon,
+                        onClick = onBookmarkClicked,
+                    )
                 }
                 Caption(
                     text = companyName,
@@ -345,11 +353,11 @@ private fun Recruitment(
                     Caption(text = trainPay)
                     JobisImage(
                         modifier = Modifier.size(18.dp),
-                        drawable = if (isMilitarySupported) R.drawable.ic_military_true
-                        else R.drawable.ic_military_false,
+                        drawable = militaryIcon,
                     )
                 }
             }
+            Spacer(modifier = Modifier.width(20.dp))
         }
     }
 }

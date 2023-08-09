@@ -29,6 +29,10 @@ internal class RecruitmentViewModel @Inject constructor(
 
     override fun sendEvent(event: Event) {}
 
+    init{
+        fetchRecruitments()
+    }
+
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentListUseCase(
