@@ -40,6 +40,8 @@ import team.retum.jobis_android.feature.review.PostReviewScreen
 import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.navigatePopBackStack
+import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.util.compose.animation.slideInLeft
 import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
@@ -86,12 +88,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            Scaffold(
-                scaffoldState = appState.scaffoldState,
-                snackbarHost = {
-                    JobisSnackBarHost(appState)
-                }
-            ) {
+            Scaffold(scaffoldState = appState.scaffoldState, snackbarHost = {
+                JobisSnackBarHost(appState)
+            }) {
                 AnimatedNavHost(
                     navController = navController,
                     startDestination = JobisRoute.Splash,
@@ -110,8 +109,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SignUpScreen(
                             appState = appState,
-                            navHostController = navController,
                             signUpViewModel = signUpViewModel,
+                            navigateToMain = navController::navigateToMain,
+                            navigatePopBackStack = navController::navigatePopBackStack,
                         )
                     }
 
@@ -123,72 +123,53 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SignInScreen(
                             appState = appState,
-                            navController = navController,
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.Main,
-                        exitTransition = {
-                            fadeOut()
-                        }
-                    ) {
+                    composable(route = JobisRoute.Main, exitTransition = {
+                        fadeOut()
+                    }) {
                         MainScreen(
-                            navController = navController,
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.Recruitments,
+                    composable(route = JobisRoute.Recruitments,
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) }
-                    ) {
+                        popExitTransition = { fadeOut(tween(300)) }) {
                         RecruitmentsScreen(
-                            navController = navController,
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.RecruitmentDetails,
-                        arguments = listOf(
-                            navArgument("recruitment-id") { type = NavType.LongType }
-                        ),
+                    composable(route = JobisRoute.RecruitmentDetails,
+                        arguments = listOf(navArgument("recruitment-id") {
+                            type = NavType.LongType
+                        }),
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() }
-                    ) {
+                        popExitTransition = { slideOutRight() }) {
                         RecruitmentDetailsScreen(
-                            navController = navController,
                             recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.Companies,
+                    composable(route = JobisRoute.Companies,
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) }
-                    ) {
+                        popExitTransition = { fadeOut(tween(300)) }) {
                         CompaniesScreen(
-                            navController = navController,
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.CompanyDetails,
-                        arguments = listOf(
-                            navArgument("company-id") { type = NavType.IntType },
-                            navArgument("has-recruitment") { type = NavType.BoolType }
-                        ),
+                    composable(route = JobisRoute.CompanyDetails,
+                        arguments = listOf(navArgument("company-id") { type = NavType.IntType },
+                            navArgument("has-recruitment") { type = NavType.BoolType }),
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() }
-                    ) {
+                        popExitTransition = { slideOutRight() }) {
                         CompanyDetailsScreen(
-                            navController = navController,
                             companyId = it.arguments?.getInt("company-id") ?: 0,
                             hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
                         )
@@ -203,7 +184,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ResetPasswordVerifyEmailScreen(
                             appState = appState,
-                            navController = navController,
                         )
                     }
 
@@ -214,7 +194,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ResetPasswordScreen(
                             appState = appState,
-                            navController = navController,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )
                     }
@@ -224,7 +203,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ComparePasswordScreen(
                             appState = appState,
-                            navController = navController,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )
                     }
@@ -235,17 +213,12 @@ class MainActivity : ComponentActivity() {
                         BugReportScreen()
                     }
 
-                    composable(
-                        route = JobisRoute.MainNavigation.ReviewDetails,
-                        arguments = listOf(
-                            navArgument("review-id") { type = NavType.StringType }
-                        ),
+                    composable(route = JobisRoute.MainNavigation.ReviewDetails,
+                        arguments = listOf(navArgument("review-id") { type = NavType.StringType }),
                         enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutRight() }
-                    ) {
+                        exitTransition = { slideOutRight() }) {
                         ReviewDetailsScreen(
                             reviewId = it.arguments?.getString("review-id") ?: "",
-                            navController = navController,
                         )
                     }
 
@@ -254,7 +227,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         PostReviewScreen(
                             appState = appState,
-                            navController = navController,
                         )
                     }
                 }
@@ -271,16 +243,14 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-        @Suppress("DEPRECATION")
-        if (MaterialTheme.colors.surface.luminance() > 0.5f) {
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        @Suppress("DEPRECATION") if (MaterialTheme.colors.surface.luminance() > 0.5f) {
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
-        @Suppress("DEPRECATION")
-        if (MaterialTheme.colors.surface.luminance() > 0.5f) {
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        @Suppress("DEPRECATION") if (MaterialTheme.colors.surface.luminance() > 0.5f) {
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
 }

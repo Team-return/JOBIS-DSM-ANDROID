@@ -26,7 +26,6 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 
 @Composable
 fun VerifyEmailScreen(
-    navController: NavController,
     signUpViewModel: SignUpViewModel,
 ) {
 
