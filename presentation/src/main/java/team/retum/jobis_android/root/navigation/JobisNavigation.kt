@@ -10,6 +10,21 @@ internal fun NavHostController.navigateToMain() {
     }
 }
 
+internal fun NavHostController.navigateToMainWithPopUpSignIn(){
+    this.navigate(JobisRoute.Main){
+        popUpTo(JobisRoute.SignIn)
+    }
+}
+
 internal fun NavHostController.navigatePopBackStack() {
     this.popBackStack()
 }
+
+internal fun NavHostController.navigateToResetPasswordVerifyEmail(){
+    this.navigate(JobisRoute.ResetPasswordVerifyEmail)
+}
+
+internal fun NavHostController.navigateToSignUp(){
+    this.navigate(JobisRoute.SignUp)
+}
+

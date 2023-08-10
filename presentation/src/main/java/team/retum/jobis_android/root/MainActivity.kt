@@ -42,6 +42,9 @@ import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.root.navigation.navigatePopBackStack
 import team.retum.jobis_android.root.navigation.navigateToMain
+import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
+import team.retum.jobis_android.root.navigation.navigateToResetPasswordVerifyEmail
+import team.retum.jobis_android.root.navigation.navigateToSignUp
 import team.retum.jobis_android.util.compose.animation.slideInLeft
 import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
@@ -123,6 +126,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SignInScreen(
                             appState = appState,
+                            navigateToMainWithPopUpSignIn = navController::navigateToMainWithPopUpSignIn,
+                            navigateToResetPasswordVerifyEmail = navController::navigateToResetPasswordVerifyEmail,
+                            navigateToSignUp = navController::navigateToSignUp,
                         )
                     }
 
