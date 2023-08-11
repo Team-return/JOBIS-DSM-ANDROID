@@ -153,7 +153,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = JobisRoute.RecruitmentDetails,
+                    composable(
+                        route = JobisRoute.RecruitmentDetails + JobisRoute.RecruitmentId,
                         arguments = listOf(navArgument("recruitment-id") {
                             type = NavType.LongType
                         }),

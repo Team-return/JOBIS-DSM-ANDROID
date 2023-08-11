@@ -40,3 +40,9 @@ internal fun NavHostController.navigateToCompanies() {
     this.navigate(JobisRoute.Companies)
 }
 
+internal fun NavHostController.navigateToRecruitmentDetails(
+    recruitmentId: Long,
+) {
+    this.navigate(JobisRoute.RecruitmentDetails + recruitmentId)
+}
+

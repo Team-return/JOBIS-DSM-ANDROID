@@ -9,12 +9,14 @@ object JobisRoute {
     const val VerifyEmail = "EmailVerify"
     const val SetPassword = "SetPassword"
     const val Recruitments = "Recruitments"
-    const val RecruitmentDetails = "RecruitmentDetails/{recruitment-id}"
+    const val RecruitmentDetails = "RecruitmentDetails/"
     const val Companies = "Companies"
     const val CompanyDetails = "CompanyDetails/{company-id}/{has-recruitment}"
     const val ResetPasswordVerifyEmail = "ResetPasswordVerifyEmail"
     const val ResetPassword = "ResetPassword"
     const val ComparePassword = "ComparePassword"
+
+    const val RecruitmentId = "{recruitment-id}"
 
     object Navigation {
         const val Home = "Home"
