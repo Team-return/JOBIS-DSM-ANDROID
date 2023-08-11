@@ -28,7 +28,9 @@ import team.retum.jobis_android.util.compose.navigation.BottomBar
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navController: NavHostController,
+    navigateToMyPage: () -> Unit,
+    navigateToRecruitments: () -> Unit,
+    navigateToCompanies: () -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -64,8 +66,9 @@ fun MainScreen(
             ) {
                 composable(route = JobisRoute.Navigation.Home) {
                     HomeScreen(
-                        navController = navController,
-                        navHostController = navHostController,
+                        navigateToMyPage = navigateToMyPage,
+                        navigateToRecruitments = navigateToRecruitments,
+                        navigateToCompanies = navigateToCompanies,
                     )
                 }
 
