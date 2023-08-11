@@ -21,8 +21,11 @@ import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.feature.home.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
 import team.retum.jobis_android.root.navigation.navigateToBugReport
+import team.retum.jobis_android.root.navigation.navigateToCompanies
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
+import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToSignInPopUpWithMain
@@ -100,8 +103,10 @@ fun MainScreen(
 
                 composable(route = JobisRoute.Navigation.Menu) {
                     MenuScreen(
-                        navController = navController,
-                        navHostController = navHostController,
+                        navigateToMyPage = navHostController::navigateToMyPage,
+                        navigateToRecruitments = navHostController::navigateToRecruitments,
+                        navigateToCompanies = navHostController::navigateToCompanies,
+                        navigateToBookmarkRecruitments = navHostController::navigateToBookmarkRecruitments,
                     )
                 }
             }

@@ -22,10 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.animation.bounceClick
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisColor
@@ -34,26 +31,11 @@ import team.returm.jobisdesignsystem.theme.Body3
 
 @Composable
 internal fun MenuScreen(
-    navController: NavController,
-    navHostController: NavHostController,
+    navigateToMyPage: () -> Unit,
+    navigateToRecruitments: () -> Unit,
+    navigateToCompanies: () -> Unit,
+    navigateToBookmarkRecruitments: () -> Unit,
 ) {
-
-    val navigateToMyPage = {
-        navHostController.navigate(JobisRoute.Navigation.MyPage)
-    }
-
-    val navigateToRecruitments = {
-        navController.navigate(JobisRoute.Recruitments)
-    }
-
-    val navigateToCompanies = {
-        navController.navigate(JobisRoute.Companies)
-    }
-
-    val navigateToBookmarkedRecruitments = {
-        navHostController.navigate(JobisRoute.Navigation.BookmarkRecruitments)
-    }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,7 +44,6 @@ internal fun MenuScreen(
         Box(modifier = Modifier.padding(horizontal = 24.dp)) {
             Header(text = stringResource(id = R.string.menu))
         }
-
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -102,7 +83,7 @@ internal fun MenuScreen(
             Menu(
                 drawableRes = R.drawable.ic_fetch_bookmarked_recruitments,
                 content = stringResource(id = R.string.fetch_bookmarked_companies),
-                onClick = navigateToBookmarkedRecruitments,
+                onClick = navigateToBookmarkRecruitments,
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

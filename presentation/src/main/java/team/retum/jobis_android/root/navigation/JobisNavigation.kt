@@ -62,3 +62,7 @@ internal fun NavHostController.navigateToComparePassword() {
     this.navigate(JobisRoute.ComparePassword)
 }
 
+internal fun NavHostController.navigateToBookmarkRecruitments() {
+    this.navigate(JobisRoute.Navigation.BookmarkRecruitments)
+}
+
