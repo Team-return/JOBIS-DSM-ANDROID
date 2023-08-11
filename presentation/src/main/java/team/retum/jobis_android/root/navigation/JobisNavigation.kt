@@ -16,6 +16,14 @@ internal fun NavHostController.navigateToMainWithPopUpSignIn() {
     }
 }
 
+internal fun NavHostController.navigateToSignInPopUpWithMain() {
+    this.navigate(JobisRoute.SignIn) {
+        popUpTo(JobisRoute.Main) {
+            inclusive = true
+        }
+    }
+}
+
 internal fun NavHostController.navigatePopBackStack() {
     this.popBackStack()
 }
@@ -44,5 +52,13 @@ internal fun NavHostController.navigateToRecruitmentDetails(
     recruitmentId: Long,
 ) {
     this.navigate(JobisRoute.RecruitmentDetails + recruitmentId)
+}
+
+internal fun NavHostController.navigateToBugReport() {
+    this.navigate(JobisRoute.MainNavigation.BugReport)
+}
+
+internal fun NavHostController.navigateToComparePassword() {
+    this.navigate(JobisRoute.ComparePassword)
 }
 

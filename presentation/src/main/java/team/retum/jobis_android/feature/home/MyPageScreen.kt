@@ -38,13 +38,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.contract.HomeSideEffect
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
@@ -57,9 +55,11 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun MyPageScreen(
-    navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    navigateToSignInPopUpWithMain: () -> Unit,
+    navigateToBugReport: () -> Unit,
+    navigateToComparePassword: () -> Unit,
     showDialog: () -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     val state = homeViewModel.container.stateFlow.collectAsState()
@@ -68,11 +68,7 @@ internal fun MyPageScreen(
         homeViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is HomeSideEffect.SuccessSignOut -> {
-                    navController.navigate(JobisRoute.SignIn) {
-                        popUpTo(JobisRoute.Main) {
-                            inclusive = true
-                        }
-                    }
+                    navigateToSignInPopUpWithMain()
                 }
             }
         }
@@ -90,16 +86,8 @@ internal fun MyPageScreen(
         showSignOutDialog = false
     }
 
-    val onBugReportClicked = {
-        navController.navigate(JobisRoute.MainNavigation.BugReport)
-    }
-
     val onInterestClicked = {
 
-    }
-
-    val onChangePasswordClicked = {
-        navController.navigate(JobisRoute.ComparePassword)
     }
 
     val onSignOutClicked = {
@@ -140,14 +128,13 @@ internal fun MyPageScreen(
                 name = studentInformation.studentName,
                 department = studentInformation.department,
                 studentGcn = studentInformation.studentGcn,
-                navController = navController,
                 showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(80.dp))
             UserMenu(
-                onBugReportClicked = onBugReportClicked,
+                navigateBugReport = navigateToBugReport,
                 onInterestClicked = onInterestClicked,
-                onChangePasswordClicked = onChangePasswordClicked,
+                navigateToComparePassword = navigateToComparePassword,
                 onSignOutClicked = onSignOutClicked
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -162,7 +149,6 @@ private fun UserProfile(
     name: String,
     department: Department,
     studentGcn: String,
-    navController: NavController,
     showDialog: () -> Unit,
 ) {
 
@@ -253,9 +239,9 @@ private fun UserProfile(
 
 @Composable
 private fun UserMenu(
-    onBugReportClicked: () -> Unit,
+    navigateBugReport: () -> Unit,
     onInterestClicked: () -> Unit,
-    onChangePasswordClicked: () -> Unit,
+    navigateToComparePassword: () -> Unit,
     onSignOutClicked: () -> Unit,
 ) {
     Divider(
@@ -264,7 +250,7 @@ private fun UserMenu(
     )
     Menu(
         content = stringResource(id = R.string.bug_report),
-        onClick = onBugReportClicked,
+        onClick = navigateBugReport,
     )
     Menu(
         content = stringResource(id = R.string.choose_interests),
@@ -272,7 +258,7 @@ private fun UserMenu(
     )
     Menu(
         content = stringResource(id = R.string.change_password),
-        onClick = onChangePasswordClicked,
+        onClick = navigateToComparePassword,
     )
     Menu(
         content = stringResource(id = R.string.log_out),

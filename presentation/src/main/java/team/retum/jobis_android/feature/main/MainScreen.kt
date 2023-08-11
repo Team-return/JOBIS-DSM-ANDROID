@@ -11,7 +11,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +21,11 @@ import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.feature.home.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.navigateToBugReport
+import team.retum.jobis_android.root.navigation.navigateToComparePassword
+import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
+import team.retum.jobis_android.root.navigation.navigateToRecruitments
+import team.retum.jobis_android.root.navigation.navigateToSignInPopUpWithMain
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,6 +44,12 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
+
+    val showDialog: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.show()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -73,15 +83,19 @@ fun MainScreen(
                 }
 
                 composable(route = JobisRoute.Navigation.BookmarkRecruitments) {
-                    BookmarkRecruitmentsScreen(navController = navController)
+                    BookmarkRecruitmentsScreen(
+                        navigateToRecruitmentDetails = navHostController::navigateToRecruitmentDetails,
+                        navigateToRecruitments = navHostController::navigateToRecruitments,
+                    )
                 }
 
                 composable(route = JobisRoute.Navigation.MyPage) {
-                    MyPageScreen(navController = navController) {
-                        coroutineScope.launch {
-                            sheetState.show()
-                        }
-                    }
+                    MyPageScreen(
+                        navigateToSignInPopUpWithMain = navHostController::navigateToSignInPopUpWithMain,
+                        navigateToBugReport = navHostController::navigateToBugReport,
+                        navigateToComparePassword = navHostController::navigateToComparePassword,
+                        showDialog = showDialog,
+                    )
                 }
 
                 composable(route = JobisRoute.Navigation.Menu) {

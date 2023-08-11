@@ -25,7 +25,7 @@ object JobisRoute {
         const val Menu = "Menu"
     }
 
-    object MainNavigation{
+    object MainNavigation {
         const val BugReport = "BugReport"
         const val ReviewDetails = "ReviewDetails/{review-id}"
         const val PostReview = "PostReview"
