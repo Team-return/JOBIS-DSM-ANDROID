@@ -18,11 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -39,7 +37,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun ResetPasswordVerifyEmailScreen(
     appState: JobisAppState,
-    navController: NavController,
+    navigateToResetPassword: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
 
@@ -73,7 +71,7 @@ internal fun ResetPasswordVerifyEmailScreen(
         resetPasswordViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is ResetPasswordSideEffect.SuccessVerification -> {
-                    navController.navigate(JobisRoute.ResetPassword)
+                    navigateToResetPassword()
                 }
 
                 is ResetPasswordSideEffect.Exception -> {

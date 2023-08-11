@@ -90,3 +90,7 @@ internal fun NavHostController.navigateToReviewDetails(
     this.navigate("${JobisRoute.MainNavigation.ReviewDetails}${reviewId}")
 }
 
+internal fun NavHostController.navigateToResetPassword() {
+    this.navigate(JobisRoute.ResetPassword)
+}
+

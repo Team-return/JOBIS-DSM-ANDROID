@@ -49,6 +49,7 @@ import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
 import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
+import team.retum.jobis_android.root.navigation.navigateToResetPassword
 import team.retum.jobis_android.root.navigation.navigateToResetPasswordVerifyEmail
 import team.retum.jobis_android.root.navigation.navigateToReviewDetails
 import team.retum.jobis_android.root.navigation.navigateToSignUp
@@ -213,6 +214,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ResetPasswordVerifyEmailScreen(
                             appState = appState,
+                            navigateToResetPassword = navController::navigateToResetPassword,
                         )
                     }
 
