@@ -225,6 +225,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ResetPasswordScreen(
                             appState = appState,
+                            navigateToMain = navController::navigateToMain,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )
                     }
