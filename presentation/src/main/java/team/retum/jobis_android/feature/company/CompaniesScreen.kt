@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
@@ -50,7 +49,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 fun CompaniesScreen(
-    navController: NavController,
+    navigateToCompanyDetails: (Long, Boolean) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
@@ -58,10 +57,6 @@ fun CompaniesScreen(
 
     val onCompanyNameChanged = { name: String ->
         companyViewModel.setCompanyName(name)
-    }
-
-    val navigateToCompanyDetails = { id: Int, hasRecruitment: Boolean ->
-        navController.navigate("CompanyDetails/${id}/${hasRecruitment}")
     }
 
     val lazyListState = rememberLazyListState()
@@ -148,7 +143,7 @@ private fun CompanyInput(
 private fun Companies(
     companies: List<CompanyEntity>,
     lazyListState: LazyListState,
-    navigateToCompanyDetails: (Int, Boolean) -> Unit,
+    navigateToCompanyDetails: (Long, Boolean) -> Unit,
 ) {
     LazyColumn(
         state = lazyListState,
@@ -160,7 +155,7 @@ private fun Companies(
                 logoUrl = item.logoUrl,
                 take = item.take,
                 hasRecruitment = item.hasRecruitment,
-                onClick = { navigateToCompanyDetails(item.id, item.hasRecruitment) },
+                onClick = { navigateToCompanyDetails(item.id.toLong(), item.hasRecruitment) },
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

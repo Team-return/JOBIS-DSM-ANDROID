@@ -176,12 +176,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = JobisRoute.Companies,
+                    composable(
+                        route = JobisRoute.Companies,
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) }) {
-                        CompaniesScreen(
-                        )
+                        popExitTransition = { fadeOut(tween(300)) },
+                    ) {
+                        CompaniesScreen(navigateToCompanyDetails = navController::navigateToCompanyDetails)
                     }
 
                     composable(
