@@ -45,9 +45,11 @@ import team.retum.jobis_android.root.navigation.navigateToCompanies
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
 import team.retum.jobis_android.root.navigation.navigateToMyPage
+import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPasswordVerifyEmail
 import team.retum.jobis_android.root.navigation.navigateToSignUp
+import team.retum.jobis_android.root.navigation.putString
 import team.retum.jobis_android.util.compose.animation.slideInLeft
 import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
@@ -150,6 +152,8 @@ class MainActivity : ComponentActivity() {
                         popEnterTransition = { slideInRight() },
                         popExitTransition = { fadeOut(tween(300)) }) {
                         RecruitmentsScreen(
+                            putString = navController::putString,
+                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                         )
                     }
 

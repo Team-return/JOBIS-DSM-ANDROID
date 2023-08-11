@@ -66,3 +66,10 @@ internal fun NavHostController.navigateToBookmarkRecruitments() {
     this.navigate(JobisRoute.Navigation.BookmarkRecruitments)
 }
 
+internal fun NavHostController.putString(
+    key: String,
+    value: String,
+){
+    this.currentBackStackEntry?.arguments?.putString(key, value)
+}
+

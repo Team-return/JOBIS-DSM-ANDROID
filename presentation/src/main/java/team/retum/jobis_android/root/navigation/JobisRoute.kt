@@ -31,3 +31,7 @@ object JobisRoute {
         const val PostReview = "PostReview"
     }
 }
+
+object NavigationProperties{
+    const val COMPANY_NAME = "companyName"
+}

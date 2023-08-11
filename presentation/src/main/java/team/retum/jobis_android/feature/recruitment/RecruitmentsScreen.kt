@@ -39,11 +39,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.feature.home.ApplyCompaniesItemShape
+import team.retum.jobis_android.root.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
@@ -64,7 +64,8 @@ import java.text.DecimalFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun RecruitmentsScreen(
-    navController: NavController,
+    putString: (String, String) -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
@@ -131,7 +132,8 @@ internal fun RecruitmentsScreen(
                     recruitmentUiModels = recruitments,
                     recruitmentViewModel = recruitmentViewModel,
                     bookmarkViewModel = bookmarkViewModel,
-                    navController = navController,
+                    putString = putString,
+                    navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                 )
             }
         }
@@ -196,7 +198,8 @@ private fun Recruitments(
     recruitmentUiModels: List<RecruitmentUiModel>,
     recruitmentViewModel: RecruitmentViewModel,
     bookmarkViewModel: BookmarkViewModel,
-    navController: NavController,
+    putString: (String, String) -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -216,10 +219,11 @@ private fun Recruitments(
     }
 
     val onRecruitmentClicked = { recruitment: RecruitmentUiModel ->
-        navController.currentBackStackEntry?.arguments?.putString(
-            "companyName", recruitment.companyName
+        putString(
+            NavigationProperties.COMPANY_NAME,
+            recruitment.companyName,
         )
-        navController.navigate("RecruitmentDetails/${recruitment.recruitId}")
+        navigateToRecruitmentDetails(recruitment.recruitId.toLong())
     }
 
     LaunchedEffect(lastIndex.value) {
