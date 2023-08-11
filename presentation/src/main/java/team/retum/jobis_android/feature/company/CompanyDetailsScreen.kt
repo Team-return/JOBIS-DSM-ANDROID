@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
@@ -58,21 +57,22 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 
 @Composable
 fun CompanyDetailsScreen(
-    navController: NavController,
     companyId: Int,
     hasRecruitment: Boolean,
+    getPreviousDestination: () -> String?,
+    navigateToRecruitmentDetails: (Long?) -> Unit,
+    navigateToReviewDetails: (String) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
 
     var detailButtonShowed by remember { mutableStateOf(true) }
 
-    val companyState = companyViewModel.container.stateFlow.collectAsState()
-    val reviewState = reviewViewModel.container.stateFlow.collectAsState()
+    val companyState by companyViewModel.container.stateFlow.collectAsState()
+    val reviewState by reviewViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        detailButtonShowed =
-            navController.previousBackStackEntry?.destination?.route != JobisRoute.RecruitmentDetails
+        detailButtonShowed = getPreviousDestination() != JobisRoute.RecruitmentDetails
 
         companyViewModel.setCompanyId(
             companyId = companyId,
@@ -127,13 +127,13 @@ fun CompanyDetailsScreen(
         ) {
             Header(text = stringResource(id = R.string.company_list_search_company))
             Spacer(modifier = Modifier.height(16.dp))
-            CompanyDetails(details = companyState.value.companyDetails)
+            CompanyDetails(details = companyState.companyDetails)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = JobisColor.Gray400,
             )
             Spacer(modifier = Modifier.height(20.dp))
-            if (reviewState.value.reviews.isNotEmpty()) {
+            if (reviewState.reviews.isNotEmpty()) {
                 Body2(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -143,8 +143,8 @@ fun CompanyDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Reviews(
-                    reviews = reviewState.value.reviews,
-                    navController = navController,
+                    reviews = reviewState.reviews,
+                    navigateToReviewDetails = navigateToReviewDetails,
                 )
             }
             Spacer(modifier = Modifier.height(80.dp))
@@ -154,9 +154,8 @@ fun CompanyDetailsScreen(
                 text = stringResource(id = R.string.company_details_see_recruitents),
                 color = JobisButtonColor.MainSolidColor,
                 enabled = hasRecruitment,
-            ) {
-                navController.navigate("RecruitmentDetails/${companyState.value.companyDetails.recruitmentId}")
-            }
+                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId?.toLong()) }
+            )
         }
     }
 }
@@ -170,7 +169,8 @@ private fun CompanyDetails(
 
     val maxLines by animateIntAsState(
         targetValue = if (showDetails) 20
-        else 3
+        else 3,
+        label = ""
     )
 
     Column {
@@ -281,7 +281,7 @@ private fun CompanyDetails(
 @Composable
 private fun Reviews(
     reviews: List<ReviewEntity>,
-    navController: NavController,
+    navigateToReviewDetails: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -296,9 +296,8 @@ private fun Reviews(
                 reviewId = item.reviewId,
                 writer = item.writer,
                 year = item.year.toString(),
-            ) {
-                navController.navigate("ReviewDetails/${item.reviewId}")
-            }
+                onClick = { navigateToReviewDetails(item.reviewId) }
+            )
             Spacer(modifier = Modifier.height(10.dp))
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))

@@ -49,7 +49,7 @@ internal fun NavHostController.navigateToCompanies() {
 }
 
 internal fun NavHostController.navigateToRecruitmentDetails(
-    recruitmentId: Long,
+    recruitmentId: Long?,
 ) {
     this.navigate(JobisRoute.RecruitmentDetails + recruitmentId)
 }
@@ -82,5 +82,11 @@ internal fun NavHostController.navigateToCompanyDetails(
     hasRecruitment: Boolean,
 ) {
     this.navigate("${JobisRoute.CompanyDetails}/${companyId}/${hasRecruitment}")
+}
+
+internal fun NavHostController.navigateToReviewDetails(
+    reviewId: String,
+) {
+    this.navigate("${JobisRoute.MainNavigation.ReviewDetails}${reviewId}")
 }
 

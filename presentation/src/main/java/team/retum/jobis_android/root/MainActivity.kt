@@ -50,6 +50,7 @@ import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPasswordVerifyEmail
+import team.retum.jobis_android.root.navigation.navigateToReviewDetails
 import team.retum.jobis_android.root.navigation.navigateToSignUp
 import team.retum.jobis_android.root.navigation.putString
 import team.retum.jobis_android.util.compose.animation.slideInLeft
@@ -192,10 +193,14 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() }) {
+                        popExitTransition = { slideOutRight() },
+                    ) {
                         CompanyDetailsScreen(
                             companyId = it.arguments?.getInt("company-id") ?: 0,
                             hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
+                            getPreviousDestination = navController::getPreviousDestination,
+                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
+                            navigateToReviewDetails = navController::navigateToReviewDetails,
                         )
                     }
 
@@ -237,10 +242,12 @@ class MainActivity : ComponentActivity() {
                         BugReportScreen()
                     }
 
-                    composable(route = JobisRoute.MainNavigation.ReviewDetails,
+                    composable(
+                        route = "${JobisRoute.MainNavigation.ReviewDetails}${JobisRoute.ReviewId}",
                         arguments = listOf(navArgument("review-id") { type = NavType.StringType }),
                         enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutRight() }) {
+                        exitTransition = { slideOutRight() },
+                    ) {
                         ReviewDetailsScreen(
                             reviewId = it.arguments?.getString("review-id") ?: "",
                         )

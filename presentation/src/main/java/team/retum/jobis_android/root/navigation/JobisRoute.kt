@@ -19,6 +19,7 @@ object JobisRoute {
     const val RecruitmentId = "{recruitment-id}"
     const val CompanyId = "{company-id}"
     const val HasRecruitment = "{has-recruitment}"
+    const val ReviewId = "{review-id}"
 
     object Navigation {
         const val Home = "Home"
@@ -29,7 +30,7 @@ object JobisRoute {
 
     object MainNavigation {
         const val BugReport = "BugReport"
-        const val ReviewDetails = "ReviewDetails/{review-id}"
+        const val ReviewDetails = "ReviewDetails/"
         const val PostReview = "PostReview"
     }
 }
