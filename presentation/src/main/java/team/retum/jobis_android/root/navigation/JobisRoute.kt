@@ -11,12 +11,14 @@ object JobisRoute {
     const val Recruitments = "Recruitments"
     const val RecruitmentDetails = "RecruitmentDetails/"
     const val Companies = "Companies"
-    const val CompanyDetails = "CompanyDetails/{company-id}/{has-recruitment}"
+    const val CompanyDetails = "CompanyDetails/"
     const val ResetPasswordVerifyEmail = "ResetPasswordVerifyEmail"
     const val ResetPassword = "ResetPassword"
     const val ComparePassword = "ComparePassword"
 
     const val RecruitmentId = "{recruitment-id}"
+    const val CompanyId = "{company-id}"
+    const val HasRecruitment = "{has-recruitment}"
 
     object Navigation {
         const val Home = "Home"
@@ -32,6 +34,6 @@ object JobisRoute {
     }
 }
 
-object NavigationProperties{
+object NavigationProperties {
     const val COMPANY_NAME = "companyName"
 }

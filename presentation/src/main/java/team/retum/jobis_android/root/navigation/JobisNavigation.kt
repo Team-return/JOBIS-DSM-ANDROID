@@ -69,7 +69,18 @@ internal fun NavHostController.navigateToBookmarkRecruitments() {
 internal fun NavHostController.putString(
     key: String,
     value: String,
-){
+) {
     this.currentBackStackEntry?.arguments?.putString(key, value)
+}
+
+internal fun NavHostController.getPreviousDestination(): String? {
+    return this.previousBackStackEntry?.destination?.route
+}
+
+internal fun NavHostController.navigateToCompanyDetails(
+    companyId: Long,
+    hasRecruitment: Boolean,
+) {
+    this.navigate("${JobisRoute.CompanyDetails}/${companyId}/${hasRecruitment}")
 }
 

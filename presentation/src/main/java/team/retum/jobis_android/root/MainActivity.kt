@@ -40,8 +40,10 @@ import team.retum.jobis_android.feature.review.PostReviewScreen
 import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.getPreviousDestination
 import team.retum.jobis_android.root.navigation.navigatePopBackStack
 import team.retum.jobis_android.root.navigation.navigateToCompanies
+import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
 import team.retum.jobis_android.root.navigation.navigateToMyPage
@@ -165,9 +167,12 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() }) {
+                        popExitTransition = { slideOutRight() },
+                    ) {
                         RecruitmentDetailsScreen(
                             recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
+                            getPreviousDestination = navController::getPreviousDestination,
+                            navigateToCompanyDetails = navController::navigateToCompanyDetails,
                         )
                     }
 
@@ -179,7 +184,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = JobisRoute.CompanyDetails,
+                    composable(
+                        route = "${JobisRoute.CompanyDetails}${JobisRoute.CompanyId}/${JobisRoute.HasRecruitment}",
                         arguments = listOf(navArgument("company-id") { type = NavType.IntType },
                             navArgument("has-recruitment") { type = NavType.BoolType }),
                         enterTransition = { slideInLeft() },
