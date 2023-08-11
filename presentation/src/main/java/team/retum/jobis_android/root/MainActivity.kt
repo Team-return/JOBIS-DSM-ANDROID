@@ -235,6 +235,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         ComparePasswordScreen(
                             appState = appState,
+                            navigateToResetPassword = navController::navigateToResetPassword,
                             resetPasswordViewModel = resetPasswordViewModel,
                         )
                     }
