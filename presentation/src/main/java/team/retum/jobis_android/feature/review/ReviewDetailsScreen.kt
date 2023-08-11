@@ -33,7 +33,6 @@ import team.returm.jobisdesignsystem.theme.Caption
 internal fun ReviewDetailsScreen(
     reviewId: String,
     reviewViewModel: ReviewViewModel = hiltViewModel(),
-    navController: NavController,
 ) {
 
     LaunchedEffect(Unit){
