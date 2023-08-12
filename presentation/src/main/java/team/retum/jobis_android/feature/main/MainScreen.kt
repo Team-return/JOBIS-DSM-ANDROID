@@ -11,7 +11,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,14 +20,21 @@ import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.feature.home.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
+import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
+import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navController: NavHostController,
+    navigateToRecruitments: () -> Unit,
+    navigateToCompanies: () -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
+    navigateToSignInPopUpWithMain: () -> Unit,
+    navigateToBugReport: () -> Unit,
+    navigateToComparePassword: () -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -38,6 +44,12 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
+
+    val showDialog: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.show()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -60,31 +72,38 @@ fun MainScreen(
             NavHost(
                 modifier = Modifier.padding(it),
                 navController = navHostController,
-                startDestination = JobisRoute.Navigation.Home,
+                startDestination = NavigationRoute.Navigation.Home,
             ) {
-                composable(route = JobisRoute.Navigation.Home) {
+                composable(route = NavigationRoute.Navigation.Home) {
                     HomeScreen(
-                        navController = navController,
-                        navHostController = navHostController,
+                        navigateToMyPage = navHostController::navigateToMyPage,
+                        navigateToRecruitments = navigateToRecruitments,
+                        navigateToCompanies = navigateToCompanies,
                     )
                 }
 
-                composable(route = JobisRoute.Navigation.BookmarkRecruitments) {
-                    BookmarkRecruitmentsScreen(navController = navController)
+                composable(route = NavigationRoute.Navigation.BookmarkRecruitments) {
+                    BookmarkRecruitmentsScreen(
+                        navigateToRecruitmentDetails = navigateToRecruitmentDetails,
+                        navigateToRecruitments = navigateToRecruitments,
+                    )
                 }
 
-                composable(route = JobisRoute.Navigation.MyPage) {
-                    MyPageScreen(navController = navController) {
-                        coroutineScope.launch {
-                            sheetState.show()
-                        }
-                    }
+                composable(route = NavigationRoute.Navigation.MyPage) {
+                    MyPageScreen(
+                        navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
+                        navigateToBugReport = navigateToBugReport,
+                        navigateToComparePassword = navigateToComparePassword,
+                        showDialog = showDialog,
+                    )
                 }
 
-                composable(route = JobisRoute.Navigation.Menu) {
+                composable(route = NavigationRoute.Navigation.Menu) {
                     MenuScreen(
-                        navController = navController,
-                        navHostController = navHostController,
+                        navigateToMyPage = navHostController::navigateToMyPage,
+                        navigateToRecruitments = navigateToRecruitments,
+                        navigateToCompanies = navigateToCompanies,
+                        navigateToBookmarkRecruitments = navHostController::navigateToBookmarkRecruitments,
                     )
                 }
             }

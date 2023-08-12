@@ -37,14 +37,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -62,8 +61,9 @@ val PositionCardShape = RoundedCornerShape(
 
 @Composable
 internal fun RecruitmentDetailsScreen(
-    navController: NavController,
     recruitmentId: Long,
+    getPreviousDestination: () -> String?,
+    navigateToCompanyDetails: (Long, Boolean) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
@@ -89,8 +89,7 @@ internal fun RecruitmentDetailsScreen(
     }
 
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed =
-            navController.previousBackStackEntry?.destination?.route != JobisRoute.CompanyDetails
+        companyDetailsButtonShowed = getPreviousDestination() != NavigationRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
         )
@@ -122,9 +121,8 @@ internal fun RecruitmentDetailsScreen(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
                 companyDetailsButtonShowed = companyDetailsButtonShowed,
-            ) {
-                navController.navigate("CompanyDetails/${details.companyId}/${true}")
-            }
+                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId, true) },
+            )
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
                 modifier = Modifier.fillMaxWidth(),
@@ -197,7 +195,8 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-            content = details.preferentialTreatment ?: stringResource(id = R.string.company_details_null),
+            content = details.preferentialTreatment
+                ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
@@ -228,8 +227,8 @@ private fun RecruitmentDetails(
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_hiring_progress),
             content = StringBuilder().apply {
-                repeat(details.hiringProgress.size){
-                    append("${it+1}.${details.hiringProgress[it].value}\n")
+                repeat(details.hiringProgress.size) {
+                    append("${it + 1}.${details.hiringProgress[it].value}\n")
                 }
             }.toString(),
         )
@@ -273,7 +272,7 @@ private fun RecruitmentDetail(
 @Composable
 private fun Positions(
     areas: List<AreasEntity>,
-){
+) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top,

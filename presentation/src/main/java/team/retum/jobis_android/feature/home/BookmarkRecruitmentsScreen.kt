@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.home
 
+import android.content.Context
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -42,10 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.util.compose.vibrate
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
@@ -58,7 +57,8 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun BookmarkRecruitmentsScreen(
-    navController: NavController,
+    navigateToRecruitmentDetails: (Long) -> Unit,
+    navigateToRecruitments: () -> Unit,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
@@ -78,15 +78,6 @@ internal fun BookmarkRecruitmentsScreen(
         bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
         bookmarks.remove(it)
         vibrate(context = context)
-    }
-
-    val navigateToRecruitmentDetails = { recruitmentId: Long ->
-        navController.navigate("RecruitmentDetails/${recruitmentId}")
-        vibrate(context = context)
-    }
-
-    val navigateToRecruitments = {
-        navController.navigate(JobisRoute.Recruitments)
     }
 
     LaunchedEffect(Unit) {
@@ -111,6 +102,7 @@ internal fun BookmarkRecruitmentsScreen(
         Header(text = stringResource(id = R.string.bookmarked_recruitments))
         Box {
             BookmarkedRecruitments(
+                context = context,
                 bookmarks = bookmarks,
                 removeItem = removeRecruitments,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
@@ -160,6 +152,7 @@ private fun BookmarkNotExistText(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BookmarkedRecruitments(
+    context: Context,
     bookmarks: MutableList<BookmarkedRecruitmentEntity>,
     removeItem: (BookmarkedRecruitmentEntity) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
@@ -180,6 +173,7 @@ private fun BookmarkedRecruitments(
 
                     DismissValue.DismissedToEnd -> {
                         navigateToRecruitmentDetails(item.recruitmentId)
+                        vibrate(context = context)
                         false
                     }
                 }

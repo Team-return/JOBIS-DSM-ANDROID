@@ -1,20 +1,16 @@
 package team.retum.jobis_android.feature.auth.signin
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,11 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignInSideEffect
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
@@ -53,8 +47,10 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun SignInScreen(
     appState: JobisAppState,
-    navController: NavController,
     signInViewModel: SignInViewModel = hiltViewModel(),
+    navigateToMainWithPopUpSignIn: () -> Unit,
+    navigateToResetPasswordVerifyEmail: () -> Unit,
+    navigateToSignUp: () -> Unit,
 ) {
 
     val state by signInViewModel.container.stateFlow.collectAsState()
@@ -68,11 +64,7 @@ internal fun SignInScreen(
         signInViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignInSideEffect.MoveToMain -> {
-                    navController.navigate(JobisRoute.Main) {
-                        popUpTo(JobisRoute.SignIn) {
-                            inclusive = true
-                        }
-                    }
+                    navigateToMainWithPopUpSignIn()
                 }
 
                 is SignInSideEffect.UnAuthorization -> {
@@ -110,11 +102,11 @@ internal fun SignInScreen(
     }
 
     val onResetPasswordClicked = {
-        navController.navigate(JobisRoute.ResetPasswordVerifyEmail)
+        navigateToResetPasswordVerifyEmail()
     }
 
     val onDoSignUpClicked = {
-        navController.navigate(JobisRoute.SignUp)
+        navigateToSignUp()
     }
 
     val postLogin = {

@@ -25,17 +25,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -58,8 +56,9 @@ private val titleList = listOf(
 @Composable
 internal fun SignUpScreen(
     appState: JobisAppState,
-    navHostController: NavHostController,
     signUpViewModel: SignUpViewModel,
+    navigateToMain: () -> Unit,
+    navigatePopBackStack: () -> Unit,
 ) {
 
     var currentProgress by remember { mutableStateOf(1) }
@@ -68,7 +67,15 @@ internal fun SignUpScreen(
 
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
-    val navController = rememberNavController()
+    val navController = appState.navController
+
+    val navigateToVerifyEmail = {
+        navController.navigate(NavigationRoute.VerifyEmail)
+    }
+
+    val navigateToSetPassword = {
+        navController.navigate(NavigationRoute.SetPassword)
+    }
 
     val notFoundToastMessage = stringResource(id = R.string.student_info_not_found_student)
     val sendAuthCodeSuccessToastTitle =
@@ -80,7 +87,7 @@ internal fun SignUpScreen(
 
     val moveToBack = {
         when (currentProgress) {
-            1 -> navHostController.popBackStack()
+            1 -> navigatePopBackStack()
             else -> navController.popBackStack()
         }
         currentProgress -= 1
@@ -94,7 +101,7 @@ internal fun SignUpScreen(
         signUpViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navController.navigate(JobisRoute.VerifyEmail)
+                    navigateToVerifyEmail()
                     currentProgress = 2
                 }
 
@@ -106,7 +113,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
-                    navController.navigate(JobisRoute.SetPassword)
+                    navigateToSetPassword()
                     currentProgress = 3
                 }
 
@@ -133,11 +140,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpSuccess -> {
-                    navHostController.navigate(JobisRoute.Main) {
-                        popUpTo(JobisRoute.Main) {
-                            inclusive = true
-                        }
-                    }
+                    navigateToMain()
                 }
 
                 is SignUpSideEffect.Exception -> {
@@ -184,18 +187,15 @@ internal fun SignUpScreen(
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.StudentInfo,
+                startDestination = NavigationRoute.StudentInfo,
             ) {
-                composable(route = JobisRoute.StudentInfo) {
+                composable(route = NavigationRoute.StudentInfo) {
                     StudentInfoScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = JobisRoute.VerifyEmail) {
-                    VerifyEmailScreen(
-                        navController = navController,
-                        signUpViewModel = signUpViewModel,
-                    )
+                composable(route = NavigationRoute.VerifyEmail) {
+                    VerifyEmailScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = JobisRoute.SetPassword) {
+                composable(route = NavigationRoute.SetPassword) {
                     SetPasswordScreen(signUpViewModel = signUpViewModel)
                 }
             }

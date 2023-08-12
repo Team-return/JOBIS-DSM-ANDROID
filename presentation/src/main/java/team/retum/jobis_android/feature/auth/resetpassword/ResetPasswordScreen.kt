@@ -19,11 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -39,7 +37,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun ResetPasswordScreen(
     appState: JobisAppState,
-    navController: NavController,
+    navigateToMain: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
 
@@ -55,11 +53,7 @@ internal fun ResetPasswordScreen(
         resetPasswordViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is ResetPasswordSideEffect.SuccessResetPassword -> {
-                    navController.navigate(JobisRoute.Main) {
-                        popUpTo(JobisRoute.Main) {
-                            inclusive = true
-                        }
-                    }
+                    navigateToMain()
                 }
 
                 is ResetPasswordSideEffect.Exception -> {

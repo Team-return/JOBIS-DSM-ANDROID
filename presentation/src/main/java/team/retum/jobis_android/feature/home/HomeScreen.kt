@@ -37,13 +37,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.student.Department
-import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobisui.colors.JobisColor
@@ -71,9 +68,10 @@ private val recruitmentStatusShape = RoundedCornerShape(
 
 @Composable
 internal fun HomeScreen(
-    navController: NavController,
-    navHostController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    navigateToMyPage: () -> Unit,
+    navigateToRecruitments: () -> Unit,
+    navigateToCompanies: () -> Unit,
 ) {
 
     val state by homeViewModel.container.stateFlow.collectAsState()
@@ -88,18 +86,6 @@ internal fun HomeScreen(
 
     val studentCounts = state.studentCounts
     val studentInformation = state.studentInformation
-
-    val onRecruitmentsMenuClicked = {
-        navController.navigate(JobisRoute.Recruitments)
-    }
-
-    val onCompaniesMenuClicked = {
-        navController.navigate(JobisRoute.Companies)
-    }
-
-    val navigateToMyPage = {
-        navHostController.navigate(JobisRoute.Navigation.MyPage)
-    }
 
     Column(
         modifier = Modifier
@@ -119,9 +105,7 @@ internal fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 UserInformation(
                     profileImageUrl = studentInformation.profileImageUrl,
                     name = studentInformation.studentName,
@@ -153,8 +137,8 @@ internal fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(26.dp))
                 MenuCardGroup(
-                    onRecruitmentsMenuClicked = onRecruitmentsMenuClicked,
-                    onCompaniesMenuClicked = onCompaniesMenuClicked,
+                    onRecruitmentsMenuClicked = navigateToRecruitments,
+                    onCompaniesMenuClicked = navigateToCompanies,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
             }
@@ -168,7 +152,6 @@ private fun RecruitmentStatus(
     passCount: Long,
     approvedCount: Long,
 ) {
-
     var employmentRate = 0f
     val passString = "$passCount / $totalStudentCount"
     val appliedString = "$approvedCount / $totalStudentCount"
