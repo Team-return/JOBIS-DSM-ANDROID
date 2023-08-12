@@ -35,9 +35,12 @@ import team.retum.jobis_android.util.compose.navigation.BottomBar
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navigateToMyPage: () -> Unit,
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
+    navigateToSignInPopUpWithMain: () -> Unit,
+    navigateToBugReport: () -> Unit,
+    navigateToComparePassword: () -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -79,7 +82,7 @@ fun MainScreen(
             ) {
                 composable(route = JobisRoute.Navigation.Home) {
                     HomeScreen(
-                        navigateToMyPage = navigateToMyPage,
+                        navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
                         navigateToCompanies = navigateToCompanies,
                     )
@@ -87,16 +90,16 @@ fun MainScreen(
 
                 composable(route = JobisRoute.Navigation.BookmarkRecruitments) {
                     BookmarkRecruitmentsScreen(
-                        navigateToRecruitmentDetails = navHostController::navigateToRecruitmentDetails,
-                        navigateToRecruitments = navHostController::navigateToRecruitments,
+                        navigateToRecruitmentDetails = navigateToRecruitmentDetails,
+                        navigateToRecruitments = navigateToRecruitments,
                     )
                 }
 
                 composable(route = JobisRoute.Navigation.MyPage) {
                     MyPageScreen(
-                        navigateToSignInPopUpWithMain = navHostController::navigateToSignInPopUpWithMain,
-                        navigateToBugReport = navHostController::navigateToBugReport,
-                        navigateToComparePassword = navHostController::navigateToComparePassword,
+                        navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
+                        navigateToBugReport = navigateToBugReport,
+                        navigateToComparePassword = navigateToComparePassword,
                         showDialog = showDialog,
                     )
                 }
@@ -104,8 +107,8 @@ fun MainScreen(
                 composable(route = JobisRoute.Navigation.Menu) {
                     MenuScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
-                        navigateToRecruitments = navHostController::navigateToRecruitments,
-                        navigateToCompanies = navHostController::navigateToCompanies,
+                        navigateToRecruitments = navigateToRecruitments,
+                        navigateToCompanies = navigateToCompanies,
                         navigateToBookmarkRecruitments = navHostController::navigateToBookmarkRecruitments,
                     )
                 }

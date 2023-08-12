@@ -42,8 +42,10 @@ import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
 import team.retum.jobis_android.root.navigation.getPreviousDestination
 import team.retum.jobis_android.root.navigation.navigatePopBackStack
+import team.retum.jobis_android.root.navigation.navigateToBugReport
 import team.retum.jobis_android.root.navigation.navigateToCompanies
 import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
+import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
 import team.retum.jobis_android.root.navigation.navigateToMyPage
@@ -52,6 +54,7 @@ import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
 import team.retum.jobis_android.root.navigation.navigateToResetPasswordVerifyEmail
 import team.retum.jobis_android.root.navigation.navigateToReviewDetails
+import team.retum.jobis_android.root.navigation.navigateToSignInPopUpWithMain
 import team.retum.jobis_android.root.navigation.navigateToSignUp
 import team.retum.jobis_android.root.navigation.putString
 import team.retum.jobis_android.util.compose.animation.slideInLeft
@@ -145,9 +148,12 @@ class MainActivity : ComponentActivity() {
                         fadeOut()
                     }) {
                         MainScreen(
-                            navigateToMyPage = navController::navigateToMyPage,
                             navigateToRecruitments = navController::navigateToRecruitments,
                             navigateToCompanies = navController::navigateToCompanies,
+                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
+                            navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
+                            navigateToBugReport = navController::navigateToBugReport,
+                            navigateToComparePassword = navController::navigateToComparePassword,
                         )
                     }
 
