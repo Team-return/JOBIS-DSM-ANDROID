@@ -20,7 +20,6 @@ import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
 import team.retum.jobis_android.contract.ResetPasswordState
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -38,10 +37,8 @@ internal class ResetPasswordViewModel @Inject constructor(
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
-        ResetPasswordState()
+        initialState = ResetPasswordState(),
     )
-
-    override fun sendEvent(event: Event) {}
 
     internal fun sendVerificationCode() = intent {
         viewModelScope.launch(Dispatchers.IO) {

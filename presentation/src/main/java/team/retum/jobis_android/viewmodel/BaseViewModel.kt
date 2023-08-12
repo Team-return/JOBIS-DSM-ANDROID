@@ -11,7 +11,6 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.TimeoutException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
@@ -32,7 +31,4 @@ abstract class BaseViewModel<S : State, E : SideEffect> : ContainerHost<S, E>, V
         is TimeoutException -> application.getString(R.string.timeout_exception)
         else -> application.getString(R.string.other_exception)
     }
-    abstract fun sendEvent(
-        event: Event,
-    )
 }

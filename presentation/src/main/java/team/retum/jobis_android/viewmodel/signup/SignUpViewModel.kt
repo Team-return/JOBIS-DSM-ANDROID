@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.signup
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +22,6 @@ import team.retum.domain.usecase.user.SignUpUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.SignUpSideEffect
 import team.retum.jobis_android.contract.SignUpState
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -45,8 +43,6 @@ class SignUpViewModel @Inject constructor(
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
 
     internal val state = container.stateFlow.value
-
-    override fun sendEvent(event: Event) {}
 
     internal fun setSex(
         sex: Sex,

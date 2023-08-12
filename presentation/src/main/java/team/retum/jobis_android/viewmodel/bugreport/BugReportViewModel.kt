@@ -1,29 +1,25 @@
 package team.retum.jobis_android.viewmodel.bugreport
 
 import android.net.Uri
-import android.util.Log
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.jobis_android.contract.bugreport.BugReportSideEffect
 import team.retum.jobis_android.contract.bugreport.BugReportState
 import team.retum.jobis_android.contract.bugreport.Position
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 internal class BugReportViewModel @Inject constructor(
 
-): BaseViewModel<BugReportState, BugReportSideEffect>(){
-
-    override fun sendEvent(event: Event) {}
+) : BaseViewModel<BugReportState, BugReportSideEffect>() {
 
     override val container = container<BugReportState, BugReportSideEffect>(BugReportState())
 
     internal fun setTitle(
         title: String,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 title = title,
             )
@@ -32,8 +28,8 @@ internal class BugReportViewModel @Inject constructor(
 
     internal fun setContent(
         content: String,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 content = content,
             )
@@ -42,7 +38,7 @@ internal class BugReportViewModel @Inject constructor(
 
     internal fun setPosition(
         position: String,
-    ) = intent{
+    ) = intent {
         runCatching {
             reduce {
                 state.copy(
@@ -60,8 +56,8 @@ internal class BugReportViewModel @Inject constructor(
 
     internal fun setUriList(
         uriList: List<Uri>,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 uriList = uriList,
             )

@@ -15,7 +15,6 @@ import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
 import team.retum.jobis_android.contract.RecruitmentSideEffect
 import team.retum.jobis_android.contract.RecruitmentState
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
@@ -25,13 +24,11 @@ internal class RecruitmentViewModel @Inject constructor(
     private val fetchRecruitmentDetailsUseCase: FetchRecruitmentDetailsUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
-    override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
-
-    override fun sendEvent(event: Event) {}
-
-    init{
+    init {
         fetchRecruitments()
     }
+
+    override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {

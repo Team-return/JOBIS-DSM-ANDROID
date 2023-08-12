@@ -12,7 +12,6 @@ import team.retum.domain.entity.FileType
 import team.retum.domain.usecase.file.UploadFileUseCase
 import team.retum.jobis_android.contract.FileSideEffect
 import team.retum.jobis_android.contract.FileState
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.io.File
 import javax.inject.Inject
@@ -21,8 +20,6 @@ import javax.inject.Inject
 internal class FileViewModel @Inject constructor(
     private val uploadFileUseCase: UploadFileUseCase,
 ) : BaseViewModel<FileState, FileSideEffect>() {
-
-    override fun sendEvent(event: Event) {}
 
     override val container = container<FileState, FileSideEffect>(FileState())
 

@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.application
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,6 @@ import team.retum.domain.param.application.AttachmentsParam
 import team.retum.domain.usecase.applications.ApplyCompanyUseCase
 import team.retum.jobis_android.contract.ApplicationSideEffect
 import team.retum.jobis_android.contract.ApplicationState
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
@@ -23,8 +21,6 @@ import javax.inject.Inject
 internal class ApplicationViewModel @Inject constructor(
     private val applyCompanyUseCase: ApplyCompanyUseCase,
 ) : BaseViewModel<ApplicationState, ApplicationSideEffect>() {
-
-    override fun sendEvent(event: Event) {}
 
     override val container = container<ApplicationState, ApplicationSideEffect>(ApplicationState())
 
