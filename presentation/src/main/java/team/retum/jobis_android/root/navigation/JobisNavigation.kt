@@ -1,6 +1,9 @@
 package team.retum.jobis_android.root.navigation
 
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 internal fun NavHostController.navigateToMain() {
     this.navigate(JobisRoute.Main) {
@@ -94,3 +97,11 @@ internal fun NavHostController.navigateToResetPassword() {
     this.navigate(JobisRoute.ResetPassword)
 }
 
+internal fun <T> getArgument(
+    name: String,
+    type: NavType<T>,
+): NamedNavArgument {
+    return navArgument(name) {
+        this.type = type
+    }
+}

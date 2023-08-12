@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +39,8 @@ import team.retum.jobis_android.feature.review.PostReviewScreen
 import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationProperties
+import team.retum.jobis_android.root.navigation.getArgument
 import team.retum.jobis_android.root.navigation.getPreviousDestination
 import team.retum.jobis_android.root.navigation.navigatePopBackStack
 import team.retum.jobis_android.root.navigation.navigateToBugReport
@@ -48,7 +49,6 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
-import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
@@ -144,9 +144,10 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = JobisRoute.Main, exitTransition = {
-                        fadeOut()
-                    }) {
+                    composable(
+                        route = JobisRoute.Main,
+                        exitTransition = { fadeOut() },
+                    ) {
                         MainScreen(
                             navigateToRecruitments = navController::navigateToRecruitments,
                             navigateToCompanies = navController::navigateToCompanies,
@@ -157,10 +158,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = JobisRoute.Recruitments,
+                    composable(
+                        route = JobisRoute.Recruitments,
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) }) {
+                        popExitTransition = { fadeOut(tween(300)) },
+                    ) {
                         RecruitmentsScreen(
                             putString = navController::putString,
                             navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
@@ -169,16 +172,20 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = JobisRoute.RecruitmentDetails + JobisRoute.RecruitmentId,
-                        arguments = listOf(navArgument("recruitment-id") {
-                            type = NavType.LongType
-                        }),
+                        arguments = listOf(
+                            getArgument(
+                                NavigationProperties.RECRUITMENT_ID,
+                                NavType.IntType,
+                            ),
+                        ),
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
                         popExitTransition = { slideOutRight() },
                     ) {
                         RecruitmentDetailsScreen(
-                            recruitmentId = it.arguments?.getLong("recruitment-id") ?: 0L,
+                            recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID)
+                                ?: 0L,
                             getPreviousDestination = navController::getPreviousDestination,
                             navigateToCompanyDetails = navController::navigateToCompanyDetails,
                         )
@@ -195,16 +202,19 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = "${JobisRoute.CompanyDetails}${JobisRoute.CompanyId}/${JobisRoute.HasRecruitment}",
-                        arguments = listOf(navArgument("company-id") { type = NavType.IntType },
-                            navArgument("has-recruitment") { type = NavType.BoolType }),
+                        arguments = listOf(
+                            getArgument(NavigationProperties.COMPANY_ID, NavType.IntType),
+                            getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
+                        ),
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutLeft() },
                         popEnterTransition = { slideInRight() },
                         popExitTransition = { slideOutRight() },
                     ) {
                         CompanyDetailsScreen(
-                            companyId = it.arguments?.getInt("company-id") ?: 0,
-                            hasRecruitment = it.arguments?.getBoolean("has-recruitment") ?: false,
+                            companyId = it.arguments?.getInt(NavigationProperties.COMPANY_ID) ?: 0,
+                            hasRecruitment = it.arguments?.getBoolean(NavigationProperties.HAS_RECRUITMENT)
+                                ?: false,
                             getPreviousDestination = navController::getPreviousDestination,
                             navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                             navigateToReviewDetails = navController::navigateToReviewDetails,
@@ -226,9 +236,7 @@ class MainActivity : ComponentActivity() {
 
                     val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
 
-                    composable(
-                        route = JobisRoute.ResetPassword,
-                    ) {
+                    composable(route = JobisRoute.ResetPassword) {
                         ResetPasswordScreen(
                             appState = appState,
                             navigateToMain = navController::navigateToMain,
@@ -236,9 +244,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.ComparePassword,
-                    ) {
+                    composable(route = JobisRoute.ComparePassword) {
                         ComparePasswordScreen(
                             appState = appState,
                             navigateToResetPassword = navController::navigateToResetPassword,
@@ -246,29 +252,25 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.MainNavigation.BugReport,
-                    ) {
+                    composable(route = JobisRoute.MainNavigation.BugReport) {
                         BugReportScreen()
                     }
 
                     composable(
                         route = "${JobisRoute.MainNavigation.ReviewDetails}${JobisRoute.ReviewId}",
-                        arguments = listOf(navArgument("review-id") { type = NavType.StringType }),
+                        arguments = listOf(
+                            getArgument(NavigationProperties.REVIEW_ID, NavType.StringType),
+                        ),
                         enterTransition = { slideInLeft() },
                         exitTransition = { slideOutRight() },
                     ) {
                         ReviewDetailsScreen(
-                            reviewId = it.arguments?.getString("review-id") ?: "",
+                            reviewId = it.arguments?.getString(NavigationProperties.REVIEW_ID) ?: ""
                         )
                     }
 
-                    composable(
-                        route = JobisRoute.MainNavigation.PostReview,
-                    ) {
-                        PostReviewScreen(
-                            appState = appState,
-                        )
+                    composable(route = JobisRoute.MainNavigation.PostReview) {
+                        PostReviewScreen(appState = appState)
                     }
                 }
             }
