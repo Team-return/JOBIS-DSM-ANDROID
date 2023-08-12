@@ -33,7 +33,7 @@ import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScree
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -70,11 +70,11 @@ internal fun SignUpScreen(
     val navController = appState.navController
 
     val navigateToVerifyEmail = {
-        navController.navigate(JobisRoute.VerifyEmail)
+        navController.navigate(NavigationRoute.VerifyEmail)
     }
 
     val navigateToSetPassword = {
-        navController.navigate(JobisRoute.SetPassword)
+        navController.navigate(NavigationRoute.SetPassword)
     }
 
     val notFoundToastMessage = stringResource(id = R.string.student_info_not_found_student)
@@ -187,15 +187,15 @@ internal fun SignUpScreen(
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
-                startDestination = JobisRoute.StudentInfo,
+                startDestination = NavigationRoute.StudentInfo,
             ) {
-                composable(route = JobisRoute.StudentInfo) {
+                composable(route = NavigationRoute.StudentInfo) {
                     StudentInfoScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = JobisRoute.VerifyEmail) {
+                composable(route = NavigationRoute.VerifyEmail) {
                     VerifyEmailScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = JobisRoute.SetPassword) {
+                composable(route = NavigationRoute.SetPassword) {
                     SetPasswordScreen(signUpViewModel = signUpViewModel)
                 }
             }

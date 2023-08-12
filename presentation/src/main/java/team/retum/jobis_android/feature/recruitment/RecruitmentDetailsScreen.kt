@@ -43,7 +43,7 @@ import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -89,7 +89,7 @@ internal fun RecruitmentDetailsScreen(
     }
 
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed = getPreviousDestination() != JobisRoute.CompanyDetails
+        companyDetailsButtonShowed = getPreviousDestination() != NavigationRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId,
         )

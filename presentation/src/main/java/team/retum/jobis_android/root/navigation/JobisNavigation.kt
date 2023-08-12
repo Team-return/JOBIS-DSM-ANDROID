@@ -6,22 +6,22 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 internal fun NavHostController.navigateToMain() {
-    this.navigate(JobisRoute.Main) {
-        popUpTo(JobisRoute.Main) {
+    this.navigate(NavigationRoute.Main) {
+        popUpTo(NavigationRoute.Main) {
             inclusive = true
         }
     }
 }
 
 internal fun NavHostController.navigateToMainWithPopUpSignIn() {
-    this.navigate(JobisRoute.Main) {
-        popUpTo(JobisRoute.SignIn)
+    this.navigate(NavigationRoute.Main) {
+        popUpTo(NavigationRoute.SignIn)
     }
 }
 
 internal fun NavHostController.navigateToSignInPopUpWithMain() {
-    this.navigate(JobisRoute.SignIn) {
-        popUpTo(JobisRoute.Main) {
+    this.navigate(NavigationRoute.SignIn) {
+        popUpTo(NavigationRoute.Main) {
             inclusive = true
         }
     }
@@ -32,41 +32,41 @@ internal fun NavHostController.navigatePopBackStack() {
 }
 
 internal fun NavHostController.navigateToResetPasswordVerifyEmail() {
-    this.navigate(JobisRoute.ResetPasswordVerifyEmail)
+    this.navigate(NavigationRoute.ResetPasswordVerifyEmail)
 }
 
 internal fun NavHostController.navigateToSignUp() {
-    this.navigate(JobisRoute.SignUp)
+    this.navigate(NavigationRoute.SignUp)
 }
 
 internal fun NavHostController.navigateToMyPage() {
-    this.navigate(JobisRoute.Navigation.MyPage)
+    this.navigate(NavigationRoute.Navigation.MyPage)
 }
 
 internal fun NavHostController.navigateToRecruitments() {
-    this.navigate(JobisRoute.Recruitments)
+    this.navigate(NavigationRoute.Recruitments)
 }
 
 internal fun NavHostController.navigateToCompanies() {
-    this.navigate(JobisRoute.Companies)
+    this.navigate(NavigationRoute.Companies)
 }
 
 internal fun NavHostController.navigateToRecruitmentDetails(
     recruitmentId: Long?,
 ) {
-    this.navigate(JobisRoute.RecruitmentDetails + recruitmentId)
+    this.navigate(NavigationRoute.RecruitmentDetails + recruitmentId)
 }
 
 internal fun NavHostController.navigateToBugReport() {
-    this.navigate(JobisRoute.MainNavigation.BugReport)
+    this.navigate(NavigationRoute.MainNavigation.BugReport)
 }
 
 internal fun NavHostController.navigateToComparePassword() {
-    this.navigate(JobisRoute.ComparePassword)
+    this.navigate(NavigationRoute.ComparePassword)
 }
 
 internal fun NavHostController.navigateToBookmarkRecruitments() {
-    this.navigate(JobisRoute.Navigation.BookmarkRecruitments)
+    this.navigate(NavigationRoute.Navigation.BookmarkRecruitments)
 }
 
 internal fun NavHostController.putString(
@@ -84,17 +84,17 @@ internal fun NavHostController.navigateToCompanyDetails(
     companyId: Long,
     hasRecruitment: Boolean,
 ) {
-    this.navigate("${JobisRoute.CompanyDetails}/${companyId}/${hasRecruitment}")
+    this.navigate("${NavigationRoute.CompanyDetails}/${companyId}/${hasRecruitment}")
 }
 
 internal fun NavHostController.navigateToReviewDetails(
     reviewId: String,
 ) {
-    this.navigate("${JobisRoute.MainNavigation.ReviewDetails}${reviewId}")
+    this.navigate("${NavigationRoute.MainNavigation.ReviewDetails}${reviewId}")
 }
 
 internal fun NavHostController.navigateToResetPassword() {
-    this.navigate(JobisRoute.ResetPassword)
+    this.navigate(NavigationRoute.ResetPassword)
 }
 
 internal fun <T> getArgument(

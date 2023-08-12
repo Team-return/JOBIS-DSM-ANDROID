@@ -20,15 +20,9 @@ import team.retum.jobis_android.feature.home.HomeScreen
 import team.retum.jobis_android.feature.home.MenuScreen
 import team.retum.jobis_android.feature.home.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
-import team.retum.jobis_android.root.navigation.navigateToBugReport
-import team.retum.jobis_android.root.navigation.navigateToCompanies
-import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMyPage
-import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
-import team.retum.jobis_android.root.navigation.navigateToRecruitments
-import team.retum.jobis_android.root.navigation.navigateToSignInPopUpWithMain
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -78,9 +72,9 @@ fun MainScreen(
             NavHost(
                 modifier = Modifier.padding(it),
                 navController = navHostController,
-                startDestination = JobisRoute.Navigation.Home,
+                startDestination = NavigationRoute.Navigation.Home,
             ) {
-                composable(route = JobisRoute.Navigation.Home) {
+                composable(route = NavigationRoute.Navigation.Home) {
                     HomeScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
@@ -88,14 +82,14 @@ fun MainScreen(
                     )
                 }
 
-                composable(route = JobisRoute.Navigation.BookmarkRecruitments) {
+                composable(route = NavigationRoute.Navigation.BookmarkRecruitments) {
                     BookmarkRecruitmentsScreen(
                         navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                         navigateToRecruitments = navigateToRecruitments,
                     )
                 }
 
-                composable(route = JobisRoute.Navigation.MyPage) {
+                composable(route = NavigationRoute.Navigation.MyPage) {
                     MyPageScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
@@ -104,7 +98,7 @@ fun MainScreen(
                     )
                 }
 
-                composable(route = JobisRoute.Navigation.Menu) {
+                composable(route = NavigationRoute.Navigation.Menu) {
                     MenuScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,

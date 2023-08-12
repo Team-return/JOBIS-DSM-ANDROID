@@ -3,7 +3,7 @@ package team.retum.jobis_android.util.compose.navigation
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.root.navigation.JobisRoute
+import team.retum.jobis_android.root.navigation.NavigationRoute
 
 sealed class NavigationItem(
     @DrawableRes val drawableId: Int,
@@ -13,24 +13,24 @@ sealed class NavigationItem(
     object Home : NavigationItem(
         drawableId = R.drawable.ic_home,
         stringResId = R.string.bottom_nav_home,
-        route = JobisRoute.Navigation.Home,
+        route = NavigationRoute.Navigation.Home,
     )
 
     object Bookmarked : NavigationItem(
         drawableId = R.drawable.ic_recruitment,
         stringResId = R.string.bottom_nav_recruitment,
-        route = JobisRoute.Navigation.BookmarkRecruitments,
+        route = NavigationRoute.Navigation.BookmarkRecruitments,
     )
 
     object Profile : NavigationItem(
         drawableId = R.drawable.ic_profile,
         stringResId = R.string.bottom_nav_my_page,
-        route = JobisRoute.Navigation.MyPage,
+        route = NavigationRoute.Navigation.MyPage,
     )
 
     object Menu : NavigationItem(
         drawableId = R.drawable.ic_menu,
         stringResId = R.string.bottom_nav_menu,
-        route = JobisRoute.Navigation.Menu,
+        route = NavigationRoute.Navigation.Menu,
     )
 }

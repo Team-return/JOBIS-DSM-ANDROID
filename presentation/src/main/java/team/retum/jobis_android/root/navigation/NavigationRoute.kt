@@ -1,6 +1,6 @@
 package team.retum.jobis_android.root.navigation
 
-object JobisRoute {
+object NavigationRoute {
     const val Splash = "Splash"
     const val SignIn = "SignIn"
     const val SignUp = "SignUp"
