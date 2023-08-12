@@ -20,13 +20,10 @@ import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.ResetPasswordSideEffect
 import team.retum.jobis_android.contract.ResetPasswordState
+import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern
 import javax.inject.Inject
-
-@Stable
-private val passwordRegex =
-    "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-z0-9!@#\$%^&*]{8,16}\$"
 
 @HiltViewModel
 internal class ResetPasswordViewModel @Inject constructor(
@@ -151,7 +148,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     ) = intent {
         setPasswordFormatErrorState(
             passwordFormatErrorState = newPassword.isEmpty() || !Pattern.matches(
-                passwordRegex,
+                Regex.PASSWORD,
                 newPassword
             ),
         )

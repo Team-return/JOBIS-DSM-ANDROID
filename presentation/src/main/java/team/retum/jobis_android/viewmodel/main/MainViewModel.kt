@@ -6,6 +6,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.usecase.user.FetchAutoSignInOptionUseCase
+import team.retum.jobis_android.contract.MainSideEffect
+import team.retum.jobis_android.contract.MainState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
