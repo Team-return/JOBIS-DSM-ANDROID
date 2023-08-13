@@ -42,7 +42,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.student.Department
-import team.retum.jobis_android.contract.HomeSideEffect
+import team.retum.jobis_android.contract.home.HomeSideEffect
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.home.HomeViewModel

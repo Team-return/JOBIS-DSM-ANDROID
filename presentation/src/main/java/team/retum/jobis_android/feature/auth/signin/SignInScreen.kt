@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.SignInSideEffect
+import team.retum.jobis_android.contract.signin.SignInSideEffect
 import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor

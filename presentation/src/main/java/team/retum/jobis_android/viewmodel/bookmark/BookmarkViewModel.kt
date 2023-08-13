@@ -10,8 +10,8 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.domain.usecase.bookmark.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.bookmark.FetchBookmarkedRecruitmentsUseCase
-import team.retum.jobis_android.contract.BookmarkSideEffect
-import team.retum.jobis_android.contract.BookmarkState
+import team.retum.jobis_android.contract.bookmark.BookmarkSideEffect
+import team.retum.jobis_android.contract.bookmark.BookmarkState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

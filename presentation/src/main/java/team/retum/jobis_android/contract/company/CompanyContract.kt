@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.company
 
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity

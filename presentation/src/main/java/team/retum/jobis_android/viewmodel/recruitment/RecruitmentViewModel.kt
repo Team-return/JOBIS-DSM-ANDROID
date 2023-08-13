@@ -13,8 +13,8 @@ import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
-import team.retum.jobis_android.contract.RecruitmentSideEffect
-import team.retum.jobis_android.contract.RecruitmentState
+import team.retum.jobis_android.contract.recruitment.RecruitmentSideEffect
+import team.retum.jobis_android.contract.recruitment.RecruitmentState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

@@ -11,8 +11,8 @@ import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.FetchCodesParam
 import team.retum.domain.param.code.Type
 import team.retum.domain.usecase.code.FetchCodesUseCase
-import team.retum.jobis_android.contract.CodeSideEffect
-import team.retum.jobis_android.contract.CodeState
+import team.retum.jobis_android.contract.code.CodeSideEffect
+import team.retum.jobis_android.contract.code.CodeState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

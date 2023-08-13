@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.SignUpSideEffect
+import team.retum.jobis_android.contract.signup.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen

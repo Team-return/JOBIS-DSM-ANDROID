@@ -12,8 +12,8 @@ import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.domain.usecase.review.FetchReviewDetailsUseCase
 import team.retum.domain.usecase.review.FetchReviewsUseCase
-import team.retum.jobis_android.contract.ReviewSideEffect
-import team.retum.jobis_android.contract.ReviewState
+import team.retum.jobis_android.contract.review.ReviewSideEffect
+import team.retum.jobis_android.contract.review.ReviewState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

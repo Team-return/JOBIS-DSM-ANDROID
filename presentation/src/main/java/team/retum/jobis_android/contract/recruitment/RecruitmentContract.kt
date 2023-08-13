@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.recruitment
 
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.util.mvi.SideEffect

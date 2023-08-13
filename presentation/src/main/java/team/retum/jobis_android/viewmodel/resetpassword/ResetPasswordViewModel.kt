@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.resetpassword
 
-import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +17,8 @@ import team.retum.domain.usecase.student.ComparePasswordUseCase
 import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.contract.ResetPasswordSideEffect
-import team.retum.jobis_android.contract.ResetPasswordState
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordState
 import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern

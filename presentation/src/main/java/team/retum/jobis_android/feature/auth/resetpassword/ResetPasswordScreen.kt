@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.ResetPasswordSideEffect
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.root.JobisAppState
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor

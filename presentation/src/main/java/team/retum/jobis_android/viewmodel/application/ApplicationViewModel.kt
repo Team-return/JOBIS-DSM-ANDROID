@@ -12,8 +12,8 @@ import team.retum.domain.param.application.ApplyCompanyParam
 import team.retum.domain.param.application.AttachmentDocsType
 import team.retum.domain.param.application.AttachmentsParam
 import team.retum.domain.usecase.applications.ApplyCompanyUseCase
-import team.retum.jobis_android.contract.ApplicationSideEffect
-import team.retum.jobis_android.contract.ApplicationState
+import team.retum.jobis_android.contract.application.ApplicationSideEffect
+import team.retum.jobis_android.contract.application.ApplicationState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

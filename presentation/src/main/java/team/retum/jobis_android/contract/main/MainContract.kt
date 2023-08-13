@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.main
 
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State

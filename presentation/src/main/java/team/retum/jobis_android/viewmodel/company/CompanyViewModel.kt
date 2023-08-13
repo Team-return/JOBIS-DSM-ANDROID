@@ -14,8 +14,8 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.company.FetchCompaniesParam
 import team.retum.domain.usecase.company.FetchCompaniesUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
-import team.retum.jobis_android.contract.CompanySideEffect
-import team.retum.jobis_android.contract.CompanyState
+import team.retum.jobis_android.contract.company.CompanySideEffect
+import team.retum.jobis_android.contract.company.CompanyState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.review
 
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewEntity

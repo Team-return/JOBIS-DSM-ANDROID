@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.application
 
 import team.retum.domain.param.application.AttachmentsParam
 import team.retum.jobis_android.util.mvi.SideEffect

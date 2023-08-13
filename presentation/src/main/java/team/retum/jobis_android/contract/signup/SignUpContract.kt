@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.signup
 
 import team.retum.domain.param.user.Sex
 import team.retum.jobis_android.util.mvi.SideEffect

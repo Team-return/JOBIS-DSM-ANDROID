@@ -16,8 +16,8 @@ import team.retum.domain.usecase.applications.FetchAppliedCompanyHistoriesUseCas
 import team.retum.domain.usecase.applications.FetchStudentCountsUseCase
 import team.retum.domain.usecase.student.FetchStudentInformationUseCase
 import team.retum.domain.usecase.user.SignOutUseCase
-import team.retum.jobis_android.contract.HomeSideEffect
-import team.retum.jobis_android.contract.HomeState
+import team.retum.jobis_android.contract.home.HomeSideEffect
+import team.retum.jobis_android.contract.home.HomeState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 

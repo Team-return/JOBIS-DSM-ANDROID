@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.code
 
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
