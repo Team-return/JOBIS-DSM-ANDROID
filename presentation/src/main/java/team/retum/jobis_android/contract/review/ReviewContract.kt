@@ -14,7 +14,5 @@ data class ReviewState(
 ): State
 
 sealed class ReviewSideEffect: SideEffect{
-    class Exception(
-        val message: String,
-    ): ReviewSideEffect()
+    class Exception(val message: String): ReviewSideEffect()
 }

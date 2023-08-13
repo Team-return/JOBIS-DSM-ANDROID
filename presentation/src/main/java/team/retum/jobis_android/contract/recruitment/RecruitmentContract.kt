@@ -34,8 +34,6 @@ data class RecruitmentState(
 ): State
 
 sealed class RecruitmentSideEffect: SideEffect{
-    class Exception(
-        val message: String,
-    ): RecruitmentSideEffect()
+    class Exception(val message: String): RecruitmentSideEffect()
 }
 

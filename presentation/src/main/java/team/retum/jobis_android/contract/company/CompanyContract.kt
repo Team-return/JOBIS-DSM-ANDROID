@@ -8,9 +8,7 @@ import java.util.Collections.emptyList
 
 sealed class CompanySideEffect: SideEffect{
     object NotFoundCompany: CompanySideEffect()
-    class Exception(
-        val message: String,
-    ): CompanySideEffect()
+    class Exception(val message: String): CompanySideEffect()
 }
 
 data class CompanyState(

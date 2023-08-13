@@ -16,7 +16,5 @@ sealed class SignInSideEffect : SideEffect {
     object MoveToMain : SignInSideEffect()
     object UnAuthorization : SignInSideEffect()
     object NotFound : SignInSideEffect()
-    class Exception(
-        val message: String,
-    ) : SignInSideEffect()
+    class Exception(val message: String) : SignInSideEffect()
 }

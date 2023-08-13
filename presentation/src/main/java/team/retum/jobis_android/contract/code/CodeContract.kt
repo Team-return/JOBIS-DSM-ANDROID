@@ -14,6 +14,4 @@ data class CodeState(
     val parentCode: Long? = null,
 ): State
 
-sealed class CodeSideEffect: SideEffect{
-
-}
+sealed class CodeSideEffect: SideEffect

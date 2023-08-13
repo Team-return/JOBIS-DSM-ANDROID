@@ -12,4 +12,5 @@ internal data class ApplicationState(
 
 internal sealed class ApplicationSideEffect : SideEffect {
     object SuccessApplyCompany: ApplicationSideEffect()
+    class Exception(val message: String): ApplicationSideEffect()
 }

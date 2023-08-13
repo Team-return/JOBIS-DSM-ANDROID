@@ -9,6 +9,4 @@ data class BookmarkState(
     val bookmarkExists: Boolean = true,
 ): State
 
-sealed class BookmarkSideEffect: SideEffect{
-
-}
+sealed class BookmarkSideEffect: SideEffect

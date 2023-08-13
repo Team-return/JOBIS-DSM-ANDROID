@@ -7,6 +7,4 @@ data class MainState(
     val autoSignInOption: Boolean = false,
 ): State
 
-sealed class MainSideEffect: SideEffect{
-
-}
+sealed class MainSideEffect: SideEffect
