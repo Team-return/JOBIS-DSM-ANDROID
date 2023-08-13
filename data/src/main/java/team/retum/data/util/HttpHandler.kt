@@ -5,11 +5,13 @@ import team.retum.domain.exception.BadRequestException
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.ForbiddenException
 import team.retum.domain.exception.NotFoundException
+import team.retum.domain.exception.OfflineException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.TimeoutException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.exception.UnknownException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class HttpHandler<T> {
 
@@ -38,5 +40,7 @@ class HttpHandler<T> {
             throw TimeoutException()
         } catch (e: Throwable) {
             throw UnknownException()
+        } catch (e: UnknownHostException){
+            throw OfflineException()
         }
 }

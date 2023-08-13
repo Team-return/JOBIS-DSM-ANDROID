@@ -7,6 +7,7 @@ class NotFoundException(): Throwable() // 404
 class ConflictException(): Throwable() // 409
 class OnServerException(): Throwable() // 500..599
 class TimeoutException(): Throwable() // Timeout
+class OfflineException(): Throwable() // Offline
 class UnknownException(): Throwable() // UnknownException
 
 
