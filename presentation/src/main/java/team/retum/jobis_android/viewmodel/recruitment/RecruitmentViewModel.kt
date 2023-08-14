@@ -24,11 +24,11 @@ internal class RecruitmentViewModel @Inject constructor(
     private val fetchRecruitmentDetailsUseCase: FetchRecruitmentDetailsUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
+    override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
+
     init {
         fetchRecruitments()
     }
-
-    override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
