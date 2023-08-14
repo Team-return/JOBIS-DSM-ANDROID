@@ -4,6 +4,8 @@ object BuildPlugins {
     const val KOTLIN_ANDROID_PLUGIN = "org.jetbrains.kotlin.android"
     const val KOTLIN_KAPT = "kotlin-kapt"
     const val HILT_PLUGIN = "dagger.hilt.android.plugin"
+    const val APP_DISTRIBUTION = "com.google.firebase.appdistribution"
+    const val GOOGLE_SERVICES = "com.google.gms.google-services"
 
 
     const val ANDROID_GRADLE = "com.android.tools.build:gradle:${Version.ANDROID_GRADLE}"
