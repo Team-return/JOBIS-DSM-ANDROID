@@ -47,7 +47,7 @@ internal class JobisAppState(
         snackbarHostState.currentSnackbarData?.dismiss()
     }
 
-    fun showToast(
+    private fun showToast(
         message: String,
         title: String? = null,
         toastType: ToastType,
@@ -63,6 +63,50 @@ internal class JobisAppState(
                 message = message,
             )
         }
+    }
+
+    internal fun showSuccessToast(
+        message: String,
+        title: String? = null,
+    ) {
+        showToast(
+            message = message,
+            title = title,
+            toastType = ToastType.Success,
+        )
+    }
+
+    internal fun showErrorToast(
+        message: String,
+        title: String? = null,
+    ) {
+        showToast(
+            message = message,
+            title = title,
+            toastType = ToastType.Error,
+        )
+    }
+
+    internal fun showNormalToast(
+        message: String,
+        title: String? = null,
+    ) {
+        showToast(
+            message = message,
+            title = title,
+            toastType = ToastType.Normal,
+        )
+    }
+
+    internal fun showWarningToast(
+        message: String,
+        title: String? = null,
+    ) {
+        showToast(
+            message = message,
+            title = title,
+            toastType = ToastType.Warning,
+        )
     }
 }
 

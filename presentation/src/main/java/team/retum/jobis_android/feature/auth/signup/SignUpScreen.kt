@@ -32,7 +32,7 @@ import team.retum.jobis_android.contract.signup.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
-import team.retum.jobis_android.root.JobisAppState
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
@@ -41,7 +41,6 @@ import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading5
-import team.returm.jobisdesignsystem.toast.ToastType
 
 @Stable
 const val maxProgress = 3
@@ -55,11 +54,12 @@ private val titleList = listOf(
 
 @Composable
 internal fun SignUpScreen(
-    appState: JobisAppState,
     signUpViewModel: SignUpViewModel,
     navigateToMain: () -> Unit,
     navigatePopBackStack: () -> Unit,
 ) {
+
+    val appState = LocalAppState.current
 
     var currentProgress by remember { mutableStateOf(1) }
 
@@ -106,10 +106,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
-                    appState.showToast(
-                        message = notFoundToastMessage,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = notFoundToastMessage)
                 }
 
                 is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
@@ -118,25 +115,18 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.VerifyEmail.EmailConflict -> {
-                    appState.showToast(
-                        message = emailConflict,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = emailConflict)
                 }
 
                 is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
-                    appState.showToast(
+                    appState.showSuccessToast(
                         title = sendAuthCodeSuccessToastTitle,
                         message = sendAuthCodeSuccessToastMessage,
-                        toastType = ToastType.Success,
                     )
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpConflict -> {
-                    appState.showToast(
-                        message = signUpAccountConflict,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = signUpAccountConflict)
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpSuccess -> {
@@ -144,10 +134,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.Exception -> {
-                    appState.showToast(
-                        message = it.message,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = it.message)
                 }
             }
         }

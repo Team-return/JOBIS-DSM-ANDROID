@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.signin.SignInSideEffect
-import team.retum.jobis_android.root.JobisAppState
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisCheckBoxColor
@@ -40,18 +40,18 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading1
-import team.returm.jobisdesignsystem.toast.ToastType
 import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
-    appState: JobisAppState,
     signInViewModel: SignInViewModel = hiltViewModel(),
     navigateToMainWithPopUpSignIn: () -> Unit,
     navigateToResetPasswordVerifyEmail: () -> Unit,
     navigateToSignUp: () -> Unit,
 ) {
+
+    val appState = LocalAppState.current
 
     val state by signInViewModel.container.stateFlow.collectAsState()
 
@@ -76,10 +76,7 @@ internal fun SignInScreen(
                 }
 
                 is SignInSideEffect.Exception -> {
-                    appState.showToast(
-                        message = it.message,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = it.message)
                 }
             }
         }

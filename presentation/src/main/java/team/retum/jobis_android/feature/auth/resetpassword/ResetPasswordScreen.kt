@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.root.JobisAppState
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.retum.jobisui.colors.JobisColor
@@ -36,10 +37,11 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordScreen(
-    appState: JobisAppState,
     navigateToMain: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
+
+    val appState = LocalAppState.current
 
     val state by resetPasswordViewModel.container.stateFlow.collectAsState()
 
@@ -57,10 +59,7 @@ internal fun ResetPasswordScreen(
                 }
 
                 is ResetPasswordSideEffect.Exception -> {
-                    appState.showToast(
-                        message = it.message,
-                        toastType = ToastType.Error,
-                    )
+                    appState.showErrorToast(message = it.message)
                 }
 
                 else -> {}

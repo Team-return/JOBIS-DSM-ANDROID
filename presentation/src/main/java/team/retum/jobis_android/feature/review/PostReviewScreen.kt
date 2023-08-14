@@ -36,7 +36,6 @@ import team.returm.jobisdesignsystem.theme.Heading6
 
 @Composable
 internal fun PostReviewScreen(
-    appState: JobisAppState,
 ) {
 
     // TODO 더미
