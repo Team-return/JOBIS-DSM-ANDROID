@@ -15,7 +15,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
-import team.retum.jobisui.colors.JobisTextFieldColor
+import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 

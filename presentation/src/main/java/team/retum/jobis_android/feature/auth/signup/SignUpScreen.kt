@@ -37,8 +37,8 @@ import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading5
 

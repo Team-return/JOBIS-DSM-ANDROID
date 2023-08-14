@@ -2,17 +2,15 @@ package team.retum.jobis_android.util.compose.animation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 
 @SuppressLint("ComposableModifierFactory")
 @Composable

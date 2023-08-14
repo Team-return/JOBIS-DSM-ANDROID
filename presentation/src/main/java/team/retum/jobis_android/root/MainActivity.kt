@@ -68,7 +68,7 @@ import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

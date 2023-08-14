@@ -46,8 +46,8 @@ import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption

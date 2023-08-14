@@ -46,7 +46,7 @@ import team.retum.jobis_android.contract.home.HomeSideEffect
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4

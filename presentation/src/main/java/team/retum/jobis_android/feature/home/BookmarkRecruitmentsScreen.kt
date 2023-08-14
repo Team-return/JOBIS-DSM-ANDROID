@@ -48,7 +48,7 @@ import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.util.compose.vibrate
 import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body4

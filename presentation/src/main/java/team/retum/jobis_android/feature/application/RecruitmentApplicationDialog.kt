@@ -45,8 +45,8 @@ import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField

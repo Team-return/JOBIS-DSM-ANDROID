@@ -3,6 +3,8 @@ plugins {
     id(BuildPlugins.KOTLIN_ANDROID_PLUGIN)
     id(BuildPlugins.KOTLIN_KAPT)
     id(BuildPlugins.HILT_PLUGIN)
+    id(BuildPlugins.APP_DISTRIBUTION)
+    id(BuildPlugins.GOOGLE_SERVICES)
 }
 
 android {
@@ -69,7 +71,6 @@ dependencies {
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
-
     implementation(Dependency.COIL.COIL)
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
@@ -91,8 +92,6 @@ dependencies {
     implementation(Dependency.ANDROID.MATERIAL)
     implementation(Dependency.ANDROID.ACTIVITY)
     implementation(Dependency.ANDROID.FRAGMENT)
-
-
 
     implementation(Dependency.ANDROID.CONSTRAINT)
     testImplementation(Dependency.TEST.JUNIT)

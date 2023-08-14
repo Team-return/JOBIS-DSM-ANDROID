@@ -30,11 +30,11 @@ import team.retum.jobis_android.contract.signin.SignInSideEffect
 import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisCheckBoxColor
-import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
+import team.returm.jobisdesignsystem.colors.JobisCheckBoxColor
+import team.returm.jobisdesignsystem.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
