@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -46,11 +45,11 @@ import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisCheckBoxColor
-import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
+import team.returm.jobisdesignsystem.colors.JobisCheckBoxColor
+import team.returm.jobisdesignsystem.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Body3
@@ -97,7 +96,8 @@ internal fun RecruitmentFilter(
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
-        )
+        ),
+        label = ""
     )
 
     val onTechChecked = { techCode: Long, techName: String ->

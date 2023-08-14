@@ -25,11 +25,11 @@ class CompanyViewModel @Inject constructor(
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
 
+    override val container = container<CompanyState, CompanySideEffect>(CompanyState())
+
     init {
         fetchCompanies()
     }
-
-    override val container = container<CompanyState, CompanySideEffect>(CompanyState())
 
     internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {

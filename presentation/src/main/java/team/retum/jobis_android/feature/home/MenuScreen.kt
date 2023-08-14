@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.util.compose.animation.bounceClick
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body3
 
