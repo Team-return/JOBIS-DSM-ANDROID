@@ -71,7 +71,6 @@ dependencies {
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
 
-
     implementation(Dependency.COIL.COIL)
 
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
@@ -93,8 +92,6 @@ dependencies {
     implementation(Dependency.ANDROID.MATERIAL)
     implementation(Dependency.ANDROID.ACTIVITY)
     implementation(Dependency.ANDROID.FRAGMENT)
-
-
 
     implementation(Dependency.ANDROID.CONSTRAINT)
     testImplementation(Dependency.TEST.JUNIT)
