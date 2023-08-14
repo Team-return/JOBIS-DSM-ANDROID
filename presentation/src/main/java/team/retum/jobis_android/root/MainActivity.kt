@@ -14,8 +14,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -38,8 +41,8 @@ import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.review.PostReviewScreen
 import team.retum.jobis_android.feature.review.ReviewDetailsScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
-import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.root.navigation.NavigationProperties
+import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.root.navigation.getArgument
 import team.retum.jobis_android.root.navigation.getPreviousDestination
 import team.retum.jobis_android.root.navigation.navigatePopBackStack
@@ -103,174 +106,172 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            Scaffold(scaffoldState = appState.scaffoldState, snackbarHost = {
-                JobisSnackBarHost(appState)
-            }) {
-                AnimatedNavHost(
-                    navController = navController,
-                    startDestination = NavigationRoute.Splash,
+            CompositionLocalProvider(LocalAppState provides appState) {
+                Scaffold(
+                    scaffoldState = appState.scaffoldState,
+                    snackbarHost = { JobisSnackBarHost(appState) },
                 ) {
-                    composable(
-                        route = NavigationRoute.Splash,
-                        exitTransition = { fadeOut(tween(300)) },
+                    AnimatedNavHost(
+                        navController = navController,
+                        startDestination = NavigationRoute.Splash,
                     ) {
-                        SplashScreen(moveToScreenBySignInOption = moveToScreenBySignInOption)
-                    }
+                        composable(
+                            route = NavigationRoute.Splash,
+                            exitTransition = { fadeOut(tween(300)) },
+                        ) {
+                            SplashScreen(moveToScreenBySignInOption = moveToScreenBySignInOption)
+                        }
 
-                    composable(
-                        route = NavigationRoute.SignUp,
-                        enterTransition = { slideInLeft() },
-                        popExitTransition = { slideOutRight() },
-                    ) {
-                        SignUpScreen(
-                            appState = appState,
-                            signUpViewModel = signUpViewModel,
-                            navigateToMain = navController::navigateToMain,
-                            navigatePopBackStack = navController::navigatePopBackStack,
-                        )
-                    }
+                        composable(
+                            route = NavigationRoute.SignUp,
+                            enterTransition = { slideInLeft() },
+                            popExitTransition = { slideOutRight() },
+                        ) {
+                            SignUpScreen(
+                                signUpViewModel = signUpViewModel,
+                                navigateToMain = navController::navigateToMain,
+                                navigatePopBackStack = navController::navigatePopBackStack,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.SignIn,
-                        exitTransition = { slideOutLeft() },
-                        popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() },
-                    ) {
-                        SignInScreen(
-                            appState = appState,
-                            navigateToMainWithPopUpSignIn = navController::navigateToMainWithPopUpSignIn,
-                            navigateToResetPasswordVerifyEmail = navController::navigateToResetPasswordVerifyEmail,
-                            navigateToSignUp = navController::navigateToSignUp,
-                        )
-                    }
+                        composable(
+                            route = NavigationRoute.SignIn,
+                            exitTransition = { slideOutLeft() },
+                            popEnterTransition = { slideInRight() },
+                            popExitTransition = { slideOutRight() },
+                        ) {
+                            SignInScreen(
+                                navigateToMainWithPopUpSignIn = navController::navigateToMainWithPopUpSignIn,
+                                navigateToResetPasswordVerifyEmail = navController::navigateToResetPasswordVerifyEmail,
+                                navigateToSignUp = navController::navigateToSignUp,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.Main,
-                        exitTransition = { fadeOut() },
-                    ) {
-                        MainScreen(
-                            navigateToRecruitments = navController::navigateToRecruitments,
-                            navigateToCompanies = navController::navigateToCompanies,
-                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
-                            navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
-                            navigateToBugReport = navController::navigateToBugReport,
-                            navigateToComparePassword = navController::navigateToComparePassword,
-                        )
-                    }
+                        composable(
+                            route = NavigationRoute.Main,
+                            exitTransition = { fadeOut() },
+                        ) {
+                            MainScreen(
+                                navigateToRecruitments = navController::navigateToRecruitments,
+                                navigateToCompanies = navController::navigateToCompanies,
+                                navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
+                                navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
+                                navigateToBugReport = navController::navigateToBugReport,
+                                navigateToComparePassword = navController::navigateToComparePassword,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.Recruitments,
-                        exitTransition = { slideOutLeft() },
-                        popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) },
-                    ) {
-                        RecruitmentsScreen(
-                            putString = navController::putString,
-                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
-                        )
-                    }
+                        composable(
+                            route = NavigationRoute.Recruitments,
+                            exitTransition = { slideOutLeft() },
+                            popEnterTransition = { slideInRight() },
+                            popExitTransition = { fadeOut(tween(300)) },
+                        ) {
+                            RecruitmentsScreen(
+                                putString = navController::putString,
+                                navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.RecruitmentDetails + NavigationRoute.RecruitmentId,
-                        arguments = listOf(
-                            getArgument(
-                                NavigationProperties.RECRUITMENT_ID,
-                                NavType.IntType,
+                        composable(
+                            route = NavigationRoute.RecruitmentDetails + NavigationRoute.RecruitmentId,
+                            arguments = listOf(
+                                getArgument(
+                                    NavigationProperties.RECRUITMENT_ID,
+                                    NavType.IntType,
+                                ),
                             ),
-                        ),
-                        enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutLeft() },
-                        popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() },
-                    ) {
-                        RecruitmentDetailsScreen(
-                            recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID)
-                                ?: 0L,
-                            getPreviousDestination = navController::getPreviousDestination,
-                            navigateToCompanyDetails = navController::navigateToCompanyDetails,
-                        )
-                    }
+                            enterTransition = { slideInLeft() },
+                            exitTransition = { slideOutLeft() },
+                            popEnterTransition = { slideInRight() },
+                            popExitTransition = { slideOutRight() },
+                        ) {
+                            RecruitmentDetailsScreen(
+                                recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID)
+                                    ?: 0L,
+                                getPreviousDestination = navController::getPreviousDestination,
+                                navigateToCompanyDetails = navController::navigateToCompanyDetails,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.Companies,
-                        exitTransition = { slideOutLeft() },
-                        popEnterTransition = { slideInRight() },
-                        popExitTransition = { fadeOut(tween(300)) },
-                    ) {
-                        CompaniesScreen(navigateToCompanyDetails = navController::navigateToCompanyDetails)
-                    }
+                        composable(
+                            route = NavigationRoute.Companies,
+                            exitTransition = { slideOutLeft() },
+                            popEnterTransition = { slideInRight() },
+                            popExitTransition = { fadeOut(tween(300)) },
+                        ) {
+                            CompaniesScreen(navigateToCompanyDetails = navController::navigateToCompanyDetails)
+                        }
 
-                    composable(
-                        route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}/${NavigationRoute.HasRecruitment}",
-                        arguments = listOf(
-                            getArgument(NavigationProperties.COMPANY_ID, NavType.IntType),
-                            getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
-                        ),
-                        enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutLeft() },
-                        popEnterTransition = { slideInRight() },
-                        popExitTransition = { slideOutRight() },
-                    ) {
-                        CompanyDetailsScreen(
-                            companyId = it.arguments?.getInt(NavigationProperties.COMPANY_ID) ?: 0,
-                            hasRecruitment = it.arguments?.getBoolean(NavigationProperties.HAS_RECRUITMENT)
-                                ?: false,
-                            getPreviousDestination = navController::getPreviousDestination,
-                            navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
-                            navigateToReviewDetails = navController::navigateToReviewDetails,
-                        )
-                    }
+                        composable(
+                            route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}/${NavigationRoute.HasRecruitment}",
+                            arguments = listOf(
+                                getArgument(NavigationProperties.COMPANY_ID, NavType.IntType),
+                                getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
+                            ),
+                            enterTransition = { slideInLeft() },
+                            exitTransition = { slideOutLeft() },
+                            popEnterTransition = { slideInRight() },
+                            popExitTransition = { slideOutRight() },
+                        ) {
+                            CompanyDetailsScreen(
+                                companyId = it.arguments?.getInt(NavigationProperties.COMPANY_ID)
+                                    ?: 0,
+                                hasRecruitment = it.arguments?.getBoolean(NavigationProperties.HAS_RECRUITMENT)
+                                    ?: false,
+                                getPreviousDestination = navController::getPreviousDestination,
+                                navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
+                                navigateToReviewDetails = navController::navigateToReviewDetails,
+                            )
+                        }
 
-                    composable(
-                        route = NavigationRoute.ResetPasswordVerifyEmail,
-                        enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutRight() },
-                        popEnterTransition = { fadeIn(tween(300)) },
-                        popExitTransition = { slideOutRight() },
-                    ) {
-                        ResetPasswordVerifyEmailScreen(
-                            appState = appState,
-                            navigateToResetPassword = navController::navigateToResetPassword,
-                        )
-                    }
+                        composable(
+                            route = NavigationRoute.ResetPasswordVerifyEmail,
+                            enterTransition = { slideInLeft() },
+                            exitTransition = { slideOutRight() },
+                            popEnterTransition = { fadeIn(tween(300)) },
+                            popExitTransition = { slideOutRight() },
+                        ) {
+                            ResetPasswordVerifyEmailScreen(navigateToResetPassword = navController::navigateToResetPassword)
+                        }
 
-                    val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
+                        val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
 
-                    composable(route = NavigationRoute.ResetPassword) {
-                        ResetPasswordScreen(
-                            appState = appState,
-                            navigateToMain = navController::navigateToMain,
-                            resetPasswordViewModel = resetPasswordViewModel,
-                        )
-                    }
+                        composable(route = NavigationRoute.ResetPassword) {
+                            ResetPasswordScreen(
+                                navigateToMain = navController::navigateToMain,
+                                resetPasswordViewModel = resetPasswordViewModel,
+                            )
+                        }
 
-                    composable(route = NavigationRoute.ComparePassword) {
-                        ComparePasswordScreen(
-                            appState = appState,
-                            navigateToResetPassword = navController::navigateToResetPassword,
-                            resetPasswordViewModel = resetPasswordViewModel,
-                        )
-                    }
+                        composable(route = NavigationRoute.ComparePassword) {
+                            ComparePasswordScreen(
+                                navigateToResetPassword = navController::navigateToResetPassword,
+                                resetPasswordViewModel = resetPasswordViewModel,
+                            )
+                        }
 
-                    composable(route = NavigationRoute.MainNavigation.BugReport) {
-                        BugReportScreen()
-                    }
+                        composable(route = NavigationRoute.MainNavigation.BugReport) {
+                            BugReportScreen()
+                        }
 
-                    composable(
-                        route = "${NavigationRoute.MainNavigation.ReviewDetails}${NavigationRoute.ReviewId}",
-                        arguments = listOf(
-                            getArgument(NavigationProperties.REVIEW_ID, NavType.StringType),
-                        ),
-                        enterTransition = { slideInLeft() },
-                        exitTransition = { slideOutRight() },
-                    ) {
-                        ReviewDetailsScreen(
-                            reviewId = it.arguments?.getString(NavigationProperties.REVIEW_ID) ?: ""
-                        )
-                    }
+                        composable(
+                            route = "${NavigationRoute.MainNavigation.ReviewDetails}${NavigationRoute.ReviewId}",
+                            arguments = listOf(
+                                getArgument(NavigationProperties.REVIEW_ID, NavType.StringType),
+                            ),
+                            enterTransition = { slideInLeft() },
+                            exitTransition = { slideOutRight() },
+                        ) {
+                            ReviewDetailsScreen(
+                                reviewId = it.arguments?.getString(NavigationProperties.REVIEW_ID)
+                                    ?: ""
+                            )
+                        }
 
-                    composable(route = NavigationRoute.MainNavigation.PostReview) {
-                        PostReviewScreen(appState = appState)
+                        composable(route = NavigationRoute.MainNavigation.PostReview) {
+                            PostReviewScreen()
+                        }
                     }
                 }
             }
@@ -296,4 +297,9 @@ class MainActivity : ComponentActivity() {
                 window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
+}
+
+@Stable
+internal val LocalAppState = staticCompositionLocalOf<JobisAppState> {
+    error("Not implemented")
 }

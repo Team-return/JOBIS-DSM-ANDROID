@@ -37,8 +37,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.contract.ApplicationSideEffect
-import team.retum.jobis_android.contract.FileSideEffect
+import team.retum.jobis_android.contract.application.ApplicationSideEffect
+import team.retum.jobis_android.contract.file.FileSideEffect
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
@@ -59,6 +60,8 @@ internal fun RecruitmentApplicationDialog(
     applicationViewModel: ApplicationViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
 ) {
+
+    val appState = LocalAppState.current
 
     val context = LocalContext.current
 
@@ -83,6 +86,10 @@ internal fun RecruitmentApplicationDialog(
                     )
                     applicationViewModel.applyCompany()
                 }
+
+                is FileSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
+                }
             }
         }
 
@@ -90,6 +97,10 @@ internal fun RecruitmentApplicationDialog(
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
                     onDismissRequest()
+                }
+
+                is ApplicationSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
                 }
             }
         }

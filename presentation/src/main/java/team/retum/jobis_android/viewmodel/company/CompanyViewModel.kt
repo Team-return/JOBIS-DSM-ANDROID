@@ -1,7 +1,6 @@
 package team.retum.jobis_android.viewmodel.company
 
 import androidx.lifecycle.viewModelScope
-import com.jobis.jobis_android.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -9,17 +8,15 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity
+import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.company.FetchCompaniesParam
 import team.retum.domain.usecase.company.FetchCompaniesUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
-import team.retum.jobis_android.contract.CompanySideEffect
-import team.retum.jobis_android.contract.CompanyState
-import team.retum.jobis_android.util.mvi.Event
+import team.retum.jobis_android.contract.company.CompanySideEffect
+import team.retum.jobis_android.contract.company.CompanyState
 import team.retum.jobis_android.viewmodel.BaseViewModel
-import team.retum.jobis_android.viewmodel.recruitment.toModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,13 +25,11 @@ class CompanyViewModel @Inject constructor(
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
 
-    override fun sendEvent(event: Event) {}
-
-    override val container = container<CompanyState, CompanySideEffect>(CompanyState())
-
-    init{
+    init {
         fetchCompanies()
     }
+
+    override val container = container<CompanyState, CompanySideEffect>(CompanyState())
 
     internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {

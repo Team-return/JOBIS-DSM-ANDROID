@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.company
 
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity
@@ -8,9 +8,7 @@ import java.util.Collections.emptyList
 
 sealed class CompanySideEffect: SideEffect{
     object NotFoundCompany: CompanySideEffect()
-    class Exception(
-        val message: String,
-    ): CompanySideEffect()
+    class Exception(val message: String): CompanySideEffect()
 }
 
 data class CompanyState(

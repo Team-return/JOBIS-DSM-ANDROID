@@ -11,11 +11,9 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.user.SignInParam
 import team.retum.domain.usecase.user.SignInUseCase
-import team.retum.jobis_android.contract.SignInSideEffect
-import team.retum.jobis_android.contract.SignInState
-import team.retum.jobis_android.util.mvi.Event
+import team.retum.jobis_android.contract.signin.SignInSideEffect
+import team.retum.jobis_android.contract.signin.SignInState
 import team.retum.jobis_android.viewmodel.BaseViewModel
-
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +22,6 @@ class SignInViewModel @Inject constructor(
 ) : BaseViewModel<SignInState, SignInSideEffect>() {
 
     override val container = container<SignInState, SignInSideEffect>(SignInState())
-
-    override fun sendEvent(event: Event) {}
 
     internal fun postLogin() = intent {
         viewModelScope.launch {

@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.signup
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,18 +20,12 @@ import team.retum.domain.usecase.user.CheckStudentExistUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.SignUpUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.contract.SignUpSideEffect
-import team.retum.jobis_android.contract.SignUpState
-import team.retum.jobis_android.util.mvi.Event
+import team.retum.jobis_android.contract.signup.SignUpSideEffect
+import team.retum.jobis_android.contract.signup.SignUpState
+import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern
 import javax.inject.Inject
-
-private const val passwordRegex =
-    "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#\$%^&*()+|=])[A-Za-z\\d~!@#\$%^&*()+|=]{8,16}\$"
-
-private const val emailRegex = "^.+@dsm.hs.kr$"
-
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
@@ -45,8 +38,6 @@ class SignUpViewModel @Inject constructor(
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
 
     internal val state = container.stateFlow.value
-
-    override fun sendEvent(event: Event) {}
 
     internal fun setSex(
         sex: Sex,
@@ -114,7 +105,7 @@ class SignUpViewModel @Inject constructor(
         email: String,
     ) = intent {
         reduce { state.copy(email = email) }
-        setEmailError(!Pattern.matches(emailRegex, email) || email.isBlank())
+        setEmailError(!Pattern.matches(Regex.EMAIL, email) || email.isBlank())
         setSignUpButtonEnabled(email.isNotBlank() && state.verifyCode.isNotBlank() && !state.emailError && !state.verifyCodeError)
     }
 
@@ -144,7 +135,7 @@ class SignUpViewModel @Inject constructor(
         password: String,
     ) = intent {
         reduce { state.copy(password = password) }
-        setPasswordError(!Pattern.matches(passwordRegex, password))
+        setPasswordError(!Pattern.matches(Regex.PASSWORD, password))
     }
 
     private fun setPasswordError(
@@ -357,7 +348,7 @@ class SignUpViewModel @Inject constructor(
         repeatPassword: String,
     ): Boolean {
 
-        val passwordError = !Pattern.matches(passwordRegex, password)
+        val passwordError = !Pattern.matches(Regex.PASSWORD, password)
         val repeatPasswordError = password != repeatPassword
 
         setPasswordError(passwordError)

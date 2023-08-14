@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.bookmark
 
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.util.mvi.SideEffect
@@ -9,6 +9,4 @@ data class BookmarkState(
     val bookmarkExists: Boolean = true,
 ): State
 
-sealed class BookmarkSideEffect: SideEffect{
-
-}
+sealed class BookmarkSideEffect: SideEffect

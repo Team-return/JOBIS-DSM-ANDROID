@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.recruitment
 
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.util.mvi.SideEffect
@@ -34,8 +34,6 @@ data class RecruitmentState(
 ): State
 
 sealed class RecruitmentSideEffect: SideEffect{
-    class Exception(
-        val message: String,
-    ): RecruitmentSideEffect()
+    class Exception(val message: String): RecruitmentSideEffect()
 }
 

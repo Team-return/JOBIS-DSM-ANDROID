@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.resetpassword
 
-import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,16 +17,12 @@ import team.retum.domain.usecase.student.ComparePasswordUseCase
 import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.contract.ResetPasswordSideEffect
-import team.retum.jobis_android.contract.ResetPasswordState
-import team.retum.jobis_android.util.mvi.Event
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordState
+import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import java.util.regex.Pattern
 import javax.inject.Inject
-
-@Stable
-private val passwordRegex =
-    "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-z0-9!@#\$%^&*]{8,16}\$"
 
 @HiltViewModel
 internal class ResetPasswordViewModel @Inject constructor(
@@ -38,10 +33,8 @@ internal class ResetPasswordViewModel @Inject constructor(
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
-        ResetPasswordState()
+        initialState = ResetPasswordState(),
     )
-
-    override fun sendEvent(event: Event) {}
 
     internal fun sendVerificationCode() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -154,7 +147,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     ) = intent {
         setPasswordFormatErrorState(
             passwordFormatErrorState = newPassword.isEmpty() || !Pattern.matches(
-                passwordRegex,
+                Regex.PASSWORD,
                 newPassword
             ),
         )

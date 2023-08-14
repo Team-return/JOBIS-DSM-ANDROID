@@ -16,9 +16,8 @@ import team.retum.domain.usecase.applications.FetchAppliedCompanyHistoriesUseCas
 import team.retum.domain.usecase.applications.FetchStudentCountsUseCase
 import team.retum.domain.usecase.student.FetchStudentInformationUseCase
 import team.retum.domain.usecase.user.SignOutUseCase
-import team.retum.jobis_android.contract.HomeSideEffect
-import team.retum.jobis_android.contract.HomeState
-import team.retum.jobis_android.util.mvi.Event
+import team.retum.jobis_android.contract.home.HomeSideEffect
+import team.retum.jobis_android.contract.home.HomeState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
@@ -29,8 +28,6 @@ internal class HomeViewModel @Inject constructor(
     private val fetchStudentInformationUseCase: FetchStudentInformationUseCase,
     private val signOutUseCase: SignOutUseCase
 ) : BaseViewModel<HomeState, HomeSideEffect>() {
-
-    override fun sendEvent(event: Event) {}
 
     override val container = container<HomeState, HomeSideEffect>(HomeState())
 
@@ -64,8 +61,8 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    internal fun signOut() = intent{
-        viewModelScope.launch(Dispatchers.IO){
+    internal fun signOut() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
             signOutUseCase().onSuccess {
                 postSideEffect(HomeSideEffect.SuccessSignOut)
             }.onFailure {

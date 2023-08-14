@@ -1,4 +1,4 @@
-package team.retum.jobis_android.contract
+package team.retum.jobis_android.contract.review
 
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewEntity
@@ -14,7 +14,5 @@ data class ReviewState(
 ): State
 
 sealed class ReviewSideEffect: SideEffect{
-    class Exception(
-        val message: String,
-    ): ReviewSideEffect()
+    class Exception(val message: String): ReviewSideEffect()
 }

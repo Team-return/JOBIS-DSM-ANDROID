@@ -8,10 +8,10 @@ import team.retum.domain.exception.BadRequestException
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.ForbiddenException
 import team.retum.domain.exception.NotFoundException
+import team.retum.domain.exception.OfflineException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.TimeoutException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.jobis_android.util.mvi.Event
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
@@ -30,9 +30,7 @@ abstract class BaseViewModel<S : State, E : SideEffect> : ContainerHost<S, E>, V
         is ConflictException -> application.getString(R.string.conflict_exception)
         is OnServerException -> application.getString(R.string.server_exception)
         is TimeoutException -> application.getString(R.string.timeout_exception)
+        is OfflineException -> application.getString(R.string.offline_exception)
         else -> application.getString(R.string.other_exception)
     }
-    abstract fun sendEvent(
-        event: Event,
-    )
 }
