@@ -19,12 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
@@ -35,7 +34,7 @@ internal fun ReviewDetailsScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         reviewViewModel.setReviewId(reviewId)
         reviewViewModel.fetchReviewDetails()
     }
@@ -59,11 +58,11 @@ internal fun ReviewDetailsScreen(
 @Composable
 private fun InterviewReviews(
     interviewEntities: List<ReviewDetailEntity>,
-){
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp)
-    ){
-        items(interviewEntities){
+    ) {
+        items(interviewEntities) {
             InterviewReview(
                 position = it.question,
                 title = it.answer,
@@ -85,7 +84,7 @@ private fun InterviewReview(
     ) {
         Caption(
             text = position,
-            color = JobisColor.Checked,
+            color = JobisColor.ToastBlue,
         )
         Body1(
             text = title,

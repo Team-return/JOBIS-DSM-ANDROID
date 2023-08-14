@@ -27,8 +27,8 @@ import team.retum.domain.param.user.Sex
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
+import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.util.jobisClickable
 

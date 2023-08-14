@@ -50,9 +50,9 @@ import team.retum.jobis_android.viewmodel.bookmark.BookmarkViewModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
-import team.retum.jobisui.colors.JobisColor
-import team.retum.jobisui.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
+import team.returm.jobisdesignsystem.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2

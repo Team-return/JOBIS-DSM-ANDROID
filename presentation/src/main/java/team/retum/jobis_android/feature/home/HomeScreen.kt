@@ -43,7 +43,7 @@ import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
-import team.retum.jobisui.colors.JobisColor
+import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
