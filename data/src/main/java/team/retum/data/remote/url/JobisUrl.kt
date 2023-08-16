@@ -2,16 +2,17 @@ package team.retum.data.remote.url
 
 object JobisUrl {
 
-    const val users = "/users"
-    const val code = "/codes"
-    const val student = "/students"
-    const val auth = "/auth"
-    const val recruitment = "/recruitments"
-    const val bookmarks = "/bookmarks"
-    const val applications = "/applications"
-    const val companies = "/companies"
-    const val review = "/reviews"
-    const val files = "/files"
+    private const val users = "/users"
+    private const val code = "/codes"
+    private const val auth = "/auth"
+    private const val recruitment = "/recruitments"
+    private const val applications = "/applications"
+    private const val companies = "/companies"
+    private const val review = "/reviews"
+
+    internal const val bookmarks = "/bookmarks"
+    internal const val files = "/files"
+    internal const val student = "/students"
 
     object User {
         const val login = "$users/login"
@@ -24,6 +25,7 @@ object JobisUrl {
         const val exists = "$student/exists"
         const val my = "$student/my"
         const val password = "$student/password"
+        const val profile = "$student/profile"
     }
 
     object Code {
@@ -40,23 +42,23 @@ object JobisUrl {
         const val details = "$recruitment/${Properties.recruitmentId}"
     }
 
-    object Applications{
+    object Applications {
         const val employment = "$applications/employment/count"
         const val students = "$applications/students"
         const val apply = "$applications/{recruitment-id}"
     }
 
-    object Company{
+    object Company {
         const val student = "$companies/student"
         const val details = "$companies/${Properties.companyId}"
     }
 
-    object Review{
+    object Review {
         const val reviews = "$review/${Properties.companyId}"
         const val reviewDetails = "$review/details/${Properties.reviewId}"
     }
 
-    object Properties{
+    object Properties {
         const val recruitmentId = "{recruitment-id}"
         const val companyId = "{company-id}"
         const val reviewId = "{review-id}"
