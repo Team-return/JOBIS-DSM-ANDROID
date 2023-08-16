@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -21,11 +23,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.jobis.jobis_android.R
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
@@ -90,6 +94,19 @@ class MainActivity : ComponentActivity() {
 
             val appState = rememberAppState()
             val navController = appState.navController
+
+            val backHandlerToastMessage = stringResource(id = R.string.back_handler)
+
+            BackHandler {
+                var waitTime = 0L
+                if (System.currentTimeMillis() >= 1500) {
+                    waitTime = System.currentTimeMillis()
+                    Toast.makeText(this, backHandlerToastMessage, Toast.LENGTH_SHORT).show()
+                } else {
+                    navController.popBackStack()
+                }
+
+            }
 
             LaunchedEffect(Unit) {
                 mainViewModel.fetchAutoSignInOption()

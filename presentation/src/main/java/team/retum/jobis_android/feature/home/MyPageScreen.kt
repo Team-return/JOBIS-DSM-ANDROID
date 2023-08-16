@@ -1,7 +1,10 @@
 package team.retum.jobis_android.feature.home
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,18 +37,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import kotlinx.coroutines.runBlocking
+import team.retum.domain.entity.FileType
 import team.retum.domain.entity.student.Department
-import team.retum.jobis_android.contract.home.HomeSideEffect
+import team.retum.jobis_android.contract.file.FileSideEffect
+import team.retum.jobis_android.contract.mypage.MyPageSideEffect
+import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.home.HomeViewModel
+import team.retum.jobis_android.viewmodel.file.FileViewModel
+import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
@@ -53,45 +61,73 @@ import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Heading6
 import team.returm.jobisdesignsystem.util.jobisClickable
 
+// TODO homeViewModel -> MyPageViewModel 로 변경
 @Composable
 internal fun MyPageScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
     showDialog: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    fileViewModel: FileViewModel = hiltViewModel(),
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
 
-    val state = homeViewModel.container.stateFlow.collectAsState()
+    val state by myPageViewModel.container.stateFlow.collectAsState()
+
+    val appState = LocalAppState.current
 
     LaunchedEffect(Unit) {
-        homeViewModel.container.sideEffectFlow.collect {
+        myPageViewModel.container.sideEffectFlow.collect {
             when (it) {
-                is HomeSideEffect.SuccessSignOut -> {
+                is MyPageSideEffect.SuccessSignOut -> {
                     navigateToSignInPopUpWithMain()
+                }
+
+                is MyPageSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
                 }
             }
         }
     }
 
-    val studentInformation = state.value.studentInformation
+    LaunchedEffect(Unit) {
+        fileViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is FileSideEffect.SuccessUploadFile -> {
+                    myPageViewModel.setEditProfileImageUrl(it.fileUrls.first())
+                    myPageViewModel.editProfileImage()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    val context = LocalContext.current
+
+    val activityResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+    ) { uri: Uri? ->
+        if (uri != null) {
+            fileViewModel.addFile(
+                FileUtil.toFile(
+                    context = context,
+                    uri = uri,
+                )
+            )
+            fileViewModel.uploadFile()
+        }
+    }
 
     var showSignOutDialog by remember { mutableStateOf(false) }
 
-    val onSignOutMainBtnClick = {
-        homeViewModel.signOut()
-    }
+    val onSignOutMainBtnClick = { myPageViewModel.signOut() }
+    val onSignOutSubBtnClick = { showSignOutDialog = false }
+    val onSignOutClicked = { showSignOutDialog = true }
 
-    val onSignOutSubBtnClick = {
-        showSignOutDialog = false
-    }
-
-    val onInterestClicked = {
-
-    }
-
-    val onSignOutClicked = {
-        showSignOutDialog = true
+    val editProfileImage = {
+        activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        fileViewModel.setType(FileType.LOGO_IMAGE)
     }
 
     if (showSignOutDialog) {
@@ -106,34 +142,28 @@ internal fun MyPageScreen(
         }
     }
 
-    runBlocking {
-        homeViewModel.fetchStudentInformations()
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-            ),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.bottom_nav_my_page))
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(50.dp))
             UserProfile(
-                profileImageUrl = studentInformation.profileImageUrl,
-                name = studentInformation.studentName,
-                department = studentInformation.department,
-                studentGcn = studentInformation.studentGcn,
+                profileImageUrl = state.profileImageUrl,
+                editProfileImage = editProfileImage,
+                name = state.studentName,
+                department = state.department,
+                studentGcn = state.studentGcn,
                 showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(80.dp))
             UserMenu(
                 navigateBugReport = navigateToBugReport,
-                onInterestClicked = onInterestClicked,
+                onInterestClicked = {},
                 navigateToComparePassword = navigateToComparePassword,
                 onSignOutClicked = onSignOutClicked
             )
@@ -146,6 +176,7 @@ internal fun MyPageScreen(
 @Composable
 private fun UserProfile(
     profileImageUrl: String,
+    editProfileImage: () -> Unit,
     name: String,
     department: Department,
     studentGcn: String,
@@ -156,10 +187,6 @@ private fun UserProfile(
     var classRoom = ""
     var number = ""
 
-    val onProfileImageClicked = {
-
-    }
-
     if (studentGcn.isNotEmpty()) {
         grade = studentGcn[0].toString().ifEmpty { "" }
         classRoom = studentGcn[1].toString().ifEmpty { "" }
@@ -167,8 +194,6 @@ private fun UserProfile(
     }
 
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-
-    val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -182,7 +207,7 @@ private fun UserProfile(
                     .clip(CircleShape)
                     .jobisClickable(
                         rippleEnabled = true,
-                        onClick = onProfileImageClicked,
+                        onClick = editProfileImage,
                     )
                     .skeleton(
                         show = profileImageUrl.isEmpty(),
