@@ -44,16 +44,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import kotlinx.coroutines.runBlocking
 import team.retum.domain.entity.FileType
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.contract.file.FileSideEffect
-import team.retum.jobis_android.contract.home.HomeSideEffect
+import team.retum.jobis_android.contract.mypage.MyPageSideEffect
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.file.FileViewModel
-import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
@@ -69,18 +68,23 @@ internal fun MyPageScreen(
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
     showDialog: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
     fileViewModel: FileViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
 
-    val state by homeViewModel.container.stateFlow.collectAsState()
+    val state by myPageViewModel.container.stateFlow.collectAsState()
+
+    val appState = LocalAppState.current
 
     LaunchedEffect(Unit) {
-        homeViewModel.container.sideEffectFlow.collect {
+        myPageViewModel.container.sideEffectFlow.collect {
             when (it) {
-                is HomeSideEffect.SuccessSignOut -> {
+                is MyPageSideEffect.SuccessSignOut -> {
                     navigateToSignInPopUpWithMain()
+                }
+
+                is MyPageSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
                 }
             }
         }
@@ -115,11 +119,9 @@ internal fun MyPageScreen(
         }
     }
 
-    val studentInformation = state.studentInformation
-
     var showSignOutDialog by remember { mutableStateOf(false) }
 
-    val onSignOutMainBtnClick = { homeViewModel.signOut() }
+    val onSignOutMainBtnClick = { myPageViewModel.signOut() }
     val onSignOutSubBtnClick = { showSignOutDialog = false }
     val onSignOutClicked = { showSignOutDialog = true }
 
@@ -140,10 +142,6 @@ internal fun MyPageScreen(
         }
     }
 
-    runBlocking {
-        homeViewModel.fetchStudentInformations()
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -155,11 +153,11 @@ internal fun MyPageScreen(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(50.dp))
             UserProfile(
-                profileImageUrl = studentInformation.profileImageUrl,
+                profileImageUrl = state.profileImageUrl,
                 editProfileImage = editProfileImage,
-                name = studentInformation.studentName,
-                department = studentInformation.department,
-                studentGcn = studentInformation.studentGcn,
+                name = state.studentName,
+                department = state.department,
+                studentGcn = state.studentGcn,
                 showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(80.dp))

@@ -43,6 +43,7 @@ import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
+import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
@@ -68,24 +69,24 @@ private val recruitmentStatusShape = RoundedCornerShape(
 
 @Composable
 internal fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPage: () -> Unit,
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
 
-    val state by homeViewModel.container.stateFlow.collectAsState()
+    val homeState by homeViewModel.container.stateFlow.collectAsState()
+    val myPageState by myPageViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
         with(homeViewModel) {
             fetchTotalPassedStudentCount()
-            fetchStudentInformations()
             fetchAppliedCompanyHistories()
         }
     }
 
-    val studentCounts = state.studentCounts
-    val studentInformation = state.studentInformation
+    val studentCounts = homeState.studentCounts
 
     Column(
         modifier = Modifier
@@ -107,10 +108,10 @@ internal fun HomeScreen(
         ) {
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 UserInformation(
-                    profileImageUrl = studentInformation.profileImageUrl,
-                    name = studentInformation.studentName,
-                    gcn = studentInformation.studentGcn,
-                    department = studentInformation.department,
+                    profileImageUrl = myPageState.profileImageUrl,
+                    name = myPageState.studentName,
+                    gcn = myPageState.studentGcn,
+                    department = myPageState.department,
                     navigateToMyPage = navigateToMyPage,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
@@ -119,7 +120,7 @@ internal fun HomeScreen(
                     color = JobisColor.Gray600,
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                ApplyCompanies(appliedCompanies = state.appliedCompanyHistories)
+                ApplyCompanies(appliedCompanies = homeState.appliedCompanyHistories)
             }
 
             Column(
