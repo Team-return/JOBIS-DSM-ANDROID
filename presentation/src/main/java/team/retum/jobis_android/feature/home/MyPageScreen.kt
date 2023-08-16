@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -44,11 +45,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.runBlocking
+import team.retum.domain.entity.FileType
 import team.retum.domain.entity.student.Department
+import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.contract.home.HomeSideEffect
+import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
+import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
@@ -56,6 +62,7 @@ import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Heading6
 import team.returm.jobisdesignsystem.util.jobisClickable
 
+// TODO homeViewModel -> MyPageViewModel 로 변경
 @Composable
 internal fun MyPageScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
@@ -63,9 +70,11 @@ internal fun MyPageScreen(
     navigateToComparePassword: () -> Unit,
     showDialog: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    fileViewModel: FileViewModel = hiltViewModel(),
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
 
-    val state = homeViewModel.container.stateFlow.collectAsState()
+    val state by homeViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
         homeViewModel.container.sideEffectFlow.collect {
@@ -77,34 +86,46 @@ internal fun MyPageScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        fileViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is FileSideEffect.SuccessUploadFile -> {
+                    myPageViewModel.setEditProfileImageUrl(it.fileUrls.first())
+                    myPageViewModel.editProfileImage()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    val context = LocalContext.current
+
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-
+        if (uri != null) {
+            fileViewModel.addFile(
+                FileUtil.toFile(
+                    context = context,
+                    uri = uri,
+                )
+            )
+            fileViewModel.uploadFile()
+        }
     }
 
-    val editProfileImage = {
-        activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    val studentInformation = state.value.studentInformation
+    val studentInformation = state.studentInformation
 
     var showSignOutDialog by remember { mutableStateOf(false) }
 
-    val onSignOutMainBtnClick = {
-        homeViewModel.signOut()
-    }
+    val onSignOutMainBtnClick = { homeViewModel.signOut() }
+    val onSignOutSubBtnClick = { showSignOutDialog = false }
+    val onSignOutClicked = { showSignOutDialog = true }
 
-    val onSignOutSubBtnClick = {
-        showSignOutDialog = false
-    }
-
-    val onInterestClicked = {
-
-    }
-
-    val onSignOutClicked = {
-        showSignOutDialog = true
+    val editProfileImage = {
+        activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        fileViewModel.setType(FileType.LOGO_IMAGE)
     }
 
     if (showSignOutDialog) {
@@ -144,7 +165,7 @@ internal fun MyPageScreen(
             Spacer(modifier = Modifier.height(80.dp))
             UserMenu(
                 navigateBugReport = navigateToBugReport,
-                onInterestClicked = onInterestClicked,
+                onInterestClicked = {},
                 navigateToComparePassword = navigateToComparePassword,
                 onSignOutClicked = onSignOutClicked
             )
