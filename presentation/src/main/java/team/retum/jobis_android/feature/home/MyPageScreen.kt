@@ -1,7 +1,10 @@
 package team.retum.jobis_android.feature.home
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,6 +77,16 @@ internal fun MyPageScreen(
         }
     }
 
+    val activityResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+    ) { uri: Uri? ->
+
+    }
+
+    val editProfileImage = {
+        activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
     val studentInformation = state.value.studentInformation
 
     var showSignOutDialog by remember { mutableStateOf(false) }
@@ -113,18 +126,16 @@ internal fun MyPageScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-            ),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.bottom_nav_my_page))
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(50.dp))
             UserProfile(
                 profileImageUrl = studentInformation.profileImageUrl,
+                editProfileImage = editProfileImage,
                 name = studentInformation.studentName,
                 department = studentInformation.department,
                 studentGcn = studentInformation.studentGcn,
@@ -146,6 +157,7 @@ internal fun MyPageScreen(
 @Composable
 private fun UserProfile(
     profileImageUrl: String,
+    editProfileImage: () -> Unit,
     name: String,
     department: Department,
     studentGcn: String,
@@ -156,10 +168,6 @@ private fun UserProfile(
     var classRoom = ""
     var number = ""
 
-    val onProfileImageClicked = {
-
-    }
-
     if (studentGcn.isNotEmpty()) {
         grade = studentGcn[0].toString().ifEmpty { "" }
         classRoom = studentGcn[1].toString().ifEmpty { "" }
@@ -167,8 +175,6 @@ private fun UserProfile(
     }
 
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-
-    val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -182,7 +188,7 @@ private fun UserProfile(
                     .clip(CircleShape)
                     .jobisClickable(
                         rippleEnabled = true,
-                        onClick = onProfileImageClicked,
+                        onClick = editProfileImage,
                     )
                     .skeleton(
                         show = profileImageUrl.isEmpty(),
