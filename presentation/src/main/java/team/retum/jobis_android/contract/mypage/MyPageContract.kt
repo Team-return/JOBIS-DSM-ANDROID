@@ -8,8 +8,8 @@ internal data class MyPageState(
     val studentName: String = "",
     val studentGcn: String = "",
     val department: Department = Department.DEFAULT,
-    val profileImageUrl: String = "https://jobis-file.s3.ap-northeast-2.amazonaws.com/EXTENSION_FILE/default_profile.png",
-    val editProfileImageUrl: String = ""
+    val profileImageUrl: String = "",
+    val editProfileImageUrl: String = "",
 ) : State
 
 internal sealed class MyPageSideEffect : SideEffect {
