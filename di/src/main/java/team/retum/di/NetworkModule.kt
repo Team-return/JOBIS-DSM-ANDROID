@@ -1,6 +1,6 @@
 package team.retum.di
 
-import com.jobis.di.BuildConfig
+import com.jobis.data.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,7 +9,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import team.retum.data.interceptor.AuthorizationInterceptor
 import team.retum.data.remote.api.ApplicationsApi
 import team.retum.data.remote.api.BookmarkApi

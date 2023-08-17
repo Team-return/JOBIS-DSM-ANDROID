@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion
+
 object ProjectProperties {
 
     const val NAME_SPACE = "com.jobis.jobis_android"
@@ -17,5 +19,5 @@ object ProjectProperties {
     const val PROGUARD = "proguard-android-optimize.txt"
     const val PROGUARD_RULES = "proguard-rules.pro"
 
-    const val JVM_VERSION = "1.8"
+    const val JVM_VERSION = "18"
 }

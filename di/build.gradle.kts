@@ -7,6 +7,12 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
 }
 
+kapt {
+    javacOptions {
+        option("-target", ProjectProperties.JVM_VERSION)
+    }
+}
+
 android {
     namespace = ProjectProperties.NAME_SPACE_DI
     compileSdk = 33
@@ -29,8 +35,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
         jvmTarget = ProjectProperties.JVM_VERSION

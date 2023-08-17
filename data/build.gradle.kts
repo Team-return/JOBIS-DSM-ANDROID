@@ -6,6 +6,12 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
 }
 
+kapt {
+    javacOptions {
+        option("-target", ProjectProperties.JVM_VERSION)
+    }
+}
+
 val properties = Properties()
 properties.load(project.rootProject.file("local.properties").inputStream())
 
@@ -33,11 +39,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
         jvmTarget = ProjectProperties.JVM_VERSION
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
