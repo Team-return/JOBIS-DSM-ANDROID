@@ -8,6 +8,7 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.OfflineException
 import team.retum.domain.exception.OnServerException
 import team.retum.domain.exception.TimeoutException
+import team.retum.domain.exception.TooLargeRequestException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.exception.UnknownException
 import java.net.SocketTimeoutException
@@ -31,6 +32,7 @@ class HttpHandler<T> {
                 403 -> ForbiddenException()
                 404 -> NotFoundException()
                 409 -> ConflictException()
+                413 -> TooLargeRequestException()
                 in 500..599 -> OnServerException()
                 else -> UnknownException()
             }

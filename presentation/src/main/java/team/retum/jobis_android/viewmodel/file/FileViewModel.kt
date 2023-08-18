@@ -9,6 +9,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.FileType
+import team.retum.domain.exception.TooLargeRequestException
 import team.retum.domain.usecase.file.UploadFileUseCase
 import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.contract.file.FileState
@@ -33,7 +34,7 @@ internal class FileViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(sideEffect = FileSideEffect.SuccessUploadFile(it.urls))
             }.onFailure {
-
+                if (it is TooLargeRequestException) postSideEffect(FileSideEffect.FileLargeException)
             }
         }
     }
