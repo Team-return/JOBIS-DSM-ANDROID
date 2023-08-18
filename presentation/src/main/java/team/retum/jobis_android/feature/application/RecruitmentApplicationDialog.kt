@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.application
 
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
@@ -118,15 +120,32 @@ internal fun RecruitmentApplicationDialog(
         }
     }
 
-    val onAddFile = { result: ActivityResult ->
+    val addFile = { uri: Uri ->
         fileViewModel.addFile(
             FileUtil.toFile(
                 context = context,
-                uri = result.data?.data!!,
+                uri = uri,
             ),
         )
         fileCount += 1
         applicationViewModel.setButtonState(urlCount > 0)
+    }
+
+    val onAddFile = { result: ActivityResult ->
+        val clipData = result.data?.clipData
+        var uri = Uri.EMPTY
+        if (clipData != null) {
+            repeat(clipData.itemCount) {
+                val item = clipData.getItemAt(it)
+                if (item != null) {
+                    uri = item.uri
+                }
+                addFile(uri)
+            }
+        } else {
+            uri = result.data?.data
+            addFile(uri)
+        }
     }
 
     val onRemoveFile = { index: Int ->
@@ -193,6 +212,7 @@ internal fun RecruitmentApplicationDialog(
             SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "*/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 launcher.launch(intent)
             }
@@ -277,24 +297,21 @@ private fun AttachedFile(
                 color = JobisColor.Gray100,
                 shape = RoundedCornerShape(8.dp),
             )
-            .padding(
-                start = 20.dp,
-                end = 14.dp,
-                top = 8.dp,
-                bottom = 8.dp,
-            ),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
+        Spacer(modifier = Modifier.width(10.dp))
         Row {
-            Caption(text = fileName)
-            Spacer(modifier = Modifier.width(2.dp))
             Caption(
-                text = "$fileSize KB",
-                color = JobisColor.Gray700,
+                text = "$fileName $fileSize KB".take(38),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
+            Spacer(modifier = Modifier.width(2.dp))
         }
+        Spacer(modifier = Modifier.weight(1f))
         RemoveIcon(onClick = onClick)
+        Spacer(modifier = Modifier.width(14.dp))
     }
 }
 
