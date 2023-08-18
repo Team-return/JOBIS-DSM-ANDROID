@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.implementation
 
-import team.retum.data.remote.api.ApplicationsApi
+import team.retum.data.remote.api.ApplicationApi
 import team.retum.data.remote.datasource.declaration.ApplicationsDataSource
 import team.retum.data.remote.request.application.ApplyCompanyRequest
 import team.retum.data.remote.response.applications.FetchAppliedCompanyHistoriesResponse
@@ -9,23 +9,23 @@ import team.retum.data.util.HttpHandler
 import javax.inject.Inject
 
 class ApplicationsDataSourceImpl @Inject constructor(
-    private val applicationsApi: ApplicationsApi,
+    private val applicationApi: ApplicationApi,
 ) : ApplicationsDataSource {
     override suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse =
         HttpHandler<FetchTotalPassedStudentCountResponse>().httpRequest {
-            applicationsApi.fetchTotalPassedStudentCount()
+            applicationApi.fetchTotalPassedStudentCount()
         }.sendRequest()
 
     override suspend fun fetchAppliedCompanyHistories(): FetchAppliedCompanyHistoriesResponse =
         HttpHandler<FetchAppliedCompanyHistoriesResponse>().httpRequest {
-            applicationsApi.fetchAppliedCompanyHistories()
+            applicationApi.fetchAppliedCompanyHistories()
         }.sendRequest()
 
     override suspend fun applyCompany(
         recruitmentId: Long,
         applyCompanyRequest: ApplyCompanyRequest
     ) = HttpHandler<Unit>().httpRequest {
-        applicationsApi.applyCompany(
+        applicationApi.applyCompany(
             recruitmentId = recruitmentId,
             applyCompanyRequest = applyCompanyRequest,
         )
