@@ -8,6 +8,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.exception.ConflictException
+import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.application.ApplyCompanyParam
 import team.retum.domain.param.application.AttachmentDocsType
 import team.retum.domain.param.application.AttachmentsParam
@@ -32,7 +34,15 @@ internal class ApplicationViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(sideEffect = ApplicationSideEffect.SuccessApplyCompany)
             }.onFailure {
-
+                when (it) {
+                    is NotFoundException -> postSideEffect(ApplicationSideEffect.RecruitmentNotFound)
+                    is ConflictException -> postSideEffect(ApplicationSideEffect.ApplyConflict)
+                    else -> postSideEffect(
+                        ApplicationSideEffect.Exception(
+                            message = getStringFromException(it),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -81,8 +91,8 @@ internal class ApplicationViewModel @Inject constructor(
 
     internal fun setButtonState(
         buttonState: Boolean,
-    ) = intent{
-        reduce{
+    ) = intent {
+        reduce {
             state.copy(
                 buttonState = buttonState,
             )

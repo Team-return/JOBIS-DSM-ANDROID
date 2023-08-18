@@ -78,6 +78,8 @@ internal fun RecruitmentApplicationDialog(
     var fileCount by remember { mutableStateOf(0) }
     var urlCount by remember { mutableStateOf(0) }
 
+    val fileLargeMessage = stringResource(id = R.string.recruitment_application_file_too_large)
+
     LaunchedEffect(Unit) {
         applicationViewModel.setRecruitmentId(recruitmentId = recruitmentId)
         fileViewModel.container.sideEffectFlow.collect {
@@ -90,20 +92,37 @@ internal fun RecruitmentApplicationDialog(
                     applicationViewModel.applyCompany()
                 }
 
+                is FileSideEffect.FileLargeException -> {
+                    appState.showErrorToast(fileLargeMessage)
+                }
+
                 is FileSideEffect.Exception -> {
                     appState.showErrorToast(message = it.message)
                 }
             }
         }
+    }
 
+    val recruitmentNotFoundMessage = stringResource(id = R.string.recruitment_application_not_found)
+    val applyConflictMessage = stringResource(id = R.string.recruitment_application_conflict)
+
+    LaunchedEffect(Unit) {
         applicationViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
                     onDismissRequest()
                 }
 
+                is ApplicationSideEffect.RecruitmentNotFound -> {
+                    appState.showErrorToast(recruitmentNotFoundMessage)
+                }
+
+                is ApplicationSideEffect.ApplyConflict -> {
+                    appState.showErrorToast(applyConflictMessage)
+                }
+
                 is ApplicationSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
+                    appState.showErrorToast(it.message)
                 }
             }
         }
