@@ -3,6 +3,8 @@ package team.retum.jobis_android.util
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.provider.OpenableColumns
+import android.util.Log
 import okhttp3.MultipartBody
 import java.io.File
 import java.io.FileOutputStream
@@ -53,13 +55,25 @@ object FileUtil {
     }
 
     private fun getFileName(
-        context: Context,
         uri: Uri,
+        context: Context,
     ): String {
-        val name = uri.toString().split("/").last()
-        val ext = context.contentResolver.getType(uri)!!.split("/").last()
 
-        return "$name.$ext"
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+
+        var fileName = ""
+
+        cursor?.run {
+            cursor.moveToFirst()
+            val index = getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (index != -1) {
+                fileName = cursor.getString(index)
+            }
+        }
+
+        cursor?.close()
+
+        return fileName
     }
 
     private fun createTempFile(
