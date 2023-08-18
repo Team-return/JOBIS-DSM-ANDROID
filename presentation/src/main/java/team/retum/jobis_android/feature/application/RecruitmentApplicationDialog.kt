@@ -2,6 +2,7 @@ package team.retum.jobis_android.feature.application
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,11 +67,10 @@ internal fun RecruitmentApplicationDialog(
 
     val context = LocalContext.current
 
-    val fileState = fileViewModel.container.stateFlow.collectAsState()
-    val applicationState = applicationViewModel.container.stateFlow.collectAsState()
+    val fileState by fileViewModel.container.stateFlow.collectAsState()
+    val applicationState by applicationViewModel.container.stateFlow.collectAsState()
 
-    val files = fileState.value.files
-
+    val files = fileState.files
     val urls = remember { mutableStateListOf<String>() }
 
     var fileCount by remember { mutableStateOf(0) }
@@ -109,36 +109,50 @@ internal fun RecruitmentApplicationDialog(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val onClickConfirmButton = {
+    val onClickConfirmButton: () -> Unit = {
         fileViewModel.uploadFile()
-        applicationViewModel.setButtonState(
-            buttonState = false,
-        )
+        applicationViewModel.setButtonState(buttonState = false)
         coroutineScope.launch {
             delay(3000)
-            applicationViewModel.setButtonState(
-                buttonState = true,
-            )
+            applicationViewModel.setButtonState(buttonState = true)
         }
+    }
+
+    val onAddFile = { result: ActivityResult ->
+        fileViewModel.addFile(
+            FileUtil.toFile(
+                context = context,
+                uri = result.data?.data!!,
+            ),
+        )
+        fileCount += 1
+        applicationViewModel.setButtonState(urlCount > 0)
     }
 
     val onRemoveFile = { index: Int ->
         fileViewModel.removeFile(index)
+        fileCount -= 1
+    }
+
+    val onAddUrl = {
+        urls.add("")
+        urlCount += 1
+        applicationViewModel.setButtonState(fileCount > 0)
+    }
+
+    val onRemoveUrl = { index: Int ->
+        urls.removeAt(index)
+        urlCount -= 1
+    }
+
+    val onUrlChanged = { index: Int, url: String ->
+        urls[index] = url
     }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        result.data?.data?.run {
-            fileViewModel.addFile(
-                FileUtil.toFile(
-                    context = context,
-                    uri = this,
-                ),
-            )
-            fileCount += 1
-        }
-    }
+        onResult = onAddFile,
+    )
 
     Column(
         modifier = Modifier
@@ -157,7 +171,6 @@ internal fun RecruitmentApplicationDialog(
                 .padding(bottom = 8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-
             Spacer(modifier = Modifier.height(25.dp))
             Caption(
                 text = stringResource(id = R.string.submitted_document, "없음"),
@@ -173,9 +186,8 @@ internal fun RecruitmentApplicationDialog(
                 AttachedFile(
                     fileName = files[it].name,
                     fileSize = (files[it].length() / 1024).toString(),
-                ) {
-                    onRemoveFile(it)
-                }
+                    onClick = { onRemoveFile(it) },
+                )
                 Spacer(modifier = Modifier.height(6.dp))
             }
             SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
@@ -192,27 +204,25 @@ internal fun RecruitmentApplicationDialog(
             Spacer(modifier = Modifier.height(6.dp))
             repeat(urlCount) { index ->
                 AttachedUrl(
-                    onValueChanged = {
-                        urls[index] = it
-                    },
+                    onValueChanged = { onUrlChanged(index, it) },
                     url = urls[index],
+                    onRemoveUrl = { onRemoveUrl(index) },
                 )
                 Spacer(modifier = Modifier.height(6.dp))
             }
-            SubmitSpace(description = stringResource(id = R.string.add_to_press_url)) {
-                urlCount += 1
-                urls.add("")
-            }
+            SubmitSpace(
+                description = stringResource(id = R.string.add_to_press_url),
+                onClick = onAddUrl,
+            )
             Spacer(modifier = Modifier.height(32.dp))
         }
         Box(modifier = Modifier.padding(horizontal = 96.dp)) {
             JobisMediumButton(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
-                enabled = applicationState.value.buttonState,
-            ) {
-                onClickConfirmButton()
-            }
+                enabled = applicationState.buttonState,
+                onClick = onClickConfirmButton,
+            )
         }
     }
 }
@@ -284,13 +294,7 @@ private fun AttachedFile(
                 color = JobisColor.Gray700,
             )
         }
-        Image(
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .jobisClickable(onClick = onClick),
-            painter = painterResource(id = JobisIcon.Close),
-            contentDescription = null,
-        )
+        RemoveIcon(onClick = onClick)
     }
 }
 
@@ -298,10 +302,23 @@ private fun AttachedFile(
 private fun AttachedUrl(
     onValueChanged: (String) -> Unit,
     url: String,
+    onRemoveUrl: () -> Unit,
 ) {
     JobisBoxTextField(
         onValueChanged = onValueChanged,
         value = url,
         hint = stringResource(id = R.string.input_url),
+        icon = { RemoveIcon(onClick = onRemoveUrl) },
+    )
+}
+
+@Composable
+private fun RemoveIcon(onClick: () -> Unit) {
+    Image(
+        modifier = Modifier
+            .padding(top = 2.dp)
+            .jobisClickable(onClick = onClick),
+        painter = painterResource(id = JobisIcon.Close),
+        contentDescription = null,
     )
 }
