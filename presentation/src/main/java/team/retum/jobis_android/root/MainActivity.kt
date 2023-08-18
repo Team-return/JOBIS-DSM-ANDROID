@@ -195,7 +195,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(
                                 getArgument(
                                     NavigationProperties.RECRUITMENT_ID,
-                                    NavType.IntType,
+                                    NavType.LongType,
                                 ),
                             ),
                             enterTransition = { slideInLeft() },
