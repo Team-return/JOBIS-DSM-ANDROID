@@ -9,7 +9,7 @@ import team.retum.data.remote.response.applications.FetchAppliedCompanyHistories
 import team.retum.data.remote.response.applications.FetchTotalPassedStudentCountResponse
 import team.retum.data.remote.url.JobisUrl
 
-interface ApplicationsApi {
+interface ApplicationApi {
     @GET(JobisUrl.Applications.employment)
     suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse
 

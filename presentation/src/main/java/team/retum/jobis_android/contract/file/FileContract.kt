@@ -14,5 +14,6 @@ data class FileState(
 
 sealed class FileSideEffect: SideEffect{
     class SuccessUploadFile(val fileUrls: List<String>): FileSideEffect()
+    object FileLargeException: FileSideEffect()
     class Exception(val message: String): FileSideEffect()
 }

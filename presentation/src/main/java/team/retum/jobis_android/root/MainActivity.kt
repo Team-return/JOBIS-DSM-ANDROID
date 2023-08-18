@@ -195,7 +195,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(
                                 getArgument(
                                     NavigationProperties.RECRUITMENT_ID,
-                                    NavType.IntType,
+                                    NavType.LongType,
                                 ),
                             ),
                             enterTransition = { slideInLeft() },
@@ -223,7 +223,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}/${NavigationRoute.HasRecruitment}",
                             arguments = listOf(
-                                getArgument(NavigationProperties.COMPANY_ID, NavType.IntType),
+                                getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
                                 getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
                             ),
                             enterTransition = { slideInLeft() },

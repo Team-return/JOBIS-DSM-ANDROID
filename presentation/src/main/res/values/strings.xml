@@ -203,6 +203,11 @@
     <string name="check">확인</string>
     <string name="input_url">URL 입력</string>
 
+    <string name="recruitment_application_not_found">존재하지 않는 모집의뢰서 입니다</string>
+    <string name="recruitment_application_conflict">이미 지원한 이력이 있습니다</string>
+
+    <string name="recruitment_application_file_too_large">파일의 용량을 초과했습니다</string>
+
     <!--    Reset Password Email Verify Screen-->
 
     <string name="self_verification">본인인증</string>
