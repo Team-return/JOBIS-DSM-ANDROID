@@ -7,7 +7,7 @@ data class AppliedCompanyHistoriesEntity(
 data class AppliedCompanyEntity(
     val applicationId: Int,
     val company: String,
-    val attachmentUrlList: List<String>,
+    val attachmentUrlList: List<String>?,
     val applicationStatus: Status,
 )
 
