@@ -3,6 +3,7 @@ package team.retum.jobis_android.feature.application
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,7 +50,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.icon.JobisIcon
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -113,7 +114,7 @@ internal fun RecruitmentApplicationDialog(
         applicationViewModel.setButtonState(
             buttonState = false,
         )
-        coroutineScope.launch{
+        coroutineScope.launch {
             delay(3000)
             applicationViewModel.setButtonState(
                 buttonState = true,
@@ -240,7 +241,10 @@ private fun SubmitSpace(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        JobisImage(drawable = JobisIcon.Upload)
+        Image(
+            painter = painterResource(id = JobisIcon.Upload),
+            contentDescription = null,
+        )
         Caption(text = description)
     }
 }
@@ -280,11 +284,12 @@ private fun AttachedFile(
                 color = JobisColor.Gray700,
             )
         }
-        JobisImage(
+        Image(
             modifier = Modifier
                 .padding(top = 2.dp)
                 .jobisClickable(onClick = onClick),
-            drawable = JobisIcon.Close,
+            painter = painterResource(id = JobisIcon.Close),
+            contentDescription = null,
         )
     }
 }
