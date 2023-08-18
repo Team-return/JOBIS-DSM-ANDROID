@@ -14,6 +14,4 @@ data class HomeState(
     val appliedCompanyHistories: List<AppliedCompanyEntity> = emptyList(),
 ) : State
 
-sealed class HomeSideEffect : SideEffect {
-
-}
+sealed class HomeSideEffect : SideEffect

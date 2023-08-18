@@ -24,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -79,13 +78,6 @@ internal fun HomeScreen(
     val homeState by homeViewModel.container.stateFlow.collectAsState()
     val myPageState by myPageViewModel.container.stateFlow.collectAsState()
 
-    LaunchedEffect(Unit) {
-        with(homeViewModel) {
-            fetchTotalPassedStudentCount()
-            fetchAppliedCompanyHistories()
-        }
-    }
-
     val studentCounts = homeState.studentCounts
 
     Column(
@@ -122,7 +114,6 @@ internal fun HomeScreen(
                 Spacer(modifier = Modifier.height(6.dp))
                 ApplyCompanies(appliedCompanies = homeState.appliedCompanyHistories)
             }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -189,12 +180,8 @@ private fun RecruitmentStatus(
             ),
             verticalArrangement = Arrangement.Bottom,
         ) {
-            Row(
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                ) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Row(verticalAlignment = Alignment.Bottom) {
                     Heading3(
                         text = employmentRate.toString(),
                         color = JobisColor.Gray100,
@@ -217,9 +204,7 @@ private fun RecruitmentStatus(
                     color = JobisColor.Gray100,
                 )
             }
-            Row(
-                verticalAlignment = Alignment.Bottom,
-            ) {
+            Row(verticalAlignment = Alignment.Bottom) {
                 Body4(
                     text = stringResource(id = R.string.home_employment_rate),
                     color = JobisColor.Gray100,
@@ -273,9 +258,7 @@ private fun UserInformation(
             contentDescription = null,
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
+        Column(verticalArrangement = Arrangement.SpaceBetween) {
             Body2(
                 modifier = Modifier
                     .padding(bottom = 8.dp)
@@ -335,13 +318,15 @@ private fun ApplyCompany(
         modifier = Modifier
             .fillMaxWidth()
             .height(68.dp)
-            .clip(
-                shape = ApplyCompaniesItemShape,
-            )
+            .clip(shape = ApplyCompaniesItemShape)
             .border(
                 width = 1.dp,
                 color = JobisColor.Gray400,
                 shape = ApplyCompaniesItemShape,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = {},
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -353,12 +338,10 @@ private fun ApplyCompany(
             )
         } else {
             Column(
-                modifier = Modifier.padding(
-                    horizontal = 18.dp,
-                    vertical = 10.dp,
-                ),
+                modifier = Modifier.padding(horizontal = 18.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -370,6 +353,7 @@ private fun ApplyCompany(
                         color = JobisColor.LightBlue,
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
