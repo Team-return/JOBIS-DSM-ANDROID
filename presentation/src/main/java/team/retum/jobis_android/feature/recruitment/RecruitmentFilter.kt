@@ -59,6 +59,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentFilter(
+    sheetState: Boolean = false,
     codeViewModel: CodeViewModel = hiltViewModel(),
     onDismissDialog: (Long?, String?) -> Unit,
 ) {
@@ -81,9 +82,10 @@ internal fun RecruitmentFilter(
     }.toString().trim().replace(" ", " | ")
 
     LaunchedEffect(Unit) {
-        codeViewModel.fetchCodes()
-        codeViewModel.setType(type = Type.TECH)
-        codeViewModel.fetchCodes()
+        if (sheetState) {
+            codeViewModel.fetchCodes()
+            codeViewModel.setType(type = Type.TECH)
+        }
     }
 
     var folded by remember { mutableStateOf(true) }
