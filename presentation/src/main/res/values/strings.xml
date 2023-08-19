@@ -250,6 +250,8 @@
     <string name="bug_report_content">내용</string>
     <string name="bug_report_screenshots">스크린샷</string>
 
+    <string name="report_bug_success">버그가 성공적으로 제보되었습니다</string>
+
     <!--    Review Details-->
 
     <string name="review_details_review">%s님의 후기</string>

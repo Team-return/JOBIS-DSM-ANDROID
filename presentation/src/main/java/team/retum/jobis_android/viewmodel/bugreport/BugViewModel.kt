@@ -1,29 +1,51 @@
 package team.retum.jobis_android.viewmodel.bugreport
 
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.param.bugreport.Position
+import team.retum.domain.param.bugreport.ReportBugParam
 import team.retum.domain.usecase.bug.ReportBugUseCase
-import team.retum.jobis_android.contract.bugreport.BugReportSideEffect
-import team.retum.jobis_android.contract.bugreport.BugReportState
-import team.retum.jobis_android.contract.bugreport.Position
+import team.retum.jobis_android.contract.bugreport.BugSideEffect
+import team.retum.jobis_android.contract.bugreport.BugState
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 internal class BugViewModel @Inject constructor(
     private val reportBugUseCase: ReportBugUseCase,
-) : BaseViewModel<BugReportState, BugReportSideEffect>() {
+) : BaseViewModel<BugState, BugSideEffect>() {
 
-    override val container = container<BugReportState, BugReportSideEffect>(BugReportState())
+    override val container = container<BugState, BugSideEffect>(BugState())
+
+    internal fun reportBug() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            reportBugUseCase(
+                ReportBugParam(
+                    title = state.title,
+                    content = state.content,
+                    developmentArea = state.selectedPosition,
+                    attachmentUrls = state.fileUrls,
+                )
+            ).onSuccess {
+                postSideEffect(BugSideEffect.SuccessReportBug)
+            }.onFailure {
+                postSideEffect(BugSideEffect.Exception(getStringFromException(it)))
+            }
+        }
+    }
 
     internal fun setTitle(
         title: String,
     ) = intent {
         reduce {
-            state.copy(
-                title = title,
-            )
+            state.copy(title = title)
         }
     }
 
@@ -31,9 +53,7 @@ internal class BugViewModel @Inject constructor(
         content: String,
     ) = intent {
         reduce {
-            state.copy(
-                content = content,
-            )
+            state.copy(content = content)
         }
     }
 
@@ -42,15 +62,11 @@ internal class BugViewModel @Inject constructor(
     ) = intent {
         runCatching {
             reduce {
-                state.copy(
-                    selectedPosition = Position.valueOf(position),
-                )
+                state.copy(selectedPosition = Position.valueOf(position),)
             }
         }.onFailure {
             reduce {
-                state.copy(
-                    selectedPosition = Position.All,
-                )
+                state.copy(selectedPosition = Position.ALL,)
             }
         }
     }

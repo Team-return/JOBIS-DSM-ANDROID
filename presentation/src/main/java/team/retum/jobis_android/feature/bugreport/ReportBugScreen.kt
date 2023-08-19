@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.bugreport.BugSideEffect
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bugreport.BugViewModel
@@ -49,13 +52,31 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-internal fun BugReportScreen(
+internal fun ReportBugScreen(
     bugViewModel: BugViewModel = hiltViewModel(),
     fileViewModel: FileViewModel = hiltViewModel(),
 ) {
 
+    val appState = LocalAppState.current
+
     val bugReportState by bugViewModel.container.stateFlow.collectAsState()
     val fileState by fileViewModel.container.stateFlow.collectAsState()
+
+    val successReportBugMessage = stringResource(id = R.string.report_bug_success)
+
+    LaunchedEffect(Unit) {
+        bugViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is BugSideEffect.SuccessReportBug -> {
+                    appState.showSuccessToast(message = successReportBugMessage)
+                }
+
+                is BugSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
+                }
+            }
+        }
+    }
 
     val context = LocalContext.current
 
@@ -111,6 +132,7 @@ internal fun BugReportScreen(
 
     val onCompleteButtonClicked = {
         bugViewModel.setFileUrls(fileUrls = fileState.urls)
+        bugViewModel.reportBug()
     }
 
     Column(
@@ -139,14 +161,12 @@ internal fun BugReportScreen(
                     screenShotCount = fileState.files.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Column(modifier = Modifier.imePadding()) {
-                    JobisLargeButton(
-                        text = stringResource(id = R.string.complete),
-                        color = JobisButtonColor.MainSolidColor,
-                        onClick = onCompleteButtonClicked,
-                    )
-                    Spacer(modifier = Modifier.height(44.dp))
-                }
+                JobisLargeButton(
+                    text = stringResource(id = R.string.complete),
+                    color = JobisButtonColor.MainSolidColor,
+                    onClick = onCompleteButtonClicked,
+                )
+                Spacer(modifier = Modifier.height(44.dp))
             }
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(88.dp))
