@@ -62,7 +62,7 @@ internal fun BugReportScreen(
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-        if(uri != null) {
+        if (uri != null) {
             val file = FileUtil.toFile(
                 context = context,
                 uri = uri,
@@ -88,11 +88,7 @@ internal fun BugReportScreen(
 
     val addScreenshot = {
         if (fileState.files.size <= 5) {
-            activityResultLauncher.launch(
-                PickVisualMediaRequest(
-                    mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly,
-                )
-            )
+            activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 
@@ -123,9 +119,7 @@ internal fun BugReportScreen(
             .jobisClickable(onClick = clearFocus),
     ) {
         Box {
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 Spacer(modifier = Modifier.height(48.dp))
                 Header(text = stringResource(id = R.string.bug_report))
                 Spacer(modifier = Modifier.height(14.dp))
@@ -145,9 +139,7 @@ internal fun BugReportScreen(
                     screenShotCount = fileState.files.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Column(
-                    modifier = Modifier.imePadding(),
-                ) {
+                Column(modifier = Modifier.imePadding()) {
                     JobisLargeButton(
                         text = stringResource(id = R.string.complete),
                         color = JobisButtonColor.MainSolidColor,
@@ -156,17 +148,13 @@ internal fun BugReportScreen(
                     Spacer(modifier = Modifier.height(44.dp))
                 }
             }
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(88.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    Box(
-                        modifier = Modifier.width(116.dp),
-                    ) {
+                    Box(modifier = Modifier.width(116.dp)) {
                         JobisDropDown(
                             color = JobisDropDownColor.MainColor,
                             itemList = positions,
@@ -245,11 +233,9 @@ private fun ScreenShots(
                     JobisImage(drawable = R.drawable.ic_image)
                 }
             }
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 itemsIndexed(uriList) { index, uri ->
-                    Box(
-                        contentAlignment = Alignment.BottomEnd,
-                    ) {
+                    Box(contentAlignment = Alignment.BottomEnd) {
                         AsyncImage(
                             model = uri,
                             contentDescription = null,
@@ -281,6 +267,7 @@ private fun ScreenShots(
                                 color = JobisButtonColor.MainShadowColor,
                                 shadow = true,
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
                         }
                     }
                 }
