@@ -105,3 +105,7 @@ internal fun <T> getArgument(
         this.type = type
     }
 }
+
+internal fun NavHostController.navigateToPostReview(companyId: Long){
+    this.navigate(NavigationRoute.MainNavigation.PostReview + companyId)
+}

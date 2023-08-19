@@ -28,6 +28,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,12 +53,14 @@ import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
+import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading6
 import team.returm.jobisdesignsystem.util.jobisClickable
 
@@ -67,12 +70,16 @@ internal fun MyPageScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
+    navigateToPostReview: (Long) -> Unit,
     showDialog: () -> Unit,
     fileViewModel: FileViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
+    companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
     val state by myPageViewModel.container.stateFlow.collectAsState()
+    val reviewableCompanies =
+        companyViewModel.container.stateFlow.collectAsState().value.reviewableCompanies
 
     val appState = LocalAppState.current
 
@@ -101,6 +108,10 @@ internal fun MyPageScreen(
                 else -> {}
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        companyViewModel.fetchReviewableCompanies()
     }
 
     val context = LocalContext.current
@@ -160,7 +171,16 @@ internal fun MyPageScreen(
                 studentGcn = state.studentGcn,
                 showDialog = showDialog,
             )
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+            if (reviewableCompanies.isNotEmpty()) {
+                val reviewableCompany = reviewableCompanies[0]
+                AvailablePostReviewCompany(
+                    companyName = reviewableCompany.name,
+                    companyId = reviewableCompany.id,
+                    navigateToPostReview = navigateToPostReview,
+                )
+            }
+            Spacer(modifier = Modifier.height(36.dp))
             UserMenu(
                 navigateBugReport = navigateToBugReport,
                 onInterestClicked = {},
@@ -259,6 +279,46 @@ private fun UserProfile(
                 color = JobisColor.Gray700,
             )
         }
+    }
+}
+
+@Stable
+val AvailablePostReviewCompanyShape = RoundedCornerShape(14.dp)
+
+@Composable
+private fun AvailablePostReviewCompany(
+    companyName: String,
+    companyId: Long,
+    navigateToPostReview: (Long) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 14.dp)
+            .clip(AvailablePostReviewCompanyShape)
+            .background(
+                color = JobisColor.Gray100,
+                shape = AvailablePostReviewCompanyShape,
+            )
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = { navigateToPostReview(companyId) },
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Spacer(modifier = Modifier.width(64.dp))
+        Caption(
+            modifier = Modifier.padding(vertical = 14.dp),
+            text = companyName,
+            color = JobisColor.Gray600,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Caption(
+            text = stringResource(id = R.string.post_review_do_post_review),
+            color = JobisColor.LightBlue,
+        )
+        Spacer(modifier = Modifier.width(64.dp))
     }
 }
 

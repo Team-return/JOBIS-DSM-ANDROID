@@ -266,4 +266,6 @@
     <string name="post_review_answer">답변내용</string>
     <string name="post_review_answer_hint">해당 질문에 답변했던 내용을 작성해주세요</string>
 
+    <string name="post_review_do_post_review">면접후기 작성하기</string>
+
 </resources>

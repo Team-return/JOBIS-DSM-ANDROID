@@ -31,6 +31,6 @@ object NavigationRoute {
     object MainNavigation {
         const val ReportBug = "ReportBug"
         const val ReviewDetails = "ReviewDetails/"
-        const val PostReview = "PostReview"
+        const val PostReview = "PostReview/"
     }
 }

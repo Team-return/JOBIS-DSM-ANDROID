@@ -35,6 +35,7 @@ fun MainScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
+    navigateToPostReview: (Long) -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -95,6 +96,7 @@ fun MainScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
                         navigateToComparePassword = navigateToComparePassword,
+                        navigateToPostReview = navigateToPostReview,
                         showDialog = showDialog,
                     )
                 }

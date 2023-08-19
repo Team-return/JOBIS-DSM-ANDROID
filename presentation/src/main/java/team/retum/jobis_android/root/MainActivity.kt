@@ -56,6 +56,7 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
+import team.retum.jobis_android.root.navigation.navigateToPostReview
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
@@ -175,6 +176,7 @@ class MainActivity : ComponentActivity() {
                                 navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
                                 navigateToBugReport = navController::navigateToBugReport,
                                 navigateToComparePassword = navController::navigateToComparePassword,
+                                navigateToPostReview = navController::navigateToPostReview,
                             )
                         }
 
@@ -286,7 +288,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(route = NavigationRoute.MainNavigation.PostReview) {
+                        composable(
+                            route = NavigationRoute.MainNavigation.PostReview + NavigationRoute.CompanyId,
+                            arguments = listOf(
+                                getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
+                            ),
+                        ) {
                             PostReviewScreen()
                         }
                     }
