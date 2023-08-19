@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -35,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
+import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
@@ -59,10 +59,11 @@ internal fun ReportBugScreen(
 
     val appState = LocalAppState.current
 
-    val bugReportState by bugViewModel.container.stateFlow.collectAsState()
+    val bugState by bugViewModel.container.stateFlow.collectAsState()
     val fileState by fileViewModel.container.stateFlow.collectAsState()
 
     val successReportBugMessage = stringResource(id = R.string.report_bug_success)
+    val fileLargeExceptionMessage = stringResource(id = R.string.recruitment_application_file_too_large)
 
     LaunchedEffect(Unit) {
         bugViewModel.container.sideEffectFlow.collect {
@@ -73,6 +74,25 @@ internal fun ReportBugScreen(
 
                 is BugSideEffect.Exception -> {
                     appState.showErrorToast(message = it.message)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        fileViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is FileSideEffect.SuccessUploadFile -> {
+                    bugViewModel.setFileUrls(fileUrls = fileState.urls)
+                    bugViewModel.reportBug()
+                }
+
+                is FileSideEffect.FileLargeException -> {
+                    appState.showErrorToast(fileLargeExceptionMessage)
+                }
+
+                is FileSideEffect.Exception -> {
+                    appState.showErrorToast(it.message)
                 }
             }
         }
@@ -101,6 +121,7 @@ internal fun ReportBugScreen(
 
     val onTitleChanged = { title: String ->
         bugViewModel.setTitle(title)
+
     }
 
     val onContentChanged = { content: String ->
@@ -131,8 +152,7 @@ internal fun ReportBugScreen(
     }
 
     val onCompleteButtonClicked = {
-        bugViewModel.setFileUrls(fileUrls = fileState.urls)
-        bugViewModel.reportBug()
+        fileViewModel.uploadFile()
     }
 
     Column(
@@ -147,15 +167,15 @@ internal fun ReportBugScreen(
                 Spacer(modifier = Modifier.height(14.dp))
                 ContentInputs(
                     onTitleChanged = onTitleChanged,
-                    title = bugReportState.title,
+                    title = bugState.title,
                     onContentChanged = onContentChanged,
-                    content = bugReportState.content,
-                    titleError = bugReportState.titleError,
-                    contentError = bugReportState.contentError,
+                    content = bugState.content,
+                    titleError = bugState.titleError,
+                    contentError = bugState.contentError,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ScreenShots(
-                    uriList = bugReportState.uris,
+                    uriList = bugState.uris,
                     addScreenshot = addScreenshot,
                     removeScreenshot = removeScreenshot,
                     screenShotCount = fileState.files.size,
@@ -165,6 +185,7 @@ internal fun ReportBugScreen(
                     text = stringResource(id = R.string.complete),
                     color = JobisButtonColor.MainSolidColor,
                     onClick = onCompleteButtonClicked,
+                    enabled = bugState.reportBugButtonState,
                 )
                 Spacer(modifier = Modifier.height(44.dp))
             }
@@ -179,7 +200,7 @@ internal fun ReportBugScreen(
                             color = JobisDropDownColor.MainColor,
                             itemList = positions,
                             onItemSelected = onItemSelected,
-                            title = stringResource(id = R.string.bug_report_position),
+                            title = stringResource(id = R.string.bug_report_all),
                         )
                     }
                 }

@@ -47,6 +47,7 @@ internal class BugViewModel @Inject constructor(
         reduce {
             state.copy(title = title)
         }
+        setTitleError(title.isBlank())
     }
 
     internal fun setContent(
@@ -55,6 +56,7 @@ internal class BugViewModel @Inject constructor(
         reduce {
             state.copy(content = content)
         }
+        setContentError(content.isBlank())
     }
 
     internal fun setPosition(
@@ -62,11 +64,11 @@ internal class BugViewModel @Inject constructor(
     ) = intent {
         runCatching {
             reduce {
-                state.copy(selectedPosition = Position.valueOf(position),)
+                state.copy(selectedPosition = Position.valueOf(position))
             }
         }.onFailure {
             reduce {
-                state.copy(selectedPosition = Position.ALL,)
+                state.copy(selectedPosition = Position.ALL)
             }
         }
     }
@@ -88,6 +90,7 @@ internal class BugViewModel @Inject constructor(
             }
             state.copy(uris = uris)
         }
+        setReportBugButtonState()
     }
 
     internal fun removeUri(index: Int) = intent {
@@ -99,5 +102,29 @@ internal class BugViewModel @Inject constructor(
             }
             state.copy(uris = uris)
         }
+        setReportBugButtonState()
+    }
+
+    private fun setReportBugButtonState(enabled: Boolean = true) = intent {
+        reduce {
+            val title = state.title
+            val content = state.content
+            val uris = state.uris
+            state.copy(reportBugButtonState = enabled && title.isNotBlank() && content.isNotBlank() && uris.isNotEmpty())
+        }
+    }
+
+    private fun setTitleError(titleError: Boolean) = intent {
+        reduce {
+            state.copy(titleError = titleError)
+        }
+        setReportBugButtonState(!titleError && !state.contentError)
+    }
+
+    private fun setContentError(contentError: Boolean) = intent {
+        reduce {
+            state.copy(contentError = contentError)
+        }
+        setReportBugButtonState(!state.titleError && !contentError)
     }
 }

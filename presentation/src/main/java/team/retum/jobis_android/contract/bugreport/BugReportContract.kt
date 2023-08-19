@@ -13,6 +13,7 @@ internal data class BugState(
     val selectedPosition: Position = Position.ALL,
     val fileUrls: List<String> = listOf(),
     val uris: MutableList<Uri> = mutableListOf(),
+    val reportBugButtonState: Boolean = false,
 ) : State
 
 sealed class BugSideEffect : SideEffect {
