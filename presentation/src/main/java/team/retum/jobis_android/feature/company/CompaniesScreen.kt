@@ -18,13 +18,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -61,26 +56,9 @@ fun CompaniesScreen(
 
     val lazyListState = rememberLazyListState()
 
-    val lastIndex = remember {
-        derivedStateOf {
-            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-        }
-    }
-
     val companies = state.companies
 
-    var page by remember { mutableStateOf(1) }
-
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
-
-    LaunchedEffect(lastIndex.value) {
-        val size = state.companies.size
-        if (size - 1 == lastIndex.value && size > 5) {
-            page += 1
-            companyViewModel.setPage(page + 1)
-            companyViewModel.fetchCompanies()
-        }
-    }
 
     Box {
         Column(

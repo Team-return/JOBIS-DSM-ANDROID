@@ -31,7 +31,7 @@ class CompanyViewModel @Inject constructor(
         fetchCompanies()
     }
 
-    internal fun fetchCompanies() = intent {
+    private fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompaniesUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
