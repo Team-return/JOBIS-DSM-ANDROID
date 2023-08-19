@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
 import team.retum.data.remote.api.ApplicationApi
 import team.retum.data.remote.api.BookmarkApi
+import team.retum.data.remote.api.BugReportApi
 import team.retum.data.remote.api.CodeApi
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.api.FileApi
@@ -112,4 +113,10 @@ object NetworkModule {
     fun provideFileApi(
         retrofit: Retrofit,
     ): FileApi = retrofit.create(FileApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideBugReportApi(
+        retrofit: Retrofit,
+    ): BugReportApi = retrofit.create(BugReportApi::class.java)
 }
