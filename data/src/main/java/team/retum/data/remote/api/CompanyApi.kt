@@ -5,6 +5,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import team.retum.data.remote.response.company.FetchCompaniesResponse
 import team.retum.data.remote.response.company.FetchCompanyDetailResponse
+import team.retum.data.remote.response.company.FetchReviewableCompaniesResponse
 import team.retum.data.remote.url.JobisUrl
 
 interface CompanyApi {
@@ -18,4 +19,7 @@ interface CompanyApi {
     suspend fun fetchCompanyDetails(
         @Path("company-id") companyId: Int,
     ): FetchCompanyDetailResponse
+
+    @GET(JobisUrl.Company.reviewableCompanies)
+    suspend fun fetchReviewableCompanies(): FetchReviewableCompaniesResponse
 }

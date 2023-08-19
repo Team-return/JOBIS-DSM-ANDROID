@@ -52,6 +52,7 @@ object JobisUrl {
     object Company {
         const val student = "$companies/student"
         const val details = "$companies/${Properties.companyId}"
+        const val reviewableCompanies = companies
     }
 
     object Review {
