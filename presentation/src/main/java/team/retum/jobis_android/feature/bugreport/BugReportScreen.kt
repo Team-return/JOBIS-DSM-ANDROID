@@ -35,7 +35,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.bugreport.BugReportViewModel
+import team.retum.jobis_android.viewmodel.bugreport.BugViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -50,11 +50,11 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun BugReportScreen(
-    bugReportViewModel: BugReportViewModel = hiltViewModel(),
+    bugViewModel: BugViewModel = hiltViewModel(),
     fileViewModel: FileViewModel = hiltViewModel(),
 ) {
 
-    val bugReportState by bugReportViewModel.container.stateFlow.collectAsState()
+    val bugReportState by bugViewModel.container.stateFlow.collectAsState()
     val fileState by fileViewModel.container.stateFlow.collectAsState()
 
     val context = LocalContext.current
@@ -68,7 +68,7 @@ internal fun BugReportScreen(
                 uri = uri,
             )
             fileViewModel.addFile(file)
-            bugReportViewModel.addUri(uri)
+            bugViewModel.addUri(uri)
         }
     }
 
@@ -79,11 +79,11 @@ internal fun BugReportScreen(
     }
 
     val onTitleChanged = { title: String ->
-        bugReportViewModel.setTitle(title)
+        bugViewModel.setTitle(title)
     }
 
     val onContentChanged = { content: String ->
-        bugReportViewModel.setContent(content)
+        bugViewModel.setContent(content)
     }
 
     val addScreenshot = {
@@ -94,7 +94,7 @@ internal fun BugReportScreen(
 
     val removeScreenshot: (Int) -> Unit = { index: Int ->
         fileViewModel.removeFile(index)
-        bugReportViewModel.removeUri(index)
+        bugViewModel.removeUri(index)
     }
 
     val positions = listOf(
@@ -106,11 +106,11 @@ internal fun BugReportScreen(
     )
 
     val onItemSelected = { index: Int ->
-        bugReportViewModel.setPosition(positions[index])
+        bugViewModel.setPosition(positions[index])
     }
 
     val onCompleteButtonClicked = {
-        bugReportViewModel.setFileUrls(fileUrls = fileState.urls)
+        bugViewModel.setFileUrls(fileUrls = fileState.urls)
     }
 
     Column(

@@ -60,7 +60,7 @@ object JobisUrl {
     }
 
     object Bugs{
-        const val bugReport = bugs
+        const val reportBug = bugs
     }
 
     object Properties {

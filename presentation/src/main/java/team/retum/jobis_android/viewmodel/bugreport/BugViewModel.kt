@@ -4,14 +4,15 @@ import android.net.Uri
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.usecase.bug.ReportBugUseCase
 import team.retum.jobis_android.contract.bugreport.BugReportSideEffect
 import team.retum.jobis_android.contract.bugreport.BugReportState
 import team.retum.jobis_android.contract.bugreport.Position
 import team.retum.jobis_android.viewmodel.BaseViewModel
 import javax.inject.Inject
 
-internal class BugReportViewModel @Inject constructor(
-
+internal class BugViewModel @Inject constructor(
+    private val reportBugUseCase: ReportBugUseCase,
 ) : BaseViewModel<BugReportState, BugReportSideEffect>() {
 
     override val container = container<BugReportState, BugReportSideEffect>(BugReportState())

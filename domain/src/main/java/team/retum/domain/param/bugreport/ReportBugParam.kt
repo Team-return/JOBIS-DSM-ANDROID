@@ -1,6 +1,6 @@
 package team.retum.domain.param.bugreport
 
-data class BugReportParam(
+data class ReportBugParam(
     val title: String,
     val content: String,
     val developmentArea: Position,
