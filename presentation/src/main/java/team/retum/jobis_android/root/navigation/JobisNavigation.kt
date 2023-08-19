@@ -58,7 +58,7 @@ internal fun NavHostController.navigateToRecruitmentDetails(
 }
 
 internal fun NavHostController.navigateToBugReport() {
-    this.navigate(NavigationRoute.MainNavigation.BugReport)
+    this.navigate(NavigationRoute.MainNavigation.ReportBug)
 }
 
 internal fun NavHostController.navigateToComparePassword() {

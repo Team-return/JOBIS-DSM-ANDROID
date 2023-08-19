@@ -14,28 +14,32 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.contract.bugreport.BugSideEffect
+import team.retum.jobis_android.contract.file.FileSideEffect
+import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.bugreport.BugReportViewModel
+import team.retum.jobis_android.viewmodel.bugreport.BugViewModel
+import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallIconButton
@@ -48,48 +52,94 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-internal fun BugReportScreen(
-    bugReportViewModel: BugReportViewModel = hiltViewModel(),
+internal fun ReportBugScreen(
+    bugViewModel: BugViewModel = hiltViewModel(),
+    fileViewModel: FileViewModel = hiltViewModel(),
 ) {
 
-    val state by bugReportViewModel.container.stateFlow.collectAsState()
+    val appState = LocalAppState.current
 
-    val uriList = remember { mutableStateListOf<Uri>() }
+    val bugState by bugViewModel.container.stateFlow.collectAsState()
+    val fileState by fileViewModel.container.stateFlow.collectAsState()
+
+    val successReportBugMessage = stringResource(id = R.string.report_bug_success)
+    val fileLargeExceptionMessage = stringResource(id = R.string.recruitment_application_file_too_large)
+
+    LaunchedEffect(Unit) {
+        bugViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is BugSideEffect.SuccessReportBug -> {
+                    appState.showSuccessToast(message = successReportBugMessage)
+                }
+
+                is BugSideEffect.Exception -> {
+                    appState.showErrorToast(message = it.message)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        fileViewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is FileSideEffect.SuccessUploadFile -> {
+                    bugViewModel.setFileUrls(fileUrls = fileState.urls)
+                    bugViewModel.reportBug()
+                }
+
+                is FileSideEffect.FileLargeException -> {
+                    appState.showErrorToast(fileLargeExceptionMessage)
+                }
+
+                is FileSideEffect.Exception -> {
+                    appState.showErrorToast(it.message)
+                }
+            }
+        }
+    }
+
+    val context = LocalContext.current
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
         if (uri != null) {
-            uriList.add(uri)
+            val file = FileUtil.toFile(
+                context = context,
+                uri = uri,
+            )
+            fileViewModel.addFile(file)
+            bugViewModel.addUri(uri)
         }
     }
 
     val focusManager = LocalFocusManager.current
 
+    val clearFocus = {
+        focusManager.clearFocus()
+    }
+
     val onTitleChanged = { title: String ->
-        bugReportViewModel.setTitle(title)
+        bugViewModel.setTitle(title)
+
     }
 
     val onContentChanged = { content: String ->
-        bugReportViewModel.setContent(content)
+        bugViewModel.setContent(content)
     }
 
     val addScreenshot = {
-        if (uriList.size <= 5) {
-            activityResultLauncher.launch(
-                PickVisualMediaRequest(
-                    mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly,
-                )
-            )
+        if (fileState.files.size <= 5) {
+            activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 
-    val removeScreenshot = { index: Int ->
-        uriList.removeAt(index)
-        Unit
+    val removeScreenshot: (Int) -> Unit = { index: Int ->
+        fileViewModel.removeFile(index)
+        bugViewModel.removeUri(index)
     }
 
-    val dropDownList = listOf(
+    val positions = listOf(
         stringResource(id = R.string.bug_report_all),
         stringResource(id = R.string.bug_report_server),
         stringResource(id = R.string.bug_report_ios),
@@ -98,70 +148,59 @@ internal fun BugReportScreen(
     )
 
     val onItemSelected = { index: Int ->
-        bugReportViewModel.setPosition(dropDownList[index])
+        bugViewModel.setPosition(positions[index])
     }
 
     val onCompleteButtonClicked = {
-        bugReportViewModel.setUriList(uriList = uriList)
+        fileViewModel.uploadFile()
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .jobisClickable {
-                focusManager.clearFocus()
-            },
+            .jobisClickable(onClick = clearFocus),
     ) {
         Box {
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 Spacer(modifier = Modifier.height(48.dp))
                 Header(text = stringResource(id = R.string.bug_report))
                 Spacer(modifier = Modifier.height(14.dp))
                 ContentInputs(
                     onTitleChanged = onTitleChanged,
-                    title = state.title,
+                    title = bugState.title,
                     onContentChanged = onContentChanged,
-                    content = state.content,
-                    titleError = state.titleError,
-                    contentError = state.contentError,
+                    content = bugState.content,
+                    titleError = bugState.titleError,
+                    contentError = bugState.contentError,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ScreenShots(
-                    uriList = uriList,
+                    uriList = bugState.uris,
                     addScreenshot = addScreenshot,
                     removeScreenshot = removeScreenshot,
-                    screenShotCount = uriList.size,
+                    screenShotCount = fileState.files.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Column(
-                    modifier = Modifier.imePadding(),
-                ) {
-                    JobisLargeButton(
-                        text = stringResource(id = R.string.complete),
-                        color = JobisButtonColor.MainSolidColor,
-                        onClick = onCompleteButtonClicked,
-                    )
-                    Spacer(modifier = Modifier.height(44.dp))
-                }
+                JobisLargeButton(
+                    text = stringResource(id = R.string.complete),
+                    color = JobisButtonColor.MainSolidColor,
+                    onClick = onCompleteButtonClicked,
+                    enabled = bugState.reportBugButtonState,
+                )
+                Spacer(modifier = Modifier.height(44.dp))
             }
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(88.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    Box(
-                        modifier = Modifier.width(116.dp),
-                    ) {
+                    Box(modifier = Modifier.width(116.dp)) {
                         JobisDropDown(
                             color = JobisDropDownColor.MainColor,
-                            itemList = dropDownList,
+                            itemList = positions,
                             onItemSelected = onItemSelected,
-                            title = stringResource(id = R.string.bug_report_developer),
+                            title = stringResource(id = R.string.bug_report_all),
                         )
                     }
                 }
@@ -235,13 +274,9 @@ private fun ScreenShots(
                     JobisImage(drawable = R.drawable.ic_image)
                 }
             }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 itemsIndexed(uriList) { index, uri ->
-                    Box(
-                        contentAlignment = Alignment.BottomEnd,
-                    ) {
+                    Box(contentAlignment = Alignment.BottomEnd) {
                         AsyncImage(
                             model = uri,
                             contentDescription = null,
@@ -273,6 +308,7 @@ private fun ScreenShots(
                                 color = JobisButtonColor.MainShadowColor,
                                 shadow = true,
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
                         }
                     }
                 }

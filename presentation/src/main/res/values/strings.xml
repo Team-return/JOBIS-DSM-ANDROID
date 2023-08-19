@@ -239,7 +239,6 @@
 
     <!--    Bug Report-->
 
-    <string name="bug_report_developer">Developer</string>
     <string name="bug_report_all">전체</string>
     <string name="bug_report_server">Server</string>
     <string name="bug_report_ios">iOS</string>
@@ -249,6 +248,8 @@
     <string name="bug_report_title">제목</string>
     <string name="bug_report_content">내용</string>
     <string name="bug_report_screenshots">스크린샷</string>
+
+    <string name="report_bug_success">버그가 성공적으로 제보되었습니다</string>
 
     <!--    Review Details-->
 

@@ -59,6 +59,7 @@ fun MainScreen(
                         sheetState.hide()
                     }
                 },
+                sheetState = sheetState.isVisible,
             )
         },
         sheetState = sheetState,

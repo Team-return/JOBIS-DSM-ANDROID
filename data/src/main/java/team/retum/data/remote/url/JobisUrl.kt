@@ -9,6 +9,7 @@ object JobisUrl {
     private const val applications = "/applications"
     private const val companies = "/companies"
     private const val review = "/reviews"
+    private const val bugs = "/bugs"
 
     internal const val bookmarks = "/bookmarks"
     internal const val files = "/files"
@@ -56,6 +57,10 @@ object JobisUrl {
     object Review {
         const val reviews = "$review/${Properties.companyId}"
         const val reviewDetails = "$review/details/${Properties.reviewId}"
+    }
+
+    object Bugs{
+        const val reportBug = bugs
     }
 
     object Properties {
