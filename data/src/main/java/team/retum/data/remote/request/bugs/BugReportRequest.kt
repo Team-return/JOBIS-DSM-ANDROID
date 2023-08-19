@@ -1,7 +1,8 @@
 package team.retum.data.remote.request.bugs
 
 import com.google.gson.annotations.SerializedName
-import team.retum.domain.entity.student.Department
+import team.retum.domain.param.bugreport.BugReportParam
+import team.retum.domain.param.bugreport.Position
 
 data class BugReportRequest(
     @SerializedName("title") val title: String,
@@ -10,10 +11,9 @@ data class BugReportRequest(
     @SerializedName("attachment_urls") val attachmentUrls: List<String>,
 )
 
-enum class Position{
-    ALL,
-    SERVER,
-    WEB,
-    ANDROID,
-    IOS,
-}
+fun BugReportParam.toRequest() = BugReportRequest(
+    title = this.title,
+    content = this.content,
+    developmentArea = this.developmentArea,
+    attachmentUrls = this.attachmentUrls,
+)
