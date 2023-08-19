@@ -54,13 +54,33 @@ internal class BugReportViewModel @Inject constructor(
         }
     }
 
-    internal fun setUriList(
-        uriList: List<Uri>,
+    internal fun setFileUrls(
+        fileUrls: List<String>
     ) = intent {
         reduce {
-            state.copy(
-                uriList = uriList,
-            )
+            state.copy(fileUrls = fileUrls)
+        }
+    }
+
+    internal fun addUri(uri: Uri) = intent {
+        reduce {
+            val uris = mutableListOf<Uri>()
+            uris.run {
+                addAll(state.uris)
+                add(uri)
+            }
+            state.copy(uris = uris)
+        }
+    }
+
+    internal fun removeUri(index: Int) = intent {
+        reduce {
+            val uris = mutableListOf<Uri>()
+            uris.run {
+                addAll(state.uris)
+                removeAt(index)
+            }
+            state.copy(uris = uris)
         }
     }
 }

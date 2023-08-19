@@ -23,19 +23,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bugreport.BugReportViewModel
+import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallIconButton
@@ -50,21 +51,32 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun BugReportScreen(
     bugReportViewModel: BugReportViewModel = hiltViewModel(),
+    fileViewModel: FileViewModel = hiltViewModel(),
 ) {
 
-    val state by bugReportViewModel.container.stateFlow.collectAsState()
+    val bugReportState by bugReportViewModel.container.stateFlow.collectAsState()
+    val fileState by fileViewModel.container.stateFlow.collectAsState()
 
-    val uriList = remember { mutableStateListOf<Uri>() }
+    val context = LocalContext.current
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-        if (uri != null) {
-            uriList.add(uri)
+        if(uri != null) {
+            val file = FileUtil.toFile(
+                context = context,
+                uri = uri,
+            )
+            fileViewModel.addFile(file)
+            bugReportViewModel.addUri(uri)
         }
     }
 
     val focusManager = LocalFocusManager.current
+
+    val clearFocus = {
+        focusManager.clearFocus()
+    }
 
     val onTitleChanged = { title: String ->
         bugReportViewModel.setTitle(title)
@@ -75,7 +87,7 @@ internal fun BugReportScreen(
     }
 
     val addScreenshot = {
-        if (uriList.size <= 5) {
+        if (fileState.files.size <= 5) {
             activityResultLauncher.launch(
                 PickVisualMediaRequest(
                     mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly,
@@ -84,12 +96,12 @@ internal fun BugReportScreen(
         }
     }
 
-    val removeScreenshot = { index: Int ->
-        uriList.removeAt(index)
-        Unit
+    val removeScreenshot: (Int) -> Unit = { index: Int ->
+        fileViewModel.removeFile(index)
+        bugReportViewModel.removeUri(index)
     }
 
-    val dropDownList = listOf(
+    val positions = listOf(
         stringResource(id = R.string.bug_report_all),
         stringResource(id = R.string.bug_report_server),
         stringResource(id = R.string.bug_report_ios),
@@ -98,19 +110,17 @@ internal fun BugReportScreen(
     )
 
     val onItemSelected = { index: Int ->
-        bugReportViewModel.setPosition(dropDownList[index])
+        bugReportViewModel.setPosition(positions[index])
     }
 
     val onCompleteButtonClicked = {
-        bugReportViewModel.setUriList(uriList = uriList)
+        bugReportViewModel.setFileUrls(fileUrls = fileState.urls)
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .jobisClickable {
-                focusManager.clearFocus()
-            },
+            .jobisClickable(onClick = clearFocus),
     ) {
         Box {
             Column(
@@ -121,18 +131,18 @@ internal fun BugReportScreen(
                 Spacer(modifier = Modifier.height(14.dp))
                 ContentInputs(
                     onTitleChanged = onTitleChanged,
-                    title = state.title,
+                    title = bugReportState.title,
                     onContentChanged = onContentChanged,
-                    content = state.content,
-                    titleError = state.titleError,
-                    contentError = state.contentError,
+                    content = bugReportState.content,
+                    titleError = bugReportState.titleError,
+                    contentError = bugReportState.contentError,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ScreenShots(
-                    uriList = uriList,
+                    uriList = bugReportState.uris,
                     addScreenshot = addScreenshot,
                     removeScreenshot = removeScreenshot,
-                    screenShotCount = uriList.size,
+                    screenShotCount = fileState.files.size,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Column(
@@ -159,9 +169,9 @@ internal fun BugReportScreen(
                     ) {
                         JobisDropDown(
                             color = JobisDropDownColor.MainColor,
-                            itemList = dropDownList,
+                            itemList = positions,
                             onItemSelected = onItemSelected,
-                            title = stringResource(id = R.string.bug_report_developer),
+                            title = stringResource(id = R.string.bug_report_position),
                         )
                     }
                 }
@@ -235,9 +245,7 @@ private fun ScreenShots(
                     JobisImage(drawable = R.drawable.ic_image)
                 }
             }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),) {
                 itemsIndexed(uriList) { index, uri ->
                     Box(
                         contentAlignment = Alignment.BottomEnd,

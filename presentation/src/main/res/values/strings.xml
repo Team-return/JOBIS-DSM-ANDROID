@@ -239,7 +239,7 @@
 
     <!--    Bug Report-->
 
-    <string name="bug_report_developer">Developer</string>
+    <string name="bug_report_position">분야</string>
     <string name="bug_report_all">전체</string>
     <string name="bug_report_server">Server</string>
     <string name="bug_report_ios">iOS</string>

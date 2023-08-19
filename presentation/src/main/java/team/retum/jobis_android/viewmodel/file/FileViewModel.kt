@@ -54,9 +54,7 @@ internal class FileViewModel @Inject constructor(
     ) = intent {
         files.add(file)
         reduce {
-            state.copy(
-                files = files,
-            )
+            state.copy(files = files)
         }
     }
 
