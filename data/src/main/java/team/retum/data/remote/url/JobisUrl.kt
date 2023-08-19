@@ -58,9 +58,10 @@ object JobisUrl {
     object Review {
         const val reviews = "$review/${Properties.companyId}"
         const val reviewDetails = "$review/details/${Properties.reviewId}"
+        const val postReview = review
     }
 
-    object Bugs{
+    object Bugs {
         const val reportBug = bugs
     }
 
