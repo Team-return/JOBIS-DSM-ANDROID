@@ -105,3 +105,7 @@ internal fun <T> getArgument(
         this.type = type
     }
 }
+
+internal fun NavHostController.navigateToNotifications(){
+    this.navigate(NavigationRoute.MainNavigation.Notifications)
+}

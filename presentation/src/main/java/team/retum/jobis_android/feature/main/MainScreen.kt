@@ -35,6 +35,7 @@ fun MainScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
+    navigateToNotifications: () -> Unit,
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -80,6 +81,7 @@ fun MainScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
                         navigateToCompanies = navigateToCompanies,
+                        navigateToNotifications = navigateToNotifications,
                     )
                 }
 
@@ -95,6 +97,7 @@ fun MainScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
                         navigateToComparePassword = navigateToComparePassword,
+                        navigateToNotifications = navigateToNotifications,
                         showDialog = showDialog,
                     )
                 }
