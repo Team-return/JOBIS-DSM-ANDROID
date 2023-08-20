@@ -67,6 +67,7 @@ internal fun MyPageScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
+    navigateToNotifications: () -> Unit,
     showDialog: () -> Unit,
     fileViewModel: FileViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
@@ -149,7 +150,11 @@ internal fun MyPageScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(48.dp))
-        Header(text = stringResource(id = R.string.bottom_nav_my_page))
+        Header(
+            text = stringResource(id = R.string.bottom_nav_my_page),
+            drawableRes = R.drawable.ic_notification,
+            onClick = navigateToNotifications,
+        )
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(50.dp))
             UserProfile(

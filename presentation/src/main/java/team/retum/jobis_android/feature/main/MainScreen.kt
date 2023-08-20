@@ -97,6 +97,7 @@ fun MainScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
                         navigateToComparePassword = navigateToComparePassword,
+                        navigateToNotifications = navigateToNotifications,
                         showDialog = showDialog,
                     )
                 }
