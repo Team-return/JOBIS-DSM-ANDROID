@@ -40,6 +40,7 @@ import team.retum.jobis_android.feature.bugreport.ReportBugScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
+import team.retum.jobis_android.feature.notification.NotificationsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.review.PostReviewScreen
@@ -56,6 +57,7 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
+import team.retum.jobis_android.root.navigation.navigateToNotifications
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
@@ -175,6 +177,7 @@ class MainActivity : ComponentActivity() {
                                 navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
                                 navigateToBugReport = navController::navigateToBugReport,
                                 navigateToComparePassword = navController::navigateToComparePassword,
+                                navigateToNotifications = navController::navigateToNotifications,
                             )
                         }
 
@@ -289,6 +292,11 @@ class MainActivity : ComponentActivity() {
                         composable(route = NavigationRoute.MainNavigation.PostReview) {
                             PostReviewScreen()
                         }
+
+                        composable(route = NavigationRoute.MainNavigation.Notifications) {
+                            NotificationsScreen()
+                        }
+
                     }
                 }
             }

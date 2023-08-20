@@ -44,7 +44,6 @@ import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body3
@@ -71,6 +70,7 @@ internal fun HomeScreen(
     navigateToMyPage: () -> Unit,
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
+    navigateToNotifications: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
@@ -105,6 +105,7 @@ internal fun HomeScreen(
                     gcn = myPageState.studentGcn,
                     department = myPageState.department,
                     navigateToMyPage = navigateToMyPage,
+                    navigateToNotifications = navigateToNotifications,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Caption(
@@ -226,6 +227,7 @@ private fun UserInformation(
     gcn: String,
     department: Department,
     navigateToMyPage: () -> Unit,
+    navigateToNotifications: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -275,9 +277,12 @@ private fun UserInformation(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        JobisImage(
-            modifier = Modifier.size(24.dp),
-            drawable = R.drawable.ic_notification,
+        Image(
+            modifier = Modifier
+                .size(24.dp)
+                .jobisClickable(onClick = navigateToNotifications),
+            painter = painterResource(R.drawable.ic_notification),
+            contentDescription = null,
         )
     }
 }
