@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -218,9 +219,7 @@ private fun UserProfile(
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            contentAlignment = Alignment.BottomEnd,
-        ) {
+        Box(contentAlignment = Alignment.BottomEnd) {
             AsyncImage(
                 modifier = Modifier
                     .size(84.dp)
@@ -244,9 +243,7 @@ private fun UserProfile(
                         .background(JobisColor.LightBlue),
                     contentAlignment = Alignment.Center,
                 ) {
-                    JobisImage(
-                        drawable = R.drawable.ic_edit,
-                    )
+                    JobisImage(drawable = R.drawable.ic_edit)
                 }
             }
         }
@@ -295,6 +292,10 @@ private fun AvailablePostReviewCompany(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 14.dp)
+            .shadow(
+                elevation = 8.dp,
+                shape = AvailablePostReviewCompanyShape,
+            )
             .clip(AvailablePostReviewCompanyShape)
             .background(
                 color = JobisColor.Gray100,
