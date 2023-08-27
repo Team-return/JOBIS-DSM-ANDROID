@@ -1,7 +1,10 @@
 package team.retum.jobis_android.contract.review
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewEntity
+import team.retum.domain.param.review.QnaElementParam
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
@@ -11,8 +14,9 @@ data class ReviewState(
     val reviewId: String = "",
     val writer: String = "",
     val reviewDetails: List<ReviewDetailEntity> = emptyList(),
-): State
+    val qnaElements: SnapshotStateList<QnaElementParam> = mutableStateListOf(),
+) : State
 
-sealed class ReviewSideEffect: SideEffect{
-    class Exception(val message: String): ReviewSideEffect()
+sealed class ReviewSideEffect : SideEffect {
+    class Exception(val message: String) : ReviewSideEffect()
 }
