@@ -17,7 +17,7 @@ interface CompanyApi {
 
     @GET(JobisUrl.Company.details)
     suspend fun fetchCompanyDetails(
-        @Path("company-id") companyId: Int,
+        @Path("company-id") companyId: Long,
     ): FetchCompanyDetailResponse
 
     @GET(JobisUrl.Company.reviewableCompanies)

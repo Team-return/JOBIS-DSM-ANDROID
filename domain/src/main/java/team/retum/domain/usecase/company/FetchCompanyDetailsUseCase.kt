@@ -7,7 +7,7 @@ class FetchCompanyDetailsUseCase @Inject constructor(
     private val companyRepository: CompanyRepository,
 ) {
     suspend operator fun invoke(
-        companyId: Int,
+        companyId: Long,
     ) = runCatching {
         companyRepository.fetchCompanyDetails(
             companyId = companyId,

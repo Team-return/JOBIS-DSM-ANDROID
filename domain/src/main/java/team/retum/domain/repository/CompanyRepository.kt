@@ -11,7 +11,7 @@ interface CompanyRepository {
     ): CompaniesEntity
 
     suspend fun fetchCompanyDetails(
-        companyId: Int,
+        companyId: Long,
     ): CompanyDetailsEntity
 
     suspend fun fetchReviewableCompanies(): ReviewableCompaniesEntity

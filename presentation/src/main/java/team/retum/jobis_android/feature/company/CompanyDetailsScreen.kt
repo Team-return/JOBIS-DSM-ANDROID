@@ -57,7 +57,7 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 
 @Composable
 fun CompanyDetailsScreen(
-    companyId: Int,
+    companyId: Long,
     hasRecruitment: Boolean,
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long?) -> Unit,

@@ -22,7 +22,7 @@ class CompanyDataSourceImpl @Inject constructor(
     }.sendRequest()
 
     override suspend fun fetchCompanyDetails(
-        companyId: Int,
+        companyId: Long,
     ): FetchCompanyDetailResponse = HttpHandler<FetchCompanyDetailResponse>().httpRequest {
         companyApi.fetchCompanyDetails(
             companyId = companyId,

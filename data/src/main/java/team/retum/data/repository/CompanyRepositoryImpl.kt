@@ -20,7 +20,7 @@ class CompanyRepositoryImpl @Inject constructor(
     ).toEntity()
 
     override suspend fun fetchCompanyDetails(
-        companyId: Int,
+        companyId: Long,
     ): CompanyDetailsEntity = companyDataSource.fetchCompanyDetails(
         companyId = companyId,
     ).toEntity()

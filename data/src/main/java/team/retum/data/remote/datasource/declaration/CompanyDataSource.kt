@@ -11,7 +11,7 @@ interface CompanyDataSource {
     ): FetchCompaniesResponse
 
     suspend fun fetchCompanyDetails(
-        companyId: Int,
+        companyId: Long,
     ): FetchCompanyDetailResponse
 
     suspend fun fetchReviewableCompanies(): FetchReviewableCompaniesResponse
