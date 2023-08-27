@@ -18,5 +18,6 @@ data class ReviewState(
 ) : State
 
 sealed class ReviewSideEffect : SideEffect {
+    object SuccessPostReview: ReviewSideEffect()
     class Exception(val message: String) : ReviewSideEffect()
 }

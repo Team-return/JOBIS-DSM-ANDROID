@@ -26,6 +26,8 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
 import team.retum.domain.param.review.QnaElementParam
+import team.retum.jobis_android.contract.review.ReviewSideEffect
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
@@ -40,6 +42,8 @@ import team.returm.jobisdesignsystem.theme.Heading6
 
 @Composable
 internal fun PostReviewScreen(
+    companyId: Long,
+    navigatePopBackStack: () -> Unit,
     reviewViewModel: ReviewViewModel = hiltViewModel(),
     codeViewModel: CodeViewModel = hiltViewModel(),
 ) {
@@ -47,10 +51,31 @@ internal fun PostReviewScreen(
     val codeState by codeViewModel.container.stateFlow.collectAsState()
     val reviewState by reviewViewModel.container.stateFlow.collectAsState()
 
+    val appState = LocalAppState.current
+
+    val successPostReviewMessage = stringResource(id = R.string.post_review_success_toast_message)
+
     LaunchedEffect(Unit) {
         codeViewModel.setType(Type.TECH)
         codeViewModel.fetchCodes()
-        reviewViewModel.addQnaElement()
+
+        with(reviewViewModel) {
+            addQnaElement()
+            setCompanyId(companyId)
+
+            container.sideEffectFlow.collect {
+                when (it) {
+                    is ReviewSideEffect.SuccessPostReview -> {
+                        appState.showSuccessToast(message = successPostReviewMessage)
+                        navigatePopBackStack()
+                    }
+
+                    is ReviewSideEffect.Exception -> {
+                        appState.showErrorToast(message = it.message)
+                    }
+                }
+            }
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -77,7 +102,7 @@ internal fun PostReviewScreen(
                 JobisLargeButton(
                     text = stringResource(id = R.string.complete),
                     color = JobisButtonColor.MainSolidColor,
-                    onClick = {},
+                    onClick = reviewViewModel::postReview,
                 )
                 Spacer(modifier = Modifier.height(44.dp))
             }
@@ -104,7 +129,7 @@ private fun ReviewInputs(
                     onQuestionChanged = { onQuestionChanged(it, index) },
                     answer = qnaElement.answer,
                     onAnswerChanged = { onAnswerChanged(it, index) },
-                    onItemSelected = { onItemSelected(qnaElement.codeId, index) },
+                    onItemSelected = { onItemSelected(codes[index].code, index) },
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Divider(

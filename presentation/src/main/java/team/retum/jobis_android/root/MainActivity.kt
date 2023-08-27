@@ -233,11 +233,12 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInRight() },
                             popExitTransition = { slideOutRight() },
                         ) {
+                            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
+                            val hasRecruitment =
+                                it.arguments?.getBoolean(NavigationRoute.HasRecruitment)
                             CompanyDetailsScreen(
-                                companyId = it.arguments?.getInt(NavigationProperties.COMPANY_ID)
-                                    ?: 0,
-                                hasRecruitment = it.arguments?.getBoolean(NavigationProperties.HAS_RECRUITMENT)
-                                    ?: false,
+                                companyId = companyId ?: 0,
+                                hasRecruitment = hasRecruitment ?: false,
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                                 navigateToReviewDetails = navController::navigateToReviewDetails,
@@ -294,7 +295,11 @@ class MainActivity : ComponentActivity() {
                                 getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
                             ),
                         ) {
-                            PostReviewScreen()
+                            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
+                            PostReviewScreen(
+                                companyId = companyId ?: 0,
+                                navigatePopBackStack = navController::popBackStack,
+                            )
                         }
                     }
                 }

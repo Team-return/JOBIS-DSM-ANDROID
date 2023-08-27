@@ -73,7 +73,7 @@ class ReviewViewModel @Inject constructor(
                     qnaElements = state.qnaElements,
                 )
             ).onSuccess {
-
+                postSideEffect(ReviewSideEffect.SuccessPostReview)
             }.onFailure {
 
             }
@@ -143,7 +143,6 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-
     internal fun setQuestion(
         question: String,
         index: Int,
@@ -163,10 +162,5 @@ class ReviewViewModel @Inject constructor(
         index: Int,
     ) = intent {
         qnaElements[index] = qnaElements[index].copy(codeId = jobCode)
-    }
-
-
-    internal fun removeQnaElement(index: Int) = intent {
-        qnaElements.removeAt(index)
     }
 }
