@@ -135,7 +135,7 @@ class CompanyViewModel @Inject constructor(
     }
 
     internal fun setCompanyId(
-        companyId: Int,
+        companyId: Long,
     ) = intent {
         reduce {
             state.copy(
