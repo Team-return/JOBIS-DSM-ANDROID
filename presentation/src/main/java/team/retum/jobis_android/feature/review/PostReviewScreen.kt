@@ -11,18 +11,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
+import team.retum.domain.entity.code.CodeEntity
+import team.retum.domain.param.code.Type
+import team.retum.domain.param.review.QnaElementParam
+import team.retum.jobis_android.contract.review.ReviewSideEffect
+import team.retum.jobis_android.root.LocalAppState
 import team.retum.jobis_android.util.compose.component.Header
+import team.retum.jobis_android.viewmodel.code.CodeViewModel
+import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallIconButton
@@ -34,29 +42,40 @@ import team.returm.jobisdesignsystem.theme.Heading6
 
 @Composable
 internal fun PostReviewScreen(
+    companyId: Long,
+    navigatePopBackStack: () -> Unit,
+    reviewViewModel: ReviewViewModel = hiltViewModel(),
+    codeViewModel: CodeViewModel = hiltViewModel(),
 ) {
 
-    // TODO 더미
-    val reviews = remember {
-        mutableStateListOf(
-            Review(
-                title = "title",
-                question = "",
-                answer = "",
-            )
-        )
-    }
+    val codeState by codeViewModel.container.stateFlow.collectAsState()
+    val reviewState by reviewViewModel.container.stateFlow.collectAsState()
 
-    // TODO 더미
-    val onAddButtonClicked = {
-        reviews.add(
-            Review(
-                title = "title",
-                question = "",
-                answer = "",
-            )
-        )
-        Unit
+    val appState = LocalAppState.current
+
+    val successPostReviewMessage = stringResource(id = R.string.post_review_success_toast_message)
+
+    LaunchedEffect(Unit) {
+        codeViewModel.setType(Type.TECH)
+        codeViewModel.fetchCodes()
+
+        with(reviewViewModel) {
+            addQnaElement()
+            setCompanyId(companyId)
+
+            container.sideEffectFlow.collect {
+                when (it) {
+                    is ReviewSideEffect.SuccessPostReview -> {
+                        appState.showSuccessToast(message = successPostReviewMessage)
+                        navigatePopBackStack()
+                    }
+
+                    is ReviewSideEffect.Exception -> {
+                        appState.showErrorToast(message = it.message)
+                    }
+                }
+            }
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -70,8 +89,12 @@ internal fun PostReviewScreen(
                 Header(text = stringResource(id = R.string.post_review_header))
                 Spacer(modifier = Modifier.height(30.dp))
                 ReviewInputs(
-                    reviews = reviews,
-                    onAddButtonClicked = onAddButtonClicked,
+                    qnaElements = reviewState.qnaElements,
+                    codes = codeState.techs,
+                    onAddButtonClicked = reviewViewModel::addQnaElement,
+                    onQuestionChanged = reviewViewModel::setQuestion,
+                    onAnswerChanged = reviewViewModel::setAnswer,
+                    onItemSelected = reviewViewModel::setJobCode
                 )
             }
             Column {
@@ -79,7 +102,7 @@ internal fun PostReviewScreen(
                 JobisLargeButton(
                     text = stringResource(id = R.string.complete),
                     color = JobisButtonColor.MainSolidColor,
-                    onClick = {},
+                    onClick = reviewViewModel::postReview,
                 )
                 Spacer(modifier = Modifier.height(44.dp))
             }
@@ -89,32 +112,24 @@ internal fun PostReviewScreen(
 
 @Composable
 private fun ReviewInputs(
-    reviews: SnapshotStateList<Review>,
+    qnaElements: List<QnaElementParam>,
+    codes: List<CodeEntity>,
+    onQuestionChanged: (String, Int) -> Unit,
+    onAnswerChanged: (String, Int) -> Unit,
     onAddButtonClicked: () -> Unit,
+    onItemSelected: (Long, Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .padding(bottom = 88.dp),
-    ) {
+    Column(modifier = Modifier.padding(bottom = 88.dp)) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(30.dp)) {
-            items(reviews) {
-
-                val index = reviews.indexOf(it)
-
+            itemsIndexed(qnaElements) { index: Int, qnaElement: QnaElementParam ->
                 PostReviewCard(
-                    title = it.title,
-                    question = reviews[index].question,
-                    onQuestionChanged = { question ->
-                        reviews[index] = reviews[index].copy(
-                            question = question,
-                        )
-                    },
-                    answer = reviews[index].answer,
-                    onAnswerChanged = { answer ->
-                        reviews[index] = reviews[index].copy(
-                            answer = answer,
-                        )
-                    },
+                    title = stringResource(id = R.string.post_review_question, index + 1),
+                    question = qnaElement.question,
+                    codes = codes,
+                    onQuestionChanged = { onQuestionChanged(it, index) },
+                    answer = qnaElement.answer,
+                    onAnswerChanged = { onAnswerChanged(it, index) },
+                    onItemSelected = { onItemSelected(codes[index].code, index) },
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Divider(
@@ -151,22 +166,39 @@ private fun ReviewInputs(
 private fun PostReviewCard(
     title: String,
     question: String,
+    codes: List<CodeEntity>,
     onQuestionChanged: (String) -> Unit,
     answer: String,
     onAnswerChanged: (String) -> Unit,
+    onItemSelected: (Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        ReviewTitle(title = title)
-        Spacer(modifier = Modifier.height(32.dp))
-        PostReviewInputs(
-            question = question,
-            onQuestionChanged = onQuestionChanged,
-            answer = answer,
-            onAnswerChanged = onAnswerChanged,
-        )
+    Box {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            ReviewTitle(title = title)
+            Spacer(modifier = Modifier.height(32.dp))
+            PostReviewInputs(
+                question = question,
+                onQuestionChanged = onQuestionChanged,
+                answer = answer,
+                onAnswerChanged = onAnswerChanged,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Box(modifier = Modifier.width(120.dp)) {
+                JobisDropDown(
+                    color = JobisDropDownColor.MainColor,
+                    itemList = codes.map { it.keyword },
+                    title = stringResource(id = R.string.post_review_position),
+                    onItemSelected = onItemSelected,
+                )
+            }
+        }
     }
 }
 
@@ -174,22 +206,10 @@ private fun PostReviewCard(
 private fun ReviewTitle(
     title: String,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.Bottom,
-    ) {
-        Heading6(text = title)
-        Spacer(modifier = Modifier.weight(1f))
-        Box(modifier = Modifier.width(120.dp)) {
-            JobisDropDown(
-                color = JobisDropDownColor.MainColor,
-                itemList = listOf(),
-                onItemSelected = {},
-                title = stringResource(id = R.string.post_review_position),
-            )
-        }
-    }
+    Heading6(
+        modifier = Modifier.fillMaxWidth(),
+        text = title,
+    )
 }
 
 @Composable
@@ -203,7 +223,7 @@ private fun PostReviewInputs(
         onValueChanged = onQuestionChanged,
         value = question,
         hint = stringResource(id = R.string.post_review_question_hint),
-        fieldText = stringResource(id = R.string.post_review_question),
+        fieldText = stringResource(id = R.string.post_review_interview_question),
     )
     Spacer(modifier = Modifier.height(20.dp))
     JobisBoxTextField(
@@ -213,9 +233,3 @@ private fun PostReviewInputs(
         fieldText = stringResource(id = R.string.post_review_answer),
     )
 }
-
-data class Review(
-    val title: String,
-    var question: String,
-    var answer: String,
-)

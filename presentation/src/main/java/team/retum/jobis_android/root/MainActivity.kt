@@ -57,6 +57,7 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
+import team.retum.jobis_android.root.navigation.navigateToPostReview
 import team.retum.jobis_android.root.navigation.navigateToNotifications
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
@@ -177,6 +178,7 @@ class MainActivity : ComponentActivity() {
                                 navigateToSignInPopUpWithMain = navController::navigateToSignInPopUpWithMain,
                                 navigateToBugReport = navController::navigateToBugReport,
                                 navigateToComparePassword = navController::navigateToComparePassword,
+                                navigateToPostReview = navController::navigateToPostReview,
                                 navigateToNotifications = navController::navigateToNotifications,
                             )
                         }
@@ -234,11 +236,12 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInRight() },
                             popExitTransition = { slideOutRight() },
                         ) {
+                            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
+                            val hasRecruitment =
+                                it.arguments?.getBoolean(NavigationRoute.HasRecruitment)
                             CompanyDetailsScreen(
-                                companyId = it.arguments?.getInt(NavigationProperties.COMPANY_ID)
-                                    ?: 0,
-                                hasRecruitment = it.arguments?.getBoolean(NavigationProperties.HAS_RECRUITMENT)
-                                    ?: false,
+                                companyId = companyId ?: 0,
+                                hasRecruitment = hasRecruitment ?: false,
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                                 navigateToReviewDetails = navController::navigateToReviewDetails,
@@ -289,8 +292,17 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(route = NavigationRoute.MainNavigation.PostReview) {
-                            PostReviewScreen()
+                        composable(
+                            route = NavigationRoute.MainNavigation.PostReview + NavigationRoute.CompanyId,
+                            arguments = listOf(
+                                getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
+                            ),
+                        ) {
+                            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
+                            PostReviewScreen(
+                                companyId = companyId ?: 0,
+                                navigatePopBackStack = navController::popBackStack,
+                            )
                         }
 
                         composable(route = NavigationRoute.MainNavigation.Notifications) {

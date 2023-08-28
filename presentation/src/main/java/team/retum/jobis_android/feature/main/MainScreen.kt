@@ -35,6 +35,7 @@ fun MainScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
     navigateToBugReport: () -> Unit,
     navigateToComparePassword: () -> Unit,
+    navigateToPostReview: (Long) -> Unit,
     navigateToNotifications: () -> Unit,
 ) {
 
@@ -97,6 +98,7 @@ fun MainScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
                         navigateToComparePassword = navigateToComparePassword,
+                        navigateToPostReview = navigateToPostReview,
                         navigateToNotifications = navigateToNotifications,
                         showDialog = showDialog,
                     )

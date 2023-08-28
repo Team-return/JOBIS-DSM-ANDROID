@@ -10,10 +10,12 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.company.CompanyEntity
+import team.retum.domain.entity.company.ReviewableCompanyEntity
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.company.FetchCompaniesParam
 import team.retum.domain.usecase.company.FetchCompaniesUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
+import team.retum.domain.usecase.company.FetchReviewableCompaniesUseCase
 import team.retum.jobis_android.contract.company.CompanySideEffect
 import team.retum.jobis_android.contract.company.CompanyState
 import team.retum.jobis_android.viewmodel.BaseViewModel
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class CompanyViewModel @Inject constructor(
     private val fetchCompaniesUseCase: FetchCompaniesUseCase,
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
+    private val fetchReviewableCompaniesUseCase: FetchReviewableCompaniesUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
 
     override val container = container<CompanyState, CompanySideEffect>(CompanyState())
@@ -92,6 +95,14 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
+    internal fun fetchReviewableCompanies() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchReviewableCompaniesUseCase().onSuccess {
+                setReviewableCompanies(it.companies)
+            }
+        }
+    }
+
     private fun setCompanies(
         companies: List<CompanyEntity>,
     ) = intent {
@@ -124,7 +135,7 @@ class CompanyViewModel @Inject constructor(
     }
 
     internal fun setCompanyId(
-        companyId: Int,
+        companyId: Long,
     ) = intent {
         reduce {
             state.copy(
@@ -132,6 +143,13 @@ class CompanyViewModel @Inject constructor(
             )
         }
     }
+
+    private fun setReviewableCompanies(reviewableCompanies: List<ReviewableCompanyEntity>) =
+        intent {
+            reduce {
+                state.copy(reviewableCompanies = reviewableCompanies)
+            }
+        }
 
     private fun setCompanyDetails(
         companyDetailsEntity: CompanyDetailsEntity,

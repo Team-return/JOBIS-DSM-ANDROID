@@ -1,5 +1,6 @@
 package team.retum.jobis_android.viewmodel.review
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,8 +11,11 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewEntity
+import team.retum.domain.param.review.PostReviewParam
+import team.retum.domain.param.review.QnaElementParam
 import team.retum.domain.usecase.review.FetchReviewDetailsUseCase
 import team.retum.domain.usecase.review.FetchReviewsUseCase
+import team.retum.domain.usecase.review.PostReviewUseCase
 import team.retum.jobis_android.contract.review.ReviewSideEffect
 import team.retum.jobis_android.contract.review.ReviewState
 import team.retum.jobis_android.viewmodel.BaseViewModel
@@ -21,9 +25,12 @@ import javax.inject.Inject
 class ReviewViewModel @Inject constructor(
     private val fetchReviewsUseCase: FetchReviewsUseCase,
     private val fetchReviewDetailsUseCase: FetchReviewDetailsUseCase,
+    private val postReviewUseCase: PostReviewUseCase,
 ) : BaseViewModel<ReviewState, ReviewSideEffect>() {
 
     override val container = container<ReviewState, ReviewSideEffect>(ReviewState())
+
+    private val qnaElements = mutableStateListOf<QnaElementParam>()
 
     internal fun fetchReviews() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -52,6 +59,21 @@ class ReviewViewModel @Inject constructor(
             ).onSuccess {
                 setWriter(it.writer)
                 setInterviews(it.qnaResponse)
+            }.onFailure {
+
+            }
+        }
+    }
+
+    internal fun postReview() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            postReviewUseCase(
+                postReviewParam = PostReviewParam(
+                    companyId = state.companyId,
+                    qnaElements = state.qnaElements,
+                )
+            ).onSuccess {
+                postSideEffect(ReviewSideEffect.SuccessPostReview)
             }.onFailure {
 
             }
@@ -106,5 +128,39 @@ class ReviewViewModel @Inject constructor(
                 reviewDetails = interviews,
             )
         }
+    }
+
+    internal fun addQnaElement() = intent {
+        qnaElements.add(
+            QnaElementParam(
+                question = "",
+                answer = "",
+                codeId = 0,
+            ),
+        )
+        reduce {
+            state.copy(qnaElements = qnaElements)
+        }
+    }
+
+    internal fun setQuestion(
+        question: String,
+        index: Int,
+    ) = intent {
+        qnaElements[index] = qnaElements[index].copy(question = question)
+    }
+
+    internal fun setAnswer(
+        answer: String,
+        index: Int,
+    ) = intent {
+        qnaElements[index] = qnaElements[index].copy(answer = answer)
+    }
+
+    internal fun setJobCode(
+        jobCode: Long,
+        index: Int,
+    ) = intent {
+        qnaElements[index] = qnaElements[index].copy(codeId = jobCode)
     }
 }

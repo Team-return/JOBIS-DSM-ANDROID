@@ -52,14 +52,16 @@ object JobisUrl {
     object Company {
         const val student = "$companies/student"
         const val details = "$companies/${Properties.companyId}"
+        const val reviewableCompanies = "$companies/review"
     }
 
     object Review {
         const val reviews = "$review/${Properties.companyId}"
         const val reviewDetails = "$review/details/${Properties.reviewId}"
+        const val postReview = review
     }
 
-    object Bugs{
+    object Bugs {
         const val reportBug = bugs
     }
 
