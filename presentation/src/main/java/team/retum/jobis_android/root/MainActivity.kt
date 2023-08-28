@@ -40,6 +40,7 @@ import team.retum.jobis_android.feature.bugreport.ReportBugScreen
 import team.retum.jobis_android.feature.company.CompaniesScreen
 import team.retum.jobis_android.feature.company.CompanyDetailsScreen
 import team.retum.jobis_android.feature.main.MainScreen
+import team.retum.jobis_android.feature.notification.NotificationsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentDetailsScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentsScreen
 import team.retum.jobis_android.feature.review.PostReviewScreen
@@ -57,6 +58,7 @@ import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
 import team.retum.jobis_android.root.navigation.navigateToPostReview
+import team.retum.jobis_android.root.navigation.navigateToNotifications
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
@@ -177,6 +179,7 @@ class MainActivity : ComponentActivity() {
                                 navigateToBugReport = navController::navigateToBugReport,
                                 navigateToComparePassword = navController::navigateToComparePassword,
                                 navigateToPostReview = navController::navigateToPostReview,
+                                navigateToNotifications = navController::navigateToNotifications,
                             )
                         }
 
@@ -301,6 +304,11 @@ class MainActivity : ComponentActivity() {
                                 navigatePopBackStack = navController::popBackStack,
                             )
                         }
+
+                        composable(route = NavigationRoute.MainNavigation.Notifications) {
+                            NotificationsScreen()
+                        }
+
                     }
                 }
             }
