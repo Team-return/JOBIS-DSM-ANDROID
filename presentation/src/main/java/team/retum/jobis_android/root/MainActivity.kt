@@ -2,8 +2,6 @@ package team.retum.jobis_android.root
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -13,16 +11,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,8 +51,9 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
-import team.retum.jobis_android.root.navigation.navigateToPostReview
+import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToNotifications
+import team.retum.jobis_android.root.navigation.navigateToPostReview
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
 import team.retum.jobis_android.root.navigation.navigateToRecruitments
 import team.retum.jobis_android.root.navigation.navigateToResetPassword
@@ -75,12 +70,13 @@ import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
 import team.retum.jobis_android.viewmodel.main.MainViewModel
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
-import team.returm.jobisdesignsystem.colors.JobisColor
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
+
+    private var delay = 0L
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(ExperimentalAnimationApi::class)
@@ -88,9 +84,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-
-            SetWindowStatus()
-
+            
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             val state = mainViewModel.container.stateFlow.collectAsState()
@@ -101,14 +95,7 @@ class MainActivity : ComponentActivity() {
             val backHandlerToastMessage = stringResource(id = R.string.back_handler)
 
             BackHandler {
-                var waitTime = 0L
-                if (System.currentTimeMillis() >= 1500) {
-                    waitTime = System.currentTimeMillis()
-                    Toast.makeText(this, backHandlerToastMessage, Toast.LENGTH_SHORT).show()
-                } else {
-                    navController.popBackStack()
-                }
-
+                setBackHandler()
             }
 
             LaunchedEffect(Unit) {
@@ -172,6 +159,7 @@ class MainActivity : ComponentActivity() {
                             exitTransition = { fadeOut() },
                         ) {
                             MainScreen(
+                                navigateToMyPage = navController::navigateToMyPage,
                                 navigateToRecruitments = navController::navigateToRecruitments,
                                 navigateToCompanies = navController::navigateToCompanies,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
@@ -308,30 +296,18 @@ class MainActivity : ComponentActivity() {
                         composable(route = NavigationRoute.MainNavigation.Notifications) {
                             NotificationsScreen()
                         }
-
                     }
                 }
             }
         }
     }
 
-    @Composable
-    private fun SetWindowStatus() {
-        window.statusBarColor = JobisColor.Gray100.toArgb()
-        window.navigationBarColor = JobisColor.Gray100.toArgb()
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-
-        @Suppress("DEPRECATION") if (MaterialTheme.colors.surface.luminance() > 0.5f) {
-            window.decorView.systemUiVisibility =
-                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-
-        @Suppress("DEPRECATION") if (MaterialTheme.colors.surface.luminance() > 0.5f) {
-            window.decorView.systemUiVisibility =
-                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    private fun setBackHandler() {
+        if (System.currentTimeMillis() > delay) {
+            delay = System.currentTimeMillis() + 1000
+            Toast.makeText(this, getText(R.string.back_handler), Toast.LENGTH_SHORT).show()
+        } else {
+            finish()
         }
     }
 }
