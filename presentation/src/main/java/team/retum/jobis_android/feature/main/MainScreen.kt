@@ -1,6 +1,8 @@
 package team.retum.jobis_android.feature.main
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
@@ -25,10 +27,12 @@ import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
 import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
+    navigateToMyPage: () -> Unit,
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
@@ -79,7 +83,7 @@ fun MainScreen(
             ) {
                 composable(route = NavigationRoute.Navigation.Home) {
                     HomeScreen(
-                        navigateToMyPage = navHostController::navigateToMyPage,
+                        navigateToMyPage = navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
                         navigateToCompanies = navigateToCompanies,
                         navigateToNotifications = navigateToNotifications,

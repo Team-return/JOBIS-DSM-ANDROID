@@ -1,6 +1,7 @@
 package team.retum.jobis_android.root.navigation
 
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -15,7 +16,9 @@ internal fun NavHostController.navigateToMain() {
 
 internal fun NavHostController.navigateToMainWithPopUpSignIn() {
     this.navigate(NavigationRoute.Main) {
-        popUpTo(NavigationRoute.SignIn)
+        popUpTo(NavigationRoute.SignIn) {
+            inclusive = true
+        }
     }
 }
 
@@ -106,10 +109,23 @@ internal fun <T> getArgument(
     }
 }
 
-internal fun NavHostController.navigateToPostReview(companyId: Long){
+internal fun NavHostController.navigateToPostReview(companyId: Long) {
     this.navigate(NavigationRoute.MainNavigation.PostReview + companyId)
 }
 
-internal fun NavHostController.navigateToNotifications(){
+internal fun NavHostController.navigateToNotifications() {
     this.navigate(NavigationRoute.MainNavigation.Notifications)
+}
+
+internal fun NavController.navigateBottomMenu(
+    navigationRoute: String,
+    popUpRoute: String,
+) {
+    this.navigate(navigationRoute){
+        popUpTo(popUpRoute){
+            inclusive = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
 }
