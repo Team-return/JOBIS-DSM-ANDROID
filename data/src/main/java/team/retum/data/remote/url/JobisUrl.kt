@@ -35,6 +35,7 @@ object JobisUrl {
 
     object Auth {
         const val code = "$auth/code"
+        const val reissue = "$auth/reissue"
     }
 
     object Recruitment {
