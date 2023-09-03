@@ -8,6 +8,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
@@ -85,7 +86,7 @@ internal class RecruitmentViewModel @Inject constructor(
                         benefits = benefits,
                         companyId = companyId,
                         companyName = companyName,
-                        companyProfileUrl = companyProfileUrl,
+                        companyProfileUrl = JobisUrl.imageUrl + companyProfileUrl,
                         endDate = endDate,
                         etc = etc,
                         hiringProgress = hiringProgress,
@@ -181,7 +182,7 @@ data class RecruitmentUiModel(
 internal fun RecruitmentEntity.toModel() = RecruitmentUiModel(
     recruitId = this.recruitId,
     companyName = this.companyName,
-    companyProfileUrl = this.companyProfileUrl,
+    companyProfileUrl = JobisUrl.imageUrl + this.companyProfileUrl,
     trainPay = this.trainPay,
     military = this.military,
     totalHiring = this.totalHiring,
