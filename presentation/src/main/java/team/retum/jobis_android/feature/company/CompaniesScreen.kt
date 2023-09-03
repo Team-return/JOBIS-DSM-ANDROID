@@ -54,8 +54,6 @@ fun CompaniesScreen(
         companyViewModel.setCompanyName(name)
     }
 
-    val lazyListState = rememberLazyListState()
-
     val companies = state.companies
 
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
@@ -90,7 +88,6 @@ fun CompaniesScreen(
             }
             Companies(
                 companies = companies,
-                lazyListState = lazyListState,
                 navigateToCompanyDetails = navigateToCompanyDetails,
             )
         }
@@ -120,13 +117,9 @@ private fun CompanyInput(
 @Composable
 private fun Companies(
     companies: List<CompanyEntity>,
-    lazyListState: LazyListState,
     navigateToCompanyDetails: (Long, Boolean) -> Unit,
 ) {
-    LazyColumn(
-        state = lazyListState,
-        contentPadding = PaddingValues(vertical = 20.dp),
-    ) {
+    LazyColumn(contentPadding = PaddingValues(vertical = 20.dp)) {
         items(companies) { item ->
             Company(
                 name = item.name,
