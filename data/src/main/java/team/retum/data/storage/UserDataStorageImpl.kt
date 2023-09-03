@@ -10,11 +10,21 @@ class UserDataStorageImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : UserDataStorage {
 
-    override fun fetchAccessToken(): String =
-        getString(UserPersonalKey.ACCESS_TOKEN)
+    override fun fetchAccessToken(): String {
+        return getString(UserPersonalKey.ACCESS_TOKEN)
+    }
 
-    override fun fetchRefreshToken(): String =
-        getString(UserPersonalKey.REFRESH_TOKEN)
+    override fun fetchRefreshToken(): String {
+        return getString(UserPersonalKey.REFRESH_TOKEN)
+    }
+
+    override fun fetchAccessTokenExpiresAt(): String {
+        return getString(UserPersonalKey.ACCESS_TOKEN_EXPIRES_AT)
+    }
+
+    override fun fetchRefreshTokenExpiresAt(): String {
+        return getString(UserPersonalKey.REFRESH_TOKEN_EXPIRES_AT)
+    }
 
     override fun setUserInfo(
         accessToken: String,
