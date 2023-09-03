@@ -15,6 +15,8 @@ object JobisUrl {
     internal const val files = "/files"
     internal const val student = "/students"
 
+    const val imageUrl = "https://jobis-bucket.s3.ap-northeast-2.amazonaws.com/"
+
     object User {
         const val login = "$users/login"
         const val reissue = "$users/reissue"

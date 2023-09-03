@@ -8,6 +8,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.student.StudentInformationEntity
 import team.retum.domain.param.students.EditProfileImageParam
 import team.retum.domain.usecase.student.EditProfileImageUseCase
@@ -66,15 +67,9 @@ internal class MyPageViewModel @Inject constructor(
                     studentName = studentName,
                     studentGcn = studentGcn,
                     department = department,
-                    profileImageUrl = profileImageUrl,
+                    profileImageUrl = JobisUrl.imageUrl + profileImageUrl,
                 )
             }
-        }
-    }
-
-    private fun setProfileImageUrl(profileImageUrl: String) = intent {
-        reduce {
-            state.copy(profileImageUrl = profileImageUrl)
         }
     }
 

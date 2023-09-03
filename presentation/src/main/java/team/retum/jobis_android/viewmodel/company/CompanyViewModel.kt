@@ -8,6 +8,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.ReviewableCompanyEntity
@@ -41,10 +42,8 @@ class CompanyViewModel @Inject constructor(
                     page = state.page,
                     name = state.name,
                 )
-            ).onSuccess {
-                setCompanies(
-                    companies = it.companies,
-                )
+            ).onSuccess { it ->
+                setCompanies(companies = it.companies.map { it.copy(logoUrl = JobisUrl.imageUrl + it.logoUrl) })
             }.onFailure { throwable ->
                 when (throwable) {
                     is NotFoundException -> postSideEffect(
@@ -107,9 +106,7 @@ class CompanyViewModel @Inject constructor(
         companies: List<CompanyEntity>,
     ) = intent {
         reduce {
-            state.copy(
-                companies = companies,
-            )
+            state.copy(companies = companies)
         }
     }
 

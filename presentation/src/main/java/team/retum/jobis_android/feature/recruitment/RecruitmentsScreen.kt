@@ -15,16 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -130,7 +127,6 @@ internal fun RecruitmentsScreen(
                 )
                 Recruitments(
                     recruitmentUiModels = recruitments,
-                    recruitmentViewModel = recruitmentViewModel,
                     bookmarkViewModel = bookmarkViewModel,
                     putString = putString,
                     navigateToRecruitmentDetails = navigateToRecruitmentDetails,
@@ -196,22 +192,10 @@ private fun RecruitmentInput(
 @Composable
 private fun Recruitments(
     recruitmentUiModels: List<RecruitmentUiModel>,
-    recruitmentViewModel: RecruitmentViewModel,
     bookmarkViewModel: BookmarkViewModel,
     putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
 ) {
-
-    val lazyListState = rememberLazyListState()
-
-    var page by remember { mutableStateOf(1) }
-
-    val lastIndex = remember {
-        derivedStateOf {
-            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-        }
-    }
-
     val onBookmarked = { index: Int, recruitmentId: Long, setBookmark: () -> Unit ->
         recruitmentUiModels[index].bookmarked = !recruitmentUiModels[index].bookmarked
         bookmarkViewModel.bookmarkRecruitment(recruitmentId = recruitmentId)
@@ -226,17 +210,7 @@ private fun Recruitments(
         navigateToRecruitmentDetails(recruitment.recruitId.toLong())
     }
 
-    LaunchedEffect(lastIndex.value) {
-        val size = recruitmentUiModels.size
-        if (size - 1 == lastIndex.value && size > 5) {
-            page += 1
-            recruitmentViewModel.setPage(page)
-            recruitmentViewModel.fetchRecruitments()
-        }
-    }
-
     LazyColumn(
-        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 20.dp),
     ) {
