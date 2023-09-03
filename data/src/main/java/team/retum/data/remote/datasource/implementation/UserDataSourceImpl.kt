@@ -71,7 +71,7 @@ class UserDataSourceImpl @Inject constructor(
             accessToken = signInResponse.accessToken,
             accessTokenExpiresAt = signInResponse.accessExpiresAt,
             refreshToken = signInResponse.refreshToken,
-            refreshTokenExpiresAt = signInResponse.refreshTokenExpiresAt,
+            refreshTokenExpiresAt = signInResponse.refreshExpiresAt,
             authority = signInResponse.authority,
         )
     }

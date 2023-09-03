@@ -2,8 +2,10 @@ package team.retum.data.remote.api
 
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 import team.retum.data.remote.request.user.SendVerificationCodeRequest
 import team.retum.data.remote.request.user.SignInRequest
@@ -16,6 +18,11 @@ interface UserApi {
     @POST(JobisUrl.User.login)
     suspend fun postLogin(
         @Body signInRequest: SignInRequest,
+    ): SignInResponse
+
+    @PUT(JobisUrl.Auth.reissue)
+    suspend fun tokenReissue(
+        @Header("X-Refresh-Token") xRefreshToken: String,
     ): SignInResponse
 
     @POST(JobisUrl.Auth.code)

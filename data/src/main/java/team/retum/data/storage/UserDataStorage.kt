@@ -5,8 +5,10 @@ import android.content.SharedPreferences
 interface UserDataStorage {
 
     fun fetchAccessToken(): String
-
     fun fetchRefreshToken(): String
+
+    fun fetchAccessTokenExpiresAt(): String
+    fun fetchRefreshTokenExpiresAt(): String
 
     fun setUserInfo(
         accessToken: String,

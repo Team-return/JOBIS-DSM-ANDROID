@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(
                     accessToken = response.accessToken,
                     accessExpiresAt = response.accessExpiresAt,
                     refreshToken = response.refreshToken,
-                    refreshTokenExpiresAt = response.refreshTokenExpiresAt,
+                    refreshExpiresAt = response.refreshExpiresAt,
                     authority = response.authority,
                 )
             )
@@ -70,7 +70,7 @@ class UserRepositoryImpl @Inject constructor(
                     accessToken = response.accessToken,
                     accessExpiresAt = response.accessExpiresAt,
                     refreshToken = response.refreshToken,
-                    refreshTokenExpiresAt = response.refreshExpiresAt,
+                    refreshExpiresAt = response.refreshExpiresAt,
                     authority = response.authority,
                 )
             )
