@@ -40,7 +40,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
-import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.root.navigation.NavigationRoute
@@ -61,7 +60,7 @@ val PositionCardShape = RoundedCornerShape(
 
 @Composable
 internal fun RecruitmentDetailsScreen(
-    recruitmentId: Long,
+    recruitmentId: Long?,
     getPreviousDestination: () -> String?,
     navigateToCompanyDetails: (Long, Boolean) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
@@ -82,7 +81,7 @@ internal fun RecruitmentDetailsScreen(
             onDismissRequest = { applicationDialogState = false },
             properties = DialogProperties(usePlatformDefaultWidth = true),
         ) {
-            RecruitmentApplicationDialog(recruitmentId = recruitmentId) {
+            RecruitmentApplicationDialog(recruitmentId = recruitmentId ?: 0) {
                 applicationDialogState = false
             }
         }
@@ -91,7 +90,7 @@ internal fun RecruitmentDetailsScreen(
     LaunchedEffect(Unit) {
         companyDetailsButtonShowed = getPreviousDestination() != NavigationRoute.CompanyDetails
         recruitmentViewModel.setRecruitmentId(
-            recruitmentId = recruitmentId,
+            recruitmentId = recruitmentId ?: 0,
         )
     }
 
@@ -132,7 +131,6 @@ internal fun RecruitmentDetailsScreen(
             RecruitmentDetails(
                 details = details,
                 areas = areas,
-                hiringProgress = details.hiringProgress,
             )
             Spacer(modifier = Modifier.height(80.dp))
         }
@@ -180,8 +178,12 @@ private fun CompanyInformation(
 private fun RecruitmentDetails(
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
-    hiringProgress: List<HiringProgress>,
 ) {
+
+    val requireGrade =
+        if (details.requiredGrade == null) stringResource(id = R.string.company_details_null)
+        else "${details.requiredGrade}%"
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -211,7 +213,7 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_grade),
-            content = "${details.requiredGrade}%",
+            content = requireGrade,
         )
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
@@ -288,7 +290,9 @@ private fun Positions(
         Column {
             areas.forEach {
                 PositionCard(
-                    position = it.job.replace(",", " / "),
+                    position = it.job.toString().replace("[", " ")
+                        .replace("]", " ")
+                        .trim(),
                     workerCount = it.hiring.toString(),
                     majorTask = it.majorTask,
                     mainSkill = it.tech,
@@ -312,6 +316,7 @@ private fun PositionCard(
     val maxLines by animateIntAsState(
         targetValue = if (showDetails) 100
         else 1,
+        label = "",
     )
 
     Column(

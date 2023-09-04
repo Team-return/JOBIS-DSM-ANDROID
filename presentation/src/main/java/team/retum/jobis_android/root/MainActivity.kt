@@ -197,8 +197,7 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = { slideOutRight() },
                         ) {
                             RecruitmentDetailsScreen(
-                                recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID)
-                                    ?: 0L,
+                                recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID),
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToCompanyDetails = navController::navigateToCompanyDetails,
                             )
