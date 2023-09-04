@@ -168,7 +168,6 @@ internal fun MyPageScreen(
         Spacer(modifier = Modifier.height(48.dp))
         Header(
             text = stringResource(id = R.string.bottom_nav_my_page),
-            drawableRes = R.drawable.ic_notification,
             onClick = navigateToNotifications,
         )
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
