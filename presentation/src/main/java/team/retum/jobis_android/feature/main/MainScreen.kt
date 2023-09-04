@@ -83,7 +83,7 @@ fun MainScreen(
             ) {
                 composable(route = NavigationRoute.Navigation.Home) {
                     HomeScreen(
-                        navigateToMyPage = navigateToMyPage,
+                        navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
                         navigateToCompanies = navigateToCompanies,
                         navigateToNotifications = navigateToNotifications,

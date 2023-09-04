@@ -119,10 +119,10 @@ internal fun NavHostController.navigateToNotifications() {
 
 internal fun NavController.navigateBottomMenu(
     navigationRoute: String,
-    popUpRoute: String,
+    navGraphId: Int,
 ) {
     this.navigate(navigationRoute){
-        popUpTo(popUpRoute){
+        popUpTo(navGraphId){
             inclusive = true
         }
         launchSingleTop = true
