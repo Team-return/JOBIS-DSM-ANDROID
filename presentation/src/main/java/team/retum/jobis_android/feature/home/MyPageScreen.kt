@@ -79,6 +79,8 @@ internal fun MyPageScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
+    val context = LocalContext.current
+
     val state by myPageViewModel.container.stateFlow.collectAsState()
     val reviewableCompanies =
         companyViewModel.container.stateFlow.collectAsState().value.reviewableCompanies
@@ -90,6 +92,10 @@ internal fun MyPageScreen(
             when (it) {
                 is MyPageSideEffect.SuccessSignOut -> {
                     navigateToSignInPopUpWithMain()
+                }
+
+                is MyPageSideEffect.SuccessEditProfileImage -> {
+                    appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
                 }
 
                 is MyPageSideEffect.Exception -> {
@@ -115,8 +121,6 @@ internal fun MyPageScreen(
     LaunchedEffect(Unit) {
         companyViewModel.fetchReviewableCompanies()
     }
-
-    val context = LocalContext.current
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),

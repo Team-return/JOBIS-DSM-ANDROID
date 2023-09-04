@@ -174,6 +174,8 @@
     <string name="change_password">비밀번호 변경하기</string>
     <string name="log_out">로그아웃</string>
 
+    <string name="success_edit_profile_image">프로필 사진이 성공적으로 변경되었습니다</string>
+
     <!--    Recruitment Application Dialog-->
     <string name="do_apply">지원하기</string>
     <string name="submitted_document">제출 서류 : %s</string>

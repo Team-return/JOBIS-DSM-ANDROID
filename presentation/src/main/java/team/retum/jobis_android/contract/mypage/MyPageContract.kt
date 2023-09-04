@@ -13,6 +13,7 @@ internal data class MyPageState(
 ) : State
 
 internal sealed class MyPageSideEffect : SideEffect {
-    object SuccessSignOut: MyPageSideEffect()
+    object SuccessSignOut : MyPageSideEffect()
+    object SuccessEditProfileImage : MyPageSideEffect()
     class Exception(val message: String) : MyPageSideEffect()
 }
