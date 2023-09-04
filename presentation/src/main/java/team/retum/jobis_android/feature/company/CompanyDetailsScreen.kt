@@ -58,7 +58,6 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 @Composable
 fun CompanyDetailsScreen(
     companyId: Long,
-    hasRecruitment: Boolean,
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long?) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
@@ -74,15 +73,10 @@ fun CompanyDetailsScreen(
     LaunchedEffect(Unit) {
         detailButtonShowed = getPreviousDestination() != NavigationRoute.RecruitmentDetails
 
-        companyViewModel.setCompanyId(
-            companyId = companyId,
-        )
+        companyViewModel.setCompanyId(companyId)
         companyViewModel.fetchCompanyDetails()
 
-        reviewViewModel.setCompanyId(
-            companyId = companyId.toLong(),
-        )
-
+        reviewViewModel.setCompanyId(companyId)
         reviewViewModel.fetchReviews()
 
         companyViewModel.container.sideEffectFlow.collect { sideEffect ->
@@ -153,8 +147,8 @@ fun CompanyDetailsScreen(
             JobisLargeButton(
                 text = stringResource(id = R.string.company_details_see_recruitents),
                 color = JobisButtonColor.MainSolidColor,
-                enabled = hasRecruitment,
-                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId?.toLong()) }
+                enabled = companyState.companyDetails.recruitmentId != null,
+                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId) }
             )
         }
     }
@@ -237,32 +231,33 @@ private fun CompanyDetails(
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address1),
-            content = details.address1,
+            content = details.mainAddress,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address2),
-            content = details.address2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subAddress ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager1),
-            content = details.manager1,
+            content = details.managerName,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number1),
-            content = details.phoneNumber1,
+            content = details.managerPhoneNo,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager2),
-            content = details.manager2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subManagerName ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number2),
-            content = details.phoneNumber2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subManagerPhoneNo
+                ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(

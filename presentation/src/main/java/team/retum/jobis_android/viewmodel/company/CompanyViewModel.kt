@@ -69,9 +69,7 @@ class CompanyViewModel @Inject constructor(
             fetchCompanyDetailUseCase(
                 companyId = state.companyId,
             ).onSuccess {
-                setCompanyDetails(
-                    companyDetailsEntity = it
-                )
+                setCompanyDetails(it)
             }.onFailure { throwable ->
                 when (throwable) {
                     is NotFoundException -> {
@@ -155,28 +153,34 @@ class CompanyViewModel @Inject constructor(
             reduce {
                 state.copy(
                     companyDetails = CompanyDetailsEntity(
-                        address1 = address1,
-                        address2 = address2,
-                        attachments = attachments,
                         businessNumber = businessNumber,
-                        companyIntroduce = companyIntroduce,
                         companyName = companyName,
-                        companyProfileUrl = companyProfileUrl,
-                        email = email,
+                        companyProfileUrl = JobisUrl.imageUrl + companyProfileUrl,
+                        companyIntroduce = companyIntroduce,
+                        mainZipCode = mainZipCode,
+                        mainAddress = (mainAddress + mainAddressDetail).toMainAddress(),
+                        mainAddressDetail = mainAddressDetail,
+                        subAddress = subAddress,
+                        subAddressDetail = subAddressDetail,
+                        managerName = managerName,
+                        managerPhoneNo = managerPhoneNo,
+                        subManagerName = subManagerName,
+                        subManagerPhoneNo = subManagerPhoneNo,
                         fax = fax,
-                        foundedAt = foundedAt,
-                        manager1 = manager1,
-                        manager2 = manager2,
-                        phoneNumber1 = phoneNumber1,
-                        phoneNumber2 = phoneNumber2,
-                        recruitmentId = recruitmentId,
+                        email = email,
                         representativeName = representativeName,
-                        take = take,
+                        foundedAt = foundedAt,
                         workerNumber = workerNumber,
-                        zipCode1 = zipCode1,
+                        take = take,
+                        recruitmentId = recruitmentId,
+                        attachments = attachments,
+                        serviceName = serviceName,
+                        businessArea = businessArea,
                     )
                 )
             }
         }
     }
 }
+
+private fun String.toMainAddress() = this.replace("/", "")

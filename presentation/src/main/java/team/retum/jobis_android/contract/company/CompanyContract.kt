@@ -1,7 +1,7 @@
 package team.retum.jobis_android.contract.company
 
-import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity
+import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.ReviewableCompanyEntity
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -19,24 +19,28 @@ data class CompanyState(
     var companyId: Long = 0,
     val reviewableCompanies: List<ReviewableCompanyEntity> = emptyList(),
     var companyDetails: CompanyDetailsEntity = CompanyDetailsEntity(
-        address1 = "",
-        address2 = null,
-        attachments = emptyList(),
         businessNumber = "",
-        companyIntroduce = "",
         companyName = "",
         companyProfileUrl = "",
-        email = "",
+        companyIntroduce = "",
+        mainZipCode = "",
+        mainAddress = "",
+        mainAddressDetail = "",
+        subAddress = null,
+        subAddressDetail = null,
+        managerName = "",
+        managerPhoneNo = "",
+        subManagerName = null,
+        subManagerPhoneNo = null,
         fax = null,
-        foundedAt = "",
-        manager1 = "",
-        manager2 = null,
-        phoneNumber1 = "",
-        phoneNumber2 = null,
-        recruitmentId = null,
+        email = "",
         representativeName = "",
-        take = 0.0,
+        foundedAt = "",
         workerNumber = 0,
-        zipCode1 = "",
+        take = 0f,
+        recruitmentId = null,
+        attachments = emptyList(),
+        serviceName = "",
+        businessArea = "",
     ),
 ) : State
