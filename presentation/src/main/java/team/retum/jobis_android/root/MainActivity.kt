@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            
+
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             val state = mainViewModel.container.stateFlow.collectAsState()
@@ -159,7 +159,6 @@ class MainActivity : ComponentActivity() {
                             exitTransition = { fadeOut() },
                         ) {
                             MainScreen(
-                                navigateToMyPage = navController::navigateToMyPage,
                                 navigateToRecruitments = navController::navigateToRecruitments,
                                 navigateToCompanies = navController::navigateToCompanies,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
@@ -213,10 +212,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}/${NavigationRoute.HasRecruitment}",
+                            route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}",
                             arguments = listOf(
                                 getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
-                                getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
                             ),
                             enterTransition = { slideInLeft() },
                             exitTransition = { slideOutLeft() },
@@ -224,11 +222,8 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = { slideOutRight() },
                         ) {
                             val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
-                            val hasRecruitment =
-                                it.arguments?.getBoolean(NavigationRoute.HasRecruitment)
                             CompanyDetailsScreen(
                                 companyId = companyId ?: 0,
-                                hasRecruitment = hasRecruitment ?: false,
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                                 navigateToReviewDetails = navController::navigateToReviewDetails,

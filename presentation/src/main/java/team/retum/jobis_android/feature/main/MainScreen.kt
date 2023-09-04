@@ -32,7 +32,6 @@ import team.retum.jobis_android.util.compose.navigation.BottomBar
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navigateToMyPage: () -> Unit,
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,

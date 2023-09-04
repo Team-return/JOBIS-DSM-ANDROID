@@ -18,7 +18,6 @@ object NavigationRoute {
 
     const val RecruitmentId = "{${NavigationProperties.RECRUITMENT_ID}}"
     const val CompanyId = "{${NavigationProperties.COMPANY_ID}}"
-    const val HasRecruitment = "{${NavigationProperties.HAS_RECRUITMENT}}"
     const val ReviewId = "{${NavigationProperties.REVIEW_ID}}"
 
     object Navigation {

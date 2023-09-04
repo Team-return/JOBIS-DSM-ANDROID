@@ -62,7 +62,7 @@ val PositionCardShape = RoundedCornerShape(
 internal fun RecruitmentDetailsScreen(
     recruitmentId: Long?,
     getPreviousDestination: () -> String?,
-    navigateToCompanyDetails: (Long, Boolean) -> Unit,
+    navigateToCompanyDetails: (Long) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
@@ -120,7 +120,7 @@ internal fun RecruitmentDetailsScreen(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
                 companyDetailsButtonShowed = companyDetailsButtonShowed,
-                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId, true) },
+                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
             )
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
