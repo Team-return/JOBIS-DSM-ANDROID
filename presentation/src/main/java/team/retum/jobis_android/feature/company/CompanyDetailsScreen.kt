@@ -39,7 +39,6 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
-import team.retum.jobis_android.contract.company.CompanySideEffect
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
@@ -65,39 +64,20 @@ fun CompanyDetailsScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
 
-    var detailButtonShowed by remember { mutableStateOf(true) }
+    var detailButtonVisibility by remember { mutableStateOf(true) }
 
     val companyState by companyViewModel.container.stateFlow.collectAsState()
     val reviewState by reviewViewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        detailButtonShowed = getPreviousDestination() != NavigationRoute.RecruitmentDetails
+        detailButtonVisibility =
+            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.RecruitmentDetails.getNavigationRoute()
 
         companyViewModel.setCompanyId(companyId)
         companyViewModel.fetchCompanyDetails()
 
         reviewViewModel.setCompanyId(companyId)
         reviewViewModel.fetchReviews()
-
-        companyViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                is CompanySideEffect.NotFoundCompany -> {
-
-                }
-
-                else -> {
-
-                }
-            }
-        }
-
-        reviewViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                else -> {
-
-                }
-            }
-        }
     }
 
     Box(
@@ -143,7 +123,7 @@ fun CompanyDetailsScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
         }
-        if (detailButtonShowed) {
+        if (detailButtonVisibility) {
             JobisLargeButton(
                 text = stringResource(id = R.string.company_details_see_recruitents),
                 color = JobisButtonColor.MainSolidColor,
@@ -360,3 +340,5 @@ private fun Review(
         )
     }
 }
+
+internal fun String.getNavigationRoute() = this.split("/").first()

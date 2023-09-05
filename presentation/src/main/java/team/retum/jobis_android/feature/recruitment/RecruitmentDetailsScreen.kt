@@ -42,6 +42,7 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
+import team.retum.jobis_android.feature.company.getNavigationRoute
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -54,9 +55,7 @@ import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
-val PositionCardShape = RoundedCornerShape(
-    size = 4.dp,
-)
+val PositionCardShape = RoundedCornerShape(4.dp)
 
 @Composable
 internal fun RecruitmentDetailsScreen(
@@ -66,11 +65,15 @@ internal fun RecruitmentDetailsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
-    var companyDetailsButtonShowed by remember { mutableStateOf(true) }
+    var companyDetailsButtonVisibility by remember { mutableStateOf(true) }
 
     val state = recruitmentViewModel.container.stateFlow.collectAsState()
 
     var applicationDialogState by remember { mutableStateOf(false) }
+
+    val onApplyButtonClicked = {
+        applicationDialogState = true
+    }
 
     val details = state.value.details
 
@@ -88,7 +91,9 @@ internal fun RecruitmentDetailsScreen(
     }
 
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed = getPreviousDestination() != NavigationRoute.CompanyDetails
+        companyDetailsButtonVisibility =
+            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.CompanyDetails.getNavigationRoute()
+
         recruitmentViewModel.setRecruitmentId(
             recruitmentId = recruitmentId ?: 0,
         )
@@ -119,7 +124,7 @@ internal fun RecruitmentDetailsScreen(
             CompanyInformation(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
-                companyDetailsButtonShowed = companyDetailsButtonShowed,
+                companyDetailsButtonShowed = companyDetailsButtonVisibility,
                 onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -137,9 +142,8 @@ internal fun RecruitmentDetailsScreen(
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_do_apply),
             color = JobisButtonColor.MainSolidColor,
-        ) {
-            applicationDialogState = true
-        }
+            onClick = onApplyButtonClicked,
+        )
     }
 }
 
