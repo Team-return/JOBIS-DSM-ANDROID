@@ -12,13 +12,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.root.LocalAppState
@@ -41,7 +41,7 @@ internal fun ResetPasswordScreen(
 
     val appState = LocalAppState.current
 
-    val state by resetPasswordViewModel.container.stateFlow.collectAsState()
+    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val onResetPasswordButtonClicked = {
         resetPasswordViewModel.resetPassword()

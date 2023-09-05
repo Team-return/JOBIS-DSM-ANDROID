@@ -70,6 +70,7 @@ dependencies {
     implementation(Dependency.COMPOSE.SHIMMER)
     androidTestImplementation(Dependency.COMPOSE.JUNIT)
     debugImplementation(Dependency.COMPOSE.UI_TEST)
+    implementation(Dependency.COMPOSE.COLLECT_AS_STATE_WITH_LIFECYCLE)
 
     implementation(Dependency.COIL.COIL)
 
