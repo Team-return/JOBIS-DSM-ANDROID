@@ -51,7 +51,6 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
-import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToNotifications
 import team.retum.jobis_android.root.navigation.navigateToPostReview
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
@@ -257,7 +256,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = NavigationRoute.MainNavigation.ReportBug) {
-                            ReportBugScreen()
+                            ReportBugScreen(navigatePopBackStack = navController::navigatePopBackStack)
                         }
 
                         composable(

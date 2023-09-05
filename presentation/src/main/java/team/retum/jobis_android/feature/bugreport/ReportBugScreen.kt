@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
@@ -55,6 +56,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun ReportBugScreen(
     bugViewModel: BugViewModel = hiltViewModel(),
     fileViewModel: FileViewModel = hiltViewModel(),
+    navigatePopBackStack: () -> Unit,
 ) {
 
     val appState = LocalAppState.current
@@ -63,13 +65,15 @@ internal fun ReportBugScreen(
     val fileState by fileViewModel.container.stateFlow.collectAsState()
 
     val successReportBugMessage = stringResource(id = R.string.report_bug_success)
-    val fileLargeExceptionMessage = stringResource(id = R.string.recruitment_application_file_too_large)
+    val fileLargeExceptionMessage =
+        stringResource(id = R.string.recruitment_application_file_too_large)
 
     LaunchedEffect(Unit) {
         bugViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is BugSideEffect.SuccessReportBug -> {
                     appState.showSuccessToast(message = successReportBugMessage)
+                    navigatePopBackStack()
                 }
 
                 is BugSideEffect.Exception -> {
