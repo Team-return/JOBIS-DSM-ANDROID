@@ -91,8 +91,6 @@ class MainActivity : ComponentActivity() {
             val appState = rememberAppState()
             val navController = appState.navController
 
-            val backHandlerToastMessage = stringResource(id = R.string.back_handler)
-
             BackHandler {
                 setBackHandler()
             }
