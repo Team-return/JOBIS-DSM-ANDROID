@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
@@ -67,7 +68,7 @@ internal fun RecruitmentsScreen(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
 
-    val state by recruitmentViewModel.container.stateFlow.collectAsState()
+    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 

@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.FileType
@@ -79,9 +80,9 @@ internal fun MyPageScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
-    val state by myPageViewModel.container.stateFlow.collectAsState()
+    val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val reviewableCompanies =
-        companyViewModel.container.stateFlow.collectAsState().value.reviewableCompanies
+        companyViewModel.container.stateFlow.collectAsStateWithLifecycle().value.reviewableCompanies
 
     val appState = LocalAppState.current
 

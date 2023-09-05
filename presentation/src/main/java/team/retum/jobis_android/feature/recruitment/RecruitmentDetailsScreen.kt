@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
@@ -69,7 +70,7 @@ internal fun RecruitmentDetailsScreen(
 
     var companyDetailsButtonShowed by remember { mutableStateOf(true) }
 
-    val state = recruitmentViewModel.container.stateFlow.collectAsState()
+    val state = recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     var applicationDialogState by remember { mutableStateOf(false) }
 

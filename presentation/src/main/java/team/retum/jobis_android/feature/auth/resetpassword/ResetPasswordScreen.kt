@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.root.LocalAppState
@@ -41,7 +42,7 @@ internal fun ResetPasswordScreen(
 
     val appState = LocalAppState.current
 
-    val state by resetPasswordViewModel.container.stateFlow.collectAsState()
+    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val onResetPasswordButtonClicked = {
         resetPasswordViewModel.resetPassword()

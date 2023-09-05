@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
@@ -68,8 +69,8 @@ fun CompanyDetailsScreen(
 
     var detailButtonShowed by remember { mutableStateOf(true) }
 
-    val companyState by companyViewModel.container.stateFlow.collectAsState()
-    val reviewState by reviewViewModel.container.stateFlow.collectAsState()
+    val companyState by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         detailButtonShowed = getPreviousDestination() != NavigationRoute.RecruitmentDetails

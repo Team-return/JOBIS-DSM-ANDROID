@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
@@ -24,7 +25,7 @@ fun SetPasswordScreen(
     signUpViewModel: SignUpViewModel,
 ) {
 
-    val state by signUpViewModel.container.stateFlow.collectAsState()
+    val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
 

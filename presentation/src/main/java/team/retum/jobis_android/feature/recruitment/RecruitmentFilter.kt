@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
@@ -64,7 +65,7 @@ internal fun RecruitmentFilter(
     onDismissDialog: (Long?, String?) -> Unit,
 ) {
 
-    val state by codeViewModel.container.stateFlow.collectAsState()
+    val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val techs = state.techs
 

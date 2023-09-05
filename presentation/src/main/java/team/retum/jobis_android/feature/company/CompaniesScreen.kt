@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
@@ -48,7 +49,7 @@ fun CompaniesScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
-    val state by companyViewModel.container.stateFlow.collectAsState()
+    val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val onCompanyNameChanged = { name: String ->
         companyViewModel.setCompanyName(name)

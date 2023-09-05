@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
@@ -48,8 +49,8 @@ internal fun PostReviewScreen(
     codeViewModel: CodeViewModel = hiltViewModel(),
 ) {
 
-    val codeState by codeViewModel.container.stateFlow.collectAsState()
-    val reviewState by reviewViewModel.container.stateFlow.collectAsState()
+    val codeState by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val appState = LocalAppState.current
 
