@@ -53,6 +53,8 @@ object Dependency {
         const val NAVIGATION_ANIMATION =
             "com.google.accompanist:accompanist-navigation-animation:${Version.COMPOSE_NAVIGATION_ANIMATION}"
         const val SHIMMER = "com.valentinilk.shimmer:compose-shimmer:${Version.SHIMMER}"
+        const val COLLECT_AS_STATE_WITH_LIFECYCLE =
+            "androidx.lifecycle:lifecycle-runtime-compose:${Version.COLLECT_AS_STATE_WITH_LIFECYCLE}"
     }
 
     object SPLASH {

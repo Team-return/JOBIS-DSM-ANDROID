@@ -25,7 +25,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
@@ -75,8 +75,8 @@ internal fun HomeScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
 
-    val homeState by homeViewModel.container.stateFlow.collectAsState()
-    val myPageState by myPageViewModel.container.stateFlow.collectAsState()
+    val homeState by homeViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val myPageState by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val studentCounts = homeState.studentCounts
 

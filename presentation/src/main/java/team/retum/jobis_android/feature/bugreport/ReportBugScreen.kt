@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
@@ -59,8 +59,8 @@ internal fun ReportBugScreen(
 
     val appState = LocalAppState.current
 
-    val bugState by bugViewModel.container.stateFlow.collectAsState()
-    val fileState by fileViewModel.container.stateFlow.collectAsState()
+    val bugState by bugViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val fileState by fileViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val successReportBugMessage = stringResource(id = R.string.report_bug_success)
     val fileLargeExceptionMessage = stringResource(id = R.string.recruitment_application_file_too_large)

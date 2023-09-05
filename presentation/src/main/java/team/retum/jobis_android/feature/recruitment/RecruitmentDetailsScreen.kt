@@ -23,7 +23,6 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
@@ -69,13 +69,13 @@ internal fun RecruitmentDetailsScreen(
 
     var companyDetailsButtonShowed by remember { mutableStateOf(true) }
 
-    val state = recruitmentViewModel.container.stateFlow.collectAsState()
+    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     var applicationDialogState by remember { mutableStateOf(false) }
 
-    val details = state.value.details
+    val details = state.details
 
-    val areas = state.value.details.areas
+    val areas = state.details.areas
 
     if (applicationDialogState) {
         Dialog(
