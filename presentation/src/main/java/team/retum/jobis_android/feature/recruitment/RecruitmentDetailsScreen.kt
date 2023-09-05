@@ -69,13 +69,13 @@ internal fun RecruitmentDetailsScreen(
 
     var companyDetailsButtonShowed by remember { mutableStateOf(true) }
 
-    val state = recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     var applicationDialogState by remember { mutableStateOf(false) }
 
-    val details = state.value.details
+    val details = state.details
 
-    val areas = state.value.details.areas
+    val areas = state.details.areas
 
     if (applicationDialogState) {
         Dialog(

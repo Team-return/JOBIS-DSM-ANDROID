@@ -15,6 +15,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -87,7 +88,7 @@ class MainActivity : ComponentActivity() {
             
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
-            val state = mainViewModel.container.stateFlow.collectAsStateWithLifecycle()
+            val state by mainViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
             val appState = rememberAppState()
             val navController = appState.navController
@@ -104,7 +105,7 @@ class MainActivity : ComponentActivity() {
 
             val moveToScreenBySignInOption = {
                 navController.navigate(
-                    if (state.value.autoSignInOption) NavigationRoute.Main
+                    if (state.autoSignInOption) NavigationRoute.Main
                     else NavigationRoute.SignIn,
                 ) {
                     popUpTo(NavigationRoute.Splash) {

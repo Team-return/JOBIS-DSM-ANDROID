@@ -80,8 +80,8 @@ internal fun MyPageScreen(
 ) {
 
     val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewableCompanies =
-        companyViewModel.container.stateFlow.collectAsStateWithLifecycle().value.reviewableCompanies
+    val reviewableCompanies by
+        companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val appState = LocalAppState.current
 
@@ -178,8 +178,8 @@ internal fun MyPageScreen(
                 showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(32.dp))
-            if (reviewableCompanies.isNotEmpty()) {
-                val reviewableCompany = reviewableCompanies[0]
+            if (reviewableCompanies.reviewableCompanies.isNotEmpty()) {
+                val reviewableCompany = reviewableCompanies.reviewableCompanies[0]
                 AvailablePostReviewCompany(
                     companyName = reviewableCompany.name,
                     companyId = reviewableCompany.id,
