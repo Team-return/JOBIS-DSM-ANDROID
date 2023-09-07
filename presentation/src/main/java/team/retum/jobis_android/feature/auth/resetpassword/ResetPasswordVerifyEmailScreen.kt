@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -102,7 +104,10 @@ internal fun ResetPasswordVerifyEmailScreen(
                 color = JobisColor.Gray600,
             )
             Spacer(modifier = Modifier.height(26.dp))
-            JobisImage(drawable = R.drawable.ic_reset_password_verify_email)
+            Image(
+                painter = painterResource(id = R.drawable.ic_reset_password_verify_email),
+                contentDescription = stringResource(id = R.string.content_description_image_reset_password_verify),
+            )
             Spacer(modifier = Modifier.height(30.dp))
             ChangePasswordInputs(
                 email = email,
