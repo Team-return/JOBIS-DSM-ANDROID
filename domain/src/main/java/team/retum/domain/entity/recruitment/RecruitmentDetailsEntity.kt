@@ -23,14 +23,14 @@ data class RecruitmentDetailsEntity(
 data class AreasEntity(
     val hiring: Long,
     val id: Long,
-    val job: String,
+    val job: List<String>,
     val majorTask: String,
     val tech: List<String>,
 )
 
 enum class HiringProgress(
     val value: String,
-){
+) {
     CULTURE_INTERVIEW("컬처 면접"),
     DOCUMENT("서류전형"),
     TASK("과제 제출"),

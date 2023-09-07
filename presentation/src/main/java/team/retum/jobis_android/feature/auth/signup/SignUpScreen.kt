@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.signup.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
@@ -67,7 +68,7 @@ internal fun SignUpScreen(
 
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
-    val navController = appState.navController
+    val navController = rememberNavController()
 
     val navigateToVerifyEmail = {
         navController.navigate(NavigationRoute.VerifyEmail)

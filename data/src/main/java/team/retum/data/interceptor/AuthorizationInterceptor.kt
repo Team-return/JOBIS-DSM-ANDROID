@@ -31,9 +31,11 @@ class AuthorizationInterceptor @Inject constructor(
             JobisUrl.Student.exists,
         )
 
-        val accessExpiresAt = LocalDateTime.parse(userDataStorage.fetchAccessTokenExpiresAt())
+        val accessExpiresAt = userDataStorage.fetchAccessTokenExpiresAt()
 
-        if (LocalDateTime.now().isAfter(accessExpiresAt)) {
+        if (accessExpiresAt.isNotBlank() && LocalDateTime.now()
+                .isAfter(LocalDateTime.parse(accessExpiresAt))
+        ) {
             tokenReissue()
         }
 

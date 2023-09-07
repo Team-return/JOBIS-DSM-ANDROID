@@ -46,6 +46,7 @@ internal class MyPageViewModel @Inject constructor(
                 fetchStudentInformation()
             }.onSuccess {
                 fetchStudentInformation()
+                postSideEffect(MyPageSideEffect.SuccessEditProfileImage)
             }.onFailure {
                 postSideEffect(MyPageSideEffect.Exception(getStringFromException(it)))
             }

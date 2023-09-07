@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,7 +42,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 fun CompaniesScreen(
-    navigateToCompanyDetails: (Long, Boolean) -> Unit,
+    navigateToCompanyDetails: (Long) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
@@ -117,7 +115,7 @@ private fun CompanyInput(
 @Composable
 private fun Companies(
     companies: List<CompanyEntity>,
-    navigateToCompanyDetails: (Long, Boolean) -> Unit,
+    navigateToCompanyDetails: (Long) -> Unit,
 ) {
     LazyColumn(contentPadding = PaddingValues(vertical = 20.dp)) {
         items(companies) { item ->
@@ -126,7 +124,7 @@ private fun Companies(
                 logoUrl = item.logoUrl,
                 take = item.take,
                 hasRecruitment = item.hasRecruitment,
-                onClick = { navigateToCompanyDetails(item.id.toLong(), item.hasRecruitment) },
+                onClick = { navigateToCompanyDetails(item.id.toLong()) },
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

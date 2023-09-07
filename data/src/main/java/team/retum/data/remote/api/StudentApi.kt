@@ -1,5 +1,6 @@
 package team.retum.data.remote.api
 
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -9,7 +10,7 @@ import team.retum.data.remote.request.students.ResetPasswordRequest
 import team.retum.data.remote.response.students.FetchStudentInformationResponse
 import team.retum.data.remote.url.JobisUrl
 
-interface StudentsApi {
+interface StudentApi {
     @GET(JobisUrl.Student.my)
     suspend fun fetchStudentInformation(): FetchStudentInformationResponse
 
@@ -26,5 +27,5 @@ interface StudentsApi {
     @PATCH(JobisUrl.Student.profile)
     suspend fun editProfileImage(
         @Body editProfileImageRequest: EditProfileImageRequest,
-    )
+    ): Response<Void>
 }

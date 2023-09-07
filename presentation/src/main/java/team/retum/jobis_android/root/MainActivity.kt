@@ -52,7 +52,6 @@ import team.retum.jobis_android.root.navigation.navigateToCompanyDetails
 import team.retum.jobis_android.root.navigation.navigateToComparePassword
 import team.retum.jobis_android.root.navigation.navigateToMain
 import team.retum.jobis_android.root.navigation.navigateToMainWithPopUpSignIn
-import team.retum.jobis_android.root.navigation.navigateToMyPage
 import team.retum.jobis_android.root.navigation.navigateToNotifications
 import team.retum.jobis_android.root.navigation.navigateToPostReview
 import team.retum.jobis_android.root.navigation.navigateToRecruitmentDetails
@@ -85,15 +84,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            
+
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
             val state by mainViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
             val appState = rememberAppState()
             val navController = appState.navController
-
-            val backHandlerToastMessage = stringResource(id = R.string.back_handler)
 
             BackHandler {
                 setBackHandler()
@@ -160,7 +157,6 @@ class MainActivity : ComponentActivity() {
                             exitTransition = { fadeOut() },
                         ) {
                             MainScreen(
-                                navigateToMyPage = navController::navigateToMyPage,
                                 navigateToRecruitments = navController::navigateToRecruitments,
                                 navigateToCompanies = navController::navigateToCompanies,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
@@ -198,8 +194,7 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = { slideOutRight() },
                         ) {
                             RecruitmentDetailsScreen(
-                                recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID)
-                                    ?: 0L,
+                                recruitmentId = it.arguments?.getLong(NavigationProperties.RECRUITMENT_ID),
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToCompanyDetails = navController::navigateToCompanyDetails,
                             )
@@ -215,10 +210,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}/${NavigationRoute.HasRecruitment}",
+                            route = "${NavigationRoute.CompanyDetails}${NavigationRoute.CompanyId}",
                             arguments = listOf(
                                 getArgument(NavigationProperties.COMPANY_ID, NavType.LongType),
-                                getArgument(NavigationProperties.HAS_RECRUITMENT, NavType.BoolType),
                             ),
                             enterTransition = { slideInLeft() },
                             exitTransition = { slideOutLeft() },
@@ -226,11 +220,8 @@ class MainActivity : ComponentActivity() {
                             popExitTransition = { slideOutRight() },
                         ) {
                             val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
-                            val hasRecruitment =
-                                it.arguments?.getBoolean(NavigationRoute.HasRecruitment)
                             CompanyDetailsScreen(
                                 companyId = companyId ?: 0,
-                                hasRecruitment = hasRecruitment ?: false,
                                 getPreviousDestination = navController::getPreviousDestination,
                                 navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
                                 navigateToReviewDetails = navController::navigateToReviewDetails,
@@ -264,7 +255,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = NavigationRoute.MainNavigation.ReportBug) {
-                            ReportBugScreen()
+                            ReportBugScreen(navigatePopBackStack = navController::navigatePopBackStack)
                         }
 
                         composable(

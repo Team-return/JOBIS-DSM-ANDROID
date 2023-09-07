@@ -83,11 +83,8 @@ internal fun NavHostController.getPreviousDestination(): String? {
     return this.previousBackStackEntry?.destination?.route
 }
 
-internal fun NavHostController.navigateToCompanyDetails(
-    companyId: Long,
-    hasRecruitment: Boolean,
-) {
-    this.navigate("${NavigationRoute.CompanyDetails}${companyId}/${hasRecruitment}")
+internal fun NavHostController.navigateToCompanyDetails(companyId: Long) {
+    this.navigate("${NavigationRoute.CompanyDetails}${companyId}")
 }
 
 internal fun NavHostController.navigateToReviewDetails(
@@ -119,10 +116,10 @@ internal fun NavHostController.navigateToNotifications() {
 
 internal fun NavController.navigateBottomMenu(
     navigationRoute: String,
-    popUpRoute: String,
+    navGraphId: Int,
 ) {
-    this.navigate(navigationRoute){
-        popUpTo(popUpRoute){
+    this.navigate(navigationRoute) {
+        popUpTo(navGraphId) {
             inclusive = true
         }
         launchSingleTop = true

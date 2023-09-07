@@ -28,7 +28,7 @@ data class FetchRecruitmentDetailsResponse(
 data class Areas(
     @SerializedName("hiring") val hiring: Long,
     @SerializedName("id") val id: Long,
-    @SerializedName("job") val job: String,
+    @SerializedName("job") val job: List<String>,
     @SerializedName("major_task") val majorTask: String,
     @SerializedName("tech") val tech: List<String>,
 )

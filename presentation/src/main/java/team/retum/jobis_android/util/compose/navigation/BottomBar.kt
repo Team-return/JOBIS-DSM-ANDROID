@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import team.retum.jobis_android.root.navigation.navigateBottomMenu
 import team.retum.jobis_android.util.compose.vibrate
@@ -63,7 +62,7 @@ fun BottomBar(
                 onClick = {
                     navController.navigateBottomMenu(
                         navigationRoute = tab.route,
-                        popUpRoute = navController.graph.findStartDestination().route!!,
+                        navGraphId = navController.graph.id,
                     )
                     vibrate(context = context)
                 },

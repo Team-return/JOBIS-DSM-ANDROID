@@ -18,7 +18,7 @@ import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.api.FileApi
 import team.retum.data.remote.api.RecruitmentApi
 import team.retum.data.remote.api.ReviewApi
-import team.retum.data.remote.api.StudentsApi
+import team.retum.data.remote.api.StudentApi
 import team.retum.data.remote.api.UserApi
 import javax.inject.Singleton
 
@@ -80,7 +80,7 @@ object NetworkModule {
     @Singleton
     fun provideStudentsApi(
         retrofit: Retrofit,
-    ): StudentsApi = retrofit.create(StudentsApi::class.java)
+    ): StudentApi = retrofit.create(StudentApi::class.java)
 
     @Provides
     @Singleton

@@ -39,7 +39,6 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
-import team.retum.jobis_android.contract.company.CompanySideEffect
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
@@ -58,7 +57,6 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 @Composable
 fun CompanyDetailsScreen(
     companyId: Long,
-    hasRecruitment: Boolean,
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long?) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
@@ -66,44 +64,20 @@ fun CompanyDetailsScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
 
-    var detailButtonShowed by remember { mutableStateOf(true) }
+    var detailButtonVisibility by remember { mutableStateOf(true) }
 
     val companyState by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        detailButtonShowed = getPreviousDestination() != NavigationRoute.RecruitmentDetails
+        detailButtonVisibility =
+            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.RecruitmentDetails.getNavigationRoute()
 
-        companyViewModel.setCompanyId(
-            companyId = companyId,
-        )
+        companyViewModel.setCompanyId(companyId)
         companyViewModel.fetchCompanyDetails()
 
-        reviewViewModel.setCompanyId(
-            companyId = companyId.toLong(),
-        )
-
+        reviewViewModel.setCompanyId(companyId)
         reviewViewModel.fetchReviews()
-
-        companyViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                is CompanySideEffect.NotFoundCompany -> {
-
-                }
-
-                else -> {
-
-                }
-            }
-        }
-
-        reviewViewModel.container.sideEffectFlow.collect { sideEffect ->
-            when (sideEffect) {
-                else -> {
-
-                }
-            }
-        }
     }
 
     Box(
@@ -149,12 +123,12 @@ fun CompanyDetailsScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
         }
-        if (detailButtonShowed) {
+        if (detailButtonVisibility) {
             JobisLargeButton(
                 text = stringResource(id = R.string.company_details_see_recruitents),
                 color = JobisButtonColor.MainSolidColor,
-                enabled = hasRecruitment,
-                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId?.toLong()) }
+                enabled = companyState.companyDetails.recruitmentId != null,
+                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId) }
             )
         }
     }
@@ -237,32 +211,33 @@ private fun CompanyDetails(
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address1),
-            content = details.address1,
+            content = details.mainAddress,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address2),
-            content = details.address2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subAddress ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager1),
-            content = details.manager1,
+            content = details.managerName,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number1),
-            content = details.phoneNumber1,
+            content = details.managerPhoneNo,
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager2),
-            content = details.manager2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subManagerName ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number2),
-            content = details.phoneNumber2 ?: stringResource(id = R.string.company_details_null),
+            content = details.subManagerPhoneNo
+                ?: stringResource(id = R.string.company_details_null),
         )
         Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
@@ -365,3 +340,5 @@ private fun Review(
         )
     }
 }
+
+internal fun String.getNavigationRoute() = this.split("/").first()

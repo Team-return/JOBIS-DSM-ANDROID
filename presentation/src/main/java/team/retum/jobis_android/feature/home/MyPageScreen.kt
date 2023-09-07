@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -79,6 +80,8 @@ internal fun MyPageScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
+    val context = LocalContext.current
+  
     val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val reviewableCompanies by
         companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -90,6 +93,10 @@ internal fun MyPageScreen(
             when (it) {
                 is MyPageSideEffect.SuccessSignOut -> {
                     navigateToSignInPopUpWithMain()
+                }
+
+                is MyPageSideEffect.SuccessEditProfileImage -> {
+                    appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
                 }
 
                 is MyPageSideEffect.Exception -> {
@@ -115,8 +122,6 @@ internal fun MyPageScreen(
     LaunchedEffect(Unit) {
         companyViewModel.fetchReviewableCompanies()
     }
-
-    val context = LocalContext.current
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -164,7 +169,6 @@ internal fun MyPageScreen(
         Spacer(modifier = Modifier.height(48.dp))
         Header(
             text = stringResource(id = R.string.bottom_nav_my_page),
-            drawableRes = R.drawable.ic_notification,
             onClick = navigateToNotifications,
         )
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -239,6 +243,7 @@ private fun UserProfile(
                     ),
                 model = profileImageUrl,
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
             )
             if (profileImageUrl.isNotEmpty()) {
                 Box(

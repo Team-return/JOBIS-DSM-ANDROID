@@ -40,9 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.recruitment.AreasEntity
-import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
+import team.retum.jobis_android.feature.company.getNavigationRoute
 import team.retum.jobis_android.root.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -55,23 +55,25 @@ import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Stable
-val PositionCardShape = RoundedCornerShape(
-    size = 4.dp,
-)
+val PositionCardShape = RoundedCornerShape(4.dp)
 
 @Composable
 internal fun RecruitmentDetailsScreen(
-    recruitmentId: Long,
+    recruitmentId: Long?,
     getPreviousDestination: () -> String?,
-    navigateToCompanyDetails: (Long, Boolean) -> Unit,
+    navigateToCompanyDetails: (Long) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
-    var companyDetailsButtonShowed by remember { mutableStateOf(true) }
+    var companyDetailsButtonVisibility by remember { mutableStateOf(true) }
 
     val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     var applicationDialogState by remember { mutableStateOf(false) }
+
+    val onApplyButtonClicked = {
+        applicationDialogState = true
+    }
 
     val details = state.details
 
@@ -82,16 +84,18 @@ internal fun RecruitmentDetailsScreen(
             onDismissRequest = { applicationDialogState = false },
             properties = DialogProperties(usePlatformDefaultWidth = true),
         ) {
-            RecruitmentApplicationDialog(recruitmentId = recruitmentId) {
+            RecruitmentApplicationDialog(recruitmentId = recruitmentId ?: 0) {
                 applicationDialogState = false
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        companyDetailsButtonShowed = getPreviousDestination() != NavigationRoute.CompanyDetails
+        companyDetailsButtonVisibility =
+            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.CompanyDetails.getNavigationRoute()
+
         recruitmentViewModel.setRecruitmentId(
-            recruitmentId = recruitmentId,
+            recruitmentId = recruitmentId ?: 0,
         )
     }
 
@@ -120,8 +124,8 @@ internal fun RecruitmentDetailsScreen(
             CompanyInformation(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
-                companyDetailsButtonShowed = companyDetailsButtonShowed,
-                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId, true) },
+                companyDetailsButtonShowed = companyDetailsButtonVisibility,
+                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
             )
             Spacer(modifier = Modifier.height(30.dp))
             Divider(
@@ -132,16 +136,14 @@ internal fun RecruitmentDetailsScreen(
             RecruitmentDetails(
                 details = details,
                 areas = areas,
-                hiringProgress = details.hiringProgress,
             )
             Spacer(modifier = Modifier.height(80.dp))
         }
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_do_apply),
             color = JobisButtonColor.MainSolidColor,
-        ) {
-            applicationDialogState = true
-        }
+            onClick = onApplyButtonClicked,
+        )
     }
 }
 
@@ -180,8 +182,12 @@ private fun CompanyInformation(
 private fun RecruitmentDetails(
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
-    hiringProgress: List<HiringProgress>,
 ) {
+
+    val requireGrade =
+        if (details.requiredGrade == null) stringResource(id = R.string.company_details_null)
+        else "${details.requiredGrade}%"
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -211,7 +217,7 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_grade),
-            content = "${details.requiredGrade}%",
+            content = requireGrade,
         )
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
@@ -288,7 +294,9 @@ private fun Positions(
         Column {
             areas.forEach {
                 PositionCard(
-                    position = it.job.replace(",", " / "),
+                    position = it.job.toString().replace("[", " ")
+                        .replace("]", " ")
+                        .trim(),
                     workerCount = it.hiring.toString(),
                     majorTask = it.majorTask,
                     mainSkill = it.tech,
@@ -312,6 +320,7 @@ private fun PositionCard(
     val maxLines by animateIntAsState(
         targetValue = if (showDetails) 100
         else 1,
+        label = "",
     )
 
     Column(
