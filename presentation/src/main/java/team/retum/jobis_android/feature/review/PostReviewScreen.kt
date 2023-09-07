@@ -154,6 +154,7 @@ private fun ReviewInputs(
                         onClick = onAddButtonClicked,
                         color = JobisButtonColor.MainShadowColor,
                         shadow = true,
+                        imageContentDescription = stringResource(id = R.string.content_description_icon_add),
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signin
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,6 @@ import team.returm.jobisdesignsystem.checkbox.JobisCheckBox
 import team.returm.jobisdesignsystem.colors.JobisCheckBoxColor
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Caption
@@ -55,9 +56,9 @@ internal fun SignInScreen(
 
     val state by signInViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    var showBackgroundIcon by remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
+
+    var showBackgroundIcon by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         showBackgroundIcon = true
@@ -113,12 +114,13 @@ internal fun SignInScreen(
     Box {
         Column {
             Animated(visible = showBackgroundIcon) {
-                JobisImage(
+                Image(
                     modifier = Modifier.offset(
                         x = 120.dp,
                         y = (-220).dp,
                     ),
-                    drawable = R.drawable.ic_sign_in_background,
+                    painter = painterResource(R.drawable.ic_sign_in_background),
+                    contentDescription = stringResource(id = R.string.content_description_image_splash),
                 )
             }
         }
@@ -126,13 +128,10 @@ internal fun SignInScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .jobisClickable { focusManager.clearFocus() }
-                .padding(
-                    top = 112.dp,
-                    start = 20.dp,
-                    end = 20.dp,
-                ),
+                .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(112.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

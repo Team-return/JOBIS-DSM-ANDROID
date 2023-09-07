@@ -28,7 +28,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallButton
 import team.returm.jobisdesignsystem.colors.JobisColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
@@ -46,24 +45,6 @@ internal fun ResetPasswordVerifyEmailScreen(
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
-
-    val onEmailChanged = { email: String ->
-        resetPasswordViewModel.setEmail(email = email)
-    }
-
-    val onAuthCodeChanged = { authCode: String ->
-        resetPasswordViewModel.setAuthCode(authCode = authCode)
-        authCode.take(6)
-        if (authCode.length == 6) focusManager.clearFocus()
-    }
-
-    val onRequestVerification = {
-        resetPasswordViewModel.sendVerificationCode()
-    }
-
-    val onVerifyButtonClicked = {
-        resetPasswordViewModel.verifyEmail()
-    }
 
     val email = state.email
     val authCode = state.authCode
@@ -83,6 +64,24 @@ internal fun ResetPasswordVerifyEmailScreen(
                 else -> {}
             }
         }
+    }
+
+    val onEmailChanged = { email: String ->
+        resetPasswordViewModel.setEmail(email = email)
+    }
+
+    val onAuthCodeChanged = { authCode: String ->
+        resetPasswordViewModel.setAuthCode(authCode = authCode)
+        authCode.take(6)
+        if (authCode.length == 6) focusManager.clearFocus()
+    }
+
+    val onRequestVerification = {
+        resetPasswordViewModel.sendVerificationCode()
+    }
+
+    val onVerifyButtonClicked = {
+        resetPasswordViewModel.verifyEmail()
     }
 
     Column(

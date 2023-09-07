@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,9 +24,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -40,6 +38,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -59,14 +58,12 @@ import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.file.FileViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading6
 import team.returm.jobisdesignsystem.util.jobisClickable
 
-// TODO homeViewModel -> MyPageViewModel 로 변경
 @Composable
 internal fun MyPageScreen(
     navigateToSignInPopUpWithMain: () -> Unit,
@@ -74,19 +71,18 @@ internal fun MyPageScreen(
     navigateToComparePassword: () -> Unit,
     navigateToPostReview: (Long) -> Unit,
     navigateToNotifications: () -> Unit,
-    showDialog: () -> Unit,
     fileViewModel: FileViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
 
-    val context = LocalContext.current
-  
+    val appState = LocalAppState.current
+
     val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val reviewableCompanies by
-        companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val appState = LocalAppState.current
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         myPageViewModel.container.sideEffectFlow.collect {
@@ -179,7 +175,6 @@ internal fun MyPageScreen(
                 name = state.studentName,
                 department = state.department,
                 studentGcn = state.studentGcn,
-                showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(32.dp))
             if (reviewableCompanies.reviewableCompanies.isNotEmpty()) {
@@ -202,7 +197,6 @@ internal fun MyPageScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun UserProfile(
     profileImageUrl: String,
@@ -210,7 +204,6 @@ private fun UserProfile(
     name: String,
     department: Department,
     studentGcn: String,
-    showDialog: () -> Unit,
 ) {
 
     var grade = ""
@@ -220,10 +213,9 @@ private fun UserProfile(
     if (studentGcn.isNotEmpty()) {
         grade = studentGcn[0].toString().ifEmpty { "" }
         classRoom = studentGcn[1].toString().ifEmpty { "" }
-        number = studentGcn.substring((if (studentGcn[2].toInt() == 0) 3 else 2)..3)
+        number =
+            studentGcn.substring((if (Integer.parseInt(studentGcn[2].toString()) == 0) 3 else 2)..3)
     }
-
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -253,7 +245,10 @@ private fun UserProfile(
                         .background(JobisColor.LightBlue),
                     contentAlignment = Alignment.Center,
                 ) {
-                    JobisImage(drawable = R.drawable.ic_edit)
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = stringResource(id = R.string.content_description_icon_edit),
+                    )
                 }
             }
         }

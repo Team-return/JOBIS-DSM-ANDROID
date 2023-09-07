@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
@@ -47,7 +48,6 @@ import team.returm.jobisdesignsystem.button.JobisSmallIconButton
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.colors.JobisDropDownColor
 import team.returm.jobisdesignsystem.dropdown.JobisDropDown
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -64,15 +64,15 @@ internal fun ReportBugScreen(
     val bugState by bugViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val fileState by fileViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val successReportBugMessage = stringResource(id = R.string.report_bug_success)
-    val fileLargeExceptionMessage =
-        stringResource(id = R.string.recruitment_application_file_too_large)
+    val focusManager = LocalFocusManager.current
+
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         bugViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is BugSideEffect.SuccessReportBug -> {
-                    appState.showSuccessToast(message = successReportBugMessage)
+                    appState.showSuccessToast(message = context.getString(R.string.report_bug_success))
                     navigatePopBackStack()
                 }
 
@@ -92,7 +92,7 @@ internal fun ReportBugScreen(
                 }
 
                 is FileSideEffect.FileLargeException -> {
-                    appState.showErrorToast(fileLargeExceptionMessage)
+                    appState.showErrorToast(context.getString(R.string.recruitment_application_file_too_large))
                 }
 
                 is FileSideEffect.Exception -> {
@@ -101,8 +101,6 @@ internal fun ReportBugScreen(
             }
         }
     }
-
-    val context = LocalContext.current
 
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -117,15 +115,12 @@ internal fun ReportBugScreen(
         }
     }
 
-    val focusManager = LocalFocusManager.current
-
     val clearFocus = {
         focusManager.clearFocus()
     }
 
     val onTitleChanged = { title: String ->
         bugViewModel.setTitle(title)
-
     }
 
     val onContentChanged = { content: String ->
@@ -252,9 +247,7 @@ private fun ScreenShots(
             color = JobisColor.Gray700,
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Box(
-            modifier = Modifier.height(150.dp)
-        ) {
+        Box(modifier = Modifier.height(150.dp)) {
             if (screenShotCount == 0) {
                 Box(
                     modifier = Modifier
@@ -275,7 +268,10 @@ private fun ScreenShots(
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
-                    JobisImage(drawable = R.drawable.ic_image)
+                    Image(
+                        painter = painterResource(R.drawable.ic_image),
+                        contentDescription = stringResource(id = R.string.content_description_image_bug),
+                    )
                 }
             }
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -296,7 +292,9 @@ private fun ScreenShots(
                                 onClick = { removeScreenshot(index) },
                                 color = JobisButtonColor.MainShadowColor,
                                 shadow = true,
+                                imageContentDescription = stringResource(id = R.string.content_description_icon_remove),
                             )
+
                         }
                     }
                 }
@@ -311,6 +309,7 @@ private fun ScreenShots(
                                 onClick = addScreenshot,
                                 color = JobisButtonColor.MainShadowColor,
                                 shadow = true,
+                                imageContentDescription = stringResource(id = R.string.content_description_icon_add),
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                         }

@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,6 @@ import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
@@ -71,6 +72,8 @@ internal fun RecruitmentsScreen(
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
+    val recruitments = state.recruitments
+
     val coroutineScope = rememberCoroutineScope()
 
     val onFilterClicked: () -> Unit = {
@@ -82,8 +85,6 @@ internal fun RecruitmentsScreen(
     val onNameChanged = { name: String ->
         recruitmentViewModel.setName(name)
     }
-
-    val recruitments = state.recruitments
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -169,7 +170,8 @@ private fun RecruitmentInput(
             drawable = R.drawable.ic_filter,
             color = JobisButtonColor.MainSolidColor,
             onClick = onFilterClicked,
-            shape = RoundedCornerShape(size = 4.dp)
+            shape = RoundedCornerShape(size = 4.dp),
+            imageContentDescription = stringResource(id = R.string.content_description_filter),
         )
     }
     Row(
@@ -312,10 +314,12 @@ private fun Recruitment(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    JobisImage(
-                        modifier = Modifier.size(18.dp),
-                        drawable = bookmarkIcon,
-                        onClick = onBookmarkClicked,
+                    Image(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .jobisClickable(onClick = onBookmarkClicked),
+                        painter = painterResource(id = bookmarkIcon),
+                        contentDescription = stringResource(id = R.string.content_description_bookmark),
                     )
                 }
                 Caption(
@@ -329,9 +333,10 @@ private fun Recruitment(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Caption(text = trainPay)
-                    JobisImage(
+                    Image(
                         modifier = Modifier.size(18.dp),
-                        drawable = militaryIcon,
+                        painter = painterResource(id = militaryIcon),
+                        contentDescription = stringResource(id = R.string.content_description_military),
                     )
                 }
             }

@@ -255,4 +255,20 @@
     <string name="content_description_icon_move_to_back">MoveToBack Icon</string>
     <string name="content_description_image_reset_password_verify">Reset Password Verify Image</string>
 
+    <string name="content_description_icon_reset_password">Reset Password Icon</string>
+
+    <string name="content_description_image_splash">Splash Image</string>
+
+    <string name="content_description_image_bug">Bug Image</string>
+    <string name="content_description_icon_add">Add Icon</string>
+    <string name="content_description_icon_remove">Remove Icon</string>
+
+    <string name="content_description_icon_edit">Edit Icon</string>
+
+    <string name="content_description_filter">Filter Icon</string>
+
+    <string name="content_description_bookmark">Bookmark Icon</string>
+
+    <string name="content_description_military">Military</string>
+
 </resources>

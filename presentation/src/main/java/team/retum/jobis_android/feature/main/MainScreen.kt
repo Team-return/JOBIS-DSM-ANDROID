@@ -50,12 +50,6 @@ fun MainScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val showDialog: () -> Unit = {
-        coroutineScope.launch {
-            sheetState.show()
-        }
-    }
-
     ModalBottomSheetLayout(
         sheetContent = {
             RecruitmentFilter(
@@ -88,14 +82,12 @@ fun MainScreen(
                         navigateToNotifications = navigateToNotifications,
                     )
                 }
-
                 composable(route = NavigationRoute.Navigation.BookmarkRecruitments) {
                     BookmarkRecruitmentsScreen(
                         navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                         navigateToRecruitments = navigateToRecruitments,
                     )
                 }
-
                 composable(route = NavigationRoute.Navigation.MyPage) {
                     MyPageScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
@@ -103,10 +95,8 @@ fun MainScreen(
                         navigateToComparePassword = navigateToComparePassword,
                         navigateToPostReview = navigateToPostReview,
                         navigateToNotifications = navigateToNotifications,
-                        showDialog = showDialog,
                     )
                 }
-
                 composable(route = NavigationRoute.Navigation.Menu) {
                     MenuScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,

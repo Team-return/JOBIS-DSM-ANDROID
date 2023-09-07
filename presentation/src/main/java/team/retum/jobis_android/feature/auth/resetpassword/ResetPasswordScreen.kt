@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,7 +28,6 @@ import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor
-import team.returm.jobisdesignsystem.image.JobisImage
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.textfield.TextFieldType
 import team.returm.jobisdesignsystem.theme.Body4
@@ -43,11 +44,10 @@ internal fun ResetPasswordScreen(
 
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val onResetPasswordButtonClicked = {
-        resetPasswordViewModel.resetPassword()
-    }
-
     val focusManager = LocalFocusManager.current
+
+    val newPassword = state.newPassword
+    val passwordRepeat = state.passwordRepeat
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.container.sideEffectFlow.collect {
@@ -65,6 +65,10 @@ internal fun ResetPasswordScreen(
         }
     }
 
+    val onResetPasswordButtonClicked = {
+        resetPasswordViewModel.resetPassword()
+    }
+
     val onNewPasswordChanged = { newPassword: String ->
         resetPasswordViewModel.setNewPassword(newPassword = newPassword)
     }
@@ -72,9 +76,6 @@ internal fun ResetPasswordScreen(
     val onPasswordRepeatChanged = { passwordRepeat: String ->
         resetPasswordViewModel.setPasswordRepeat(passwordRepeat = passwordRepeat)
     }
-
-    val newPassword = state.newPassword
-    val passwordRepeat = state.passwordRepeat
 
     Column(
         modifier = Modifier
@@ -98,7 +99,10 @@ internal fun ResetPasswordScreen(
             color = JobisColor.Gray600,
         )
         Spacer(modifier = Modifier.height(26.dp))
-        JobisImage(drawable = R.drawable.ic_reset_password)
+        Image(
+            painter = painterResource(id = R.drawable.ic_reset_password),
+            contentDescription = stringResource(id = R.string.content_description_icon_reset_password),
+        )
         Spacer(modifier = Modifier.height(30.dp))
         ResetPasswordInput(
             newPassword = newPassword,
