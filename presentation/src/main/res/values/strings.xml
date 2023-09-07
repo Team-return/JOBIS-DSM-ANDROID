@@ -248,4 +248,9 @@
     <!--Notifications Screen-->
     <string name="notifications_alarm">알림</string>
 
+    <!--content descriptions-->
+    <string name="content_description_splash_image">Jobis Image</string>
+    <string name="content_description_icon_move_to_back">MoveToBack Icon</string>
+    <string name="content_description_image_reset_password_verify">Reset Password Verify Image</string>
+
 </resources>
