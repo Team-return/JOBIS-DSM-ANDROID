@@ -26,7 +26,7 @@ object Version {
     const val COMPOSE_ACTIVITY = "1.6.1"
     const val COMPOSE_UI = "1.3.3"
     const val COMPOSE_MATERIAL = "1.3.1"
-    const val COMPOSE_NAVIGATON = "2.5.3"
+    const val COMPOSE_NAVIGATION = "2.5.3"
     const val COMPOSE_NAVIGATION_HILT = "1.0.0"
     const val COMPOSE_FLOW_LAYOUT = "0.30.1"
     const val COMPOSE_NAVIGATION_ANIMATION = "0.30.1"
@@ -36,7 +36,7 @@ object Version {
 
     const val ORBIT_MVI = "4.5.0"
 
-    const val DESIGN_SYSTEM = "v1.2.2"
+    const val DESIGN_SYSTEM = "v1.2.3"
 
     const val SHIMMER = "1.0.5"
 }
