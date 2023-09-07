@@ -22,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,8 +69,8 @@ internal fun RecruitmentApplicationDialog(
 
     val context = LocalContext.current
 
-    val fileState by fileViewModel.container.stateFlow.collectAsState()
-    val applicationState by applicationViewModel.container.stateFlow.collectAsState()
+    val fileState by fileViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val applicationState by applicationViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val files = fileState.files
     val urls = remember { mutableStateListOf<String>() }

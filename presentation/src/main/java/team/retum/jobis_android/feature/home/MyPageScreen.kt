@@ -29,7 +29,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.FileType
@@ -81,10 +81,10 @@ internal fun MyPageScreen(
 ) {
 
     val context = LocalContext.current
-
-    val state by myPageViewModel.container.stateFlow.collectAsState()
-    val reviewableCompanies =
-        companyViewModel.container.stateFlow.collectAsState().value.reviewableCompanies
+  
+    val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val reviewableCompanies by
+        companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val appState = LocalAppState.current
 
@@ -182,8 +182,8 @@ internal fun MyPageScreen(
                 showDialog = showDialog,
             )
             Spacer(modifier = Modifier.height(32.dp))
-            if (reviewableCompanies.isNotEmpty()) {
-                val reviewableCompany = reviewableCompanies[0]
+            if (reviewableCompanies.reviewableCompanies.isNotEmpty()) {
+                val reviewableCompany = reviewableCompanies.reviewableCompanies[0]
                 AvailablePostReviewCompany(
                     companyName = reviewableCompany.name,
                     companyId = reviewableCompany.id,

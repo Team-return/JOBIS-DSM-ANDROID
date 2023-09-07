@@ -22,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +37,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
@@ -64,7 +64,7 @@ internal fun RecruitmentFilter(
     onDismissDialog: (Long?, String?) -> Unit,
 ) {
 
-    val state by codeViewModel.container.stateFlow.collectAsState()
+    val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val techs = state.techs
 

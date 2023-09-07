@@ -30,6 +30,7 @@ object Version {
     const val COMPOSE_NAVIGATION_HILT = "1.0.0"
     const val COMPOSE_FLOW_LAYOUT = "0.30.1"
     const val COMPOSE_NAVIGATION_ANIMATION = "0.30.1"
+    const val COLLECT_AS_STATE_WITH_LIFECYCLE = "2.6.0-alpha04"
 
     const val SPLASH_SCREEN = "1.0.0"
 

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.root.LocalAppState
@@ -41,7 +41,7 @@ internal fun ResetPasswordVerifyEmailScreen(
 
     val appState = LocalAppState.current
 
-    val state by resetPasswordViewModel.container.stateFlow.collectAsState()
+    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
 
