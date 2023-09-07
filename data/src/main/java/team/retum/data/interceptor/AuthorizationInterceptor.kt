@@ -33,10 +33,10 @@ class AuthorizationInterceptor @Inject constructor(
 
         val accessExpiresAt = userDataStorage.fetchAccessTokenExpiresAt()
 
-        if (accessExpiresAt.isNotBlank()) {
-            if (LocalDateTime.now().isAfter(LocalDateTime.parse(accessExpiresAt))) {
-                tokenReissue()
-            }
+        if (accessExpiresAt.isNotBlank() && LocalDateTime.now()
+                .isAfter(LocalDateTime.parse(accessExpiresAt))
+        ) {
+            tokenReissue()
         }
 
         if (ignorePath.contains(path)) {
