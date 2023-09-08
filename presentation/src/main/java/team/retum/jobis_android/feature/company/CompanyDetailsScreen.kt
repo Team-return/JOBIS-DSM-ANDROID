@@ -83,22 +83,17 @@ fun CompanyDetailsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-                bottom = 24.dp,
-            ),
+            .padding(horizontal = 24.dp),
         contentAlignment = Alignment.BottomCenter,
     ) {
+        Spacer(modifier = Modifier.height(48.dp))
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(
-                    state = ScrollState(0),
-                ),
+                .verticalScroll(state = ScrollState(0)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(48.dp))
             Header(text = stringResource(id = R.string.company_list_search_company))
             Spacer(modifier = Modifier.height(16.dp))
             CompanyDetails(details = companyState.companyDetails)
@@ -121,15 +116,18 @@ fun CompanyDetailsScreen(
                     navigateToReviewDetails = navigateToReviewDetails,
                 )
             }
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(104.dp))
         }
         if (detailButtonVisibility) {
-            JobisLargeButton(
-                text = stringResource(id = R.string.company_details_see_recruitents),
-                color = JobisButtonColor.MainSolidColor,
-                enabled = companyState.companyDetails.recruitmentId != null,
-                onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId) }
-            )
+            Column {
+                JobisLargeButton(
+                    text = stringResource(id = R.string.company_details_see_recruitents),
+                    color = JobisButtonColor.MainSolidColor,
+                    enabled = companyState.companyDetails.recruitmentId != null,
+                    onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId) },
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }
@@ -143,8 +141,7 @@ private fun CompanyDetails(
 
     val maxLines by animateIntAsState(
         targetValue = if (showDetails) 20
-        else 3,
-        label = ""
+        else 3, label = ""
     )
 
     Column {
@@ -193,63 +190,51 @@ private fun CompanyDetails(
             title = stringResource(id = R.string.company_details_representative_name),
             content = details.representativeName,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_founded_at),
             content = details.foundedAt,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_worker_number),
             content = "${details.workerNumber}명",
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_take),
             content = "${details.take.toInt()}억",
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address1),
             content = details.mainAddress,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address2),
             content = details.subAddress ?: stringResource(id = R.string.company_details_null),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager1),
             content = details.managerName,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number1),
             content = details.managerPhoneNo,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager2),
             content = details.subManagerName ?: stringResource(id = R.string.company_details_null),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number2),
             content = details.subManagerPhoneNo
                 ?: stringResource(id = R.string.company_details_null),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_email),
             content = details.email,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         CompanyDetail(
             title = stringResource(id = R.string.company_details_fax),
             content = details.fax ?: stringResource(id = R.string.company_details_null),
         )
-        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
@@ -267,12 +252,10 @@ private fun Reviews(
     ) {
         repeat(reviews.size) { index ->
             val item = reviews[index]
-            Review(
-                reviewId = item.reviewId,
+            Review(reviewId = item.reviewId,
                 writer = item.writer,
                 year = item.year.toString(),
-                onClick = { navigateToReviewDetails(item.reviewId) }
-            )
+                onClick = { navigateToReviewDetails(item.reviewId) })
             Spacer(modifier = Modifier.height(10.dp))
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))
@@ -300,6 +283,7 @@ private fun CompanyDetail(
             color = JobisColor.Gray900,
         )
     }
+    Spacer(modifier = Modifier.height(10.dp))
 }
 
 

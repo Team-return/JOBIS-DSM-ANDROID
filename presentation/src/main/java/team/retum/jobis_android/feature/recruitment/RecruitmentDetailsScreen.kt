@@ -65,19 +65,27 @@ internal fun RecruitmentDetailsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
 
+    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
+
+    val details = state.details
+    val areas = state.details.areas
+
     var companyDetailsButtonVisibility by remember { mutableStateOf(true) }
 
-    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        companyDetailsButtonVisibility =
+            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.CompanyDetails.getNavigationRoute()
+
+        recruitmentViewModel.setRecruitmentId(
+            recruitmentId = recruitmentId ?: 0,
+        )
+    }
 
     var applicationDialogState by remember { mutableStateOf(false) }
 
     val onApplyButtonClicked = {
         applicationDialogState = true
     }
-
-    val details = state.details
-
-    val areas = state.details.areas
 
     if (applicationDialogState) {
         Dialog(
@@ -90,24 +98,10 @@ internal fun RecruitmentDetailsScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        companyDetailsButtonVisibility =
-            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.CompanyDetails.getNavigationRoute()
-
-        recruitmentViewModel.setRecruitmentId(
-            recruitmentId = recruitmentId ?: 0,
-        )
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 48.dp,
-                start = 24.dp,
-                end = 24.dp,
-                bottom = 24.dp,
-            )
+            .padding(horizontal = 24.dp)
             .jobisClickable {
                 applicationDialogState = false
             },
@@ -116,11 +110,10 @@ internal fun RecruitmentDetailsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(
-                    state = ScrollState(0),
-                ),
+                .verticalScroll(state = ScrollState(0)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(48.dp))
             CompanyInformation(
                 companyName = details.companyName,
                 companyProfileUrl = details.companyProfileUrl,
@@ -139,11 +132,14 @@ internal fun RecruitmentDetailsScreen(
             )
             Spacer(modifier = Modifier.height(80.dp))
         }
-        JobisLargeButton(
-            text = stringResource(id = R.string.recruitment_details_do_apply),
-            color = JobisButtonColor.MainSolidColor,
-            onClick = onApplyButtonClicked,
-        )
+        Column {
+            JobisLargeButton(
+                text = stringResource(id = R.string.recruitment_details_do_apply),
+                color = JobisButtonColor.MainSolidColor,
+                onClick = onApplyButtonClicked,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
 
@@ -196,7 +192,6 @@ private fun RecruitmentDetails(
             title = stringResource(R.string.recruitment_details_get_company),
             content = "${details.startDate}~${details.endDate}",
         )
-        Spacer(modifier = Modifier.height(10.dp))
         Positions(areas = areas)
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
@@ -204,7 +199,6 @@ private fun RecruitmentDetails(
             content = details.preferentialTreatment
                 ?: stringResource(id = R.string.company_details_null),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_licenses),
             content = StringBuilder().apply {
@@ -214,22 +208,18 @@ private fun RecruitmentDetails(
                 } ?: stringResource(id = R.string.company_details_null)
             }.toString().trim().replace(" ", ", "),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_grade),
             content = requireGrade,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_worker_time),
             content = "${details.workHours}시간",
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_benefits),
             content = "${details.benefits}",
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_hiring_progress),
             content = StringBuilder().apply {
@@ -238,12 +228,10 @@ private fun RecruitmentDetails(
                 }
             }.toString(),
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_documents),
             content = details.submitDocument,
         )
-        Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_etc),
             content = details.etc ?: stringResource(id = R.string.company_details_null)
@@ -273,6 +261,7 @@ private fun RecruitmentDetail(
             color = JobisColor.Gray900,
         )
     }
+    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
