@@ -1,36 +1,43 @@
 package team.retum.jobis_android.navigation
 
 object NavigationRoute {
-    const val Splash = "Splash"
-    const val SignIn = "SignIn"
-    const val SignUp = "SignUp"
-    const val Main = "Main"
-    const val StudentInfo = "StudentInfo"
-    const val VerifyEmail = "EmailVerify"
-    const val SetPassword = "SetPassword"
-    const val Recruitments = "Recruitments"
-    const val RecruitmentDetails = "RecruitmentDetails/"
-    const val Companies = "Companies"
-    const val CompanyDetails = "CompanyDetails/"
-    const val ResetPasswordVerifyEmail = "ResetPasswordVerifyEmail"
-    const val ResetPassword = "ResetPassword"
-    const val ComparePassword = "ComparePassword"
+    const val Splash = "splash"
+    const val Root = "root"
 
-    const val RecruitmentId = "{${NavigationProperties.RECRUITMENT_ID}}"
-    const val CompanyId = "{${NavigationProperties.COMPANY_ID}}"
-    const val ReviewId = "{${NavigationProperties.REVIEW_ID}}"
+    const val Auth = "auth"
+    const val Main = "main"
+    const val User = "user"
 
-    object Navigation {
-        const val Home = "Home"
-        const val BookmarkRecruitments = "BookmarkRecruitments"
-        const val MyPage = "MyPage"
-        const val Menu = "Menu"
+    object BottomNavigation {
+        const val Home = "home"
+        const val BookmarkRecruitments = "bookmarkRecruitments"
+        const val MyPage = "myPage"
+        const val Menu = "menu"
     }
+}
 
-    object MainNavigation {
-        const val ReportBug = "ReportBug"
-        const val ReviewDetails = "ReviewDetails/"
-        const val PostReview = "PostReview"
-        const val Notifications = "Notifications"
-    }
+object AuthDestinations {
+    const val SignIn = "signIn"
+    const val SignUp = "signUp"
+    const val ResetPasswordVerifyEmail = "resetPasswordVerifyEmail"
+    const val ResetPassword = "resetPassword"
+    const val ComparePassword = "comparePassword"
+    const val StudentInfo = "studentInfo"
+    const val VerifyEmail = "verifyEmail"
+    const val SetPassword = "setPassword"
+
+}
+
+object MainDestinations {
+    const val Recruitments = "recruitments"
+    const val RecruitmentDetails = "recruitmentDetails/"
+    const val Companies = "companies"
+    const val CompanyDetails = "companyDetails/"
+    const val ReviewDetails = "reviewDetails/"
+    const val PostReview = "postReview"
+}
+
+object UserDestination {
+    const val ReportBug = "reportBug"
+    const val Notifications = "notifications"
 }

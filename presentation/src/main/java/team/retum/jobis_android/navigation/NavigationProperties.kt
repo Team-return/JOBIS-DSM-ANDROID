@@ -7,3 +7,5 @@ object NavigationProperties {
     const val HAS_RECRUITMENT = "has-recruitment"
     const val REVIEW_ID = "review-id"
 }
+
+internal fun String.toNavigationRoute() = "{${this}}"

@@ -7,24 +7,24 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 internal fun NavHostController.navigateToMain() {
-    this.navigate(NavigationRoute.Main) {
-        popUpTo(NavigationRoute.Main) {
+    this.navigate(NavigationRoute.Root) {
+        popUpTo(NavigationRoute.Root) {
             inclusive = true
         }
     }
 }
 
 internal fun NavHostController.navigateToMainWithPopUpSignIn() {
-    this.navigate(NavigationRoute.Main) {
-        popUpTo(NavigationRoute.SignIn) {
+    this.navigate(NavigationRoute.Root) {
+        popUpTo(AuthDestinations.SignIn) {
             inclusive = true
         }
     }
 }
 
 internal fun NavHostController.navigateToSignInPopUpWithMain() {
-    this.navigate(NavigationRoute.SignIn) {
-        popUpTo(NavigationRoute.Main) {
+    this.navigate(AuthDestinations.SignIn) {
+        popUpTo(NavigationRoute.Root) {
             inclusive = true
         }
     }
@@ -35,41 +35,41 @@ internal fun NavHostController.navigatePopBackStack() {
 }
 
 internal fun NavHostController.navigateToResetPasswordVerifyEmail() {
-    this.navigate(NavigationRoute.ResetPasswordVerifyEmail)
+    this.navigate(AuthDestinations.ResetPasswordVerifyEmail)
 }
 
 internal fun NavHostController.navigateToSignUp() {
-    this.navigate(NavigationRoute.SignUp)
+    this.navigate(AuthDestinations.SignUp)
 }
 
 internal fun NavHostController.navigateToMyPage() {
-    this.navigate(NavigationRoute.Navigation.MyPage)
+    this.navigate(NavigationRoute.BottomNavigation.MyPage)
 }
 
 internal fun NavHostController.navigateToRecruitments() {
-    this.navigate(NavigationRoute.Recruitments)
+    this.navigate(MainDestinations.Recruitments)
 }
 
 internal fun NavHostController.navigateToCompanies() {
-    this.navigate(NavigationRoute.Companies)
+    this.navigate(MainDestinations.Companies)
 }
 
 internal fun NavHostController.navigateToRecruitmentDetails(
     recruitmentId: Long?,
 ) {
-    this.navigate(NavigationRoute.RecruitmentDetails + recruitmentId)
+    this.navigate(MainDestinations.RecruitmentDetails + recruitmentId)
 }
 
 internal fun NavHostController.navigateToBugReport() {
-    this.navigate(NavigationRoute.MainNavigation.ReportBug)
+    this.navigate(UserDestination.ReportBug)
 }
 
 internal fun NavHostController.navigateToComparePassword() {
-    this.navigate(NavigationRoute.ComparePassword)
+    this.navigate(AuthDestinations.ComparePassword)
 }
 
 internal fun NavHostController.navigateToBookmarkRecruitments() {
-    this.navigate(NavigationRoute.Navigation.BookmarkRecruitments)
+    this.navigate(NavigationRoute.BottomNavigation.BookmarkRecruitments)
 }
 
 internal fun NavHostController.putString(
@@ -84,17 +84,25 @@ internal fun NavHostController.getPreviousDestination(): String? {
 }
 
 internal fun NavHostController.navigateToCompanyDetails(companyId: Long) {
-    this.navigate("${NavigationRoute.CompanyDetails}${companyId}")
+    this.navigate("${MainDestinations.CompanyDetails}${companyId}")
+}
+
+internal fun NavHostController.navigateToVerifyEmail(){
+    this.navigate(AuthDestinations.VerifyEmail)
+}
+
+internal fun NavHostController.navigateToSetPassword(){
+    this.navigate(AuthDestinations.SetPassword)
 }
 
 internal fun NavHostController.navigateToReviewDetails(
     reviewId: String,
 ) {
-    this.navigate("${NavigationRoute.MainNavigation.ReviewDetails}${reviewId}")
+    this.navigate("${MainDestinations.ReviewDetails}${reviewId}")
 }
 
 internal fun NavHostController.navigateToResetPassword() {
-    this.navigate(NavigationRoute.ResetPassword)
+    this.navigate(AuthDestinations.ResetPassword)
 }
 
 internal fun <T> getArgument(
@@ -107,11 +115,11 @@ internal fun <T> getArgument(
 }
 
 internal fun NavHostController.navigateToPostReview(companyId: Long) {
-    this.navigate(NavigationRoute.MainNavigation.PostReview + companyId)
+    this.navigate(MainDestinations.PostReview + companyId)
 }
 
 internal fun NavHostController.navigateToNotifications() {
-    this.navigate(NavigationRoute.MainNavigation.Notifications)
+    this.navigate(UserDestination.Notifications)
 }
 
 internal fun NavController.navigateBottomMenu(
