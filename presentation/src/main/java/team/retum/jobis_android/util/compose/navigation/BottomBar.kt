@@ -3,7 +3,9 @@ package team.retum.jobis_android.util.compose.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -42,7 +44,8 @@ fun BottomBar(
 
     BottomNavigation(
         modifier = Modifier
-            .height(68.dp)
+            .height(80.dp)
+            .navigationBarsPadding()
             .graphicsLayer(
                 clip = true,
                 shape = RoundedCornerShape(
@@ -68,13 +71,12 @@ fun BottomBar(
                 },
                 icon = {
                     Icon(
-                        modifier = Modifier.padding(
-                            bottom = 8.dp,
-                        ),
+                        modifier = Modifier.padding(bottom = 8.dp),
                         painter = painterResource(id = tab.drawableId),
                         contentDescription = stringResource(id = tab.stringResId),
                     )
                 },
+                modifier = Modifier.padding(top = 4.dp),
                 selectedContentColor = JobisColor.LightBlue,
                 unselectedContentColor = JobisColor.Gray500,
                 label = {
