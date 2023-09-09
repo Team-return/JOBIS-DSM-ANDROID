@@ -1,4 +1,4 @@
-package team.retum.jobis_android.root
+package team.retum.jobis_android.util.compose
 
 import androidx.compose.runtime.Composable
 import team.returm.jobisdesignsystem.toast.JobisErrorToast

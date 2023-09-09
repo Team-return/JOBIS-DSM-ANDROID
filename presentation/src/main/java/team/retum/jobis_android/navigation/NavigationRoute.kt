@@ -1,4 +1,4 @@
-package team.retum.jobis_android.root.navigation
+package team.retum.jobis_android.navigation
 
 object NavigationRoute {
     const val Splash = "Splash"

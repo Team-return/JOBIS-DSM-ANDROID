@@ -1,4 +1,4 @@
-package team.retum.jobis_android.root.navigation
+package team.retum.jobis_android.navigation
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController

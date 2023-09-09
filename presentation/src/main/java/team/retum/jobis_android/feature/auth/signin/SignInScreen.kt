@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.signin.SignInSideEffect
-import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton

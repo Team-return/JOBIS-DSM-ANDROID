@@ -3,7 +3,7 @@ package team.retum.jobis_android.util.compose.navigation
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.root.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.NavigationRoute
 
 sealed class NavigationItem(
     @DrawableRes val drawableId: Int,

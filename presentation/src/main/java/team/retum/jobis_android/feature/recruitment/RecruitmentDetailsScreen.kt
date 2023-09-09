@@ -43,7 +43,7 @@ import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.feature.company.getNavigationRoute
-import team.retum.jobis_android.root.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.NavigationRoute
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton

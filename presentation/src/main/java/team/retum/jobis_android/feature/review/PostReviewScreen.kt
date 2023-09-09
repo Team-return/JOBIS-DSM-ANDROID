@@ -27,7 +27,7 @@ import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.param.code.Type
 import team.retum.domain.param.review.QnaElementParam
 import team.retum.jobis_android.contract.review.ReviewSideEffect
-import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel

@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.home
+package team.retum.jobis_android.feature.main
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -50,7 +50,7 @@ import team.retum.domain.entity.FileType
 import team.retum.domain.entity.student.Department
 import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.contract.mypage.MyPageSideEffect
-import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header

@@ -33,8 +33,8 @@ import team.retum.jobis_android.contract.signup.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
-import team.retum.jobis_android.root.LocalAppState
-import team.retum.jobis_android.root.navigation.NavigationRoute
+import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.navigation.NavigationRoute
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor

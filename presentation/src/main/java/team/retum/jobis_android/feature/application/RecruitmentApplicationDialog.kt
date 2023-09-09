@@ -44,7 +44,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.contract.application.ApplicationSideEffect
 import team.retum.jobis_android.contract.file.FileSideEffect
-import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.application.ApplicationViewModel

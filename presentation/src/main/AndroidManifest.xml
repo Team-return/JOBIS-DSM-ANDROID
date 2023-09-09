@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
-            android:name="team.retum.jobis_android.root.MainActivity"
+            android:name="team.retum.jobis_android.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

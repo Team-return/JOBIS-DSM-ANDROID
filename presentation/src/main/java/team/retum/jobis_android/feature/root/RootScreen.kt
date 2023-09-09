@@ -1,6 +1,5 @@
-package team.retum.jobis_android.feature.main
+package team.retum.jobis_android.feature.root
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -17,21 +16,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.feature.home.BookmarkRecruitmentsScreen
-import team.retum.jobis_android.feature.home.HomeScreen
-import team.retum.jobis_android.feature.home.MenuScreen
-import team.retum.jobis_android.feature.home.MyPageScreen
+import team.retum.jobis_android.feature.main.BookmarkRecruitmentsScreen
+import team.retum.jobis_android.feature.main.HomeScreen
+import team.retum.jobis_android.feature.main.MenuScreen
+import team.retum.jobis_android.feature.main.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
-import team.retum.jobis_android.root.navigation.NavigationRoute
-import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
-import team.retum.jobis_android.root.navigation.navigateToMyPage
+import team.retum.jobis_android.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.navigateToBookmarkRecruitments
+import team.retum.jobis_android.navigation.navigateToMyPage
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(
+fun RootScreen(
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,

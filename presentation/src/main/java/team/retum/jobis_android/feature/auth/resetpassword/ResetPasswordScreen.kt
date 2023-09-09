@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
-import team.retum.jobis_android.root.LocalAppState
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton

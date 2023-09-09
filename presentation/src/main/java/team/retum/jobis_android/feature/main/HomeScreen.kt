@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.home
+package team.retum.jobis_android.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
