@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -232,7 +233,11 @@ private fun Recruitments(
                 position = position,
                 isBookmarked = isBookmarked,
                 companyName = recruitment.companyName,
-                trainPay = stringResource(id = R.string.search_recruitment_train_pay, trainPay),
+                trainPay = if (recruitment.trainPay != 0) stringResource(
+                    id = R.string.search_recruitment_train_pay,
+                    trainPay,
+                )
+                else "",
                 isMilitarySupported = recruitment.military,
                 onBookmarked = { onBookmarked(index, recruitment.recruitId.toLong(), setBookmark) },
                 onItemClicked = { onRecruitmentClicked(recruitment) },
@@ -309,7 +314,9 @@ private fun Recruitment(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Body2(
-                        modifier = Modifier.fillMaxWidth(0.9f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .skeleton(position.isBlank()),
                         text = position,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -323,6 +330,10 @@ private fun Recruitment(
                     )
                 }
                 Caption(
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .defaultMinSize(minWidth = 80.dp)
+                        .skeleton(companyName.isBlank()),
                     text = companyName,
                     color = JobisColor.Gray600,
                 )
@@ -332,7 +343,12 @@ private fun Recruitment(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Caption(text = trainPay)
+                    Caption(
+                        modifier = Modifier
+                            .defaultMinSize(minWidth = 40.dp)
+                            .skeleton(trainPay.isBlank()),
+                        text = trainPay,
+                    )
                     Image(
                         modifier = Modifier.size(18.dp),
                         painter = painterResource(id = militaryIcon),

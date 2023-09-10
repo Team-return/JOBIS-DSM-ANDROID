@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.main.ApplyCompaniesItemShape
+import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -166,16 +168,34 @@ private fun Company(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
-                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(16.dp)),
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .skeleton(
+                        show = logoUrl.isBlank(),
+                        shape = RoundedCornerShape(16.dp),
+                    ),
                 model = logoUrl,
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                Body2(text = name)
+                Body2(
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 92.dp)
+                        .skeleton(name.isBlank()),
+                    text = name,
+                )
                 Spacer(modifier = Modifier.height(2.dp))
                 Caption(
-                    text = stringResource(id = R.string.company_list_million, take.toString()),
+                    modifier = Modifier
+                        .defaultMinSize(40.dp)
+                        .skeleton(take == 0f),
+                    text = if (take != 0f) stringResource(
+                        id = R.string.company_list_million,
+                        take.toString()
+                    )
+                    else "",
                     color = JobisColor.Gray600,
                 )
                 if (hasRecruitment) {

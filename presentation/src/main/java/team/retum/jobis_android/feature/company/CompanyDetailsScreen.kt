@@ -41,7 +41,6 @@ import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.navigation.NavigationProperties
-import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -96,8 +95,6 @@ fun CompanyDetailsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(48.dp))
-            Header(text = stringResource(id = R.string.company_list_search_company))
-            Spacer(modifier = Modifier.height(16.dp))
             CompanyDetails(details = companyState.companyDetails)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
