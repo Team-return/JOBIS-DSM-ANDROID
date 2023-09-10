@@ -5,8 +5,6 @@ import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.domain.entity.review.ReviewDetailsEntity
 
 data class FetchReviewDetailsResponse(
-    @SerializedName("year") val year: Long,
-    @SerializedName("writer") val writer: String,
     @SerializedName("qna_responses") val qnaResponses: List<QnaResponse>,
 )
 
@@ -17,8 +15,6 @@ data class QnaResponse(
 )
 
 internal fun FetchReviewDetailsResponse.toEntity() = ReviewDetailsEntity(
-    year = this.year,
-    writer = this.writer,
     qnaResponse = this.qnaResponses.map { it.toEntity() },
 )
 

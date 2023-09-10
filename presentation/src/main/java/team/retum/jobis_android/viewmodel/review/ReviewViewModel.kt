@@ -57,10 +57,7 @@ class ReviewViewModel @Inject constructor(
             fetchReviewDetailsUseCase(
                 reviewId = state.reviewId,
             ).onSuccess {
-                setWriter(it.writer)
                 setInterviews(it.qnaResponse)
-            }.onFailure {
-
             }
         }
     }
@@ -96,16 +93,6 @@ class ReviewViewModel @Inject constructor(
         reduce {
             state.copy(
                 companyId = companyId,
-            )
-        }
-    }
-
-    private fun setWriter(
-        writer: String,
-    ) = intent {
-        reduce {
-            state.copy(
-                writer = writer,
             )
         }
     }

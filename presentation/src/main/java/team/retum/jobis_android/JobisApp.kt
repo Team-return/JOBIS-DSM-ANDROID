@@ -15,6 +15,7 @@ import team.retum.jobis_android.navigation.AuthDestinations
 import team.retum.jobis_android.navigation.NavigationRoute
 import team.retum.jobis_android.navigation.authNavigation
 import team.retum.jobis_android.navigation.getPreviousDestination
+import team.retum.jobis_android.navigation.getString
 import team.retum.jobis_android.navigation.mainNavigation
 import team.retum.jobis_android.navigation.navigatePopBackStack
 import team.retum.jobis_android.navigation.navigateToBugReport
@@ -76,6 +77,7 @@ internal fun JobisApp(
 
         mainNavigation(
             putString = navController::putString,
+            getString = navController::getString,
             navigateToRecruitmentDetails = navController::navigateToRecruitmentDetails,
             getPreviousDestination = navController::getPreviousDestination,
             navigateToCompanyDetails = navController::navigateToCompanyDetails,

@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.company
 
-import android.util.Log
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
@@ -41,6 +40,7 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.navigation.MainDestinations
+import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
@@ -61,6 +61,7 @@ fun CompanyDetailsScreen(
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
+    putString: (key: String, value: String) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
@@ -115,6 +116,7 @@ fun CompanyDetailsScreen(
                 Reviews(
                     reviews = reviewState.reviews,
                     navigateToReviewDetails = navigateToReviewDetails,
+                    putString = putString,
                 )
             }
             Spacer(modifier = Modifier.height(104.dp))
@@ -249,6 +251,7 @@ private fun CompanyDetails(
 private fun Reviews(
     reviews: List<ReviewEntity>,
     navigateToReviewDetails: (String) -> Unit,
+    putString: (key: String, value: String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -259,10 +262,15 @@ private fun Reviews(
     ) {
         repeat(reviews.size) { index ->
             val item = reviews[index]
-            Review(reviewId = item.reviewId,
+            Review(
+                reviewId = item.reviewId,
                 writer = item.writer,
                 year = item.year.toString(),
-                onClick = { navigateToReviewDetails(item.reviewId) })
+                onClick = {
+                    putString(NavigationProperties.WRITER, item.writer)
+                    navigateToReviewDetails(item.reviewId)
+                },
+            )
             Spacer(modifier = Modifier.height(10.dp))
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))

@@ -19,6 +19,7 @@ import team.retum.jobis_android.util.compose.navigation.baseComposable
 
 internal fun NavGraphBuilder.mainNavigation(
     putString: (key: String, value: String) -> Unit,
+    getString: (key: String) -> String?,
     navigateToRecruitmentDetails: (recruitmentId: Long) -> Unit,
     getPreviousDestination: () -> String?,
     navigateToCompanyDetails: (companyId: Long) -> Unit,
@@ -86,6 +87,7 @@ internal fun NavGraphBuilder.mainNavigation(
                 getPreviousDestination = getPreviousDestination,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                 navigateToReviewDetails = navigateToReviewDetails,
+                putString = putString,
             )
         }
 
@@ -96,8 +98,12 @@ internal fun NavGraphBuilder.mainNavigation(
             ),
             enterTransition = slideInLeft(),
             exitTransition = slideOutRight(),
+            popExitTransition = slideOutRight(),
         ) {
-            ReviewDetailsScreen(it.arguments?.getString(NavigationProperties.REVIEW_ID) ?: "")
+            ReviewDetailsScreen(
+                reviewId = it.arguments?.getString(NavigationProperties.REVIEW_ID) ?: "",
+                getString = getString,
+            )
         }
 
         baseComposable(

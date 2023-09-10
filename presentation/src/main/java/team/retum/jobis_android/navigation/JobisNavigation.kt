@@ -1,5 +1,6 @@
 package team.retum.jobis_android.navigation
 
+import android.util.Log
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -75,6 +76,10 @@ internal fun NavHostController.putString(
     value: String,
 ) {
     this.currentBackStackEntry?.arguments?.putString(key, value)
+}
+
+internal fun NavHostController.getString(key: String): String? {
+    return this.previousBackStackEntry?.arguments?.getString(key)
 }
 
 internal fun NavHostController.getPreviousDestination(): String? {
