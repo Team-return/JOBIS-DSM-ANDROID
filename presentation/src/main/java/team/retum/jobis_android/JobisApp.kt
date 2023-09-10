@@ -3,7 +3,9 @@ package team.retum.jobis_android
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -57,6 +59,7 @@ internal fun JobisApp(
     }
 
     AnimatedNavHost(
+        modifier = Modifier.navigationBarsPadding(),
         navController = navController,
         startDestination = NavigationRoute.Splash,
     ) {

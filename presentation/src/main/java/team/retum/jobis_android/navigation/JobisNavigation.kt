@@ -54,10 +54,8 @@ internal fun NavHostController.navigateToCompanies() {
     this.navigate(MainDestinations.Companies)
 }
 
-internal fun NavHostController.navigateToRecruitmentDetails(
-    recruitmentId: Long?,
-) {
-    this.navigate(MainDestinations.RecruitmentDetails + recruitmentId)
+internal fun NavHostController.navigateToRecruitmentDetails(recruitmentId: Long?) {
+    this.navigate(MainDestinations.RecruitmentDetails.plus(recruitmentId))
 }
 
 internal fun NavHostController.navigateToBugReport() {
@@ -84,21 +82,19 @@ internal fun NavHostController.getPreviousDestination(): String? {
 }
 
 internal fun NavHostController.navigateToCompanyDetails(companyId: Long) {
-    this.navigate("${MainDestinations.CompanyDetails}${companyId}")
+    this.navigate(MainDestinations.CompanyDetails.plus(companyId))
 }
 
-internal fun NavHostController.navigateToVerifyEmail(){
+internal fun NavHostController.navigateToVerifyEmail() {
     this.navigate(AuthDestinations.VerifyEmail)
 }
 
-internal fun NavHostController.navigateToSetPassword(){
+internal fun NavHostController.navigateToSetPassword() {
     this.navigate(AuthDestinations.SetPassword)
 }
 
-internal fun NavHostController.navigateToReviewDetails(
-    reviewId: String,
-) {
-    this.navigate("${MainDestinations.ReviewDetails}${reviewId}")
+internal fun NavHostController.navigateToReviewDetails(reviewId: String) {
+    this.navigate(MainDestinations.ReviewDetails.plus(reviewId))
 }
 
 internal fun NavHostController.navigateToResetPassword() {
@@ -115,7 +111,7 @@ internal fun <T> getArgument(
 }
 
 internal fun NavHostController.navigateToPostReview(companyId: Long) {
-    this.navigate(MainDestinations.PostReview + companyId)
+    this.navigate(MainDestinations.PostReview.plus(companyId))
 }
 
 internal fun NavHostController.navigateToNotifications() {

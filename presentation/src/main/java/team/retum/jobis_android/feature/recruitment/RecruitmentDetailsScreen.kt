@@ -196,8 +196,8 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-            content = details.preferentialTreatment
-                ?: stringResource(id = R.string.company_details_null),
+            content = if (details.preferentialTreatment.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
+            else details.preferentialTreatment.toString(),
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_licenses),
@@ -205,8 +205,9 @@ private fun RecruitmentDetails(
                 details.requiredLicenses?.forEach {
                     append(it)
                     append(" ")
-                } ?: stringResource(id = R.string.company_details_null)
-            }.toString().trim().replace(" ", ", "),
+                }
+            }.toString().trim().replace(" ", ", ")
+                .ifEmpty { stringResource(id = R.string.company_details_null) },
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_grade),
@@ -224,9 +225,11 @@ private fun RecruitmentDetails(
             title = stringResource(id = R.string.recruitment_details_hiring_progress),
             content = StringBuilder().apply {
                 repeat(details.hiringProgress.size) {
-                    append("${it + 1}.${details.hiringProgress[it].value}\n")
+                    append("${it + 1}. ${details.hiringProgress[it].value}")
+                    if (it != details.hiringProgress.lastIndex) append("\n")
                 }
-            }.toString(),
+            }
+                .toString(),
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_documents),
@@ -234,7 +237,8 @@ private fun RecruitmentDetails(
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_etc),
-            content = details.etc ?: stringResource(id = R.string.company_details_null)
+            content = if (details.etc.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
+            else details.etc.toString()
         )
     }
 
@@ -333,7 +337,10 @@ private fun PositionCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Body3(text = position)
+            Body3(
+                modifier = Modifier.weight(1f),
+                text = position,
+            )
             Caption(
                 text = stringResource(id = R.string.recruitment_details_count, workerCount),
                 color = JobisColor.Gray600,

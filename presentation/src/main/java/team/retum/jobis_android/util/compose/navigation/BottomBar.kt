@@ -43,8 +43,7 @@ fun BottomBar(
 
     BottomNavigation(
         modifier = Modifier
-            .height(112.dp)
-            .navigationBarsPadding()
+            .height(64.dp)
             .graphicsLayer(
                 clip = true,
                 shape = RoundedCornerShape(

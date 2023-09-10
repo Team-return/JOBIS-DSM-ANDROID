@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.company
 
+import android.util.Log
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
@@ -212,7 +213,8 @@ private fun CompanyDetails(
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address2),
-            content = details.subAddress ?: stringResource(id = R.string.company_details_null),
+            content = if (details.subAddress.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
+            else details.subAddress.toString(),
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager1),
@@ -220,16 +222,17 @@ private fun CompanyDetails(
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number1),
-            content = details.managerPhoneNo,
+            content = details.managerPhoneNo.toPhoneNumber(),
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager2),
-            content = details.subManagerName ?: stringResource(id = R.string.company_details_null),
+            content = if (details.subManagerName.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
+            else details.subManagerName.toString(),
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number2),
-            content = details.subManagerPhoneNo
-                ?: stringResource(id = R.string.company_details_null),
+            content = if (details.subManagerPhoneNo.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
+            else details.subManagerPhoneNo.toPhoneNumber(),
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_email),
@@ -330,3 +333,13 @@ private fun Review(
 }
 
 internal fun String.getNavigationRoute() = this.split("/").first()
+
+private fun String?.toPhoneNumber() = StringBuilder().apply {
+    repeat(this@toPhoneNumber?.length ?: 0) {
+        when (it) {
+            3 -> append("-")
+            7 -> append("-")
+        }
+        append(this@toPhoneNumber?.get(it))
+    }
+}.toString()
