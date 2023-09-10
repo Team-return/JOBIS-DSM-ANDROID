@@ -57,7 +57,7 @@ import java.text.DecimalFormat
 
 @Stable
 val ApplyCompaniesItemShape = RoundedCornerShape(
-    size = 10.dp,
+    size = 16.dp,
 )
 
 @Stable

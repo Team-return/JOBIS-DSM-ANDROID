@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -165,7 +166,7 @@ private fun Company(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
-                modifier = Modifier.size(80.dp),
+                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(16.dp)),
                 model = logoUrl,
                 contentDescription = null,
             )
