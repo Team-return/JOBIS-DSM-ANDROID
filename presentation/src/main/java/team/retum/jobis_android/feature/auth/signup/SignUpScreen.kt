@@ -34,7 +34,10 @@ import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScree
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.navigation.AuthDestinations
 import team.retum.jobis_android.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.navigateToSetPassword
+import team.retum.jobis_android.navigation.navigateToVerifyEmail
 import team.retum.jobis_android.util.compose.component.TopBar
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
@@ -70,14 +73,6 @@ internal fun SignUpScreen(
 
     val navController = rememberNavController()
 
-    val navigateToVerifyEmail = {
-        navController.navigate(NavigationRoute.VerifyEmail)
-    }
-
-    val navigateToSetPassword = {
-        navController.navigate(NavigationRoute.SetPassword)
-    }
-
     val notFoundToastMessage = stringResource(id = R.string.student_info_not_found_student)
     val sendAuthCodeSuccessToastTitle =
         stringResource(id = R.string.email_verification_send_auth_code_success_title)
@@ -102,7 +97,7 @@ internal fun SignUpScreen(
         signUpViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navigateToVerifyEmail()
+                    navController.navigateToVerifyEmail()
                     currentProgress = 2
                 }
 
@@ -111,7 +106,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
-                    navigateToSetPassword()
+                    navController.navigateToSetPassword()
                     currentProgress = 3
                 }
 
@@ -175,15 +170,15 @@ internal fun SignUpScreen(
             Spacer(modifier = Modifier.height(50.dp))
             NavHost(
                 navController = navController,
-                startDestination = NavigationRoute.StudentInfo,
+                startDestination = AuthDestinations.StudentInfo,
             ) {
-                composable(route = NavigationRoute.StudentInfo) {
+                composable(route = AuthDestinations.StudentInfo) {
                     StudentInfoScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = NavigationRoute.VerifyEmail) {
+                composable(route = AuthDestinations.VerifyEmail) {
                     VerifyEmailScreen(signUpViewModel = signUpViewModel)
                 }
-                composable(route = NavigationRoute.SetPassword) {
+                composable(route = AuthDestinations.SetPassword) {
                     SetPasswordScreen(signUpViewModel = signUpViewModel)
                 }
             }

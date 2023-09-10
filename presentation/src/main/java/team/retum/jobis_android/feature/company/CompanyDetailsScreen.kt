@@ -39,7 +39,7 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
-import team.retum.jobis_android.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
@@ -58,7 +58,7 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 fun CompanyDetailsScreen(
     companyId: Long,
     getPreviousDestination: () -> String?,
-    navigateToRecruitmentDetails: (Long?) -> Unit,
+    navigateToRecruitmentDetails: (Long) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
@@ -71,7 +71,7 @@ fun CompanyDetailsScreen(
 
     LaunchedEffect(Unit) {
         detailButtonVisibility =
-            getPreviousDestination()?.getNavigationRoute() != NavigationRoute.RecruitmentDetails.getNavigationRoute()
+            getPreviousDestination()?.getNavigationRoute() != MainDestinations.RecruitmentDetails.getNavigationRoute()
 
         companyViewModel.setCompanyId(companyId)
         companyViewModel.fetchCompanyDetails()
@@ -124,7 +124,11 @@ fun CompanyDetailsScreen(
                     text = stringResource(id = R.string.company_details_see_recruitents),
                     color = JobisButtonColor.MainSolidColor,
                     enabled = companyState.companyDetails.recruitmentId != null,
-                    onClick = { navigateToRecruitmentDetails(companyState.companyDetails.recruitmentId) },
+                    onClick = {
+                        navigateToRecruitmentDetails(
+                            companyState.companyDetails.recruitmentId ?: 0
+                        )
+                    },
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }

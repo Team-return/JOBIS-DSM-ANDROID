@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
-internal fun NavHostController.navigateToMain() {
+internal fun NavHostController.navigateToRoot() {
     this.navigate(NavigationRoute.Root) {
         popUpTo(NavigationRoute.Root) {
             inclusive = true
@@ -14,7 +14,7 @@ internal fun NavHostController.navigateToMain() {
     }
 }
 
-internal fun NavHostController.navigateToMainWithPopUpSignIn() {
+internal fun NavHostController.navigateToRootWithPopUpSignIn() {
     this.navigate(NavigationRoute.Root) {
         popUpTo(AuthDestinations.SignIn) {
             inclusive = true

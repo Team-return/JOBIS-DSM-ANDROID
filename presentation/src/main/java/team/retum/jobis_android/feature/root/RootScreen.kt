@@ -70,9 +70,9 @@ fun RootScreen(
             NavHost(
                 modifier = Modifier.padding(it),
                 navController = navHostController,
-                startDestination = NavigationRoute.Navigation.Home,
+                startDestination = NavigationRoute.BottomNavigation.Home,
             ) {
-                composable(route = NavigationRoute.Navigation.Home) {
+                composable(route = NavigationRoute.BottomNavigation.Home) {
                     HomeScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
@@ -80,13 +80,13 @@ fun RootScreen(
                         navigateToNotifications = navigateToNotifications,
                     )
                 }
-                composable(route = NavigationRoute.Navigation.BookmarkRecruitments) {
+                composable(route = NavigationRoute.BottomNavigation.BookmarkRecruitments) {
                     BookmarkRecruitmentsScreen(
                         navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                         navigateToRecruitments = navigateToRecruitments,
                     )
                 }
-                composable(route = NavigationRoute.Navigation.MyPage) {
+                composable(route = NavigationRoute.BottomNavigation.MyPage) {
                     MyPageScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
@@ -95,7 +95,7 @@ fun RootScreen(
                         navigateToNotifications = navigateToNotifications,
                     )
                 }
-                composable(route = NavigationRoute.Navigation.Menu) {
+                composable(route = NavigationRoute.BottomNavigation.Menu) {
                     MenuScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
