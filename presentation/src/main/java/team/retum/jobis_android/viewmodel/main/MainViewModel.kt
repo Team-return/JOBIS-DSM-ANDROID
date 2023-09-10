@@ -18,6 +18,10 @@ class MainViewModel @Inject constructor(
 
     override val container = container<MainState, MainSideEffect>(MainState())
 
+    init{
+        fetchAutoSignInOption()
+    }
+
     internal fun fetchAutoSignInOption() {
         runBlocking {
             fetchAutoSignInOptionUseCase().onSuccess {

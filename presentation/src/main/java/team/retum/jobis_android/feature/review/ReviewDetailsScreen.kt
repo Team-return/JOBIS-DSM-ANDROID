@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewDetailEntity
+import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -31,15 +32,16 @@ import team.returm.jobisdesignsystem.theme.Caption
 @Composable
 internal fun ReviewDetailsScreen(
     reviewId: String,
+    getString: (key: String) -> String?,
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
+
+    val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         reviewViewModel.setReviewId(reviewId)
         reviewViewModel.fetchReviewDetails()
     }
-
-    val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,7 +50,12 @@ internal fun ReviewDetailsScreen(
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             Spacer(modifier = Modifier.height(48.dp))
-            Header(text = stringResource(id = R.string.review_details_review, state.writer))
+            Header(
+                text = stringResource(
+                    id = R.string.review_details_review,
+                    getString(NavigationProperties.WRITER) ?: "",
+                )
+            )
             Spacer(modifier = Modifier.height(30.dp))
             InterviewReviews(interviewEntities = state.reviewDetails)
         }

@@ -1,4 +1,4 @@
-package team.retum.jobis_android.root
+package team.retum.jobis_android
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ScaffoldState
@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import team.returm.jobisdesignsystem.toast.ToastType
+
+@Stable
+internal val LocalAppState = staticCompositionLocalOf<JobisAppState> {
+    error("Not implemented")
+}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

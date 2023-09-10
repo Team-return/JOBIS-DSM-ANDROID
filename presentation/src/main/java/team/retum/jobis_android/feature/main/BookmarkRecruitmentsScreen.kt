@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.home
+package team.retum.jobis_android.feature.main
 
 import android.content.Context
 import androidx.compose.animation.animateColorAsState

@@ -3,6 +3,7 @@ package team.retum.jobis_android.util.compose.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
@@ -18,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import team.retum.jobis_android.root.navigation.navigateBottomMenu
+import team.retum.jobis_android.navigation.navigateBottomMenu
 import team.retum.jobis_android.util.compose.vibrate
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body4
@@ -42,7 +43,7 @@ fun BottomBar(
 
     BottomNavigation(
         modifier = Modifier
-            .height(68.dp)
+            .height(64.dp)
             .graphicsLayer(
                 clip = true,
                 shape = RoundedCornerShape(
@@ -68,13 +69,12 @@ fun BottomBar(
                 },
                 icon = {
                     Icon(
-                        modifier = Modifier.padding(
-                            bottom = 8.dp,
-                        ),
+                        modifier = Modifier.padding(bottom = 4.dp),
                         painter = painterResource(id = tab.drawableId),
                         contentDescription = stringResource(id = tab.stringResId),
                     )
                 },
+                modifier = Modifier.height(80.dp),
                 selectedContentColor = JobisColor.LightBlue,
                 unselectedContentColor = JobisColor.Gray500,
                 label = {

@@ -1,6 +1,5 @@
-package team.retum.jobis_android.feature.main
+package team.retum.jobis_android.feature.root
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -17,21 +16,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.feature.home.BookmarkRecruitmentsScreen
-import team.retum.jobis_android.feature.home.HomeScreen
-import team.retum.jobis_android.feature.home.MenuScreen
-import team.retum.jobis_android.feature.home.MyPageScreen
+import team.retum.jobis_android.feature.main.BookmarkRecruitmentsScreen
+import team.retum.jobis_android.feature.main.HomeScreen
+import team.retum.jobis_android.feature.main.MenuScreen
+import team.retum.jobis_android.feature.main.MyPageScreen
 import team.retum.jobis_android.feature.recruitment.RecruitmentFilter
-import team.retum.jobis_android.root.navigation.NavigationRoute
-import team.retum.jobis_android.root.navigation.navigateToBookmarkRecruitments
-import team.retum.jobis_android.root.navigation.navigateToMyPage
+import team.retum.jobis_android.navigation.NavigationRoute
+import team.retum.jobis_android.navigation.navigateToBookmarkRecruitments
+import team.retum.jobis_android.navigation.navigateToMyPage
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(
+fun RootScreen(
     navigateToRecruitments: () -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
@@ -49,12 +47,6 @@ fun MainScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val coroutineScope = rememberCoroutineScope()
-
-    val showDialog: () -> Unit = {
-        coroutineScope.launch {
-            sheetState.show()
-        }
-    }
 
     ModalBottomSheetLayout(
         sheetContent = {
@@ -78,9 +70,9 @@ fun MainScreen(
             NavHost(
                 modifier = Modifier.padding(it),
                 navController = navHostController,
-                startDestination = NavigationRoute.Navigation.Home,
+                startDestination = NavigationRoute.BottomNavigation.Home,
             ) {
-                composable(route = NavigationRoute.Navigation.Home) {
+                composable(route = NavigationRoute.BottomNavigation.Home) {
                     HomeScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,
@@ -88,26 +80,22 @@ fun MainScreen(
                         navigateToNotifications = navigateToNotifications,
                     )
                 }
-
-                composable(route = NavigationRoute.Navigation.BookmarkRecruitments) {
+                composable(route = NavigationRoute.BottomNavigation.BookmarkRecruitments) {
                     BookmarkRecruitmentsScreen(
                         navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                         navigateToRecruitments = navigateToRecruitments,
                     )
                 }
-
-                composable(route = NavigationRoute.Navigation.MyPage) {
+                composable(route = NavigationRoute.BottomNavigation.MyPage) {
                     MyPageScreen(
                         navigateToSignInPopUpWithMain = navigateToSignInPopUpWithMain,
                         navigateToBugReport = navigateToBugReport,
                         navigateToComparePassword = navigateToComparePassword,
                         navigateToPostReview = navigateToPostReview,
                         navigateToNotifications = navigateToNotifications,
-                        showDialog = showDialog,
                     )
                 }
-
-                composable(route = NavigationRoute.Navigation.Menu) {
+                composable(route = NavigationRoute.BottomNavigation.Menu) {
                     MenuScreen(
                         navigateToMyPage = navHostController::navigateToMyPage,
                         navigateToRecruitments = navigateToRecruitments,

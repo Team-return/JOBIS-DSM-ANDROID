@@ -40,9 +40,9 @@ class HttpHandler<T> {
             throw e
         } catch (e: SocketTimeoutException) {
             throw TimeoutException()
+        } catch (e: UnknownHostException) {
+            throw OfflineException()
         } catch (e: Throwable) {
             throw UnknownException()
-        } catch (e: UnknownHostException){
-            throw OfflineException()
         }
 }

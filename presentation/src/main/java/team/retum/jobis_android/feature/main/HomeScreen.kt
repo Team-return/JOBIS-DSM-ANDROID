@@ -1,4 +1,4 @@
-package team.retum.jobis_android.feature.home
+package team.retum.jobis_android.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -57,7 +57,7 @@ import java.text.DecimalFormat
 
 @Stable
 val ApplyCompaniesItemShape = RoundedCornerShape(
-    size = 10.dp,
+    size = 16.dp,
 )
 
 @Stable

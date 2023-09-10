@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
@@ -40,6 +41,8 @@ internal class BookmarkViewModel @Inject constructor(
             fetchBookmarkedRecruitmentsUseCase().onSuccess {
                 setBookmarkExists(bookmarkExists = it.bookmarks.isNotEmpty())
                 setBookmarkedRecruitments(bookmarkedRecruitments = it.bookmarks)
+            }.onFailure {
+                setBookmarkExists(false)
             }
         }
     }

@@ -7,9 +7,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
-import team.retum.jobis_android.root.JobisAppState
-import team.retum.jobis_android.root.JobisBasicToast
-import team.retum.jobis_android.root.ToastState
+import team.retum.jobis_android.JobisAppState
+import team.retum.jobis_android.util.compose.JobisBasicToast
+import team.retum.jobis_android.ToastState
 
 @Composable
 internal fun JobisSnackBarHost(

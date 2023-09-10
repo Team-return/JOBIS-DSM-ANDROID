@@ -1,8 +1,6 @@
 package team.retum.domain.entity.review
 
 data class ReviewDetailsEntity(
-    val year: Long,
-    val writer: String,
     val qnaResponse: List<ReviewDetailEntity>,
 )
 
