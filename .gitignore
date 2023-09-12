@@ -775,3 +775,5 @@ buildSrc/build/kotlin/compileKotlin/caches-jvm/lookups/id-to-file.tab.values.at
 .idea/libraries/Gradle__io_coil_kt_coil_compose_base_2_4_0_aar.xml
 
 presentation/google-services.json
+
+presentation/release/presentation-release.aab
