@@ -15,10 +15,6 @@ interface UserRepository {
         sendVerificationCodeParam: SendVerificationCodeParam,
     )
 
-    suspend fun checkStudentExists(
-        checkStudentExistsParam: CheckStudentExistsParam,
-    )
-
     suspend fun verifyEmail(
         verifyEmailParam: VerifyEmailParam,
     )

@@ -32,4 +32,15 @@ class StudentsDataSourceImpl @Inject constructor(
         HttpHandler<Unit>().httpRequest {
             studentApi.editProfileImage(editProfileImageRequest = editProfileImageRequest)
         }.sendRequest()
+
+    override suspend fun checkStudentExists(
+        gcn: Int,
+        name: String,
+    ) = HttpHandler<Unit>()
+        .httpRequest {
+            studentApi.checkStudentExists(
+                gcn = gcn,
+                name = name,
+            )
+        }.sendRequest()
 }

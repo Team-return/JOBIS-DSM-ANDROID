@@ -1,16 +1,16 @@
 package team.retum.domain.usecase.user
 
 import team.retum.domain.param.user.CheckStudentExistsParam
-import team.retum.domain.repository.UserRepository
+import team.retum.domain.repository.StudentRepository
 import javax.inject.Inject
 
 class CheckStudentExistUseCase @Inject constructor(
-    private val userRepository: UserRepository,
+    private val studentRepository: StudentRepository,
 ) {
     suspend operator fun invoke(
         checkStudentExistsParam: CheckStudentExistsParam,
     ) = kotlin.runCatching {
-        userRepository.checkStudentExists(
+        studentRepository.checkStudentExists(
             checkStudentExistsParam = checkStudentExistsParam,
         )
     }

@@ -28,4 +28,10 @@ interface StudentApi {
     suspend fun editProfileImage(
         @Body editProfileImageRequest: EditProfileImageRequest,
     ): Response<Void>
+
+    @GET(JobisUrl.Student.exists)
+    suspend fun checkStudentExists(
+        @Query("gcn") gcn: Int,
+        @Query("name") name: String,
+    )
 }

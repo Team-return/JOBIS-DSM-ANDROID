@@ -11,11 +11,6 @@ interface UserDataSource {
 
     suspend fun sendVerificationCode(sendVerificationCodeRequest: SendVerificationCodeRequest)
 
-    suspend fun checkStudentExists(
-        gcn: Int,
-        name: String,
-    )
-
     suspend fun verifyEmail(
         email: String,
         authCode: String,

@@ -3,6 +3,7 @@ package team.retum.domain.repository
 import team.retum.domain.entity.student.StudentInformationEntity
 import team.retum.domain.param.students.EditProfileImageParam
 import team.retum.domain.param.students.ResetPasswordParam
+import team.retum.domain.param.user.CheckStudentExistsParam
 
 interface StudentRepository {
     suspend fun fetchStudentInformation(): StudentInformationEntity
@@ -12,4 +13,8 @@ interface StudentRepository {
     suspend fun resetPassword(resetPasswordParam: ResetPasswordParam)
 
     suspend fun editProfileImage(editProfileImageParam: EditProfileImageParam)
+
+    suspend fun checkStudentExists(
+        checkStudentExistsParam: CheckStudentExistsParam,
+    )
 }

@@ -30,12 +30,6 @@ interface UserApi {
         @Body sendVerificationCodeRequest: SendVerificationCodeRequest,
     )
 
-    @GET(JobisUrl.Student.exists)
-    suspend fun checkStudentExists(
-        @Query("gcn") gcn: Int,
-        @Query("name") name: String,
-    )
-
     @PATCH(JobisUrl.Auth.code)
     suspend fun verifyEmail(
         @Query("email") email: String,

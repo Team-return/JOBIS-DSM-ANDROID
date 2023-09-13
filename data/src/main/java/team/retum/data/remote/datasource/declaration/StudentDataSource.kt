@@ -12,4 +12,9 @@ interface StudentsDataSource {
     suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest)
 
     suspend fun editProfileImage(editProfileImageRequest: EditProfileImageRequest)
+
+    suspend fun checkStudentExists(
+        gcn: Int,
+        name: String,
+    )
 }

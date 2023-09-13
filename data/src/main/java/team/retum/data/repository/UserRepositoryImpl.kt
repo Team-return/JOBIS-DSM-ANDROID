@@ -47,15 +47,6 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun checkStudentExists(
-        checkStudentExistsParam: CheckStudentExistsParam,
-    ) {
-        userDataSource.checkStudentExists(
-            gcn = checkStudentExistsParam.gcn,
-            name = checkStudentExistsParam.name,
-        )
-    }
-
     override suspend fun signUp(
         signUpParam: SignUpParam,
     ) {
