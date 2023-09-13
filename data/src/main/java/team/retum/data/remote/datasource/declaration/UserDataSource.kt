@@ -16,10 +16,6 @@ interface UserDataSource {
         authCode: String,
     )
 
-    suspend fun signUp(
-        signUpRequest: SignUpRequest,
-    ): SignUpResponse
-
     suspend fun setUserInfo(signInResponse: SignInResponse)
 
     suspend fun setAutoSignInOption(autoSignInOption: Boolean)

@@ -35,9 +35,4 @@ interface UserApi {
         @Query("email") email: String,
         @Query("auth_code") authCode: String,
     )
-
-    @POST(JobisUrl.student)
-    suspend fun signUp(
-        @Body signUpRequest: SignUpRequest,
-    ): SignUpResponse
 }

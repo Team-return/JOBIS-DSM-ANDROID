@@ -4,7 +4,9 @@ import team.retum.data.remote.api.StudentApi
 import team.retum.data.remote.datasource.declaration.StudentsDataSource
 import team.retum.data.remote.request.students.EditProfileImageRequest
 import team.retum.data.remote.request.students.ResetPasswordRequest
+import team.retum.data.remote.request.user.SignUpRequest
 import team.retum.data.remote.response.students.FetchStudentInformationResponse
+import team.retum.data.remote.response.user.SignUpResponse
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
 
@@ -41,6 +43,15 @@ class StudentsDataSourceImpl @Inject constructor(
             studentApi.checkStudentExists(
                 gcn = gcn,
                 name = name,
+            )
+        }.sendRequest()
+
+    override suspend fun signUp(
+        signUpRequest: SignUpRequest,
+    ) = HttpHandler<SignUpResponse>()
+        .httpRequest {
+            studentApi.signUp(
+                signUpRequest = signUpRequest,
             )
         }.sendRequest()
 }

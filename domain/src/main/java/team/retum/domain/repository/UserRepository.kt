@@ -19,10 +19,6 @@ interface UserRepository {
         verifyEmailParam: VerifyEmailParam,
     )
 
-    suspend fun signUp(
-        signUpParam: SignUpParam,
-    )
-
     suspend fun fetchAutoSignInOption(): Boolean
 
     suspend fun signOut()

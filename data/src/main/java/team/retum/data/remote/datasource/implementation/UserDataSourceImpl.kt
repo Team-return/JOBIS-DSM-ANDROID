@@ -44,15 +44,6 @@ class UserDataSourceImpl @Inject constructor(
             )
         }.sendRequest()
 
-    override suspend fun signUp(
-        signUpRequest: SignUpRequest,
-    ) = HttpHandler<SignUpResponse>()
-        .httpRequest {
-            userApi.signUp(
-                signUpRequest = signUpRequest,
-            )
-        }.sendRequest()
-
     override suspend fun setUserInfo(
         signInResponse: SignInResponse,
     ) {

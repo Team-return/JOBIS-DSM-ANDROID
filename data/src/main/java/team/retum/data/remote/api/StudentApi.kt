@@ -4,10 +4,13 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Query
 import team.retum.data.remote.request.students.EditProfileImageRequest
 import team.retum.data.remote.request.students.ResetPasswordRequest
+import team.retum.data.remote.request.user.SignUpRequest
 import team.retum.data.remote.response.students.FetchStudentInformationResponse
+import team.retum.data.remote.response.user.SignUpResponse
 import team.retum.data.remote.url.JobisUrl
 
 interface StudentApi {
@@ -34,4 +37,9 @@ interface StudentApi {
         @Query("gcn") gcn: Int,
         @Query("name") name: String,
     )
+
+    @POST(JobisUrl.student)
+    suspend fun signUp(
+        @Body signUpRequest: SignUpRequest,
+    ): SignUpResponse
 }

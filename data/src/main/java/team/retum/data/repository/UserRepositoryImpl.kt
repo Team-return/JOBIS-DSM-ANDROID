@@ -47,27 +47,6 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun signUp(
-        signUpParam: SignUpParam,
-    ) {
-
-        val response = userDataSource.signUp(
-            signUpRequest = signUpParam.toRequest(),
-        )
-
-        userDataSource.run {
-            setUserInfo(
-                signInResponse = SignInResponse(
-                    accessToken = response.accessToken,
-                    accessExpiresAt = response.accessExpiresAt,
-                    refreshToken = response.refreshToken,
-                    refreshExpiresAt = response.refreshExpiresAt,
-                    authority = response.authority,
-                )
-            )
-        }
-    }
-
     override suspend fun fetchAutoSignInOption(): Boolean {
         return userDataSource.fetchAutoSignInOption()
     }
