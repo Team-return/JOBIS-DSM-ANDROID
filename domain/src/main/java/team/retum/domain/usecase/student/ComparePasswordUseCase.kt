@@ -1,14 +1,14 @@
 package team.retum.domain.usecase.student
 
-import team.retum.domain.repository.StudentsRepository
+import team.retum.domain.repository.StudentRepository
 import javax.inject.Inject
 
 class ComparePasswordUseCase @Inject constructor(
-    private val studentsRepository: StudentsRepository,
+    private val studentRepository: StudentRepository,
 ) {
     suspend operator fun invoke(
         password: String,
     ) = runCatching{
-        studentsRepository.comparePassword(password = password)
+        studentRepository.comparePassword(password = password)
     }
 }

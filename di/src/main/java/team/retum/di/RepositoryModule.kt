@@ -12,7 +12,7 @@ import team.retum.data.repository.CompanyRepositoryImpl
 import team.retum.data.repository.FileRepositoryImpl
 import team.retum.data.repository.RecruitmentRepositoryImpl
 import team.retum.data.repository.ReviewRepositoryImpl
-import team.retum.data.repository.StudentsRepositoryImpl
+import team.retum.data.repository.StudentRepositoryImpl
 import team.retum.data.repository.UserRepositoryImpl
 import team.retum.domain.repository.ApplicationsRepository
 import team.retum.domain.repository.BookmarkRepository
@@ -22,7 +22,7 @@ import team.retum.domain.repository.CompanyRepository
 import team.retum.domain.repository.FileRepository
 import team.retum.domain.repository.RecruitmentRepository
 import team.retum.domain.repository.ReviewRepository
-import team.retum.domain.repository.StudentsRepository
+import team.retum.domain.repository.StudentRepository
 import team.retum.domain.repository.UserRepository
 import javax.inject.Singleton
 
@@ -50,9 +50,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsStudentsRepository(
-        studentsRepositoryImpl: StudentsRepositoryImpl,
-    ): StudentsRepository
+    abstract fun bindsStudentRepository(
+        studentsRepositoryImpl: StudentRepositoryImpl,
+    ): StudentRepository
 
     @Binds
     @Singleton

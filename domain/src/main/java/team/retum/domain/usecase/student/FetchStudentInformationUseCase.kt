@@ -1,12 +1,12 @@
 package team.retum.domain.usecase.student
 
-import team.retum.domain.repository.StudentsRepository
+import team.retum.domain.repository.StudentRepository
 import javax.inject.Inject
 
 class FetchStudentInformationUseCase @Inject constructor(
-    private val studentsRepository: StudentsRepository,
+    private val studentRepository: StudentRepository,
 ) {
     suspend operator fun invoke() = runCatching{
-        studentsRepository.fetchStudentInformation()
+        studentRepository.fetchStudentInformation()
     }
 }
