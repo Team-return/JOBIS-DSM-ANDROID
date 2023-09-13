@@ -8,6 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import team.retum.data.remote.api.AuthApi
 import team.retum.data.remote.api.UserApi
 import team.retum.data.remote.url.JobisUrl
 import team.retum.data.storage.UserDataStorage
@@ -55,11 +56,11 @@ class AuthorizationInterceptor @Inject constructor(
 
         val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
-        val userApi = retrofit.create(UserApi::class.java)
+        val authApi = retrofit.create(AuthApi::class.java)
 
         runBlocking {
             runCatching {
-                userApi.tokenReissue(userDataStorage.fetchRefreshToken())
+                authApi.tokenReissue(userDataStorage.fetchRefreshToken())
             }.onSuccess { response ->
                 response.apply {
                     userDataStorage.setUserInfo(
