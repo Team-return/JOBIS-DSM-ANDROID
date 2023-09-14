@@ -9,7 +9,7 @@ data class FetchCompaniesResponse(
 )
 
 data class Company(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
     @SerializedName("logo_url") val logoUrl: String,
     @SerializedName("take") val take: Float,
