@@ -9,14 +9,6 @@ class BookmarkRepositoryImpl @Inject constructor(
     private val bookmarkDataSource: BookmarkDataSource,
 ) : BookmarkRepository {
 
-    override suspend fun bookmarkRecruitment(
-        recruitmentId: Long,
-    ) {
-        bookmarkDataSource.bookmarkRecruitment(
-            recruitmentId = recruitmentId,
-        )
-    }
-
     override suspend fun fetchBookmarkedRecruitments() =
         bookmarkDataSource.fetchBookmarkedRecruitments().toEntity()
 

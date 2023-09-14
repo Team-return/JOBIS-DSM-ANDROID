@@ -11,18 +11,18 @@ import javax.inject.Inject
 class RecruitmentRepositoryImpl @Inject constructor(
     private val recruitmentDataSource: RecruitmentDataSource,
 ) : RecruitmentRepository {
-    override suspend fun fetchRecruitmentList(
-        fetchRecruitmentListParam: FetchRecruitmentListParam
-    ): RecruitmentsEntity = recruitmentDataSource.fetchRecruitmentList(
-        page = fetchRecruitmentListParam.page,
-        jobCode = fetchRecruitmentListParam.jobCode,
-        techCode = fetchRecruitmentListParam.techCode,
-        name = fetchRecruitmentListParam.name,
-    ).toEntity()
+    override suspend fun fetchRecruitmentList(fetchRecruitmentListParam: FetchRecruitmentListParam): RecruitmentsEntity =
+        recruitmentDataSource.fetchRecruitmentList(
+            page = fetchRecruitmentListParam.page,
+            jobCode = fetchRecruitmentListParam.jobCode,
+            techCode = fetchRecruitmentListParam.techCode,
+            name = fetchRecruitmentListParam.name,
+        ).toEntity()
 
-    override suspend fun fetchRecruitmentDetails(
-        recruitmentId: Long,
-    ): RecruitmentDetailsEntity = recruitmentDataSource.fetchRecruitmentDetails(
-        recruitmentId = recruitmentId,
-    ).toEntity()
+    override suspend fun fetchRecruitmentDetails(recruitmentId: Long): RecruitmentDetailsEntity =
+        recruitmentDataSource.fetchRecruitmentDetails(recruitmentId).toEntity()
+
+    override suspend fun bookmarkRecruitment(recruitmentId: Long) {
+        recruitmentDataSource.bookmarkRecruitment(recruitmentId)
+    }
 }

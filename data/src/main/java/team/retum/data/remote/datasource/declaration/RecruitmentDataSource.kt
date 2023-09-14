@@ -11,7 +11,7 @@ interface RecruitmentDataSource {
         name: String?,
     ): RecruitmentsResponse
 
-    suspend fun fetchRecruitmentDetails(
-        recruitmentId: Long,
-    ): FetchRecruitmentDetailsResponse
+    suspend fun fetchRecruitmentDetails(recruitmentId: Long): FetchRecruitmentDetailsResponse
+
+    suspend fun bookmarkRecruitment(recruitmentId: Long)
 }

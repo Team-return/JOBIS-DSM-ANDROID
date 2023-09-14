@@ -9,15 +9,6 @@ import javax.inject.Inject
 class BookmarkDataSourceImpl @Inject constructor(
     private val bookmarkApi: BookmarkApi,
 ) : BookmarkDataSource {
-
-    override suspend fun bookmarkRecruitment(
-        recruitmentId: Long,
-    ) = HttpHandler<Unit>().httpRequest {
-        bookmarkApi.bookmarkRecruitment(
-            recruitmentId = recruitmentId,
-        )
-    }.sendRequest()
-
     override suspend fun fetchBookmarkedRecruitments(): FetchBookmarkedRecruitmentsResponse =
         HttpHandler<FetchBookmarkedRecruitmentsResponse>().httpRequest {
             bookmarkApi.fetchBookmarkedRecruitments()
