@@ -24,14 +24,14 @@ internal class BugViewModel @Inject constructor(
 
     override val container = container<BugState, BugSideEffect>(BugState())
 
-    internal fun reportBug() = intent {
+    internal fun reportBug(fileUrls: List<String>) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reportBugUseCase(
                 ReportBugParam(
                     title = state.title,
                     content = state.content,
                     developmentArea = state.selectedPosition,
-                    attachmentUrls = state.fileUrls,
+                    attachmentUrls = fileUrls,
                 )
             ).onSuccess {
                 postSideEffect(BugSideEffect.SuccessReportBug)

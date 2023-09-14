@@ -35,9 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
 import team.retum.jobis_android.contract.file.FileSideEffect
-import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.bugreport.BugViewModel
@@ -87,8 +87,7 @@ internal fun ReportBugScreen(
         fileViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is FileSideEffect.SuccessUploadFile -> {
-                    bugViewModel.setFileUrls(fileUrls = fileState.urls)
-                    bugViewModel.reportBug()
+                    bugViewModel.reportBug(fileUrls = it.fileUrls)
                 }
 
                 is FileSideEffect.FileLargeException -> {
