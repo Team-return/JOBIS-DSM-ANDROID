@@ -13,4 +13,9 @@ class BookmarkDataSourceImpl @Inject constructor(
         HttpHandler<FetchBookmarkedRecruitmentsResponse>().httpRequest {
             bookmarkApi.fetchBookmarkedRecruitments()
         }.sendRequest()
+
+    override suspend fun bookmarkRecruitment(recruitmentId: Long) =
+        HttpHandler<Unit>().httpRequest {
+            bookmarkApi.bookmarkRecruitment(recruitmentId)
+        }.sendRequest()
 }

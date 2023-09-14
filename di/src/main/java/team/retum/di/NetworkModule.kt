@@ -17,7 +17,7 @@ import team.retum.data.remote.api.BugApi
 import team.retum.data.remote.api.CodeApi
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.api.FileApi
-import team.retum.data.remote.api.RecruitmentApi
+import team.retum.data.remote.api.recruitment.RecruitmentApi
 import team.retum.data.remote.api.ReviewApi
 import team.retum.data.remote.api.StudentApi
 import team.retum.data.remote.api.user.UserApi

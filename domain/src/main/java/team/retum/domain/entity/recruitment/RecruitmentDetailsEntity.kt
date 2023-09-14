@@ -1,5 +1,7 @@
 package team.retum.domain.entity.recruitment
 
+import team.retum.domain.enums.HiringProgress
+
 data class RecruitmentDetailsEntity(
     val areas: List<AreasEntity>,
     val benefits: String?,
@@ -10,14 +12,14 @@ data class RecruitmentDetailsEntity(
     val etc: String?,
     val hiringProgress: List<HiringProgress>,
     val military: Boolean,
-    val pay: Int?,
+    val pay: Long?,
     val preferentialTreatment: String?,
-    val requiredGrade: Int?,
+    val requiredGrade: Long?,
     val requiredLicenses: List<String>?,
     val startDate: String,
     val submitDocument: String,
-    val trainPay: Int,
-    val workHours: Int,
+    val trainPay: Long,
+    val workHours: Long,
 )
 
 data class AreasEntity(
@@ -27,17 +29,3 @@ data class AreasEntity(
     val majorTask: String,
     val tech: List<String>,
 )
-
-enum class HiringProgress(
-    val value: String,
-) {
-    CULTURE_INTERVIEW("컬처 면접"),
-    DOCUMENT("서류전형"),
-    TASK("과제 제출"),
-    LIVE_CODING("라이브코딩"),
-    TECH_INTERVIEW("기술면접"),
-    FINAL_INTERVIEW("최종면접"),
-    PERSONALITY("인적성 테스트"),
-    AI("AI 면접"),
-    CODING_TEST("코딩테스트")
-}

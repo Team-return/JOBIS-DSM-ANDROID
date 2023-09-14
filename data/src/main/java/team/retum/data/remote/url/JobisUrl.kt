@@ -17,6 +17,10 @@ object JobisUrl {
 
     const val imageUrl = "https://jobis-bucket.s3.ap-northeast-2.amazonaws.com/"
 
+    object Bookmark{
+        const val bookmark = "$bookmarks/${Properties.recruitmentId}"
+    }
+
     object User {
         const val login = "$users/login"
         const val reissue = "$users/reissue"
@@ -42,7 +46,6 @@ object JobisUrl {
 
     object Recruitment {
         const val student = "$recruitment/student"
-        const val bookmark = "$bookmarks/${Properties.recruitmentId}"
         const val details = "$recruitment/${Properties.recruitmentId}"
     }
 

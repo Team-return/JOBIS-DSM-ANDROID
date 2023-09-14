@@ -210,7 +210,7 @@ private fun Recruitments(
             NavigationProperties.COMPANY_NAME,
             recruitment.companyName,
         )
-        navigateToRecruitmentDetails(recruitment.recruitId.toLong())
+        navigateToRecruitmentDetails(recruitment.recruitId)
     }
 
     LazyColumn(
@@ -233,13 +233,13 @@ private fun Recruitments(
                 position = position,
                 isBookmarked = isBookmarked,
                 companyName = recruitment.companyName,
-                trainPay = if (recruitment.trainPay != 0) stringResource(
+                trainPay = if (recruitment.trainPay != 0L) stringResource(
                     id = R.string.search_recruitment_train_pay,
                     trainPay,
                 )
                 else "",
                 isMilitarySupported = recruitment.military,
-                onBookmarked = { onBookmarked(index, recruitment.recruitId.toLong(), setBookmark) },
+                onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
                 onItemClicked = { onRecruitmentClicked(recruitment) },
             )
         }

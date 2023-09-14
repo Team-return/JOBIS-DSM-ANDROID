@@ -7,10 +7,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.enums.AuthCodeType
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.CheckStudentExistsParam
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.Sex

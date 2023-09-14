@@ -2,8 +2,8 @@ package team.retum.data.remote.response.recruitment
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.entity.recruitment.AreasEntity
-import team.retum.domain.entity.recruitment.HiringProgress
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
+import team.retum.domain.enums.HiringProgress
 
 data class FetchRecruitmentDetailsResponse(
     @SerializedName("areas") val areas: List<Areas>,
@@ -15,14 +15,14 @@ data class FetchRecruitmentDetailsResponse(
     @SerializedName("etc") val etc: String?,
     @SerializedName("hiring_progress") val hiringProgress: List<HiringProgress>,
     @SerializedName("military") val military: Boolean,
-    @SerializedName("pay") val pay: Int?,
+    @SerializedName("pay") val pay: Long?,
     @SerializedName("preferential_treatment") val preferentialTreatment: String?,
-    @SerializedName("required_grade") val requiredGrade: Int?,
+    @SerializedName("required_grade") val requiredGrade: Long?,
     @SerializedName("required_licenses") val requiredLicenses: List<String>?,
     @SerializedName("start_date") val startDate: String,
     @SerializedName("submit_document") val submitDocument: String,
-    @SerializedName("train_pay") val trainPay: Int,
-    @SerializedName("work_hours") val workHours: Int,
+    @SerializedName("train_pay") val trainPay: Long,
+    @SerializedName("work_hours") val workHours: Long,
 )
 
 data class Areas(

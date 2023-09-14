@@ -4,4 +4,6 @@ import team.retum.data.remote.response.bookmark.FetchBookmarkedRecruitmentsRespo
 
 interface BookmarkDataSource {
     suspend fun fetchBookmarkedRecruitments(): FetchBookmarkedRecruitmentsResponse
+
+    suspend fun bookmarkRecruitment(recruitmentId: Long)
 }
