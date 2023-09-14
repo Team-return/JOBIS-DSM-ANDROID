@@ -1,4 +1,4 @@
-package team.retum.data.remote.api
+package team.retum.data.remote.api.auth
 
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -16,14 +16,14 @@ interface AuthApi {
         @Header("X-Refresh-Token") xRefreshToken: String,
     ): SignInResponse
 
-    @POST(JobisUrl.Auth.code)
-    suspend fun sendVerificationCode(
-        @Body sendVerificationCodeRequest: SendVerificationCodeRequest,
-    )
-
     @PATCH(JobisUrl.Auth.code)
     suspend fun verifyEmail(
         @Query("email") email: String,
         @Query("auth_code") authCode: String,
+    )
+
+    @POST(JobisUrl.Auth.code)
+    suspend fun sendVerificationCode(
+        @Body sendVerificationCodeRequest: SendVerificationCodeRequest,
     )
 }

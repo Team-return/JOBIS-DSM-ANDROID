@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.implementation
 
-import team.retum.data.remote.api.AuthApi
+import team.retum.data.remote.api.auth.AuthApi
 import team.retum.data.remote.datasource.declaration.AuthDataSource
 import team.retum.data.remote.request.user.SendVerificationCodeRequest
 import team.retum.data.util.HttpHandler
