@@ -1,4 +1,4 @@
-package team.retum.data.remote.api
+package team.retum.data.remote.api.bug
 
 import retrofit2.http.Body
 import retrofit2.http.POST

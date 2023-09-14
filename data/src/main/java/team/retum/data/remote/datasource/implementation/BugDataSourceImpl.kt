@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.implementation
 
-import team.retum.data.remote.api.BugApi
+import team.retum.data.remote.api.bug.BugApi
 import team.retum.data.remote.datasource.declaration.BugDataSource
 import team.retum.data.remote.request.bugs.ReportBugRequest
 import team.retum.data.util.HttpHandler
