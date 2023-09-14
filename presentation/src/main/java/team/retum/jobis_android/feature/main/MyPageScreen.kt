@@ -47,7 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.FileType
-import team.retum.domain.entity.student.Department
+import team.retum.domain.enums.Department
 import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.contract.mypage.MyPageSideEffect
 import team.retum.jobis_android.LocalAppState

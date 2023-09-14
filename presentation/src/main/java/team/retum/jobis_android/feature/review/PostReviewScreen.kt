@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.code.CodeEntity
-import team.retum.domain.param.code.Type
+import team.retum.domain.enums.Type
 import team.retum.domain.param.review.QnaElementParam
 import team.retum.jobis_android.contract.review.ReviewSideEffect
 import team.retum.jobis_android.LocalAppState

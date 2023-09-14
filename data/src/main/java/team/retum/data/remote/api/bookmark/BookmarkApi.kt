@@ -1,4 +1,4 @@
-package team.retum.data.remote.api
+package team.retum.data.remote.api.bookmark
 
 import retrofit2.Response
 import retrofit2.http.GET

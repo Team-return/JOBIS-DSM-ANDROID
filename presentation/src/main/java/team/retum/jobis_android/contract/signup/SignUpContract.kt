@@ -1,6 +1,6 @@
 package team.retum.jobis_android.contract.signup
 
-import team.retum.domain.param.user.Sex
+import team.retum.domain.enums.Gender
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
@@ -15,7 +15,7 @@ data class SignUpState(
     val repeatPasswordError: Boolean = false,
     val grade: String = "",
     val name: String = "",
-    val sex: Sex = Sex.MAN,
+    val gender: Gender = Gender.MAN,
     val classRoom: String = "",
     val number: String = "",
     val studentNotFound: Boolean = false,

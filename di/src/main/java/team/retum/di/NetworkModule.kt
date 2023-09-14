@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
 import team.retum.data.remote.api.application.ApplicationApi
 import team.retum.data.remote.api.auth.AuthApi
-import team.retum.data.remote.api.BookmarkApi
+import team.retum.data.remote.api.bookmark.BookmarkApi
 import team.retum.data.remote.api.BugApi
 import team.retum.data.remote.api.code.CodeApi
 import team.retum.data.remote.api.company.CompanyApi

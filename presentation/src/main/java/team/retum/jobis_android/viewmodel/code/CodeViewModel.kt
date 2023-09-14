@@ -8,8 +8,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.code.CodeEntity
+import team.retum.domain.enums.Type
 import team.retum.domain.param.code.FetchCodesParam
-import team.retum.domain.param.code.Type
 import team.retum.domain.usecase.code.FetchCodesUseCase
 import team.retum.jobis_android.contract.code.CodeSideEffect
 import team.retum.jobis_android.contract.code.CodeState
