@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.application
 
 import team.retum.data.remote.request.application.ApplyCompanyRequest
 import team.retum.data.remote.response.applications.FetchAppliedCompanyHistoriesResponse

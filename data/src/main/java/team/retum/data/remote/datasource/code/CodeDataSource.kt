@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.code
 
 import team.retum.data.remote.response.code.FetchCodesResponse
 import team.retum.domain.enums.Type

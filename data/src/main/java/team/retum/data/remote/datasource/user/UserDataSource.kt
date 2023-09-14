@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.user
 
 import team.retum.data.remote.request.user.SignInRequest
 import team.retum.data.remote.response.user.SignInResponse

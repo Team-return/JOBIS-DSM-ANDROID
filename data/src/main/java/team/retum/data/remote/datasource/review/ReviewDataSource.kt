@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.review
 
 import team.retum.data.remote.request.review.PostReviewRequest
 import team.retum.data.remote.response.review.FetchReviewDetailsResponse

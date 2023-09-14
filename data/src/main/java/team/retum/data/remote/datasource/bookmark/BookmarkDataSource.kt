@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.bookmark
 
 import team.retum.data.remote.response.bookmark.FetchBookmarkedRecruitmentsResponse
 

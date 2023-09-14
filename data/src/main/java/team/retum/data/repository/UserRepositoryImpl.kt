@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.UserDataSource
+import team.retum.data.remote.datasource.user.UserDataSource
 import team.retum.data.remote.request.user.SignInRequest
 import team.retum.data.remote.response.user.SignInResponse
 import team.retum.domain.param.user.SignInParam

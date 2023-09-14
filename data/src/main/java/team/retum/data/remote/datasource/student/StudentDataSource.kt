@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.student
 
 import team.retum.data.remote.request.students.EditProfileImageRequest
 import team.retum.data.remote.request.students.ResetPasswordRequest

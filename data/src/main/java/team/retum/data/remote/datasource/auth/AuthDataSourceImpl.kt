@@ -1,7 +1,6 @@
-package team.retum.data.remote.datasource.implementation
+package team.retum.data.remote.datasource.auth
 
 import team.retum.data.remote.api.auth.AuthApi
-import team.retum.data.remote.datasource.declaration.AuthDataSource
 import team.retum.data.remote.request.user.SendVerificationCodeRequest
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject

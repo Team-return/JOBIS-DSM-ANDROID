@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.bug
 
 import team.retum.data.remote.request.bugs.ReportBugRequest
 

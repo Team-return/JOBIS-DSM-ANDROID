@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.AuthDataSource
+import team.retum.data.remote.datasource.auth.AuthDataSource
 import team.retum.data.remote.request.user.toRequest
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam

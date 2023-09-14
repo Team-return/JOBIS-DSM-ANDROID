@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
+import team.retum.data.remote.datasource.recruitment.RecruitmentDataSource
 import team.retum.data.remote.response.recruitment.toEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentsEntity

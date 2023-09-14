@@ -1,7 +1,6 @@
-package team.retum.data.remote.datasource.implementation
+package team.retum.data.remote.datasource.student
 
 import team.retum.data.remote.api.student.StudentApi
-import team.retum.data.remote.datasource.declaration.StudentsDataSource
 import team.retum.data.remote.request.students.EditProfileImageRequest
 import team.retum.data.remote.request.students.ResetPasswordRequest
 import team.retum.data.remote.request.user.SignUpRequest

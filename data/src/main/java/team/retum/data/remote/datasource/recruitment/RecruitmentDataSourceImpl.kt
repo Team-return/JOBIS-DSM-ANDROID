@@ -1,7 +1,6 @@
-package team.retum.data.remote.datasource.implementation
+package team.retum.data.remote.datasource.recruitment
 
 import team.retum.data.remote.api.recruitment.RecruitmentApi
-import team.retum.data.remote.datasource.declaration.RecruitmentDataSource
 import team.retum.data.remote.response.recruitment.FetchRecruitmentDetailsResponse
 import team.retum.data.remote.response.recruitment.RecruitmentsResponse
 import team.retum.data.util.HttpHandler

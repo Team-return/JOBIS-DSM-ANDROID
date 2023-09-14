@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.BugDataSource
+import team.retum.data.remote.datasource.bug.BugDataSource
 import team.retum.data.remote.request.bugs.toRequest
 import team.retum.domain.param.bugreport.ReportBugParam
 import team.retum.domain.repository.BugRepository

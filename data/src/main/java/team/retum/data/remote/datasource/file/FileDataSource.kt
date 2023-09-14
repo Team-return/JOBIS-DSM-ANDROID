@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.file
 
 import okhttp3.MultipartBody
 import team.retum.data.remote.response.file.UploadFileResponse

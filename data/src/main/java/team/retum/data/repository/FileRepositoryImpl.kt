@@ -3,7 +3,7 @@ package team.retum.data.repository
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import team.retum.data.remote.datasource.declaration.FileDataSource
+import team.retum.data.remote.datasource.file.FileDataSource
 import team.retum.data.remote.response.file.toEntity
 import team.retum.domain.entity.FileType
 import team.retum.domain.entity.UploadFileEntity

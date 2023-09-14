@@ -1,7 +1,6 @@
-package team.retum.data.remote.datasource.implementation
+package team.retum.data.remote.datasource.user
 
 import team.retum.data.remote.api.user.UserApi
-import team.retum.data.remote.datasource.declaration.UserDataSource
 import team.retum.data.remote.request.user.SignInRequest
 import team.retum.data.remote.response.user.SignInResponse
 import team.retum.data.storage.UserDataStorage

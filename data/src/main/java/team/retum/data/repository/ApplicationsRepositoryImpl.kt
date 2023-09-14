@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.ApplicationsDataSource
+import team.retum.data.remote.datasource.application.ApplicationsDataSource
 import team.retum.data.remote.request.application.toRequest
 import team.retum.data.remote.response.applications.toEntity
 import team.retum.domain.entity.applications.AppliedCompanyHistoriesEntity

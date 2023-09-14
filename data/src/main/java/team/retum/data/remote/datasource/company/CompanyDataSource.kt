@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.company
 
 import team.retum.data.remote.response.company.FetchCompaniesResponse
 import team.retum.data.remote.response.company.FetchCompanyDetailResponse

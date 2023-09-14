@@ -1,4 +1,4 @@
-package team.retum.data.remote.datasource.declaration
+package team.retum.data.remote.datasource.auth
 
 import team.retum.data.remote.request.user.SendVerificationCodeRequest
 

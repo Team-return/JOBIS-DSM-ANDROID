@@ -1,8 +1,7 @@
-package team.retum.data.remote.datasource.implementation
+package team.retum.data.remote.datasource.file
 
 import okhttp3.MultipartBody
 import team.retum.data.remote.api.file.FileApi
-import team.retum.data.remote.datasource.declaration.FileDataSource
 import team.retum.data.remote.response.file.UploadFileResponse
 import team.retum.data.util.HttpHandler
 import team.retum.domain.entity.FileType
