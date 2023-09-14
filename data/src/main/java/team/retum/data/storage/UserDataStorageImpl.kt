@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import team.retum.domain.enums.Authority
 import javax.inject.Inject
 
 class UserDataStorageImpl @Inject constructor(
@@ -31,7 +32,7 @@ class UserDataStorageImpl @Inject constructor(
         accessTokenExpiresAt: String,
         refreshToken: String,
         refreshTokenExpiresAt: String,
-        authority: String,
+        authority: Authority,
     ) {
         putString(UserPersonalKey.ACCESS_TOKEN, accessToken)
         putString(UserPersonalKey.ACCESS_TOKEN_EXPIRES_AT, accessTokenExpiresAt)

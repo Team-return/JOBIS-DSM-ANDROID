@@ -1,6 +1,7 @@
 package team.retum.data.storage
 
 import android.content.SharedPreferences
+import team.retum.domain.enums.Authority
 
 interface UserDataStorage {
 
@@ -15,7 +16,7 @@ interface UserDataStorage {
         accessTokenExpiresAt: String,
         refreshToken: String,
         refreshTokenExpiresAt: String,
-        authority: String,
+        authority: Authority,
     )
 
     fun setAutoSignInOption(

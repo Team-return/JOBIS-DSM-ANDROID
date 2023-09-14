@@ -20,7 +20,7 @@ import team.retum.data.remote.api.FileApi
 import team.retum.data.remote.api.RecruitmentApi
 import team.retum.data.remote.api.ReviewApi
 import team.retum.data.remote.api.StudentApi
-import team.retum.data.remote.api.UserApi
+import team.retum.data.remote.api.user.UserApi
 import javax.inject.Singleton
 
 @Module
