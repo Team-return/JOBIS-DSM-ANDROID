@@ -1,4 +1,4 @@
-package team.retum.data.remote.api.file
+package team.retum.data.remote.api
 
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart

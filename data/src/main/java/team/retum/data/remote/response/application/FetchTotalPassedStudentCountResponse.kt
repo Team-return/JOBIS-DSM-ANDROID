@@ -1,4 +1,4 @@
-package team.retum.data.remote.response.applications
+package team.retum.data.remote.response.application
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.entity.applications.StudentCountsEntity

@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.code
 
-import team.retum.data.remote.api.code.CodeApi
+import team.retum.data.remote.api.CodeApi
 import team.retum.data.remote.response.code.FetchCodesResponse
 import team.retum.data.util.HttpHandler
 import team.retum.domain.enums.Type

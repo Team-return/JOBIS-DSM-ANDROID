@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import team.retum.data.repository.ApplicationsRepositoryImpl
+import team.retum.data.repository.ApplicationRepositoryImpl
 import team.retum.data.repository.AuthRepositoryImpl
 import team.retum.data.repository.BookmarkRepositoryImpl
 import team.retum.data.repository.BugRepositoryImpl
@@ -47,7 +47,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsApplicationsRepository(
-        applicationsRepositoryImpl: ApplicationsRepositoryImpl,
+        applicationRepositoryImpl: ApplicationRepositoryImpl,
     ): ApplicationsRepository
 
     @Binds

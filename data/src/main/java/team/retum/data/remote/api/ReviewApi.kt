@@ -1,4 +1,4 @@
-package team.retum.data.remote.api.review
+package team.retum.data.remote.api
 
 import retrofit2.http.Body
 import retrofit2.http.GET

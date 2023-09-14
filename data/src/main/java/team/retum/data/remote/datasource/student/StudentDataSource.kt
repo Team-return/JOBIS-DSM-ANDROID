@@ -1,9 +1,9 @@
 package team.retum.data.remote.datasource.student
 
-import team.retum.data.remote.request.students.EditProfileImageRequest
-import team.retum.data.remote.request.students.ResetPasswordRequest
+import team.retum.data.remote.request.student.EditProfileImageRequest
+import team.retum.data.remote.request.student.ResetPasswordRequest
 import team.retum.data.remote.request.user.SignUpRequest
-import team.retum.data.remote.response.students.FetchStudentInformationResponse
+import team.retum.data.remote.response.student.FetchStudentInformationResponse
 import team.retum.data.remote.response.user.SignUpResponse
 
 interface StudentsDataSource {

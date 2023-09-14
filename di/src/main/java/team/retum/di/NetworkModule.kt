@@ -10,17 +10,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
-import team.retum.data.remote.api.application.ApplicationApi
-import team.retum.data.remote.api.auth.AuthApi
-import team.retum.data.remote.api.bookmark.BookmarkApi
-import team.retum.data.remote.api.bug.BugApi
-import team.retum.data.remote.api.code.CodeApi
-import team.retum.data.remote.api.company.CompanyApi
-import team.retum.data.remote.api.file.FileApi
-import team.retum.data.remote.api.recruitment.RecruitmentApi
-import team.retum.data.remote.api.review.ReviewApi
-import team.retum.data.remote.api.student.StudentApi
-import team.retum.data.remote.api.user.UserApi
+import team.retum.data.remote.api.ApplicationApi
+import team.retum.data.remote.api.AuthApi
+import team.retum.data.remote.api.BookmarkApi
+import team.retum.data.remote.api.BugApi
+import team.retum.data.remote.api.CodeApi
+import team.retum.data.remote.api.CompanyApi
+import team.retum.data.remote.api.FileApi
+import team.retum.data.remote.api.RecruitmentApi
+import team.retum.data.remote.api.ReviewApi
+import team.retum.data.remote.api.StudentApi
+import team.retum.data.remote.api.UserApi
 import javax.inject.Singleton
 
 @Module

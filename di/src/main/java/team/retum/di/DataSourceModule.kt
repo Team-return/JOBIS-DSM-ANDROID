@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import team.retum.data.remote.datasource.application.ApplicationsDataSource
+import team.retum.data.remote.datasource.application.ApplicationDataSource
 import team.retum.data.remote.datasource.auth.AuthDataSource
 import team.retum.data.remote.datasource.bookmark.BookmarkDataSource
 import team.retum.data.remote.datasource.bug.BugDataSource
@@ -15,7 +15,7 @@ import team.retum.data.remote.datasource.recruitment.RecruitmentDataSource
 import team.retum.data.remote.datasource.review.ReviewDataSource
 import team.retum.data.remote.datasource.student.StudentsDataSource
 import team.retum.data.remote.datasource.user.UserDataSource
-import team.retum.data.remote.datasource.application.ApplicationsDataSourceImpl
+import team.retum.data.remote.datasource.application.ApplicationDataSourceImpl
 import team.retum.data.remote.datasource.auth.AuthDataSourceImpl
 import team.retum.data.remote.datasource.bookmark.BookmarkDataSourceImpl
 import team.retum.data.remote.datasource.bug.BugDataSourceImpl
@@ -47,8 +47,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsApplicationsDataSource(
-        applicationsDataSourceImpl: ApplicationsDataSourceImpl,
-    ): ApplicationsDataSource
+        applicationsDataSourceImpl: ApplicationDataSourceImpl,
+    ): ApplicationDataSource
 
     @Binds
     @Singleton

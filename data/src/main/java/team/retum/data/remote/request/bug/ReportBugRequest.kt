@@ -1,4 +1,4 @@
-package team.retum.data.remote.request.bugs
+package team.retum.data.remote.request.bug
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.enums.DevelopmentArea

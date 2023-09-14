@@ -1,4 +1,4 @@
-package team.retum.data.remote.request.students
+package team.retum.data.remote.request.student
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.param.students.ResetPasswordParam

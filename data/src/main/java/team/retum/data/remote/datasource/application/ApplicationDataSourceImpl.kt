@@ -1,15 +1,15 @@
 package team.retum.data.remote.datasource.application
 
-import team.retum.data.remote.api.application.ApplicationApi
+import team.retum.data.remote.api.ApplicationApi
 import team.retum.data.remote.request.application.ApplyCompanyRequest
-import team.retum.data.remote.response.applications.FetchAppliedCompanyHistoriesResponse
-import team.retum.data.remote.response.applications.FetchTotalPassedStudentCountResponse
+import team.retum.data.remote.response.application.FetchAppliedCompanyHistoriesResponse
+import team.retum.data.remote.response.application.FetchTotalPassedStudentCountResponse
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
 
-class ApplicationsDataSourceImpl @Inject constructor(
+class ApplicationDataSourceImpl @Inject constructor(
     private val applicationApi: ApplicationApi,
-) : ApplicationsDataSource {
+) : ApplicationDataSource {
     override suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse =
         HttpHandler<FetchTotalPassedStudentCountResponse>().httpRequest {
             applicationApi.fetchTotalPassedStudentCount()

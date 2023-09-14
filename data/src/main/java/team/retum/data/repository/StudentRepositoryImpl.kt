@@ -2,9 +2,9 @@ package team.retum.data.repository
 
 import team.retum.data.remote.datasource.student.StudentsDataSource
 import team.retum.data.remote.datasource.user.UserDataSource
-import team.retum.data.remote.request.students.toRequest
+import team.retum.data.remote.request.student.toRequest
 import team.retum.data.remote.request.user.toRequest
-import team.retum.data.remote.response.students.toEntity
+import team.retum.data.remote.response.student.toEntity
 import team.retum.data.remote.response.user.SignInResponse
 import team.retum.domain.entity.student.StudentInformationEntity
 import team.retum.domain.param.students.EditProfileImageParam

@@ -1,4 +1,4 @@
-package team.retum.data.remote.api.company
+package team.retum.data.remote.api
 
 import retrofit2.http.GET
 import retrofit2.http.Path

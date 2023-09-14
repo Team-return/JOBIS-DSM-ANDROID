@@ -1,10 +1,10 @@
 package team.retum.data.remote.datasource.application
 
 import team.retum.data.remote.request.application.ApplyCompanyRequest
-import team.retum.data.remote.response.applications.FetchAppliedCompanyHistoriesResponse
-import team.retum.data.remote.response.applications.FetchTotalPassedStudentCountResponse
+import team.retum.data.remote.response.application.FetchAppliedCompanyHistoriesResponse
+import team.retum.data.remote.response.application.FetchTotalPassedStudentCountResponse
 
-interface ApplicationsDataSource {
+interface ApplicationDataSource {
     suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse
 
     suspend fun fetchAppliedCompanyHistories(): FetchAppliedCompanyHistoriesResponse

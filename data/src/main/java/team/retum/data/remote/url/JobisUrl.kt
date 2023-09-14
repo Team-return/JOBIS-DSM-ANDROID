@@ -49,7 +49,7 @@ object JobisUrl {
         const val details = "$recruitment/${Properties.recruitmentId}"
     }
 
-    object Applications {
+    object Application {
         const val employment = "$applications/employment/count"
         const val students = "$applications/students"
         const val apply = "$applications/{recruitment-id}"
