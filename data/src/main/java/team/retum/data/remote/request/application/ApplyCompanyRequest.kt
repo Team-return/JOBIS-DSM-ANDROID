@@ -1,7 +1,7 @@
 package team.retum.data.remote.request.application
 
+import team.retum.domain.enums.AttachmentDocsType
 import team.retum.domain.param.application.ApplyCompanyParam
-import team.retum.domain.param.application.AttachmentDocsType
 import team.retum.domain.param.application.AttachmentsParam
 
 data class ApplyCompanyRequest(

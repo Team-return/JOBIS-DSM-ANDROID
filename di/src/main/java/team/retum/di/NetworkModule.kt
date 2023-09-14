@@ -10,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.retum.data.interceptor.AuthorizationInterceptor
-import team.retum.data.remote.api.ApplicationApi
+import team.retum.data.remote.api.application.ApplicationApi
 import team.retum.data.remote.api.auth.AuthApi
 import team.retum.data.remote.api.BookmarkApi
 import team.retum.data.remote.api.BugApi

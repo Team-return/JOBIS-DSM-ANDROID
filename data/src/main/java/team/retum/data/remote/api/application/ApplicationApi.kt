@@ -1,4 +1,4 @@
-package team.retum.data.remote.api
+package team.retum.data.remote.api.application
 
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -10,11 +10,11 @@ import team.retum.data.remote.response.applications.FetchTotalPassedStudentCount
 import team.retum.data.remote.url.JobisUrl
 
 interface ApplicationApi {
-    @GET(JobisUrl.Applications.employment)
-    suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse
-
     @GET(JobisUrl.Applications.students)
     suspend fun fetchAppliedCompanyHistories(): FetchAppliedCompanyHistoriesResponse
+
+    @GET(JobisUrl.Applications.employment)
+    suspend fun fetchTotalPassedStudentCount(): FetchTotalPassedStudentCountResponse
 
     @POST(JobisUrl.Applications.apply)
     suspend fun applyCompany(

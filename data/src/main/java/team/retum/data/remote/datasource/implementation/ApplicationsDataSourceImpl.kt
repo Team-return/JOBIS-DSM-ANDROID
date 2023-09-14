@@ -1,6 +1,6 @@
 package team.retum.data.remote.datasource.implementation
 
-import team.retum.data.remote.api.ApplicationApi
+import team.retum.data.remote.api.application.ApplicationApi
 import team.retum.data.remote.datasource.declaration.ApplicationsDataSource
 import team.retum.data.remote.request.application.ApplyCompanyRequest
 import team.retum.data.remote.response.applications.FetchAppliedCompanyHistoriesResponse
