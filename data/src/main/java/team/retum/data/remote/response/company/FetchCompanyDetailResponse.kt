@@ -21,7 +21,7 @@ data class FetchCompanyDetailResponse(
     @SerializedName("email") val email: String,
     @SerializedName("representative_name") val representativeName: String,
     @SerializedName("founded_at") val foundedAt: String,
-    @SerializedName("worker_number") val workerNumber: Int,
+    @SerializedName("worker_number") val workerNumber: Long,
     @SerializedName("take") val take: Float,
     @SerializedName("recruitment_id") val recruitmentId: Long?,
     @SerializedName("attachments") val attachments: List<String>,

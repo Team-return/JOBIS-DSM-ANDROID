@@ -40,7 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
-import team.retum.domain.entity.student.Department
+import team.retum.domain.enums.Department
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel

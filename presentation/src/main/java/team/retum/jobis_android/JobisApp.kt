@@ -85,7 +85,7 @@ internal fun JobisApp(
             popBackStack = navController::popBackStack,
         )
 
-        userNavigation(moveToScreenBySignInOption)
+        userNavigation(navController::popBackStack)
 
         composable(
             route = NavigationRoute.Splash,

@@ -6,12 +6,8 @@ import javax.inject.Inject
 
 class BookmarkRecruitmentUseCase @Inject constructor(
     private val bookmarkRepository: BookmarkRepository
-){
-    suspend operator fun invoke(
-        recruitmentId: Long,
-    ) = runCatching{
-        bookmarkRepository.bookmarkRecruitment(
-            recruitmentId = recruitmentId,
-        )
+) {
+    suspend operator fun invoke(recruitmentId: Long) = runCatching {
+        bookmarkRepository.bookmarkRecruitment(recruitmentId)
     }
 }

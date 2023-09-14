@@ -1,22 +1,14 @@
 package team.retum.domain.entity.applications
 
+import team.retum.domain.enums.ApplicationStatus
+
 data class AppliedCompanyHistoriesEntity(
     val applications: List<AppliedCompanyEntity>,
 )
 
 data class AppliedCompanyEntity(
-    val applicationId: Int,
+    val applicationId: Long,
     val company: String,
-    val attachmentUrlList: List<String>?,
-    val applicationStatus: Status,
+    val applicationStatus: ApplicationStatus,
 )
 
-enum class Status(
-    val status: String,
-){
-    REQUESTED("승인요청"),
-    APPROVED("승인됨"),
-    FAILED("탈락"),
-    PASS("합격"),
-    REJECTED("반려"),
-}

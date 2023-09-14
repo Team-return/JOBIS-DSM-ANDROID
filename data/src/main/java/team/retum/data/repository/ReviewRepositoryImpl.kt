@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.ReviewDataSource
+import team.retum.data.remote.datasource.review.ReviewDataSource
 import team.retum.data.remote.request.review.toRequest
 import team.retum.data.remote.response.review.toEntity
 import team.retum.domain.entity.review.ReviewDetailsEntity

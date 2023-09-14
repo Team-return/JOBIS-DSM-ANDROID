@@ -8,13 +8,11 @@ import team.retum.data.remote.response.bookmark.FetchBookmarkedRecruitmentsRespo
 import team.retum.data.remote.url.JobisUrl
 
 interface BookmarkApi {
-
-    @PATCH(JobisUrl.Recruitment.bookmark)
-    suspend fun bookmarkRecruitment(
-        @Path("recruitment-id") recruitmentId: Long,
-    ): Response<Void>
-
     @GET(JobisUrl.bookmarks)
     suspend fun fetchBookmarkedRecruitments(): FetchBookmarkedRecruitmentsResponse
 
+    @PATCH(JobisUrl.Bookmark.bookmark)
+    suspend fun bookmarkRecruitment(
+        @Path("recruitment-id") recruitmentId: Long,
+    ): Response<Void>
 }

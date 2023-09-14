@@ -1,7 +1,7 @@
 package team.retum.data.remote.request.user
 
 import com.google.gson.annotations.SerializedName
-import team.retum.domain.param.user.AuthCodeType
+import team.retum.domain.enums.AuthCodeType
 import team.retum.domain.param.user.SendVerificationCodeParam
 
 data class SendVerificationCodeRequest(

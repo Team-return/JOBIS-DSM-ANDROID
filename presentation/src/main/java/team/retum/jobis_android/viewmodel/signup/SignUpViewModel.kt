@@ -7,13 +7,13 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.enums.AuthCodeType
+import team.retum.domain.enums.Gender
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.CheckStudentExistsParam
 import team.retum.domain.param.user.SendVerificationCodeParam
-import team.retum.domain.param.user.Sex
 import team.retum.domain.param.user.SignUpParam
 import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.user.CheckStudentExistUseCase
@@ -39,10 +39,10 @@ class SignUpViewModel @Inject constructor(
 
     internal val state = container.stateFlow.value
 
-    internal fun setSex(
-        sex: Sex,
+    internal fun setGender(
+        gender: Gender,
     ) = intent {
-        reduce { state.copy(sex = sex) }
+        reduce { state.copy(gender = gender) }
     }
 
     internal fun setName(
@@ -310,11 +310,11 @@ class SignUpViewModel @Inject constructor(
                     signUpParam = SignUpParam(
                         email = state.email,
                         password = state.password,
-                        grade = state.grade.toInt(),
+                        grade = state.grade.toLong(),
                         name = state.name,
-                        gender = state.sex,
-                        classRoom = state.classRoom.toInt(),
-                        number = state.number.toInt(),
+                        gender = state.gender,
+                        classRoom = state.classRoom.toLong(),
+                        number = state.number.toLong(),
                     )
                 ).onSuccess {
                     postSideEffect(

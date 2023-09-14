@@ -9,7 +9,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import team.retum.domain.param.bugreport.Position
+import team.retum.domain.enums.DevelopmentArea
 import team.retum.domain.param.bugreport.ReportBugParam
 import team.retum.domain.usecase.bug.ReportBugUseCase
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
@@ -64,11 +64,11 @@ internal class BugViewModel @Inject constructor(
     ) = intent {
         runCatching {
             reduce {
-                state.copy(selectedPosition = Position.valueOf(position))
+                state.copy(selectedPosition = DevelopmentArea.valueOf(position))
             }
         }.onFailure {
             reduce {
-                state.copy(selectedPosition = Position.ALL)
+                state.copy(selectedPosition = DevelopmentArea.ALL)
             }
         }
     }

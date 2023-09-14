@@ -5,7 +5,7 @@ data class CompaniesEntity(
 )
 
 data class CompanyEntity(
-    val id: Int,
+    val id: Long,
     val name: String,
     val logoUrl: String,
     val take: Float,

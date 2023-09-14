@@ -10,13 +10,11 @@ import team.retum.data.remote.url.JobisUrl
 interface RecruitmentApi {
     @GET(JobisUrl.Recruitment.student)
     suspend fun fetchRecruitmentList(
-        @Query("page") page: Int,
+        @Query("page") page: Int?,
+        @Query("name") name: String?,
         @Query("job_code") jobCode: Long?,
         @Query("tech_code") techCode: String?,
-        @Query("name") name: String?,
     ): RecruitmentsResponse
-
-
 
     @GET(JobisUrl.Recruitment.details)
     suspend fun fetchRecruitmentDetails(

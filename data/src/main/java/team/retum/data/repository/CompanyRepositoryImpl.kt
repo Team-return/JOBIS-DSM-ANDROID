@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.declaration.CompanyDataSource
+import team.retum.data.remote.datasource.company.CompanyDataSource
 import team.retum.data.remote.response.company.toEntity
 import team.retum.domain.entity.company.CompaniesEntity
 import team.retum.domain.entity.company.CompanyDetailsEntity

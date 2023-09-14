@@ -8,10 +8,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.enums.AttachmentDocsType
 import team.retum.domain.exception.ConflictException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.application.ApplyCompanyParam
-import team.retum.domain.param.application.AttachmentDocsType
 import team.retum.domain.param.application.AttachmentsParam
 import team.retum.domain.usecase.applications.ApplyCompanyUseCase
 import team.retum.jobis_android.contract.application.ApplicationSideEffect

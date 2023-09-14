@@ -6,6 +6,6 @@ data class ReviewsEntity(
 
 data class ReviewEntity(
     val reviewId: String,
-    val year: Int,
+    val year: Long,
     val writer: String,
 )

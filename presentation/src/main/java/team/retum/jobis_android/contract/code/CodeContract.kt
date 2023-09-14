@@ -1,7 +1,7 @@
 package team.retum.jobis_android.contract.code
 
 import team.retum.domain.entity.code.CodeEntity
-import team.retum.domain.param.code.Type
+import team.retum.domain.enums.Type
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 

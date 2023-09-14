@@ -18,7 +18,7 @@ data class CompanyDetailsEntity(
     val email: String,
     val representativeName: String,
     val foundedAt: String,
-    val workerNumber: Int,
+    val workerNumber: Long,
     val take: Float,
     val recruitmentId: Long?,
     val attachments: List<String>,

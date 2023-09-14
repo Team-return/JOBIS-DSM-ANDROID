@@ -8,9 +8,9 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.enums.AuthCodeType
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.students.ResetPasswordParam
-import team.retum.domain.param.user.AuthCodeType
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.student.ComparePasswordUseCase
@@ -211,7 +211,7 @@ internal class ResetPasswordViewModel @Inject constructor(
         }
     }
 
-    internal fun setPasswordRepeatErrorState(
+    private fun setPasswordRepeatErrorState(
         passwordRepeatErrorState: Boolean,
     ) = intent {
         reduce {
@@ -221,7 +221,7 @@ internal class ResetPasswordViewModel @Inject constructor(
         }
     }
 
-    internal fun setPasswordFormatErrorState(
+    private fun setPasswordFormatErrorState(
         passwordFormatErrorState: Boolean,
     ) = intent {
         reduce {

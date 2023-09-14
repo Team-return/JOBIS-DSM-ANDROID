@@ -1,17 +1,17 @@
 package team.retum.data.remote.request.user
 
 import com.google.gson.annotations.SerializedName
-import team.retum.domain.param.user.Sex
+import team.retum.domain.enums.Gender
 import team.retum.domain.param.user.SignUpParam
 
 data class SignUpRequest(
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
-    @SerializedName("grade") val grade: Int,
+    @SerializedName("grade") val grade: Long,
     @SerializedName("name") val name: String,
-    @SerializedName("gender") val gender: Sex,
-    @SerializedName("class_room") val classRoom: Int,
-    @SerializedName("number") val number: Int,
+    @SerializedName("gender") val gender: Gender,
+    @SerializedName("class_room") val classRoom: Long,
+    @SerializedName("number") val number: Long,
 )
 
 fun SignUpParam.toRequest() = SignUpRequest(

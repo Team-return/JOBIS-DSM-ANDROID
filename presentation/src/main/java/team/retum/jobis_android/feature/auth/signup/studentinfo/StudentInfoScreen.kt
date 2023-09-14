@@ -23,7 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
-import team.retum.domain.param.user.Sex
+import team.retum.domain.enums.Gender
 import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor
@@ -55,11 +55,11 @@ internal fun StudentInfoScreen(
     }
 
     val onManSelected = {
-        signUpViewModel.setSex(sex = Sex.MAN)
+        signUpViewModel.setGender(gender = Gender.MAN)
     }
 
     val onWomanSelected = {
-        signUpViewModel.setSex(sex = Sex.WOMAN)
+        signUpViewModel.setGender(gender = Gender.WOMAN)
     }
 
     val onNameChanged = { name: String ->
@@ -89,7 +89,7 @@ internal fun StudentInfoScreen(
         SelectGender(
             onManSelected = onManSelected,
             onWomanSelected = onWomanSelected,
-            sex = state.sex,
+            gender = state.gender,
         )
         Spacer(modifier = Modifier.height(28.dp))
         InformationFields(
@@ -111,14 +111,14 @@ internal fun StudentInfoScreen(
 private fun SelectGender(
     onManSelected: () -> Unit,
     onWomanSelected: () -> Unit,
-    sex: Sex,
+    gender: Gender,
 ) {
 
     val manButtonColor: ButtonColor
     val womanButtonColor: ButtonColor
 
-    when (sex) {
-        Sex.MAN -> {
+    when (gender) {
+        Gender.MAN -> {
             manButtonColor = JobisButtonColor.MainSolidColor
             womanButtonColor = JobisButtonColor.MainShadowColor
         }
@@ -136,7 +136,7 @@ private fun SelectGender(
             modifier = Modifier.weight(1f),
         ) {
             JobisMediumButton(
-                text = Sex.MAN.value,
+                text = Gender.MAN.value,
                 color = manButtonColor,
                 shadow = true,
                 onClick = onManSelected,
@@ -147,7 +147,7 @@ private fun SelectGender(
             modifier = Modifier.weight(1f),
         ) {
             JobisMediumButton(
-                text = Sex.WOMAN.value,
+                text = Gender.WOMAN.value,
                 color = womanButtonColor,
                 shadow = true,
                 onClick = onWomanSelected,

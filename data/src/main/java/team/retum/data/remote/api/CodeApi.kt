@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import team.retum.data.remote.response.code.FetchCodesResponse
 import team.retum.data.remote.url.JobisUrl
-import team.retum.domain.param.code.Type
+import team.retum.domain.enums.Type
 
 interface CodeApi {
     @GET(JobisUrl.Code.code)

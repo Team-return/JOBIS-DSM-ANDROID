@@ -4,7 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import team.retum.data.repository.ApplicationsRepositoryImpl
+import team.retum.data.repository.ApplicationRepositoryImpl
+import team.retum.data.repository.AuthRepositoryImpl
 import team.retum.data.repository.BookmarkRepositoryImpl
 import team.retum.data.repository.BugRepositoryImpl
 import team.retum.data.repository.CodeRepositoryImpl
@@ -12,9 +13,10 @@ import team.retum.data.repository.CompanyRepositoryImpl
 import team.retum.data.repository.FileRepositoryImpl
 import team.retum.data.repository.RecruitmentRepositoryImpl
 import team.retum.data.repository.ReviewRepositoryImpl
-import team.retum.data.repository.StudentsRepositoryImpl
+import team.retum.data.repository.StudentRepositoryImpl
 import team.retum.data.repository.UserRepositoryImpl
 import team.retum.domain.repository.ApplicationsRepository
+import team.retum.domain.repository.AuthRepository
 import team.retum.domain.repository.BookmarkRepository
 import team.retum.domain.repository.BugRepository
 import team.retum.domain.repository.CodeRepository
@@ -22,7 +24,7 @@ import team.retum.domain.repository.CompanyRepository
 import team.retum.domain.repository.FileRepository
 import team.retum.domain.repository.RecruitmentRepository
 import team.retum.domain.repository.ReviewRepository
-import team.retum.domain.repository.StudentsRepository
+import team.retum.domain.repository.StudentRepository
 import team.retum.domain.repository.UserRepository
 import javax.inject.Singleton
 
@@ -45,14 +47,14 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsApplicationsRepository(
-        applicationsRepositoryImpl: ApplicationsRepositoryImpl,
+        applicationRepositoryImpl: ApplicationRepositoryImpl,
     ): ApplicationsRepository
 
     @Binds
     @Singleton
-    abstract fun bindsStudentsRepository(
-        studentsRepositoryImpl: StudentsRepositoryImpl,
-    ): StudentsRepository
+    abstract fun bindsStudentRepository(
+        studentsRepositoryImpl: StudentRepositoryImpl,
+    ): StudentRepository
 
     @Binds
     @Singleton
@@ -89,4 +91,8 @@ abstract class RepositoryModule {
     abstract fun bindsBugRepository(
         bugRepositoryImpl: BugRepositoryImpl,
     ): BugRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
 }

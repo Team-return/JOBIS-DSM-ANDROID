@@ -1,16 +1,16 @@
 package team.retum.domain.usecase.user
 
 import team.retum.domain.param.user.SendVerificationCodeParam
-import team.retum.domain.repository.UserRepository
+import team.retum.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class SendVerificationCodeUseCase @Inject constructor(
-    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
 ) {
     suspend operator fun invoke(
         sendVerificationCodeParam: SendVerificationCodeParam,
     ) = kotlin.runCatching {
-        userRepository.sendVerificationCode(
+        authRepository.sendVerificationCode(
             sendVerificationCodeParam = sendVerificationCodeParam
         )
     }

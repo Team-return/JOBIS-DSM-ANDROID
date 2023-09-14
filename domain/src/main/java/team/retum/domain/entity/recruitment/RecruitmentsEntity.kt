@@ -5,12 +5,12 @@ data class RecruitmentsEntity(
 )
 
 data class RecruitmentEntity(
-    val recruitId: Int,
+    val recruitId: Long,
     val companyName: String,
     val companyProfileUrl: String,
-    val trainPay: Int,
+    val trainPay: Long,
     val military: Boolean,
-    val totalHiring: Int,
+    val totalHiring: Long,
     val jobCodeList: String,
     val bookmarked: Boolean,
 )

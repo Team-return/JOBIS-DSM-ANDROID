@@ -1,17 +1,13 @@
 package team.retum.domain.param.user
 
+import team.retum.domain.enums.Gender
+
 data class SignUpParam(
     val email: String,
     val password: String,
-    val grade: Int,
+    val grade: Long,
     val name: String,
-    val gender: Sex,
-    val classRoom: Int,
-    val number: Int,
+    val gender: Gender,
+    val classRoom: Long,
+    val number: Long,
 )
-
-enum class Sex(
-    val value: String,
-) {
-    MAN("남"), WOMAN("여")
-}
