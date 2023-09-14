@@ -19,7 +19,7 @@ import team.retum.data.remote.api.company.CompanyApi
 import team.retum.data.remote.api.FileApi
 import team.retum.data.remote.api.recruitment.RecruitmentApi
 import team.retum.data.remote.api.ReviewApi
-import team.retum.data.remote.api.StudentApi
+import team.retum.data.remote.api.student.StudentApi
 import team.retum.data.remote.api.user.UserApi
 import javax.inject.Singleton
 

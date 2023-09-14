@@ -1,8 +1,8 @@
 package team.retum.data.remote.response.students
 
 import com.google.gson.annotations.SerializedName
-import team.retum.domain.entity.student.Department
 import team.retum.domain.entity.student.StudentInformationEntity
+import team.retum.domain.enums.Department
 
 data class FetchStudentInformationResponse(
     @SerializedName("student_name") val studentName: String,
