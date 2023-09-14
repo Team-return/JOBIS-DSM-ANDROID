@@ -10,7 +10,7 @@ data class FetchReviewsResponse(
 
 data class Review(
     @SerializedName("review_id") val reviewId: String,
-    @SerializedName("year") val year: Int,
+    @SerializedName("year") val year: Long,
     @SerializedName("writer") val writer: String,
 )
 
