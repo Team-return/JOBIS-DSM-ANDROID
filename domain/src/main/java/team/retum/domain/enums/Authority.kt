@@ -1,7 +1,7 @@
 package team.retum.domain.enums
 
 enum class Authority {
-    USER,
+    STUDENT,
     TEACHER,
     COMPANY,
     DEVELOPER,
