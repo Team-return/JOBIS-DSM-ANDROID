@@ -110,7 +110,6 @@ internal fun RecruitmentsScreen(
                         setJobCode(jobCode)
                         setTechCode(techCode)
                         fetchRecruitments()
-                        setPage(1)
                     }
                     sheetState.hide()
                 }

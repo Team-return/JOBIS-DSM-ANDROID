@@ -105,16 +105,6 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    internal fun setPage(
-        page: Int,
-    ) = intent {
-        reduce {
-            state.copy(
-                page = page,
-            )
-        }
-    }
-
     internal fun setJobCode(
         jobCode: Long?,
     ) = intent {
