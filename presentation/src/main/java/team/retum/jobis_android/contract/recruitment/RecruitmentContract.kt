@@ -30,7 +30,7 @@ data class RecruitmentState(
         trainPay = 0,
         workHours = 0,
     ),
-    val recruitments: List<RecruitmentUiModel> = mutableListOf(),
+    val recruitments: MutableList<RecruitmentUiModel> = mutableListOf(),
 ): State
 
 sealed class RecruitmentSideEffect: SideEffect{
