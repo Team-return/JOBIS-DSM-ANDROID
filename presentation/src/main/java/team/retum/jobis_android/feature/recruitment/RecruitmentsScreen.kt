@@ -16,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +63,8 @@ import team.returm.jobisdesignsystem.util.JobisSize
 import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
 
+private const val PAGE_SIZE = 10
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun RecruitmentsScreen(
@@ -87,6 +92,16 @@ internal fun RecruitmentsScreen(
         recruitmentViewModel.setName(name)
     }
 
+    val lazyListState = rememberLazyListState()
+    val visibleLastItemIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+
+    LaunchedEffect(visibleLastItemIndex) {
+        if (visibleLastItemIndex == state.recruitments.lastIndex) {
+            recruitmentViewModel.setPage()
+            recruitmentViewModel.fetchRecruitments()
+        }
+    }
+
     ModalBottomSheetLayout(
         sheetContent = {
             RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode, techCode ->
@@ -95,7 +110,6 @@ internal fun RecruitmentsScreen(
                         setJobCode(jobCode)
                         setTechCode(techCode)
                         fetchRecruitments()
-                        setPage(1)
                     }
                     sheetState.hide()
                 }
@@ -128,6 +142,7 @@ internal fun RecruitmentsScreen(
                     onKeywordChanged = onNameChanged,
                 )
                 Recruitments(
+                    lazyListState = lazyListState,
                     recruitmentUiModels = recruitments,
                     bookmarkViewModel = bookmarkViewModel,
                     putString = putString,
@@ -194,6 +209,7 @@ private fun RecruitmentInput(
 
 @Composable
 private fun Recruitments(
+    lazyListState: LazyListState,
     recruitmentUiModels: List<RecruitmentUiModel>,
     bookmarkViewModel: BookmarkViewModel,
     putString: (String, String) -> Unit,
@@ -214,6 +230,7 @@ private fun Recruitments(
     }
 
     LazyColumn(
+        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 20.dp),
     ) {

@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.company
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +63,16 @@ fun CompaniesScreen(
 
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
+    val lazyListState = rememberLazyListState()
+    val visibleLastItemIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+
+    LaunchedEffect(visibleLastItemIndex) {
+        if (visibleLastItemIndex == state.companies.lastIndex) {
+            companyViewModel.setPage()
+            companyViewModel.fetchCompanies()
+        }
+    }
+
     Box {
         Column(
             modifier = Modifier
@@ -88,6 +102,7 @@ fun CompaniesScreen(
                 Caption(text = state.name ?: "")
             }
             Companies(
+                lazyListState = lazyListState,
                 companies = companies,
                 navigateToCompanyDetails = navigateToCompanyDetails,
             )
@@ -117,10 +132,14 @@ private fun CompanyInput(
 
 @Composable
 private fun Companies(
+    lazyListState: LazyListState,
     companies: List<CompanyEntity>,
     navigateToCompanyDetails: (Long) -> Unit,
 ) {
-    LazyColumn(contentPadding = PaddingValues(vertical = 20.dp)) {
+    LazyColumn(
+        state = lazyListState,
+        contentPadding = PaddingValues(vertical = 20.dp),
+    ) {
         items(companies) { item ->
             Company(
                 name = item.name,

@@ -13,7 +13,7 @@ sealed class CompanySideEffect : SideEffect {
 }
 
 data class CompanyState(
-    var companies: List<CompanyEntity> = mutableListOf(),
+    var companies: MutableList<CompanyEntity> = mutableListOf(),
     var page: Int = 1,
     var name: String? = null,
     var companyId: Long = 0,

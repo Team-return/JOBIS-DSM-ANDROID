@@ -35,7 +35,7 @@ class CompanyViewModel @Inject constructor(
         fetchCompanies()
     }
 
-    private fun fetchCompanies() = intent {
+    internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompaniesUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
@@ -103,18 +103,17 @@ class CompanyViewModel @Inject constructor(
     private fun setCompanies(
         companies: List<CompanyEntity>,
     ) = intent {
+        val currentCompanies = state.companies
+        currentCompanies.addAll(companies)
         reduce {
-            state.copy(companies = companies)
+            state.copy(companies = currentCompanies)
         }
     }
 
-    internal fun setPage(
-        page: Int,
-    ) = intent {
+    internal fun setPage() = intent {
+        val currentPage = state.page
         reduce {
-            state.copy(
-                page = page,
-            )
+            state.copy(page = currentPage + 1)
         }
     }
 

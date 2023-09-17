@@ -105,16 +105,6 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    internal fun setPage(
-        page: Int,
-    ) = intent {
-        reduce {
-            state.copy(
-                page = page,
-            )
-        }
-    }
-
     internal fun setJobCode(
         jobCode: Long?,
     ) = intent {
@@ -160,10 +150,19 @@ internal class RecruitmentViewModel @Inject constructor(
     private fun setRecruitments(
         recruitments: List<RecruitmentUiModel>,
     ) = intent {
+        val currentRecruitments = state.recruitments
+        currentRecruitments.addAll(recruitments)
         reduce {
             state.copy(
-                recruitments = recruitments,
+                recruitments = currentRecruitments,
             )
+        }
+    }
+
+    internal fun setPage() = intent {
+        val currentPage = state.page
+        reduce {
+            state.copy(page = currentPage + 1)
         }
     }
 }
