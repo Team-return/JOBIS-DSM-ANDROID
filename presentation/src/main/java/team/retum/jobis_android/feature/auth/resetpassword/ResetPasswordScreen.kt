@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -65,15 +65,15 @@ internal fun ResetPasswordScreen(
         }
     }
 
-    val onResetPasswordButtonClicked = {
+    val onResetPasswordButtonClicked: () -> Unit = {
         resetPasswordViewModel.resetPassword()
     }
 
-    val onNewPasswordChanged = { newPassword: String ->
+    val onNewPasswordChanged: (String) -> Unit = { newPassword: String ->
         resetPasswordViewModel.setNewPassword(newPassword = newPassword)
     }
 
-    val onPasswordRepeatChanged = { passwordRepeat: String ->
+    val onPasswordRepeatChanged: (String) -> Unit = { passwordRepeat: String ->
         resetPasswordViewModel.setPasswordRepeat(passwordRepeat = passwordRepeat)
     }
 

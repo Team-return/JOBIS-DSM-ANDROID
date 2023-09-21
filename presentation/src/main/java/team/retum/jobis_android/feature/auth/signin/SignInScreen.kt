@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.signin.SignInSideEffect
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.contract.signin.SignInSideEffect
 import team.retum.jobis_android.viewmodel.signin.SignInViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -84,12 +84,12 @@ internal fun SignInScreen(
 
     }
 
-    val onEmailChanged = { email: String ->
+    val onEmailChanged: (String) -> Unit = { email: String ->
         signInViewModel.setEmail(email)
         signInViewModel.setEmailError(false)
     }
 
-    val onPasswordChanged = { password: String ->
+    val onPasswordChanged: (String) -> Unit = { password: String ->
         signInViewModel.setPassword(password)
         signInViewModel.setPasswordError(false)
     }
@@ -107,7 +107,7 @@ internal fun SignInScreen(
         navigateToSignUp()
     }
 
-    val postLogin = {
+    val postLogin: () -> Unit = {
         signInViewModel.postLogin()
     }
 

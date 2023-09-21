@@ -42,9 +42,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.application.ApplicationSideEffect
 import team.retum.jobis_android.contract.file.FileSideEffect
-import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
@@ -150,7 +150,7 @@ internal fun RecruitmentApplicationDialog(
         applicationViewModel.setButtonState(urlCount > 0)
     }
 
-    val onAddFile = { result: ActivityResult ->
+    val onAddFile: (ActivityResult) -> Unit = { result: ActivityResult ->
         val clipData = result.data?.clipData
         var uri = Uri.EMPTY
         if (clipData != null) {
@@ -172,7 +172,7 @@ internal fun RecruitmentApplicationDialog(
         fileCount -= 1
     }
 
-    val onAddUrl = {
+    val onAddUrl: () -> Unit = {
         urls.add("")
         urlCount += 1
         applicationViewModel.setButtonState(fileCount > 0)

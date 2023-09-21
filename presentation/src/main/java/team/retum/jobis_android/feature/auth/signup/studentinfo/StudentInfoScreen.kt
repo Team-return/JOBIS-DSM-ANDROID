@@ -54,30 +54,30 @@ internal fun StudentInfoScreen(
         )
     }
 
-    val onManSelected = {
+    val onManSelected: () -> Unit = {
         signUpViewModel.setGender(gender = Gender.MAN)
     }
 
-    val onWomanSelected = {
+    val onWomanSelected: () -> Unit = {
         signUpViewModel.setGender(gender = Gender.WOMAN)
     }
 
-    val onNameChanged = { name: String ->
+    val onNameChanged: (String) -> Unit = { name: String ->
         signUpViewModel.setName(name = name)
     }
 
-    val onGradeChanged = { grade: String ->
+    val onGradeChanged: (String) -> Unit = { grade: String ->
         signUpViewModel.setGrade(grade = grade)
         if (grade.length == 1) focusManager.moveFocus(FocusDirection.Next)
 
     }
 
-    val onClassChanged = { `class`: String ->
+    val onClassChanged: (String) -> Unit = { `class`: String ->
         signUpViewModel.setClass(`class` = `class`)
         if (`class`.length == 1) focusManager.moveFocus(FocusDirection.Next)
     }
 
-    val onNumberChanged = { number: String ->
+    val onNumberChanged: (String) -> Unit = { number: String ->
         signUpViewModel.setNumber(number = number)
         if (number.length == 2) clearFocus()
     }

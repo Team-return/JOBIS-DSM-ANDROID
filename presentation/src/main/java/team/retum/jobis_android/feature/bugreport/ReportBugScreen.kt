@@ -118,11 +118,11 @@ internal fun ReportBugScreen(
         focusManager.clearFocus()
     }
 
-    val onTitleChanged = { title: String ->
+    val onTitleChanged: (String) -> Unit = { title: String ->
         bugViewModel.setTitle(title)
     }
 
-    val onContentChanged = { content: String ->
+    val onContentChanged: (String) -> Unit = { content: String ->
         bugViewModel.setContent(content)
     }
 
@@ -145,11 +145,11 @@ internal fun ReportBugScreen(
         stringResource(id = R.string.bug_report_web),
     )
 
-    val onItemSelected = { index: Int ->
+    val onItemSelected: (Int) -> Unit = { index: Int ->
         bugViewModel.setPosition(positions[index])
     }
 
-    val onCompleteButtonClicked = {
+    val onCompleteButtonClicked: () -> Unit = {
         fileViewModel.uploadFile()
     }
 

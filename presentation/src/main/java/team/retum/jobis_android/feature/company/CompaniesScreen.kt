@@ -1,6 +1,5 @@
 package team.retum.jobis_android.feature.company
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -55,7 +54,7 @@ fun CompaniesScreen(
 
     val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val onCompanyNameChanged = { name: String ->
+    val onCompanyNameChanged: (String) -> Unit = { name: String ->
         companyViewModel.setCompanyName(name)
     }
 
@@ -146,7 +145,7 @@ private fun Companies(
                 logoUrl = item.logoUrl,
                 take = item.take,
                 hasRecruitment = item.hasRecruitment,
-                onClick = { navigateToCompanyDetails(item.id.toLong()) },
+                onClick = { navigateToCompanyDetails(item.id) },
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

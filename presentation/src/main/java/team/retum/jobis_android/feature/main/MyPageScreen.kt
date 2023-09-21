@@ -48,9 +48,9 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.FileType
 import team.retum.domain.enums.Department
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.file.FileSideEffect
 import team.retum.jobis_android.contract.mypage.MyPageSideEffect
-import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
@@ -135,11 +135,11 @@ internal fun MyPageScreen(
 
     var showSignOutDialog by remember { mutableStateOf(false) }
 
-    val onSignOutMainBtnClick = { myPageViewModel.signOut() }
-    val onSignOutSubBtnClick = { showSignOutDialog = false }
-    val onSignOutClicked = { showSignOutDialog = true }
+    val onSignOutMainBtnClick: () -> Unit = { myPageViewModel.signOut() }
+    val onSignOutSubBtnClick: () -> Unit = { showSignOutDialog = false }
+    val onSignOutClicked: () -> Unit = { showSignOutDialog = true }
 
-    val editProfileImage = {
+    val editProfileImage: () -> Unit = {
         activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         fileViewModel.setType(FileType.LOGO_IMAGE)
     }

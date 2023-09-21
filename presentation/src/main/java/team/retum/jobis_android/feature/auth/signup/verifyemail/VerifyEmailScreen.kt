@@ -32,7 +32,7 @@ fun VerifyEmailScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val onEmailChanged = { email: String ->
+    val onEmailChanged: (String) -> Unit = { email: String ->
         signUpViewModel.setEmail(email = email)
     }
 
