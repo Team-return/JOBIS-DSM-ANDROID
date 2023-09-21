@@ -18,8 +18,6 @@ object Version {
 
     const val ANDROID_GRADLE = "7.2.1"
     const val KOTLIN_GRADLE = "1.6.10"
-    const val HILT_GRADLE = "2.28-alpha"
-    const val LIBRARY = "7.3.0"
 
     const val COMPOSE_LIFECYCLE = "2.5.1"
     const val COMPOSE_LIFECYCLE_RUNTIME = "2.6.0-alpha05"
@@ -34,7 +32,7 @@ object Version {
 
     const val SPLASH_SCREEN = "1.0.0"
 
-    const val ORBIT_MVI = "4.5.0"
+    const val ORBIT_MVI = "6.0.0"
 
     const val DESIGN_SYSTEM = "v1.2.3"
 
