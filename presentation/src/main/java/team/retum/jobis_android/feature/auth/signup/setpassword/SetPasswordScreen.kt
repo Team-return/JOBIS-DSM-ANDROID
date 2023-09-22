@@ -28,11 +28,11 @@ fun SetPasswordScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val onPasswordChanged = { password: String ->
+    val onPasswordChanged: (String) -> Unit = { password: String ->
         signUpViewModel.setPassword(password = password)
     }
 
-    val onRepeatPasswordChanged = { repeatPassword: String ->
+    val onRepeatPasswordChanged: (String) -> Unit = { repeatPassword: String ->
         signUpViewModel.setRepeatPassword(repeatPassword = repeatPassword)
     }
 

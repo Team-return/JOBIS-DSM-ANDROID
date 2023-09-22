@@ -63,8 +63,6 @@ import team.returm.jobisdesignsystem.util.JobisSize
 import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
 
-private const val PAGE_SIZE = 10
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun RecruitmentsScreen(
@@ -88,7 +86,7 @@ internal fun RecruitmentsScreen(
         }
     }
 
-    val onNameChanged = { name: String ->
+    val onNameChanged: (String) -> Unit = { name: String ->
         recruitmentViewModel.setName(name)
     }
 

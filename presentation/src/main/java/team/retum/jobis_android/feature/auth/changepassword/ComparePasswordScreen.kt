@@ -16,8 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -39,7 +39,7 @@ internal fun ComparePasswordScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val onComparePasswordButtonClicked = {
+    val onComparePasswordButtonClicked: () -> Unit = {
         resetPasswordViewModel.comparePassword()
     }
 

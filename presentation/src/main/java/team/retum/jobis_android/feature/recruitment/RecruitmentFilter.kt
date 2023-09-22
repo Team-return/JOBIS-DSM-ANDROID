@@ -70,7 +70,7 @@ internal fun RecruitmentFilter(
 
     val selectedTechCodes = remember { mutableStateListOf<Pair<Long, String>>() }
 
-    val onKeywordChanged = { keyword: String ->
+    val onKeywordChanged: (String) -> Unit = { keyword: String ->
         codeViewModel.setKeyword(keyword)
     }
 

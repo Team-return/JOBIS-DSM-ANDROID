@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
-import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -66,21 +66,21 @@ internal fun ResetPasswordVerifyEmailScreen(
         }
     }
 
-    val onEmailChanged = { email: String ->
+    val onEmailChanged: (String) -> Unit = { email: String ->
         resetPasswordViewModel.setEmail(email = email)
     }
 
-    val onAuthCodeChanged = { authCode: String ->
+    val onAuthCodeChanged: (String) -> Unit = { authCode: String ->
         resetPasswordViewModel.setAuthCode(authCode = authCode)
         authCode.take(6)
         if (authCode.length == 6) focusManager.clearFocus()
     }
 
-    val onRequestVerification = {
+    val onRequestVerification: () -> Unit = {
         resetPasswordViewModel.sendVerificationCode()
     }
 
-    val onVerifyButtonClicked = {
+    val onVerifyButtonClicked: () -> Unit = {
         resetPasswordViewModel.verifyEmail()
     }
 
