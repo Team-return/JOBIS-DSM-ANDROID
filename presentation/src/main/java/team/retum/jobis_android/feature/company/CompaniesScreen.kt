@@ -22,6 +22,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -63,10 +66,10 @@ fun CompaniesScreen(
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
     val lazyListState = rememberLazyListState()
-    val visibleLastItemIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+    var checkCompany by remember { mutableStateOf(false) }
 
-    LaunchedEffect(visibleLastItemIndex) {
-        if (visibleLastItemIndex == state.companies.lastIndex) {
+    LaunchedEffect(checkCompany) {
+        if (checkCompany) {
             companyViewModel.setPage()
             companyViewModel.fetchCompanies()
         }
@@ -104,6 +107,7 @@ fun CompaniesScreen(
                 lazyListState = lazyListState,
                 companies = companies,
                 navigateToCompanyDetails = navigateToCompanyDetails,
+                checkCompanies = { checkCompany = it },
             )
         }
     }
@@ -134,22 +138,27 @@ private fun Companies(
     lazyListState: LazyListState,
     companies: List<CompanyEntity>,
     navigateToCompanyDetails: (Long) -> Unit,
+    checkCompanies: (Boolean) -> Unit,
 ) {
-    LazyColumn(
-        state = lazyListState,
-        contentPadding = PaddingValues(vertical = 20.dp),
-    ) {
-        items(companies) { item ->
-            Company(
-                name = item.name,
-                logoUrl = item.logoUrl,
-                take = item.take,
-                hasRecruitment = item.hasRecruitment,
-                onClick = { navigateToCompanyDetails(item.id) },
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+    checkCompanies(false)
+    if (companies.isNotEmpty()) {
+        LazyColumn(
+            state = lazyListState,
+            contentPadding = PaddingValues(vertical = 20.dp),
+        ) {
+            items(companies) { item ->
+                Company(
+                    name = item.name,
+                    logoUrl = item.logoUrl,
+                    take = item.take,
+                    hasRecruitment = item.hasRecruitment,
+                    onClick = { navigateToCompanyDetails(item.id) },
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                if (item == companies.last()) checkCompanies(true)
+            }
         }
-    }
+    } else checkCompanies(true)
 }
 
 @Composable
