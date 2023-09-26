@@ -1,5 +1,7 @@
 package team.retum.jobis_android.viewmodel.recruitment
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +32,8 @@ internal class RecruitmentViewModel @Inject constructor(
     init {
         fetchRecruitments()
     }
+
+    private val _recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf()
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -128,9 +132,11 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun setName(
         name: String,
     ) = intent {
+        _recruitments.clear()
         reduce {
             state.copy(
                 name = name,
+                page = 1,
             )
         }
         fetchRecruitments()
@@ -150,12 +156,9 @@ internal class RecruitmentViewModel @Inject constructor(
     private fun setRecruitments(
         recruitments: List<RecruitmentUiModel>,
     ) = intent {
-        val currentRecruitments = state.recruitments
-        currentRecruitments.addAll(recruitments)
+        _recruitments.addAll(recruitments)
         reduce {
-            state.copy(
-                recruitments = currentRecruitments,
-            )
+            state.copy(recruitments = _recruitments)
         }
     }
 

@@ -103,6 +103,7 @@ fun CompaniesScreen(
                 )
                 Caption(text = state.name ?: "")
             }
+            Spacer(modifier = Modifier.height(4.dp))
             Companies(
                 lazyListState = lazyListState,
                 companies = companies,

@@ -1,5 +1,7 @@
 package team.retum.jobis_android.viewmodel.company
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,8 @@ class CompanyViewModel @Inject constructor(
     init {
         fetchCompanies()
     }
+
+    private val _companies: SnapshotStateList<CompanyEntity> = mutableStateListOf()
 
     internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,10 +107,9 @@ class CompanyViewModel @Inject constructor(
     private fun setCompanies(
         companies: List<CompanyEntity>,
     ) = intent {
-        val currentCompanies = state.companies
-        currentCompanies.addAll(companies)
+        _companies.addAll(companies)
         reduce {
-            state.copy(companies = currentCompanies)
+            state.copy(companies = _companies)
         }
     }
 
@@ -120,9 +123,11 @@ class CompanyViewModel @Inject constructor(
     internal fun setCompanyName(
         name: String,
     ) = intent {
+        _companies.clear()
         reduce {
             state.copy(
                 name = name,
+                page = 1,
             )
         }
         fetchCompanies()
