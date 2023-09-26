@@ -141,7 +141,6 @@ private fun Companies(
     navigateToCompanyDetails: (Long) -> Unit,
     checkCompanies: (Boolean) -> Unit,
 ) {
-    checkCompanies(false)
     if (companies.isNotEmpty()) {
         LazyColumn(
             state = lazyListState,
@@ -162,6 +161,7 @@ private fun Companies(
             }
         }
     } else checkCompanies(true)
+    checkCompanies(false)
 }
 
 @Composable
