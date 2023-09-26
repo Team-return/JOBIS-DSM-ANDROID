@@ -156,7 +156,9 @@ private fun Companies(
                     onClick = { navigateToCompanyDetails(item.id) },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                if (item == companies.last()) checkCompanies(true)
+                if (item == companies.last()) {
+                    checkCompanies(true)
+                }
             }
         }
     } else checkCompanies(true)
