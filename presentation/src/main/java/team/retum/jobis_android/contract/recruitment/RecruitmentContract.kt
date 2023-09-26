@@ -1,5 +1,7 @@
 package team.retum.jobis_android.contract.recruitment
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -30,7 +32,7 @@ data class RecruitmentState(
         trainPay = 0,
         workHours = 0,
     ),
-    val recruitments: MutableList<RecruitmentUiModel> = mutableListOf(),
+    val recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf(),
 ): State
 
 sealed class RecruitmentSideEffect: SideEffect{
