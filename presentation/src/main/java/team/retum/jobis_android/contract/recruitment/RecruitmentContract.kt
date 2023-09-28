@@ -9,6 +9,7 @@ import team.retum.jobis_android.viewmodel.recruitment.RecruitmentUiModel
 
 data class RecruitmentState(
     var page: Int = 1,
+    var recruitmentCount: Long = 0,
     var jobCode: Long? = null,
     var techCode: String? = null,
     var name: String? = null,

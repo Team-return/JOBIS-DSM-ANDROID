@@ -47,6 +47,7 @@ object JobisUrl {
     object Recruitment {
         const val student = "$recruitment/student"
         const val details = "$recruitment/${Properties.recruitmentId}"
+        const val recruitmentCount = "$recruitment/student/count"
     }
 
     object Application {
@@ -59,6 +60,7 @@ object JobisUrl {
         const val student = "$companies/student"
         const val details = "$companies/${Properties.companyId}"
         const val reviewableCompanies = "$companies/review"
+        const val companyCount = "$companies/student/count"
     }
 
     object Review {

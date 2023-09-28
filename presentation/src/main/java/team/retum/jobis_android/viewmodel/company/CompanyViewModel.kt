@@ -17,6 +17,7 @@ import team.retum.domain.entity.company.ReviewableCompanyEntity
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.company.FetchCompaniesParam
 import team.retum.domain.usecase.company.FetchCompaniesUseCase
+import team.retum.domain.usecase.company.FetchCompanyCountUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
 import team.retum.domain.usecase.company.FetchReviewableCompaniesUseCase
 import team.retum.jobis_android.contract.company.CompanySideEffect
@@ -29,12 +30,14 @@ class CompanyViewModel @Inject constructor(
     private val fetchCompaniesUseCase: FetchCompaniesUseCase,
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
     private val fetchReviewableCompaniesUseCase: FetchReviewableCompaniesUseCase,
+    private val fetchCompanyCountUseCase: FetchCompanyCountUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
 
     override val container = container<CompanyState, CompanySideEffect>(CompanyState())
 
     init {
         fetchCompanies()
+        fetchCompanyCount()
     }
 
     private val _companies: SnapshotStateList<CompanyEntity> = mutableStateListOf()
@@ -104,12 +107,33 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
+    private fun fetchCompanyCount() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchCompanyCountUseCase(
+                fetchCompaniesParam = FetchCompaniesParam(
+                    page = state.page,
+                    name = state.name,
+                )
+            ).onSuccess {
+                setCompanyCount(it.totalPageCount)
+            }
+        }
+    }
+
     private fun setCompanies(
         companies: List<CompanyEntity>,
     ) = intent {
         _companies.addAll(companies)
         reduce {
             state.copy(companies = _companies)
+        }
+    }
+
+    private fun setCompanyCount(
+        companyCount: Long,
+    ) = intent {
+        reduce {
+            state.copy(companyCount = companyCount)
         }
     }
 

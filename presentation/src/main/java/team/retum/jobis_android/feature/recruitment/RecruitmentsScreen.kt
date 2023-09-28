@@ -146,6 +146,8 @@ internal fun RecruitmentsScreen(
                     putString = putString,
                     navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                     checkRecruitment = { checkRecruitment = it },
+                    recruitmentCount = state.recruitmentCount,
+                    pageCount = state.page,
                 )
             }
         }
@@ -214,6 +216,8 @@ private fun Recruitments(
     putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
     checkRecruitment: (Boolean) -> Unit,
+    recruitmentCount: Long,
+    pageCount: Int,
 ) {
     val onBookmarked = { index: Int, recruitmentId: Long, setBookmark: () -> Unit ->
         recruitmentUiModels[index].bookmarked = !recruitmentUiModels[index].bookmarked
@@ -260,7 +264,7 @@ private fun Recruitments(
                     onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
                     onItemClicked = { onRecruitmentClicked(recruitment) },
                 )
-                if (recruitment == recruitmentUiModels.last()) {
+                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
                     checkRecruitment(true)
                 }
             }

@@ -109,6 +109,8 @@ fun CompaniesScreen(
                 companies = companies,
                 navigateToCompanyDetails = navigateToCompanyDetails,
                 checkCompanies = { checkCompany = it },
+                companyCount = state.companyCount,
+                pageCount = state.page,
             )
         }
     }
@@ -140,6 +142,8 @@ private fun Companies(
     companies: List<CompanyEntity>,
     navigateToCompanyDetails: (Long) -> Unit,
     checkCompanies: (Boolean) -> Unit,
+    companyCount: Long,
+    pageCount: Int,
 ) {
     if (companies.isNotEmpty()) {
         LazyColumn(
@@ -155,7 +159,7 @@ private fun Companies(
                     onClick = { navigateToCompanyDetails(item.id) },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                if (item == companies.last()) {
+                if (item == companies.last() && pageCount.toLong() != companyCount) {
                     checkCompanies(true)
                 }
             }

@@ -17,6 +17,7 @@ sealed class CompanySideEffect : SideEffect {
 data class CompanyState(
     var companies: SnapshotStateList<CompanyEntity> = mutableStateListOf(),
     var page: Int = 1,
+    var companyCount: Long = 0,
     var name: String? = null,
     var companyId: Long = 0,
     val reviewableCompanies: List<ReviewableCompanyEntity> = emptyList(),
