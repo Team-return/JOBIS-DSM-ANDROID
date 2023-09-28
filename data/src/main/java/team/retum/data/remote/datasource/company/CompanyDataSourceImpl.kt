@@ -36,7 +36,7 @@ class CompanyDataSourceImpl @Inject constructor(
     override suspend fun fetchCompanyCount(
         page: Int,
         name: String?,
-    ): FetchCompanyCountResponse  = HttpHandler<FetchCompanyCountResponse>().httpRequest{
+    ): FetchCompanyCountResponse = HttpHandler<FetchCompanyCountResponse>().httpRequest {
         companyApi.fetchCompanyCount(
             page = page,
             name = name,
