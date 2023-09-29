@@ -3,6 +3,7 @@ package team.retum.data.remote.api
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import team.retum.data.remote.response.recruitment.FetchRecruitmentCountResponse
 import team.retum.data.remote.response.recruitment.FetchRecruitmentDetailsResponse
 import team.retum.data.remote.response.recruitment.RecruitmentsResponse
 import team.retum.data.remote.url.JobisUrl
@@ -20,4 +21,10 @@ interface RecruitmentApi {
     suspend fun fetchRecruitmentDetails(
         @Path("recruitment-id") recruitmentId: Long,
     ): FetchRecruitmentDetailsResponse
+
+    @GET(JobisUrl.Recruitment.recruitmentCount)
+    suspend fun fetchRecruitmentCount(
+        @Query("page") page: Int,
+        @Query("name") name: String?,
+    ): FetchRecruitmentCountResponse
 }

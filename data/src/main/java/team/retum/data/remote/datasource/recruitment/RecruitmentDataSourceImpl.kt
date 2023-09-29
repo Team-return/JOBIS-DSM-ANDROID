@@ -1,6 +1,7 @@
 package team.retum.data.remote.datasource.recruitment
 
 import team.retum.data.remote.api.RecruitmentApi
+import team.retum.data.remote.response.recruitment.FetchRecruitmentCountResponse
 import team.retum.data.remote.response.recruitment.FetchRecruitmentDetailsResponse
 import team.retum.data.remote.response.recruitment.RecruitmentsResponse
 import team.retum.data.util.HttpHandler
@@ -27,4 +28,14 @@ class RecruitmentDataSourceImpl @Inject constructor(
         HttpHandler<FetchRecruitmentDetailsResponse>().httpRequest {
             recruitmentApi.fetchRecruitmentDetails(recruitmentId)
         }.sendRequest()
+
+    override suspend fun fetRecruitmentCount(
+        page: Int,
+        name: String?
+    ): FetchRecruitmentCountResponse = HttpHandler<FetchRecruitmentCountResponse>().httpRequest {
+        recruitmentApi.fetchRecruitmentCount(
+            page = page,
+            name = name,
+        )
+    }.sendRequest()
 }

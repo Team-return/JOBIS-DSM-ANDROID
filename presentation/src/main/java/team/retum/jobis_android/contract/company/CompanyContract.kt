@@ -1,5 +1,7 @@
 package team.retum.jobis_android.contract.company
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.domain.entity.company.ReviewableCompanyEntity
@@ -13,8 +15,9 @@ sealed class CompanySideEffect : SideEffect {
 }
 
 data class CompanyState(
-    var companies: MutableList<CompanyEntity> = mutableListOf(),
+    var companies: SnapshotStateList<CompanyEntity> = mutableStateListOf(),
     var page: Int = 1,
+    var companyCount: Long = 0,
     var name: String? = null,
     var companyId: Long = 0,
     val reviewableCompanies: List<ReviewableCompanyEntity> = emptyList(),

@@ -91,10 +91,10 @@ internal fun RecruitmentsScreen(
     }
 
     val lazyListState = rememberLazyListState()
-    val visibleLastItemIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+    var checkRecruitment by remember { mutableStateOf(false) }
 
-    LaunchedEffect(visibleLastItemIndex) {
-        if (visibleLastItemIndex == state.recruitments.lastIndex) {
+    LaunchedEffect(checkRecruitment) {
+        if (checkRecruitment) {
             recruitmentViewModel.setPage()
             recruitmentViewModel.fetchRecruitments()
         }
@@ -145,6 +145,9 @@ internal fun RecruitmentsScreen(
                     bookmarkViewModel = bookmarkViewModel,
                     putString = putString,
                     navigateToRecruitmentDetails = navigateToRecruitmentDetails,
+                    checkRecruitment = { checkRecruitment = it },
+                    recruitmentCount = state.recruitmentCount,
+                    pageCount = state.page,
                 )
             }
         }
@@ -212,6 +215,9 @@ private fun Recruitments(
     bookmarkViewModel: BookmarkViewModel,
     putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
+    checkRecruitment: (Boolean) -> Unit,
+    recruitmentCount: Long,
+    pageCount: Int,
 ) {
     val onBookmarked = { index: Int, recruitmentId: Long, setBookmark: () -> Unit ->
         recruitmentUiModels[index].bookmarked = !recruitmentUiModels[index].bookmarked
@@ -227,38 +233,44 @@ private fun Recruitments(
         navigateToRecruitmentDetails(recruitment.recruitId)
     }
 
-    LazyColumn(
-        state = lazyListState,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(vertical = 20.dp),
-    ) {
-        itemsIndexed(recruitmentUiModels) { index, recruitment ->
+    if (recruitmentUiModels.isNotEmpty()) {
+        LazyColumn(
+            state = lazyListState,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 20.dp),
+        ) {
+            itemsIndexed(recruitmentUiModels) { index, recruitment ->
 
-            val position = recruitment.jobCodeList.replace(',', '/')
-            val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
+                val position = recruitment.jobCodeList.replace(',', '/')
+                val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
 
-            var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
+                var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
 
-            val setBookmark = {
-                isBookmarked = !isBookmarked
-            }
+                val setBookmark = {
+                    isBookmarked = !isBookmarked
+                }
 
-            Recruitment(
-                imageUrl = recruitment.companyProfileUrl,
-                position = position,
-                isBookmarked = isBookmarked,
-                companyName = recruitment.companyName,
-                trainPay = if (recruitment.trainPay != 0L) stringResource(
-                    id = R.string.search_recruitment_train_pay,
-                    trainPay,
+                Recruitment(
+                    imageUrl = recruitment.companyProfileUrl,
+                    position = position,
+                    isBookmarked = isBookmarked,
+                    companyName = recruitment.companyName,
+                    trainPay = if (recruitment.trainPay != 0L) stringResource(
+                        id = R.string.search_recruitment_train_pay,
+                        trainPay,
+                    )
+                    else "",
+                    isMilitarySupported = recruitment.military,
+                    onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
+                    onItemClicked = { onRecruitmentClicked(recruitment) },
                 )
-                else "",
-                isMilitarySupported = recruitment.military,
-                onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
-                onItemClicked = { onRecruitmentClicked(recruitment) },
-            )
+                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
+                    checkRecruitment(true)
+                }
+            }
         }
-    }
+    } else checkRecruitment(true)
+    checkRecruitment(false)
 }
 
 @Composable

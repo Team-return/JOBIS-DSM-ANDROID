@@ -1,5 +1,7 @@
 package team.retum.jobis_android.viewmodel.company
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +17,7 @@ import team.retum.domain.entity.company.ReviewableCompanyEntity
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.company.FetchCompaniesParam
 import team.retum.domain.usecase.company.FetchCompaniesUseCase
+import team.retum.domain.usecase.company.FetchCompanyCountUseCase
 import team.retum.domain.usecase.company.FetchCompanyDetailsUseCase
 import team.retum.domain.usecase.company.FetchReviewableCompaniesUseCase
 import team.retum.jobis_android.contract.company.CompanySideEffect
@@ -27,13 +30,17 @@ class CompanyViewModel @Inject constructor(
     private val fetchCompaniesUseCase: FetchCompaniesUseCase,
     private val fetchCompanyDetailUseCase: FetchCompanyDetailsUseCase,
     private val fetchReviewableCompaniesUseCase: FetchReviewableCompaniesUseCase,
+    private val fetchCompanyCountUseCase: FetchCompanyCountUseCase,
 ) : BaseViewModel<CompanyState, CompanySideEffect>() {
 
     override val container = container<CompanyState, CompanySideEffect>(CompanyState())
 
     init {
         fetchCompanies()
+        fetchCompanyCount()
     }
+
+    private val _companies: SnapshotStateList<CompanyEntity> = mutableStateListOf()
 
     internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -100,13 +107,33 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
+    private fun fetchCompanyCount() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchCompanyCountUseCase(
+                fetchCompaniesParam = FetchCompaniesParam(
+                    page = state.page,
+                    name = state.name,
+                )
+            ).onSuccess {
+                setCompanyCount(it.totalPageCount)
+            }
+        }
+    }
+
     private fun setCompanies(
         companies: List<CompanyEntity>,
     ) = intent {
-        val currentCompanies = state.companies
-        currentCompanies.addAll(companies)
+        _companies.addAll(companies)
         reduce {
-            state.copy(companies = currentCompanies)
+            state.copy(companies = _companies)
+        }
+    }
+
+    private fun setCompanyCount(
+        companyCount: Long,
+    ) = intent {
+        reduce {
+            state.copy(companyCount = companyCount)
         }
     }
 
@@ -120,9 +147,11 @@ class CompanyViewModel @Inject constructor(
     internal fun setCompanyName(
         name: String,
     ) = intent {
+        _companies.clear()
         reduce {
             state.copy(
                 name = name,
+                page = 1,
             )
         }
         fetchCompanies()

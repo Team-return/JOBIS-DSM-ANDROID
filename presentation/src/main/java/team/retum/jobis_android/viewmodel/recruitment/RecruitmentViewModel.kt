@@ -1,5 +1,7 @@
 package team.retum.jobis_android.viewmodel.recruitment
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +14,7 @@ import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.param.recruitment.FetchRecruitmentListParam
+import team.retum.domain.usecase.recruitment.FetchRecruitmentCountUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
 import team.retum.jobis_android.contract.recruitment.RecruitmentSideEffect
@@ -23,13 +26,17 @@ import javax.inject.Inject
 internal class RecruitmentViewModel @Inject constructor(
     private val fetchRecruitmentListUseCase: FetchRecruitmentListUseCase,
     private val fetchRecruitmentDetailsUseCase: FetchRecruitmentDetailsUseCase,
+    private val fetchRecruitmentCountUseCase: FetchRecruitmentCountUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
     init {
         fetchRecruitments()
+        fetchRecruitmentCount()
     }
+
+    private val _recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf()
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
@@ -75,6 +82,21 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
+    private fun fetchRecruitmentCount() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchRecruitmentCountUseCase(
+                fetchRecruitmentListParam = FetchRecruitmentListParam(
+                    page = state.page,
+                    name = state.name,
+                    jobCode = null,
+                    techCode = null,
+                )
+            ).onSuccess {
+                setRecruitmentCount(it.totalPageCount)
+            }
+        }
+    }
+
     private fun setRecruitmentDetails(
         recruitmentDetails: RecruitmentDetailsEntity,
     ) = intent {
@@ -105,6 +127,14 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
+    private fun setRecruitmentCount(
+        recruitmentCount: Long,
+    ) = intent {
+        reduce {
+            state.copy(recruitmentCount = recruitmentCount)
+        }
+    }
+
     internal fun setJobCode(
         jobCode: Long?,
     ) = intent {
@@ -128,9 +158,11 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun setName(
         name: String,
     ) = intent {
+        _recruitments.clear()
         reduce {
             state.copy(
                 name = name,
+                page = 1,
             )
         }
         fetchRecruitments()
@@ -150,12 +182,9 @@ internal class RecruitmentViewModel @Inject constructor(
     private fun setRecruitments(
         recruitments: List<RecruitmentUiModel>,
     ) = intent {
-        val currentRecruitments = state.recruitments
-        currentRecruitments.addAll(recruitments)
+        _recruitments.addAll(recruitments)
         reduce {
-            state.copy(
-                recruitments = currentRecruitments,
-            )
+            state.copy(recruitments = _recruitments)
         }
     }
 

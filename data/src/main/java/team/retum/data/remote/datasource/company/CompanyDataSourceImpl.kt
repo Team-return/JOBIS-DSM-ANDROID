@@ -2,6 +2,7 @@ package team.retum.data.remote.datasource.company
 
 import team.retum.data.remote.api.CompanyApi
 import team.retum.data.remote.response.company.FetchCompaniesResponse
+import team.retum.data.remote.response.company.FetchCompanyCountResponse
 import team.retum.data.remote.response.company.FetchCompanyDetailResponse
 import team.retum.data.remote.response.company.FetchReviewableCompaniesResponse
 import team.retum.data.util.HttpHandler
@@ -30,5 +31,15 @@ class CompanyDataSourceImpl @Inject constructor(
 
     override suspend fun fetchReviewableCompanies() = HttpHandler<FetchReviewableCompaniesResponse>().httpRequest {
         companyApi.fetchReviewableCompanies()
+    }.sendRequest()
+
+    override suspend fun fetchCompanyCount(
+        page: Int,
+        name: String?,
+    ): FetchCompanyCountResponse = HttpHandler<FetchCompanyCountResponse>().httpRequest {
+        companyApi.fetchCompanyCount(
+            page = page,
+            name = name,
+        )
     }.sendRequest()
 }
