@@ -139,9 +139,7 @@ internal class RecruitmentViewModel @Inject constructor(
         jobCode: Long?,
     ) = intent {
         reduce {
-            state.copy(
-                jobCode = jobCode,
-            )
+            state.copy(jobCode = jobCode)
         }
     }
 

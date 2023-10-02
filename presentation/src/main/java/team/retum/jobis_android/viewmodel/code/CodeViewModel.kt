@@ -23,7 +23,7 @@ internal class CodeViewModel @Inject constructor(
 
     override val container = container<CodeState, CodeSideEffect>(CodeState())
 
-    private val techList = mutableListOf<CodeEntity>()
+    private val _techs = mutableListOf<CodeEntity>()
 
     internal fun fetchCodes() = intent {
 
@@ -34,16 +34,18 @@ internal class CodeViewModel @Inject constructor(
                 fetchCodesParam = FetchCodesParam(
                     keyword = state.keyword,
                     type = type,
-                    parentCode = state.parentCode,
+                    parentCode = state.selectedJobCode,
                 )
             ).onSuccess {
                 when (type) {
                     Type.JOB -> setJobs(jobs = it.codes)
 
                     Type.TECH -> {
-                        setTechs(techs = it.codes)
-                        techList.clear()
-                        techList.addAll(it.codes)
+                        with(_techs) {
+                            clear()
+                            addAll(it.codes)
+                            setTechs(techs = this)
+                        }
                     }
 
                     Type.BUSINESS_AREA -> setBusinessAreas(businessAreas = it.codes)
@@ -61,12 +63,10 @@ internal class CodeViewModel @Inject constructor(
     }
 
     private fun setTechs(
-        techs: List<CodeEntity>,
+        techs: MutableList<CodeEntity>,
     ) = intent {
         reduce {
-            state.copy(
-                techs = techs,
-            )
+            state.copy(techs = techs)
         }
     }
 
@@ -95,9 +95,7 @@ internal class CodeViewModel @Inject constructor(
         type: Type,
     ) = intent {
         reduce {
-            state.copy(
-                type = type,
-            )
+            state.copy(type = type)
         }
     }
 
@@ -105,9 +103,22 @@ internal class CodeViewModel @Inject constructor(
         parentCode: Long,
     ) = intent {
         reduce {
-            state.copy(
-                parentCode = parentCode,
-            )
+            state.copy(selectedJobCode = parentCode)
+        }
+    }
+
+    internal fun onSelectTech(
+        code: Long,
+        keyword: String,
+    ) = intent {
+        val tech = code to keyword
+
+        with(state.selectedTechs) {
+            if (contains(tech)) remove(tech)
+            else add(tech)
+        }
+        reduce {
+            state.copy(selectedTechs = state.selectedTechs)
         }
     }
 
@@ -117,7 +128,7 @@ internal class CodeViewModel @Inject constructor(
 
         val resultList = mutableListOf<CodeEntity>()
 
-        techList.filter {
+        _techs.filter {
             (keyword.length <= it.keyword.length && (keyword.uppercase() == it.keyword.substring(
                 keyword.indices
             ).uppercase()))
@@ -126,7 +137,7 @@ internal class CodeViewModel @Inject constructor(
         }
 
         setTechs(
-            techs = if (keyword.isBlank()) techList
+            techs = if (keyword.isBlank()) _techs
             else resultList,
         )
     }

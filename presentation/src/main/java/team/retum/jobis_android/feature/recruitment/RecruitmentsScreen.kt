@@ -102,11 +102,11 @@ internal fun RecruitmentsScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode, techCode ->
+            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode: Long, techCodes: String ->
                 coroutineScope.launch {
                     with(recruitmentViewModel) {
                         setJobCode(jobCode)
-                        setTechCode(techCode)
+                        setTechCode(techCodes)
                         initRecruitments()
                         fetchRecruitmentCount()
                         fetchRecruitments()

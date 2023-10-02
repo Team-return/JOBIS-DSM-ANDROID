@@ -23,7 +23,6 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -61,21 +60,19 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun RecruitmentFilter(
     sheetState: Boolean = false,
     codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: (Long?, String?) -> Unit,
+    onDismissDialog: (jobCode: Long, techCodes: String) -> Unit,
 ) {
 
     val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val techs = state.techs
-
-    val selectedTechCodes = remember { mutableStateListOf<Pair<Long, String>>() }
+    val selectedTechs = state.selectedTechs
 
     val onKeywordChanged: (String) -> Unit = { keyword: String ->
         codeViewModel.setKeyword(keyword)
     }
 
     val selectedTech = StringBuilder().apply {
-        selectedTechCodes.forEach {
+        selectedTechs.forEach {
             append(it.second)
             append(" ")
         }
@@ -101,12 +98,11 @@ internal fun RecruitmentFilter(
         label = ""
     )
 
-    val onTechChecked = { techCode: Long, techName: String ->
-        if (selectedTechCodes.contains(techCode to techName)) {
-            selectedTechCodes.remove(techCode to techName)
-        } else {
-            selectedTechCodes.add(techCode to techName)
-        }
+    val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
+        codeViewModel.onSelectTech(
+            code = code,
+            keyword = keyword,
+        )
     }
 
     Column(
@@ -148,7 +144,7 @@ internal fun RecruitmentFilter(
                         folded = folded,
                         positions = state.jobs.sortedByDescending { it.keyword.length },
                         codeViewModel = codeViewModel,
-                        selectedPositionCode = state.parentCode ?: 0,
+                        selectedPositionCode = state.selectedJobCode ?: 0,
                     ) {
                         positionsHeight = it.dp
                     }
@@ -198,9 +194,9 @@ internal fun RecruitmentFilter(
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                         Techs(
-                            techs = techs,
-                            selectedTechs = selectedTechCodes,
-                            onTechChecked = onTechChecked,
+                            techs = state.techs,
+                            selectedTechs = selectedTechs,
+                            onSelectTech = onSelectTech,
                         )
                     }
                 }
@@ -208,10 +204,14 @@ internal fun RecruitmentFilter(
             JobisLargeButton(
                 text = stringResource(id = R.string.apply),
                 color = JobisButtonColor.MainSolidColor,
-                enabled = (state.parentCode != null || selectedTech.isNotEmpty())
-            ) {
-                onDismissDialog(state.parentCode, getTechCode(selectedTechCodes))
-            }
+                enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
+                onClick = {
+                    onDismissDialog(
+                        state.selectedJobCode ?: 0L,
+                        getTechCodes(selectedTechs)
+                    )
+                }
+            )
         }
     }
 }
@@ -304,7 +304,7 @@ private fun Job(
 private fun Techs(
     techs: List<CodeEntity>,
     selectedTechs: List<Pair<Long, String>>,
-    onTechChecked: (Long, String) -> Boolean,
+    onSelectTech: (code: Long, keyword: String) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
@@ -318,7 +318,7 @@ private fun Techs(
             Tech(
                 tech = tech.keyword,
                 checked = selectedTechs.contains(code to keyword),
-                onTechChecked = { onTechChecked(code, keyword) },
+                onTechChecked = { onSelectTech(code, keyword) },
             )
         }
     }
@@ -333,9 +333,8 @@ private fun Tech(
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-
-            ) {
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             JobisCheckBox(
                 color = JobisCheckBoxColor.MainColor,
                 isChecked = checked,
@@ -356,9 +355,10 @@ private fun Tech(
 
 private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
-private fun getTechCode(
+private fun getTechCodes(
     techCodes: List<Pair<Long, String>>,
 ): String {
-    return StringBuilder().apply { techCodes.forEach { append("${it.first} ") } }.toString().trim()
-        .replace(" ", ",")
+    return StringBuilder().apply {
+        techCodes.forEach { append("${it.first} ") }
+    }.toString().trim().replace(" ", ",")
 }
