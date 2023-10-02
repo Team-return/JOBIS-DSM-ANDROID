@@ -82,14 +82,14 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    private fun fetchRecruitmentCount() = intent {
+    internal fun fetchRecruitmentCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentCountUseCase(
                 fetchRecruitmentListParam = FetchRecruitmentListParam(
                     page = state.page,
                     name = state.name,
-                    jobCode = null,
-                    techCode = null,
+                    jobCode = state.jobCode,
+                    techCode = state.techCode,
                 )
             ).onSuccess {
                 setRecruitmentCount(it.totalPageCount)
@@ -192,6 +192,16 @@ internal class RecruitmentViewModel @Inject constructor(
         val currentPage = state.page
         reduce {
             state.copy(page = currentPage + 1)
+        }
+    }
+
+    internal fun initRecruitments() = intent {
+        _recruitments.clear()
+        reduce {
+            state.copy(
+                recruitments = _recruitments,
+                page = 1,
+            )
         }
     }
 }

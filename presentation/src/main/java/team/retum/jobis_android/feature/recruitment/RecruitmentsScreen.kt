@@ -107,6 +107,8 @@ internal fun RecruitmentsScreen(
                     with(recruitmentViewModel) {
                         setJobCode(jobCode)
                         setTechCode(techCode)
+                        initRecruitments()
+                        fetchRecruitmentCount()
                         fetchRecruitments()
                     }
                     sheetState.hide()
@@ -201,9 +203,11 @@ private fun RecruitmentInput(
             color = JobisColor.Gray600,
         )
         Caption(text = name ?: "")
+        Spacer(modifier = Modifier.weight(1f))
         Caption(
             modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
             text = stringResource(id = R.string.filter_applied),
+            color = JobisColor.Gray600,
         )
     }
 }
