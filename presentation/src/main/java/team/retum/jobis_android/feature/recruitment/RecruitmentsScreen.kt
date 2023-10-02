@@ -102,11 +102,13 @@ internal fun RecruitmentsScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode, techCode ->
+            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode: Long, techCodes: String ->
                 coroutineScope.launch {
                     with(recruitmentViewModel) {
                         setJobCode(jobCode)
-                        setTechCode(techCode)
+                        setTechCode(techCodes)
+                        initRecruitments()
+                        fetchRecruitmentCount()
                         fetchRecruitments()
                     }
                     sheetState.hide()
@@ -201,9 +203,11 @@ private fun RecruitmentInput(
             color = JobisColor.Gray600,
         )
         Caption(text = name ?: "")
+        Spacer(modifier = Modifier.weight(1f))
         Caption(
             modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
             text = stringResource(id = R.string.filter_applied),
+            color = JobisColor.Gray600,
         )
     }
 }
