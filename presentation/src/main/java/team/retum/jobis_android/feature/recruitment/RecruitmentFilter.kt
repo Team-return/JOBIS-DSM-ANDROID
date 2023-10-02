@@ -67,7 +67,10 @@ internal fun RecruitmentFilter(
 
     val selectedTechs = state.selectedTechs
 
+    var folded by remember { mutableStateOf(false) }
+
     val onKeywordChanged: (String) -> Unit = { keyword: String ->
+        if (folded) folded = false
         codeViewModel.setKeyword(keyword)
     }
 
@@ -80,22 +83,24 @@ internal fun RecruitmentFilter(
 
     LaunchedEffect(sheetState) {
         if (sheetState) {
-            codeViewModel.fetchCodes()
+            with(codeViewModel) {
+                fetchCodes()
+                setType(Type.TECH)
+                fetchCodes()
+            }
         }
     }
-
-    var folded by remember { mutableStateOf(true) }
 
     var positionsHeight by remember { mutableStateOf(0.dp) }
 
     val foldedOffset by animateDpAsState(
-        targetValue = if (!folded) (positionsHeight + 12.dp)
+        targetValue = if (folded) (positionsHeight + 12.dp)
         else (-12).dp,
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
         ),
-        label = ""
+        label = "",
     )
 
     val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
@@ -105,15 +110,22 @@ internal fun RecruitmentFilter(
         )
     }
 
+    val setOnPositionsHeight: (Int) -> Unit = { positionsHeight = it.dp }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(contentAlignment = Alignment.BottomCenter) {
             Box {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.padding(
+                        top = 20.dp,
+                        start = 20.dp,
+                        end = 20.dp,
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Divider(
                         modifier = Modifier
                             .width(32.dp)
@@ -142,16 +154,16 @@ internal fun RecruitmentFilter(
                     )
                     Jobs(
                         folded = folded,
-                        positions = state.jobs.sortedByDescending { it.keyword.length },
+                        positions = state.jobs,
                         codeViewModel = codeViewModel,
                         selectedPositionCode = state.selectedJobCode ?: 0,
-                    ) {
-                        positionsHeight = it.dp
-                    }
+                        setOnPositionsHeight = setOnPositionsHeight,
+                    )
                 }
                 Column(
                     modifier = Modifier
                         .fillMaxHeight(0.9f)
+                        .padding(top = 20.dp)
                         .offset(y = foldedOffset),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
@@ -160,9 +172,10 @@ internal fun RecruitmentFilter(
                         modifier = Modifier
                             .fillMaxHeight(0.82f)
                             .background(JobisColor.Gray100)
-                            .padding(top = 12.dp),
+                            .padding(horizontal = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
+                        Spacer(modifier = Modifier.height(12.dp))
                         Caption(
                             modifier = Modifier.jobisClickable {
                                 if (state.jobs.isNotEmpty()) {
@@ -170,17 +183,16 @@ internal fun RecruitmentFilter(
                                 }
                             },
                             text = stringResource(
-                                id = if (folded) R.string.choose_position
-                                else R.string.unfold,
+                                id = if (folded) R.string.unfold
+                                else R.string.choose_position,
                             ),
                             color = JobisColor.Gray600,
                             decoration = TextDecoration.Underline,
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp),
+                                .padding(vertical = 16.dp),
                             horizontalArrangement = Arrangement.Start,
                         ) {
                             Body4(
@@ -192,7 +204,6 @@ internal fun RecruitmentFilter(
                                 color = JobisColor.LightBlue,
                             )
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
                         Techs(
                             techs = state.techs,
                             selectedTechs = selectedTechs,
@@ -201,17 +212,19 @@ internal fun RecruitmentFilter(
                     }
                 }
             }
-            JobisLargeButton(
-                text = stringResource(id = R.string.apply),
-                color = JobisButtonColor.MainSolidColor,
-                enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
-                onClick = {
-                    onDismissDialog(
-                        state.selectedJobCode ?: 0L,
-                        getTechCodes(selectedTechs)
-                    )
-                }
-            )
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                JobisLargeButton(
+                    text = stringResource(id = R.string.apply),
+                    color = JobisButtonColor.MainSolidColor,
+                    enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
+                    onClick = {
+                        onDismissDialog(
+                            state.selectedJobCode ?: 0L, getTechCodes(selectedTechs)
+                        )
+                    },
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }
@@ -246,7 +259,7 @@ private fun Jobs(
                     keyword = positions[it].keyword,
                     selected = selectedPositionCode == code,
                 ) {
-                    if (!folded) {
+                    if (folded) {
                         with(codeViewModel) {
                             setType(Type.TECH)
                             setParentCode(code)
@@ -307,8 +320,7 @@ private fun Techs(
     onSelectTech: (code: Long, keyword: String) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(techs) { tech ->
 

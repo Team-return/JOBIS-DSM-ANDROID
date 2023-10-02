@@ -58,7 +58,7 @@ internal class CodeViewModel @Inject constructor(
         jobs: List<CodeEntity>,
     ) = intent {
         reduce {
-            state.copy(jobs = jobs)
+            state.copy(jobs = jobs.sortedByDescending { it.keyword.length })
         }
     }
 
@@ -100,7 +100,7 @@ internal class CodeViewModel @Inject constructor(
     }
 
     internal fun setParentCode(
-        parentCode: Long,
+        parentCode: Long?,
     ) = intent {
         reduce {
             state.copy(selectedJobCode = parentCode)
