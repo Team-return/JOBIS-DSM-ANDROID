@@ -81,10 +81,9 @@ internal fun RecruitmentFilter(
         }
     }.toString().trim().replace(" ", " | ")
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(sheetState) {
         if (sheetState) {
             codeViewModel.fetchCodes()
-            codeViewModel.setType(type = Type.TECH)
         }
     }
 
@@ -116,13 +115,9 @@ internal fun RecruitmentFilter(
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            contentAlignment = Alignment.BottomCenter,
-        ) {
+        Box(contentAlignment = Alignment.BottomCenter) {
             Box {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Divider(
                         modifier = Modifier
                             .width(32.dp)
@@ -149,9 +144,9 @@ internal fun RecruitmentFilter(
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
                     )
-                    Positions(
+                    Jobs(
                         folded = folded,
-                        positions = state.jobs,
+                        positions = state.jobs.sortedByDescending { it.keyword.length },
                         codeViewModel = codeViewModel,
                         selectedPositionCode = state.parentCode ?: 0,
                     ) {
@@ -222,21 +217,23 @@ internal fun RecruitmentFilter(
 }
 
 @Composable
-private fun Positions(
+private fun Jobs(
     folded: Boolean,
     positions: List<CodeEntity>,
     codeViewModel: CodeViewModel,
     selectedPositionCode: Long,
     setOnPositionsHeight: (Int) -> Unit,
 ) {
-
-    Column(modifier = Modifier.padding(bottom = 16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+    ) {
         FlowRow(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 14.dp)
-                .onGloballyPositioned {
-                    setOnPositionsHeight(it.size.height.toDp)
-                },
+                .onGloballyPositioned { setOnPositionsHeight(it.size.height.toDp) },
             mainAxisAlignment = MainAxisAlignment.Start,
             crossAxisSpacing = 8.dp,
             mainAxisSpacing = 4.dp,
@@ -245,7 +242,7 @@ private fun Positions(
 
                 val code = positions[it].code
 
-                Position(
+                Job(
                     keyword = positions[it].keyword,
                     selected = selectedPositionCode == code,
                 ) {
@@ -262,8 +259,11 @@ private fun Positions(
     }
 }
 
+
+private val JobShape = RoundedCornerShape(18.dp)
+
 @Composable
-private fun Position(
+private fun Job(
     keyword: String,
     selected: Boolean,
     onSelectedPosition: () -> Unit,
@@ -272,15 +272,18 @@ private fun Position(
         modifier = Modifier
             .shadow(
                 elevation = 2.dp,
-                shape = RoundedCornerShape(18.dp)
+                shape = JobShape,
             )
             .background(
                 color = if (selected) JobisColor.LightBlue
                 else JobisColor.Gray100,
-                shape = RoundedCornerShape(18.dp)
+                shape = JobShape,
             )
-            .clip(RoundedCornerShape(18.dp))
-            .jobisClickable(onClick = onSelectedPosition),
+            .clip(JobShape)
+            .jobisClickable(
+                onClick = onSelectedPosition,
+                rippleEnabled = true,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Body4(
@@ -356,5 +359,6 @@ private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.densit
 private fun getTechCode(
     techCodes: List<Pair<Long, String>>,
 ): String {
-    return StringBuilder().apply { techCodes.forEach { append("${it.first} ") } }.toString().trim().replace(" ", ",")
+    return StringBuilder().apply { techCodes.forEach { append("${it.first} ") } }.toString().trim()
+        .replace(" ", ",")
 }

@@ -38,23 +38,15 @@ internal class CodeViewModel @Inject constructor(
                 )
             ).onSuccess {
                 when (type) {
-                    Type.JOB -> {
-                        setJobs(
-                            jobs = it.codes,
-                        )
-                    }
+                    Type.JOB -> setJobs(jobs = it.codes)
 
                     Type.TECH -> {
-                        setTechs(
-                            techs = it.codes,
-                        )
+                        setTechs(techs = it.codes)
                         techList.clear()
                         techList.addAll(it.codes)
                     }
 
-                    Type.BUSINESS_AREA -> setBusinessAreas(
-                        businessAreas = it.codes,
-                    )
+                    Type.BUSINESS_AREA -> setBusinessAreas(businessAreas = it.codes)
                 }
             }
         }
@@ -64,9 +56,7 @@ internal class CodeViewModel @Inject constructor(
         jobs: List<CodeEntity>,
     ) = intent {
         reduce {
-            state.copy(
-                jobs = jobs,
-            )
+            state.copy(jobs = jobs)
         }
     }
 
