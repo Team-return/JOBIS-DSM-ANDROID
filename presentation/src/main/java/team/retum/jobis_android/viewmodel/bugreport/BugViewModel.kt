@@ -31,7 +31,7 @@ internal class BugViewModel @Inject constructor(
                     title = state.title,
                     content = state.content,
                     developmentArea = state.selectedPosition,
-                    attachmentUrls = null,
+                    attachmentUrls = fileUrls,
                 )
             ).onSuccess {
                 postSideEffect(BugSideEffect.SuccessReportBug)
