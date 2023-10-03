@@ -6,5 +6,5 @@ data class ReportBugParam(
     val title: String,
     val content: String,
     val developmentArea: DevelopmentArea,
-    val attachmentUrls: List<String>,
+    val attachmentUrls: List<String>?,
 )

@@ -24,14 +24,14 @@ internal class BugViewModel @Inject constructor(
 
     override val container = container<BugState, BugSideEffect>(BugState())
 
-    internal fun reportBug(fileUrls: List<String>) = intent {
+    internal fun reportBug(fileUrls: List<String>? = null) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reportBugUseCase(
                 ReportBugParam(
                     title = state.title,
                     content = state.content,
                     developmentArea = state.selectedPosition,
-                    attachmentUrls = fileUrls,
+                    attachmentUrls = null,
                 )
             ).onSuccess {
                 postSideEffect(BugSideEffect.SuccessReportBug)
@@ -109,8 +109,7 @@ internal class BugViewModel @Inject constructor(
         reduce {
             val title = state.title
             val content = state.content
-            val uris = state.uris
-            state.copy(reportBugButtonState = enabled && title.isNotBlank() && content.isNotBlank() && uris.isNotEmpty())
+            state.copy(reportBugButtonState = enabled && title.isNotBlank() && content.isNotBlank())
         }
     }
 
