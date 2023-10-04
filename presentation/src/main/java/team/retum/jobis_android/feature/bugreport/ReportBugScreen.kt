@@ -150,7 +150,11 @@ internal fun ReportBugScreen(
     }
 
     val onCompleteButtonClicked: () -> Unit = {
-        fileViewModel.uploadFile()
+        if (fileState.urls.isNotEmpty()) {
+            fileViewModel.uploadFile()
+        } else {
+            bugViewModel.reportBug()
+        }
     }
 
     Column(

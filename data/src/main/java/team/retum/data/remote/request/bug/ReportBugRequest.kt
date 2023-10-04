@@ -8,7 +8,7 @@ data class ReportBugRequest(
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("development_area") val developmentArea: DevelopmentArea,
-    @SerializedName("attachment_urls") val attachmentUrls: List<String>,
+    @SerializedName("attachment_urls") val attachmentUrls: List<String>?,
 )
 
 fun ReportBugParam.toRequest() = ReportBugRequest(
