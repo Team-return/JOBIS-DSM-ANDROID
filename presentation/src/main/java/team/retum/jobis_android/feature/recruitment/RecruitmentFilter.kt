@@ -60,7 +60,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun RecruitmentFilter(
     sheetState: Boolean = false,
     codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: (jobCode: Long, techCodes: String) -> Unit,
+    onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
 ) {
 
     val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -103,11 +103,21 @@ internal fun RecruitmentFilter(
         label = "",
     )
 
+    val onSelectJob: (jobCode: Long) -> Unit = {
+        with(codeViewModel) {
+            setType(Type.TECH)
+            setParentCode(it)
+            fetchCodes()
+        }
+    }
+
     val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
-        codeViewModel.onSelectTech(
-            code = code,
-            keyword = keyword,
-        )
+        with(codeViewModel) {
+            onSelectTech(
+                code = code,
+                keyword = keyword,
+            )
+        }
     }
 
     val setOnPositionsHeight: (Int) -> Unit = { positionsHeight = it.dp }
@@ -155,7 +165,7 @@ internal fun RecruitmentFilter(
                     Jobs(
                         folded = folded,
                         positions = state.jobs,
-                        codeViewModel = codeViewModel,
+                        onSelectJob = onSelectJob,
                         selectedPositionCode = state.selectedJobCode ?: 0,
                         setOnPositionsHeight = setOnPositionsHeight,
                     )
@@ -219,7 +229,8 @@ internal fun RecruitmentFilter(
                     enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
                     onClick = {
                         onDismissDialog(
-                            state.selectedJobCode ?: 0L, getTechCodes(selectedTechs)
+                            state.selectedJobCode,
+                            getTechCodes(selectedTechs),
                         )
                     },
                 )
@@ -233,7 +244,7 @@ internal fun RecruitmentFilter(
 private fun Jobs(
     folded: Boolean,
     positions: List<CodeEntity>,
-    codeViewModel: CodeViewModel,
+    onSelectJob: (jobCode: Long) -> Unit,
     selectedPositionCode: Long,
     setOnPositionsHeight: (Int) -> Unit,
 ) {
@@ -260,11 +271,7 @@ private fun Jobs(
                     selected = selectedPositionCode == code,
                 ) {
                     if (folded) {
-                        with(codeViewModel) {
-                            setType(Type.TECH)
-                            setParentCode(code)
-                            fetchCodes()
-                        }
+                        onSelectJob(code)
                     }
                 }
             }
