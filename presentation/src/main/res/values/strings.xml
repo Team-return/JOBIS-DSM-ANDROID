@@ -1,0 +1,276 @@
+<resources>
+    <string name="app_name">자비스</string>
+    <string name="jobis">JOBIS</string>
+
+    <!--    Global-->
+    <string name="jobis_description">취업의 지름길</string>
+    <string name="sign_in">로그인</string>
+    <string name="sign_up">회원가입</string>
+    <string name="next">다음</string>
+    <string name="verification">인증</string>
+    <string name="cancel">취소</string>
+    <string name="back_handler">뒤로가기 버튼을 한 번 더 누르면 종료됩니다</string>
+
+    <!--    Bottom Navigation-->
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_recruitment">의뢰서</string>
+    <string name="bottom_nav_my_page">마이페이지</string>
+    <string name="bottom_nav_menu">메뉴</string>
+
+    <!--    Exception Handling-->
+    <string name="bad_request_exception">잘못된 형식의 요청입니다</string>
+    <string name="unauthorization_exception">토큰이 만료되었습니다 다시 로그인 해주세요</string>
+    <string name="forbidden_exception">접근 권한이 없습니다</string>
+    <string name="not_found_exception">찾을 수 없습니다</string>
+    <string name="conflict_exception">중복된 요청입니다</string>
+    <string name="server_exception">서버와의 통신에서 문제가 발생했습니다</string>
+    <string name="other_exception">알 수 없는 오류가 발생했습니다</string>
+    <string name="timeout_exception">요청 시간이 초과되었습니다</string>
+    <string name="offline_exception">인터넷 연결을 확인해주세요</string>
+
+    <!--    SignIn-->
+    <string name="sign_in_hint_email">이메일을 입력해주세요</string>
+    <string name="sign_in_hint_password">비밀번호를 입력해주세요</string>
+
+    <string name="sign_in_auto_sign_in">자동 로그인</string>
+    <string name="sign_in_reset_password">비밀번호 재설정</string>
+    <string name="sign_in_sign_up_question">아직 회원이 아니신가요?</string>
+
+    <string name="sign_in_email_error">존재하지 않는 이메일 입니다</string>
+    <string name="sign_in_password_error">비밀번호가 일치하지 않습니다</string>
+
+    <!--    Sign Up-->
+    <!--    Input Personal Infomation-->
+    <string name="input_personal_information">개인정보 입력</string>
+
+    <string name="input_hint_name">이름을 입력하세요</string>
+    <string name="input_hint_grade">학년</string>
+    <string name="input_hint_class">반</string>
+    <string name="input_hint_number">번호</string>
+
+    <string name="student_info_not_found_student">존재하지 않는 학생입니다</string>
+
+    <!--    Email Verification-->
+    <string name="email_verification">이메일 인증</string>
+    <string name="please_enter_email">이메일을 입력해주세요</string>
+    <string name="email_verification_email_hint">\@dsm.hs.kr이 포함되어야 합니다</string>
+    <string name="email_verification_verify_code_hint">인증번호 6자리</string>
+    <string name="email_verification_request_verify">인증요청</string>
+    <string name="email_verification_resend">재발송</string>
+
+    <string name="email_verification_conflict">중복된 이메일 입니다</string>
+    <string name="email_verification_send_auth_code_success_title">인증번호 발송 완료</string>
+    <string name="email_verification_send_auth_code_success_message">이메일을 확인해 주세요</string>
+
+    <!--    Set Password-->
+    <string name="set_password">비밀번호 설정</string>
+    <string name="set_password_repeat_password_hint">비밀번호를 한 번 더 입력해주세요</string>
+    <string name="set_password_mismatch_password_format">비밀번호 형식이호 올바르지 않습니다</string>
+    <string name="set_password_mismatch_password">비밀번호가 일치하지 않습니다</string>
+
+    <string name="set_password_hint_password">8 ~ 16자, 영문자, 숫자, 특수문자 포함</string>
+
+    <string name="sign_up_account_conflict">이미 존재하는 계정입니다</string>
+
+
+    <!--    Home-->
+    <string name="home_do_get_recruitment">모집의뢰서\n조회하기</string>
+    <string name="home_do_get_company">기업 찾기</string>
+    <string name="home_employment_rate">대마고 취업률</string>
+    <string name="home_count_success_candidate">합격자 수</string>
+    <string name="home_count_apply_candidate">지원자 수</string>
+    <string name="home_apply_status">지원현황</string>
+    <string name="home_no_apply_companies">아직 지원한 기업이 없어요</string>
+
+    <!--    Search Recruitment-->
+    <string name="search_recruitment_header">모집의뢰서 조회하기</string>
+    <string name="search_recruitment_train_pay">실습 수당 %s만 원</string>
+    <string name="search_recruitment_more_details">더보기</string>
+    <string name="search_recruitment_filter_hint">회사검색</string>
+    <string name="recruitments_not_exist">모집의뢰서가 존재하지 않습니다</string>
+
+    <!--    Recruitment Details-->
+    <string name="recruitment_details_get_company">기업 보기</string>
+
+    <string name="recruitment_details_recruit_period">모집기간</string>
+    <string name="recruitment_details_position">모집분야</string>
+    <string name="recruitment_details_preferential_treatment">우대사항</string>
+    <string name="recruitment_details_licenses">자격증</string>
+    <string name="recruitment_details_required_grade">필수성적</string>
+    <string name="recruitment_details_worker_time">근무시간</string>
+    <string name="recruitment_details_pay">실습수당</string>
+    <string name="recruitment_details_hiring">정규직전환시</string>
+    <string name="recruitment_details_benefits">복리후생</string>
+    <string name="recruitment_details_hiring_progress">채용절차</string>
+    <string name="recruitment_details_required_documents">제출서류</string>
+    <string name="recruitment_details_etc">기타사항</string>
+
+    <string name="recruitment_details_do_apply">지원하기</string>
+
+    <string name="recruitment_details_main_work">주요업무</string>
+    <string name="recruitment_details_main_skills">사용기술</string>
+    <string name="recruitment_details_count">%s 명</string>
+
+    <string name="recruitment_details_show_detail">자세히</string>
+    <string name="recruitment_details_show_simply">간략히</string>
+
+    <!--    Company List-->
+    <string name="company_list_million">%s억</string>
+    <string name="company_list_search_company">기업 조회하기</string>
+    <string name="companies_not_exits">기업이 존재하지 않습니다</string>
+
+    <!--    Company Details-->
+    <string name="company_details_see_recruitents">모집의뢰서 보기</string>
+
+    <string name="company_details_representative_name">대표자</string>
+    <string name="company_details_founded_at">설립일</string>
+    <string name="company_details_worker_number">근로자 수</string>
+    <string name="company_details_take">연매출</string>
+    <string name="company_details_address1">주소(본사)</string>
+    <string name="company_details_address2">주소(지점)</string>
+    <string name="company_details_manager1">담당자1</string>
+    <string name="company_details_phone_number1">전화번호1</string>
+    <string name="company_details_manager2">담당자2</string>
+    <string name="company_details_phone_number2">전화번호2</string>
+    <string name="company_details_email">이메일</string>
+    <string name="company_details_fax">팩스</string>
+
+    <string name="company_details_null">없음</string>
+    <string name="company_details_review_interview">면접 후기</string>
+
+    <!--    Reviews-->
+    <string name="reviews_writer">%s님의 후기</string>
+
+    <!--    Recruitment Filter-->
+    <string name="tech_code_filter">기술 코드 필터</string>
+    <string name="search_tech_code">기술 코드 검색</string>
+    <string name="unfold">접기</string>
+    <string name="choose_position">분야 선택</string>
+    <string name="chose">선택됨 :</string>
+    <string name="apply">적용</string>
+    <string name="search_result">검색결과 :</string>
+    <string name="filter_applied">필터 적용됨</string>
+
+    <!--Bookmark Recruitments Screen-->
+    <string name="bookmarked_recruitments">북마크한 모집의뢰서</string>
+    <string name="bookmarked_date">북마크한 날짜 : %s</string>
+    <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
+    <string name="bookmarked_get_recruitments">모집의뢰서 보러가기</string>
+    <string name="bookmark_remove">삭제</string>
+    <string name="bookmark_recruitment_details">상세보기</string>
+
+    <!--   Menu Screen-->
+    <string name="menu">메뉴</string>
+    <string name="user">사용자</string>
+    <string name="company">기업</string>
+    <string name="fetch_recruitments">모집의뢰서 조회하기</string>
+    <string name="fetch_companies">기업 찾기</string>
+    <string name="fetch_bookmarked_companies">북마크한 기업 보기</string>
+
+    <!--    MyPage Screen-->
+    <string name="student_gcn">%s학년 %s반 %s번</string>
+    <string name="bug_report">버그 제보하기</string>
+    <string name="choose_interests">관심분야 선택하기</string>
+    <string name="change_password">비밀번호 변경하기</string>
+    <string name="log_out">로그아웃</string>
+
+    <string name="success_edit_profile_image">프로필 사진이 성공적으로 변경되었습니다</string>
+
+    <!--    Recruitment Application Dialog-->
+    <string name="do_apply">지원하기</string>
+    <string name="submitted_document">제출 서류 : %s</string>
+    <string name="attached_file">첨부파일</string>
+    <string name="url">URL</string>
+    <string name="add_to_press_file">눌러서 파일 추가하기</string>
+    <string name="add_to_press_url">URL 입력란 추가하기</string>
+    <string name="check">확인</string>
+    <string name="input_url">URL 입력</string>
+
+    <string name="recruitment_application_not_found">존재하지 않는 모집의뢰서 입니다</string>
+    <string name="recruitment_application_conflict">이미 지원한 이력이 있습니다</string>
+
+    <string name="recruitment_application_file_too_large">파일의 용량을 초과했습니다</string>
+
+    <string name="recruitment_application_success">성공적으로 지원되었습니다!</string>
+
+    <!--    Reset Password Email Verify Screen-->
+    <string name="self_verification">본인인증</string>
+    <string name="self_verification_explain">먼저 이메일 인증을 통해 본인임을 증명하세요.</string>
+    <string name="verification_code">인증코드 6자리</string>
+    <string name="check_personal_information">이메일이 오지 않나요? 입력하신 정보가 맞는지 확인해 주세요.</string>
+    <string name="do_verify">인증하기</string>
+    <string name="auth_code_mismatch">인증번호가 일치하지 않습니다</string>
+
+    <!--    Reset Password Screen-->
+    <string name="reset_password">비밀번호 재설정</string>
+    <string name="reset_password_explain">새로운 비밀번호로 변경하세요.</string>
+    <string name="input_new_password">새로운 비밀번호를 입력하세요</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="password_format_error">8~16자, 영문자, 숫자, 특수문자 포함</string>
+    <string name="password_repeat_error">비밀번호가 일치하지 않습니다</string>
+    <string name="complete">완료</string>
+
+    <!--    Compare Password Screen-->
+    <string name="check_original_password">기존 비밀번호 확인</string>
+    <string name="enter_original_password">기존 비밀번호를 입력해주세요.</string>
+    <string name="hint_original_password">기존 비밀번호를 입력하세요</string>
+
+    <!--    SignOut Dialog-->
+    <string name="sign_out_dialog_title">로그아웃 하시겠습니까?</string>
+
+    <!--    Bug Report-->
+    <string name="bug_report_all">전체</string>
+    <string name="bug_report_server">Server</string>
+    <string name="bug_report_ios">iOS</string>
+    <string name="bug_report_android">Android</string>
+    <string name="bug_report_web">Web</string>
+
+    <string name="bug_report_title">제목</string>
+    <string name="bug_report_content">내용</string>
+    <string name="bug_report_screenshots">스크린샷</string>
+
+    <string name="report_bug_success">버그가 성공적으로 제보되었습니다</string>
+
+    <!--    Review Details-->
+    <string name="review_details_review">%s님의 후기</string>
+
+    <!--    Post Review-->
+    <string name="post_review_header">면접후기 작성</string>
+    <string name="post_review_position">직무</string>
+
+    <string name="post_review_interview_question">면접질문</string>
+    <string name="post_review_question_hint">면접에서 답변했던 질문을 작성해주세요</string>
+
+    <string name="post_review_answer">답변내용</string>
+    <string name="post_review_answer_hint">해당 질문에 답변했던 내용을 작성해주세요</string>
+
+    <string name="post_review_do_post_review">면접후기 작성하기</string>
+    <string name="post_review_question">질문 %s</string>
+
+    <string name="post_review_success_toast_message">후기가 성공적으로 작성되었습니다</string>
+
+    <!--Notifications Screen-->
+    <string name="notifications_alarm">알림</string>
+
+    <!--content descriptions-->
+    <string name="content_description_splash_image">Jobis Image</string>
+    <string name="content_description_icon_move_to_back">MoveToBack Icon</string>
+    <string name="content_description_image_reset_password_verify">Reset Password Verify Image</string>
+
+    <string name="content_description_icon_reset_password">Reset Password Icon</string>
+
+    <string name="content_description_image_splash">Splash Image</string>
+
+    <string name="content_description_image_bug">Bug Image</string>
+    <string name="content_description_icon_add">Add Icon</string>
+    <string name="content_description_icon_remove">Remove Icon</string>
+
+    <string name="content_description_icon_edit">Edit Icon</string>
+
+    <string name="content_description_filter">Filter Icon</string>
+
+    <string name="content_description_bookmark">Bookmark Icon</string>
+
+    <string name="content_description_military">Military</string>
+
+</resources>
