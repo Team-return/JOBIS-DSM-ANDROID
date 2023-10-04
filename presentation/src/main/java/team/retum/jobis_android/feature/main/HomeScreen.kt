@@ -279,13 +279,14 @@ private fun UserInformation(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Image(
+        // TODO fcm 구현 시 작업
+        /*Image(
             modifier = Modifier
                 .size(24.dp)
                 .jobisClickable(onClick = navigateToNotifications),
             painter = painterResource(R.drawable.ic_notification),
             contentDescription = null,
-        )
+        )*/
     }
 }
 
