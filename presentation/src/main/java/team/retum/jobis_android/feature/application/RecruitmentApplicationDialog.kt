@@ -103,22 +103,20 @@ internal fun RecruitmentApplicationDialog(
         }
     }
 
-    val recruitmentNotFoundMessage = stringResource(id = R.string.recruitment_application_not_found)
-    val applyConflictMessage = stringResource(id = R.string.recruitment_application_conflict)
-
     LaunchedEffect(Unit) {
         applicationViewModel.container.sideEffectFlow.collect {
+            onDismissRequest()
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
-                    onDismissRequest()
+                    appState.showSuccessToast(context.getString(R.string.recruitment_application_success))
                 }
 
                 is ApplicationSideEffect.RecruitmentNotFound -> {
-                    appState.showErrorToast(recruitmentNotFoundMessage)
+                    appState.showErrorToast(context.getString(R.string.recruitment_application_not_found))
                 }
 
                 is ApplicationSideEffect.ApplyConflict -> {
-                    appState.showErrorToast(applyConflictMessage)
+                    appState.showErrorToast(context.getString(R.string.recruitment_application_conflict))
                 }
 
                 is ApplicationSideEffect.Exception -> {

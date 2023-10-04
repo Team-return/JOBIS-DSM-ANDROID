@@ -294,20 +294,18 @@ private fun UserInformation(
 private fun ApplyCompanies(
     appliedCompanies: List<AppliedCompanyEntity>,
 ) {
-    val size = if (appliedCompanies.size >= 2) 2
-    else appliedCompanies.size
-
     if (appliedCompanies.isNotEmpty()) {
-        Column {
-            repeat(size) { index ->
-                if (index == 0) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+        Column(
+            modifier = Modifier
+                .height(220.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            repeat(appliedCompanies.size) { index ->
                 ApplyCompany(
                     company = appliedCompanies[index].company,
                     status = appliedCompanies[index].applicationStatus.status,
                 )
-                Spacer(modifier = Modifier.height(12.dp))
             }
         }
     } else {
@@ -331,10 +329,6 @@ private fun ApplyCompany(
                 width = 1.dp,
                 color = JobisColor.Gray400,
                 shape = ApplyCompaniesItemShape,
-            )
-            .jobisClickable(
-                rippleEnabled = true,
-                onClick = {},
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -191,6 +191,8 @@
 
     <string name="recruitment_application_file_too_large">파일의 용량을 초과했습니다</string>
 
+    <string name="recruitment_application_success">성공적으로 지원되었습니다!</string>
+
     <!--    Reset Password Email Verify Screen-->
     <string name="self_verification">본인인증</string>
     <string name="self_verification_explain">먼저 이메일 인증을 통해 본인임을 증명하세요.</string>
