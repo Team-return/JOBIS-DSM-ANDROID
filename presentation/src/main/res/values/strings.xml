@@ -236,7 +236,7 @@
 
     <!--    Post Review-->
     <string name="post_review_header">면접후기 작성</string>
-    <string name="post_review_position">직무</string>
+    <string name="post_review_position">기술 스택</string>
 
     <string name="post_review_interview_question">면접질문</string>
     <string name="post_review_question_hint">면접에서 답변했던 질문을 작성해주세요</string>
