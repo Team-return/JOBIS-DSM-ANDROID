@@ -67,18 +67,18 @@ internal fun StudentInfoScreen(
     }
 
     val onGradeChanged: (String) -> Unit = { grade: String ->
-        signUpViewModel.setGrade(grade = grade)
+        signUpViewModel.setGrade(grade = grade.take(1))
         if (grade.length == 1) focusManager.moveFocus(FocusDirection.Next)
 
     }
 
     val onClassChanged: (String) -> Unit = { `class`: String ->
-        signUpViewModel.setClass(`class` = `class`)
+        signUpViewModel.setClass(`class` = `class`.take(2))
         if (`class`.length == 1) focusManager.moveFocus(FocusDirection.Next)
     }
 
     val onNumberChanged: (String) -> Unit = { number: String ->
-        signUpViewModel.setNumber(number = number)
+        signUpViewModel.setNumber(number = number.take(2))
         if (number.length == 2) clearFocus()
     }
 
