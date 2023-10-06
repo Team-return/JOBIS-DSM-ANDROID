@@ -25,7 +25,7 @@ interface StudentApi {
     @PATCH(JobisUrl.Student.password)
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
-    )
+    ): Response<Void>
 
     @PATCH(JobisUrl.Student.profile)
     suspend fun editProfileImage(

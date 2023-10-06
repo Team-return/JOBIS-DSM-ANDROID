@@ -2,12 +2,10 @@ package team.retum.jobis_android.feature.auth.resetpassword
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -113,16 +111,12 @@ internal fun ResetPasswordScreen(
             onPasswordRepeatChanged = onPasswordRepeatChanged,
         )
         Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier.imePadding(),
-        ) {
-            JobisLargeButton(
-                text = stringResource(id = R.string.complete),
-                color = JobisButtonColor.MainSolidColor,
-                enabled = newPassword.isNotEmpty() && passwordRepeat.isNotEmpty() && !state.passwordFormatErrorState && !state.passwordRepeatErrorState,
-                onClick = onResetPasswordButtonClicked,
-            )
-        }
+        JobisLargeButton(
+            text = stringResource(id = R.string.complete),
+            color = JobisButtonColor.MainSolidColor,
+            enabled = newPassword.isNotEmpty() && passwordRepeat.isNotEmpty() && !state.passwordFormatErrorState && !state.passwordRepeatErrorState,
+            onClick = onResetPasswordButtonClicked,
+        )
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
