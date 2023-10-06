@@ -1,9 +1,6 @@
 package team.retum.jobis_android.util.compose.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
@@ -24,12 +21,10 @@ import team.retum.jobis_android.util.compose.vibrate
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body4
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun BottomBar(
     navController: NavController,
 ) {
-
     val context = LocalContext.current
 
     val tabs = listOf(

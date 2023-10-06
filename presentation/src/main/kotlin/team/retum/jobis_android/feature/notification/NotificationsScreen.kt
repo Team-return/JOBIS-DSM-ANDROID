@@ -32,18 +32,6 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun NotificationsScreen(
 
 ) {
-
-    // TODO 더미값 제거
-    val notifications = listOf(
-        Notification(
-            id = 0,
-            title = "title",
-            companyName = "companyName",
-            date = "date",
-            isOpened = false,
-        ),
-    )
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +41,7 @@ internal fun NotificationsScreen(
         Header(text = stringResource(id = R.string.notifications_alarm))
         Spacer(modifier = Modifier.height(24.dp))
         Notifications(
-            notifications = notifications,
+            notifications = listOf(),
             navigateToNotificationDetails = { },
         )
     }

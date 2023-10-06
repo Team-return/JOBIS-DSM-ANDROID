@@ -1,7 +1,6 @@
 package team.retum.jobis_android.feature.root
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -19,7 +18,6 @@ import team.retum.jobis_android.navigation.navigateToBookmarkRecruitments
 import team.retum.jobis_android.navigation.navigateToMyPage
 import team.retum.jobis_android.util.compose.navigation.BottomBar
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun RootScreen(
     navigateToRecruitments: () -> Unit,
@@ -39,7 +37,9 @@ fun RootScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         bottomBar = {
-            BottomBar(navController = navHostController)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                BottomBar(navController = navHostController)
+            }
         },
     ) {
         NavHost(
