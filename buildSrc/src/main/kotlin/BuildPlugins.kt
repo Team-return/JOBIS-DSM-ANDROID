@@ -6,8 +6,6 @@ object BuildPlugins {
     const val HILT_PLUGIN = "dagger.hilt.android.plugin"
     const val APP_DISTRIBUTION = "com.google.firebase.appdistribution"
     const val GOOGLE_SERVICES = "com.google.gms.google-services"
-
-
     const val ANDROID_GRADLE = "com.android.tools.build:gradle:${Version.ANDROID_GRADLE}"
     const val KOTLIN_GRADLE = "org.jetbrains.kotlin:kotlin-graldle-plugin:${Version.KOTLIN_GRADLE}"
 }

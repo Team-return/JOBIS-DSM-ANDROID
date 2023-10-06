@@ -1,14 +1,4 @@
 object Version {
-    const val ANDROID_CORE = "1.8.0"
-    const val APPCOMMPAT = "1.6.0"
-    const val CONSTRAINT = "2.1.4"
-    const val ACTIVITY = "1.6.1"
-    const val FRAGMENT = "1.5.5"
-
-    const val JUNIT = "4.13.2"
-    const val EXT_JUNIT = "1.1.5"
-    const val ESPRESSO = "3.5.1"
-
     const val RETROFIT = "2.9.0"
     const val OKHTTP = "4.10.0"
 
@@ -20,9 +10,7 @@ object Version {
     const val KOTLIN_GRADLE = "1.6.10"
 
     const val COMPOSE_LIFECYCLE = "2.5.1"
-    const val COMPOSE_LIFECYCLE_RUNTIME = "2.6.0-alpha05"
     const val COMPOSE_ACTIVITY = "1.6.1"
-    const val COMPOSE_UI = "1.3.3"
     const val COMPOSE_MATERIAL = "1.3.1"
     const val COMPOSE_NAVIGATION = "2.5.3"
     const val COMPOSE_NAVIGATION_HILT = "1.0.0"
