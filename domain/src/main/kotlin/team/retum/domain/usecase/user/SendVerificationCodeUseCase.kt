@@ -11,7 +11,7 @@ class SendVerificationCodeUseCase @Inject constructor(
         sendVerificationCodeParam: SendVerificationCodeParam,
     ) = kotlin.runCatching {
         authRepository.sendVerificationCode(
-            sendVerificationCodeParam = sendVerificationCodeParam
+            sendVerificationCodeParam = sendVerificationCodeParam,
         )
     }
 }

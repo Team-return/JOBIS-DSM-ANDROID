@@ -5,7 +5,7 @@ import team.retum.domain.entity.review.ReviewEntity
 import team.retum.domain.entity.review.ReviewsEntity
 
 data class FetchReviewsResponse(
-    @SerializedName("reviews") val reviews: List<Review>
+    @SerializedName("reviews") val reviews: List<Review>,
 )
 
 data class Review(

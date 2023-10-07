@@ -12,7 +12,6 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override suspend fun postLogin(param: SignInParam) {
-
         val response = userDataSource.postLogin(
             signInRequest = param.toRequest(),
         )
@@ -25,7 +24,7 @@ class UserRepositoryImpl @Inject constructor(
                     refreshToken = response.refreshToken,
                     refreshExpiresAt = response.refreshExpiresAt,
                     authority = response.authority,
-                )
+                ),
             )
 
             setAutoSignInOption(

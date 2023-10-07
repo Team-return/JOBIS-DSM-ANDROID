@@ -54,7 +54,6 @@ fun CompaniesScreen(
     navigateToCompanyDetails: (Long) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
-
     val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val onCompanyNameChanged: (String) -> Unit = { name: String ->
@@ -164,7 +163,9 @@ private fun Companies(
                 }
             }
         }
-    } else checkCompanies(true)
+    } else {
+        checkCompanies(true)
+    }
     checkCompanies(false)
 }
 
@@ -225,11 +226,14 @@ private fun Company(
                     modifier = Modifier
                         .defaultMinSize(40.dp)
                         .skeleton(take == 0f),
-                    text = if (take != 0f) stringResource(
-                        id = R.string.company_list_million,
-                        take.toString()
-                    )
-                    else "",
+                    text = if (take != 0f) {
+                        stringResource(
+                            id = R.string.company_list_million,
+                            take.toString(),
+                        )
+                    } else {
+                        ""
+                    },
                     color = JobisColor.Gray600,
                 )
                 if (hasRecruitment) {

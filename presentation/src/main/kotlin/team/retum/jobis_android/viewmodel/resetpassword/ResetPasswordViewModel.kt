@@ -42,7 +42,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = state.email,
                     authCodeType = AuthCodeType.PASSWORD,
-                )
+                ),
             ).onSuccess {
                 setSendAuthCodeState(sendAuthCodeErrorState = true)
             }.onFailure {
@@ -58,7 +58,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                 verifyEmailParam = VerifyEmailParam(
                     email = state.email,
                     authCode = state.authCode,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
@@ -84,7 +84,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                         postSideEffect(
                             ResetPasswordSideEffect.Exception(
                                 message = getStringFromException(it),
-                            )
+                            ),
                         )
                     }
                 }
@@ -98,17 +98,11 @@ internal class ResetPasswordViewModel @Inject constructor(
                 resetPasswordParam = ResetPasswordParam(
                     currentPassword = state.currentPassword,
                     newPassword = state.newPassword,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessResetPassword)
-            }.onFailure {
-
             }
         }
-    }
-
-    private fun checkPasswordRepeat() {
-
     }
 
     internal fun setEmail(
@@ -148,7 +142,7 @@ internal class ResetPasswordViewModel @Inject constructor(
         setPasswordFormatErrorState(
             passwordFormatErrorState = newPassword.isEmpty() || !Pattern.matches(
                 Regex.PASSWORD,
-                newPassword
+                newPassword,
             ),
         )
         reduce {

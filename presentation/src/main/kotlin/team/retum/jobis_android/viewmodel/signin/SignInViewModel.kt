@@ -30,7 +30,7 @@ class SignInViewModel @Inject constructor(
                     accountId = state.email,
                     password = state.password,
                     isAutoLogin = state.autoSignIn,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(SignInSideEffect.MoveToMain)
             }.onFailure { throwable ->
@@ -58,8 +58,8 @@ class SignInViewModel @Inject constructor(
                     SignInSideEffect.Exception(
                         message = getStringFromException(
                             throwable = throwable,
-                        )
-                    )
+                        ),
+                    ),
                 )
             }
         }

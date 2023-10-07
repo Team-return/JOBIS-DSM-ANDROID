@@ -7,6 +7,6 @@ import team.retum.jobis_android.util.mvi.State
 data class BookmarkState(
     val bookmarkedRecruitments: List<BookmarkedRecruitmentEntity> = emptyList(),
     val bookmarkExists: Boolean = true,
-): State
+) : State
 
-sealed class BookmarkSideEffect: SideEffect
+sealed class BookmarkSideEffect : SideEffect

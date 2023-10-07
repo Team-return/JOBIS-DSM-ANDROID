@@ -49,7 +49,6 @@ fun BottomBar(
             ),
         backgroundColor = JobisColor.Gray100,
     ) {
-
         val currentDestination = navBackStackEntry?.destination?.route
 
         tabs.forEach { tab ->

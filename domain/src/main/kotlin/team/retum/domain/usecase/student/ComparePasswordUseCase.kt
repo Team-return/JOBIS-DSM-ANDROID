@@ -8,7 +8,7 @@ class ComparePasswordUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         password: String,
-    ) = runCatching{
+    ) = runCatching {
         studentRepository.comparePassword(password = password)
     }
 }

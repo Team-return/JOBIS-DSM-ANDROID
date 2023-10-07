@@ -46,13 +46,12 @@ class AuthorizationInterceptor @Inject constructor(
         val accessToken = userDataStorage.fetchAccessToken()
 
         return chain.proceed(
-            request.newBuilder().addHeader("Authorization", "Bearer $accessToken").build()
+            request.newBuilder().addHeader("Authorization", "Bearer $accessToken").build(),
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun tokenReissue() {
-
         val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
         val authApi = retrofit.create(AuthApi::class.java)

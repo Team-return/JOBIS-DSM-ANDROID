@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class ReviewDataSourceImpl @Inject constructor(
     private val reviewApi: ReviewApi,
-): ReviewDataSource {
+) : ReviewDataSource {
     override suspend fun fetchReviews(
         companyId: Long,
     ): FetchReviewsResponse = HttpHandler<FetchReviewsResponse>().httpRequest {
@@ -26,7 +26,8 @@ class ReviewDataSourceImpl @Inject constructor(
         )
     }.sendRequest()
 
-    override suspend fun postReview(postReviewRequest: PostReviewRequest) = HttpHandler<Unit>().httpRequest {
-        reviewApi.postReview(postReviewRequest)
-    }.sendRequest()
+    override suspend fun postReview(postReviewRequest: PostReviewRequest) =
+        HttpHandler<Unit>().httpRequest {
+            reviewApi.postReview(postReviewRequest)
+        }.sendRequest()
 }

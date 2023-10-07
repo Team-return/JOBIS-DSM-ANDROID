@@ -48,7 +48,7 @@ class CompanyViewModel @Inject constructor(
                 fetchCompaniesParam = FetchCompaniesParam(
                     page = state.page,
                     name = state.name,
-                )
+                ),
             ).onSuccess { it ->
                 setCompanies(companies = it.companies.map { it.copy(logoUrl = JobisUrl.imageUrl + it.logoUrl) })
             }.onFailure { throwable ->
@@ -62,8 +62,8 @@ class CompanyViewModel @Inject constructor(
                             sideEffect = CompanySideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -81,7 +81,7 @@ class CompanyViewModel @Inject constructor(
                 when (throwable) {
                     is NotFoundException -> {
                         postSideEffect(
-                            sideEffect = CompanySideEffect.NotFoundCompany
+                            sideEffect = CompanySideEffect.NotFoundCompany,
                         )
                     }
 
@@ -90,8 +90,8 @@ class CompanyViewModel @Inject constructor(
                             sideEffect = CompanySideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -113,7 +113,7 @@ class CompanyViewModel @Inject constructor(
                 fetchCompaniesParam = FetchCompaniesParam(
                     page = state.page,
                     name = state.name,
-                )
+                ),
             ).onSuccess {
                 setCompanyCount(it.totalPageCount)
             }
@@ -204,7 +204,7 @@ class CompanyViewModel @Inject constructor(
                         attachments = attachments,
                         serviceName = serviceName,
                         businessArea = businessArea,
-                    )
+                    ),
                 )
             }
         }

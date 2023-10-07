@@ -1,6 +1,5 @@
 package team.retum.jobis_android.navigation
 
-import android.util.Log
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController

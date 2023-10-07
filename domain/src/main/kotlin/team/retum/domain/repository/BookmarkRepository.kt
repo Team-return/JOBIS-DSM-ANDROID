@@ -6,5 +6,4 @@ interface BookmarkRepository {
     suspend fun fetchBookmarkedRecruitments(): BookmarkedRecruitmentsEntity
 
     suspend fun bookmarkRecruitment(recruitmentId: Long)
-
 }

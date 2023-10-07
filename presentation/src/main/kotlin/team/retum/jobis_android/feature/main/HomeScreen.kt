@@ -75,7 +75,6 @@ internal fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
-
     val homeState by homeViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val myPageState by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
@@ -167,9 +166,10 @@ private fun RecruitmentStatus(
             .background(
                 brush = Brush.horizontalGradient(
                     listOf(
-                        JobisColor.Blue, JobisColor.LightBlue
-                    )
-                )
+                        JobisColor.Blue,
+                        JobisColor.LightBlue,
+                    ),
+                ),
             ),
         verticalArrangement = Arrangement.Center,
     ) {
@@ -299,7 +299,7 @@ private fun ApplyCompanies(
             modifier = Modifier
                 .height(220.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             repeat(appliedCompanies.size) { index ->
                 ApplyCompany(
@@ -400,7 +400,6 @@ private fun MenuCard(
     @DrawableRes drawable: Int,
     onClick: () -> Unit,
 ) {
-
     val interactionSource = MutableInteractionSource()
 
     Column(

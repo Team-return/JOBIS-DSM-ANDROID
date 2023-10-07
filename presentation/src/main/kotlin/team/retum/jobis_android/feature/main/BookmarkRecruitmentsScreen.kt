@@ -61,7 +61,6 @@ internal fun BookmarkRecruitmentsScreen(
     navigateToRecruitments: () -> Unit,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
-
     val context = LocalContext.current
 
     val state by bookmarkViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -88,15 +87,18 @@ internal fun BookmarkRecruitmentsScreen(
     }
 
     val bookmarkNotExistTextAlpha by animateFloatAsState(
-        targetValue = if (!state.bookmarkExists) 1f
-        else 0f,
+        targetValue = if (!state.bookmarkExists) {
+            1f
+        } else {
+            0f
+        },
         label = "",
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 24.dp),
     ) {
         Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.bookmarked_recruitments))
@@ -160,7 +162,7 @@ private fun BookmarkedRecruitments(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        contentPadding = PaddingValues(top = 30.dp)
+        contentPadding = PaddingValues(top = 30.dp),
     ) {
         items(items = bookmarks, key = { it.recruitmentId }, itemContent = { item ->
             val dismissState = rememberDismissState(confirmStateChange = {
@@ -192,7 +194,6 @@ private fun BookmarkedRecruitments(
                     .clip(RoundedCornerShape(12.dp)),
                 state = dismissState,
                 background = {
-
                     val currentDismissState = dismissState.targetValue
 
                     val backgroundColor by animateColorAsState(
@@ -200,7 +201,9 @@ private fun BookmarkedRecruitments(
                             DismissValue.DismissedToStart -> JobisColor.Red
                             DismissValue.DismissedToEnd -> JobisColor.Green
                             else -> JobisColor.Gray500
-                        }, animationSpec = tween(durationMillis = 200), label = ""
+                        },
+                        animationSpec = tween(durationMillis = 200),
+                        label = "",
                     )
 
                     val dismissStartText = when (currentDismissState) {
@@ -221,7 +224,7 @@ private fun BookmarkedRecruitments(
                             DismissValue.DismissedToEnd -> JobisColor.Gray100
                             else -> JobisColor.Gray900
                         },
-                        label = ""
+                        label = "",
                     )
 
                     Row(

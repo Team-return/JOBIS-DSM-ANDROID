@@ -23,7 +23,6 @@ import team.returm.jobisdesignsystem.textfield.TextFieldType
 fun SetPasswordScreen(
     signUpViewModel: SignUpViewModel,
 ) {
-
     val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current

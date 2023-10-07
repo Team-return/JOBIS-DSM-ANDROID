@@ -10,7 +10,7 @@ class ApplyCompanyUseCase @Inject constructor(
     suspend operator fun invoke(
         recruitmentId: Long,
         applyCompanyParam: ApplyCompanyParam,
-    ) = runCatching{
+    ) = runCatching {
         applicationsRepository.applyCompany(
             recruitmentId = recruitmentId,
             applyCompanyParam = applyCompanyParam,

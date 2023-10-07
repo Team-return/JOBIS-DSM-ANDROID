@@ -32,7 +32,6 @@ internal fun ComparePasswordScreen(
     navigateToResetPassword: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
-
     val appState = LocalAppState.current
 
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()

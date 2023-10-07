@@ -14,7 +14,7 @@ data class ReviewableCompany(
 )
 
 fun FetchReviewableCompaniesResponse.toEntity() = ReviewableCompaniesEntity(
-    companies = this.companies.map { it.toEntity() }
+    companies = this.companies.map { it.toEntity() },
 )
 
 fun ReviewableCompany.toEntity() = ReviewableCompanyEntity(

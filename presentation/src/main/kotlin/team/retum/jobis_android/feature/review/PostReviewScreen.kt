@@ -26,8 +26,8 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.enums.Type
 import team.retum.domain.param.review.QnaElementParam
-import team.retum.jobis_android.contract.review.ReviewSideEffect
 import team.retum.jobis_android.LocalAppState
+import team.retum.jobis_android.contract.review.ReviewSideEffect
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
@@ -47,7 +47,6 @@ internal fun PostReviewScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
     codeViewModel: CodeViewModel = hiltViewModel(),
 ) {
-
     val codeState by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
     val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
@@ -94,7 +93,7 @@ internal fun PostReviewScreen(
                     onAddButtonClicked = reviewViewModel::addQnaElement,
                     onQuestionChanged = reviewViewModel::setQuestion,
                     onAnswerChanged = reviewViewModel::setAnswer,
-                    onItemSelected = reviewViewModel::setJobCode
+                    onItemSelected = reviewViewModel::setJobCode,
                 )
             }
             Column {
@@ -161,7 +160,6 @@ private fun ReviewInputs(
         }
     }
 }
-
 
 @Composable
 private fun PostReviewCard(

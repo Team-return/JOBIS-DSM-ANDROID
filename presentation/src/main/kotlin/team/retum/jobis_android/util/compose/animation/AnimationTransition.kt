@@ -17,11 +17,11 @@ internal fun slideOutLeft(
         durationMillis = duration,
         easing = easing,
     ),
-    targetOffsetX = { initialOffSetX }
+    targetOffsetX = { initialOffSetX },
 ) + fadeOut(
     animationSpec = tween(
         durationMillis = duration,
-    )
+    ),
 )
 
 internal fun slideOutRight(
@@ -33,11 +33,11 @@ internal fun slideOutRight(
         durationMillis = duration,
         easing = easing,
     ),
-    targetOffsetX = { initialOffSetX }
+    targetOffsetX = { initialOffSetX },
 ) + fadeOut(
     animationSpec = tween(
         durationMillis = duration,
-    )
+    ),
 )
 
 internal fun slideInRight(
@@ -49,11 +49,11 @@ internal fun slideInRight(
         durationMillis = duration,
         easing = easing,
     ),
-    initialOffsetX = { targetOffSetX }
+    initialOffsetX = { targetOffSetX },
 ) + fadeIn(
     animationSpec = tween(
         durationMillis = duration,
-    )
+    ),
 )
 
 internal fun slideInLeft(
@@ -65,9 +65,9 @@ internal fun slideInLeft(
         durationMillis = duration,
         easing = easing,
     ),
-    initialOffsetX = { targetOffSetX }
+    initialOffsetX = { targetOffSetX },
 ) + fadeIn(
     animationSpec = tween(
         durationMillis = duration,
-    )
+    ),
 )

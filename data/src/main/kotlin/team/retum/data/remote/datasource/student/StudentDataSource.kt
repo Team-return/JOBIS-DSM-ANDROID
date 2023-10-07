@@ -6,7 +6,7 @@ import team.retum.data.remote.request.user.SignUpRequest
 import team.retum.data.remote.response.student.FetchStudentInformationResponse
 import team.retum.data.remote.response.user.SignUpResponse
 
-interface StudentsDataSource {
+interface StudentDataSource {
     suspend fun fetchStudentInformation(): FetchStudentInformationResponse
 
     suspend fun comparePassword(password: String)

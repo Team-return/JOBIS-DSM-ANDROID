@@ -58,7 +58,6 @@ internal fun ReportBugScreen(
     fileViewModel: FileViewModel = hiltViewModel(),
     navigatePopBackStack: () -> Unit,
 ) {
-
     val appState = LocalAppState.current
 
     val bugState by bugViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -297,7 +296,6 @@ private fun ScreenShots(
                                 shadow = true,
                                 imageContentDescription = stringResource(id = R.string.content_description_icon_remove),
                             )
-
                         }
                     }
                 }

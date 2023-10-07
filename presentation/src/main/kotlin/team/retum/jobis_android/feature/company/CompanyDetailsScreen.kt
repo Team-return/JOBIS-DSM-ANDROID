@@ -64,7 +64,6 @@ fun CompanyDetailsScreen(
     companyViewModel: CompanyViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
-
     var detailButtonVisibility by remember { mutableStateOf(true) }
 
     val companyState by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -126,7 +125,7 @@ fun CompanyDetailsScreen(
                     enabled = companyState.companyDetails.recruitmentId != null,
                     onClick = {
                         navigateToRecruitmentDetails(
-                            companyState.companyDetails.recruitmentId ?: 0
+                            companyState.companyDetails.recruitmentId ?: 0,
                         )
                     },
                 )
@@ -140,12 +139,15 @@ fun CompanyDetailsScreen(
 private fun CompanyDetails(
     details: CompanyDetailsEntity,
 ) {
-
     var showDetails by remember { mutableStateOf(false) }
 
     val maxLines by animateIntAsState(
-        targetValue = if (showDetails) 20
-        else 3, label = ""
+        targetValue = if (showDetails) {
+            20
+        } else {
+            3
+        },
+        label = "",
     )
 
     Column {
@@ -177,8 +179,11 @@ private fun CompanyDetails(
                 modifier = Modifier.jobisClickable {
                     showDetails = !showDetails
                 },
-                text = if (showDetails) stringResource(id = R.string.recruitment_details_show_simply)
-                else stringResource(id = R.string.recruitment_details_show_detail),
+                text = if (showDetails) {
+                    stringResource(id = R.string.recruitment_details_show_simply)
+                } else {
+                    stringResource(id = R.string.recruitment_details_show_detail)
+                },
                 color = JobisColor.Gray600,
                 overflow = TextOverflow.Ellipsis,
                 decoration = TextDecoration.Underline,
@@ -212,8 +217,11 @@ private fun CompanyDetails(
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_address2),
-            content = if (details.subAddress.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
-            else details.subAddress.toString(),
+            content = if (details.subAddress.isNullOrEmpty()) {
+                stringResource(id = R.string.company_details_null)
+            } else {
+                details.subAddress.toString()
+            },
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager1),
@@ -225,13 +233,19 @@ private fun CompanyDetails(
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_manager2),
-            content = if (details.subManagerName.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
-            else details.subManagerName.toString(),
+            content = if (details.subManagerName.isNullOrEmpty()) {
+                stringResource(id = R.string.company_details_null)
+            } else {
+                details.subManagerName.toString()
+            },
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_phone_number2),
-            content = if (details.subManagerPhoneNo.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
-            else details.subManagerPhoneNo.toPhoneNumber(),
+            content = if (details.subManagerPhoneNo.isNullOrEmpty()) {
+                stringResource(id = R.string.company_details_null)
+            } else {
+                details.subManagerPhoneNo.toPhoneNumber()
+            },
         )
         CompanyDetail(
             title = stringResource(id = R.string.company_details_email),
@@ -297,7 +311,6 @@ private fun CompanyDetail(
     }
     Spacer(modifier = Modifier.height(10.dp))
 }
-
 
 @Composable
 private fun Review(

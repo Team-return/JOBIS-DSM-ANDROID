@@ -12,7 +12,7 @@ class FileDataSourceImpl @Inject constructor(
 ) : FileDataSource {
     override suspend fun uploadFile(
         type: FileType,
-        files: List<MultipartBody.Part>
+        files: List<MultipartBody.Part>,
     ): UploadFileResponse = HttpHandler<UploadFileResponse>().httpRequest {
         fileApi.uploadFile(
             type = type,

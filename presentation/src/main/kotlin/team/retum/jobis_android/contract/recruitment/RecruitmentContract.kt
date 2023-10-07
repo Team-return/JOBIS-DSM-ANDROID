@@ -34,9 +34,8 @@ data class RecruitmentState(
         workHours = 0,
     ),
     val recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf(),
-): State
+) : State
 
-sealed class RecruitmentSideEffect: SideEffect{
-    class Exception(val message: String): RecruitmentSideEffect()
+sealed class RecruitmentSideEffect : SideEffect {
+    class Exception(val message: String) : RecruitmentSideEffect()
 }
-

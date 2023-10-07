@@ -27,7 +27,6 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 fun VerifyEmailScreen(
     signUpViewModel: SignUpViewModel,
 ) {
-
     val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
@@ -72,7 +71,7 @@ fun VerifyEmailScreen(
                     keyboardActions = KeyboardActions { focusManager.clearFocus() },
                     enabled = state.authCodeEnabled,
                     error = state.verifyCodeError,
-                    errorText = stringResource(id = R.string.auth_code_mismatch)
+                    errorText = stringResource(id = R.string.auth_code_mismatch),
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -83,8 +82,11 @@ fun VerifyEmailScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     JobisSmallButton(
                         text = stringResource(
-                            id = if (state.authCodeEnabled) R.string.email_verification_resend
-                            else R.string.email_verification_request_verify
+                            id = if (state.authCodeEnabled) {
+                                R.string.email_verification_resend
+                            } else {
+                                R.string.email_verification_request_verify
+                            },
                         ),
                         color = JobisButtonColor.MainSolidColor,
                         onClick = onSendVerificationCodeButtonClicked,

@@ -51,7 +51,6 @@ internal fun SignInScreen(
     navigateToResetPasswordVerifyEmail: () -> Unit,
     navigateToSignUp: () -> Unit,
 ) {
-
     val appState = LocalAppState.current
 
     val state by signInViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -81,7 +80,6 @@ internal fun SignInScreen(
                 }
             }
         }
-
     }
 
     val onEmailChanged: (String) -> Unit = { email: String ->

@@ -10,15 +10,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun ToastLayout(
     content: @Composable () -> Unit,
-){
+) {
     Column(
         modifier = Modifier.padding(
             top = 48.dp,
             start = 22.dp,
-            end = 22.dp
+            end = 22.dp,
         ),
         verticalArrangement = Arrangement.Top,
-    ){
+    ) {
         content()
     }
 }

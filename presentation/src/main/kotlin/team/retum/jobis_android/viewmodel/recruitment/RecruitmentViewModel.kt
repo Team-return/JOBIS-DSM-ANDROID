@@ -46,7 +46,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     jobCode = state.jobCode,
                     techCode = state.techCode,
                     name = state.name,
-                )
+                ),
             ).onSuccess { it ->
                 setRecruitments(it.recruitmentEntities.map { it.toModel() })
             }.onFailure { throwable ->
@@ -54,29 +54,24 @@ internal class RecruitmentViewModel @Inject constructor(
                     sideEffect = RecruitmentSideEffect.Exception(
                         message = getStringFromException(
                             throwable = throwable,
-                        )
-                    )
+                        ),
+                    ),
                 )
             }
         }
     }
-
 
     private fun fetchRecruitmentDetails() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentDetailsUseCase(
                 recruitmentId = state.recruitmentId,
             ).onSuccess {
-                setRecruitmentDetails(
-                    recruitmentDetails = it,
-                )
+                setRecruitmentDetails(it)
             }.onFailure { throwable ->
                 postSideEffect(
                     sideEffect = RecruitmentSideEffect.Exception(
-                        message = getStringFromException(
-                            throwable = throwable,
-                        )
-                    )
+                        message = getStringFromException(throwable),
+                    ),
                 )
             }
         }
@@ -90,7 +85,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     name = state.name,
                     jobCode = state.jobCode,
                     techCode = state.techCode,
-                )
+                ),
             ).onSuccess {
                 setRecruitmentCount(it.totalPageCount)
             }
@@ -121,7 +116,7 @@ internal class RecruitmentViewModel @Inject constructor(
                         submitDocument = submitDocument,
                         trainPay = trainPay,
                         workHours = workHours,
-                    )
+                    ),
                 )
             }
         }

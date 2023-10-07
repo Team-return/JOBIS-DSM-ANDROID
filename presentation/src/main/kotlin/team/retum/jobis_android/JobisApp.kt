@@ -45,11 +45,13 @@ internal fun JobisApp(
     signUpViewModel: SignUpViewModel,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
-
     val navController = rememberAnimatedNavController()
 
-    val navRouteBySignInOption = if (signInOption) NavigationRoute.Root
-    else AuthDestinations.SignIn
+    val navRouteBySignInOption = if (signInOption) {
+        NavigationRoute.Root
+    } else {
+        AuthDestinations.SignIn
+    }
 
     val moveToScreenBySignInOption = {
         navController.navigate(navRouteBySignInOption) {
@@ -111,5 +113,3 @@ internal fun JobisApp(
         }
     }
 }
-
-

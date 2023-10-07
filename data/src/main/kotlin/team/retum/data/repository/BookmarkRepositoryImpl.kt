@@ -15,5 +15,4 @@ class BookmarkRepositoryImpl @Inject constructor(
     override suspend fun bookmarkRecruitment(recruitmentId: Long) {
         bookmarkDataSource.bookmarkRecruitment(recruitmentId)
     }
-
 }

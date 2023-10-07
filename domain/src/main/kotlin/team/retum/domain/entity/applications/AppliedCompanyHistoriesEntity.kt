@@ -11,4 +11,3 @@ data class AppliedCompanyEntity(
     val company: String,
     val applicationStatus: ApplicationStatus,
 )
-

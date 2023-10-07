@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class ReportBugUseCase @Inject constructor(
     private val bugRepository: BugRepository,
-){
+) {
     suspend operator fun invoke(reportBugParam: ReportBugParam) = runCatching {
         bugRepository.reportBug(reportBugParam)
     }

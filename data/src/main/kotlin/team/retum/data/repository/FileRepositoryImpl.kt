@@ -27,5 +27,5 @@ private fun File.getImageMultipart(key: String): MultipartBody.Part =
     MultipartBody.Part.createFormData(
         name = key,
         filename = name,
-        body = asRequestBody("multipart/form-data".toMediaType())
+        body = asRequestBody("multipart/form-data".toMediaType()),
     )

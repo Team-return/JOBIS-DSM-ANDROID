@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class AuthDataSourceImpl @Inject constructor(
     private val authApi: AuthApi,
-): AuthDataSource {
+) : AuthDataSource {
     override suspend fun sendVerificationCode(
         sendVerificationCodeRequest: SendVerificationCodeRequest,
     ) = HttpHandler<Unit>()

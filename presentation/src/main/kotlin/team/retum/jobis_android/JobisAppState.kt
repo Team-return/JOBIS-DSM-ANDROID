@@ -63,7 +63,7 @@ internal class JobisAppState(
                 ToastState(
                     title = title,
                     toastType = toastType,
-                )
+                ),
             )
             snackbarHostState.showSnackbar(
                 message = message,

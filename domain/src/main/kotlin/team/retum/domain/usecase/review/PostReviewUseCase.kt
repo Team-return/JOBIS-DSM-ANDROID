@@ -7,7 +7,7 @@ import javax.inject.Inject
 class PostReviewUseCase @Inject constructor(
     private val reviewRepository: ReviewRepository,
 ) {
-    suspend operator fun invoke(postReviewParam: PostReviewParam) = runCatching{
+    suspend operator fun invoke(postReviewParam: PostReviewParam) = runCatching {
         reviewRepository.postReview(postReviewParam)
     }
 }

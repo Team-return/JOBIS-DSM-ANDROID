@@ -27,9 +27,7 @@ interface UserDataStorage {
 
     fun getPreference(key: String): SharedPreferences
 
-    fun getString(
-        key: String
-    ): String
+    fun getString(key: String): String
 
     fun putString(
         key: String,

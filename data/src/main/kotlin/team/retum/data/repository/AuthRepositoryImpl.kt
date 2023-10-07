@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-): AuthRepository {
+) : AuthRepository {
     override suspend fun sendVerificationCode(
         sendVerificationCodeParam: SendVerificationCodeParam,
     ) {

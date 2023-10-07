@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
-import android.util.Log
 import okhttp3.MultipartBody
 import java.io.File
 import java.io.FileOutputStream
@@ -36,14 +35,14 @@ object FileUtil {
         context: Context,
         uri: Uri,
         file: File,
-    ){
+    ) {
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
 
         val buffer = ByteArray(4 * 1024)
-        while(true){
+        while (true) {
             val byteCount = inputStream!!.read(buffer)
-            if(byteCount < 0) break
+            if (byteCount < 0) break
             outputStream.write(buffer, 0, byteCount)
         }
 
@@ -58,7 +57,6 @@ object FileUtil {
         uri: Uri,
         context: Context,
     ): String {
-
         val cursor = context.contentResolver.query(uri, null, null, null, null)
 
         var fileName = ""

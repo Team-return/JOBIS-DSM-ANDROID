@@ -37,7 +37,6 @@ internal fun ResetPasswordScreen(
     navigateToMain: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
-
     val appState = LocalAppState.current
 
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -148,7 +147,7 @@ private fun ResetPasswordInput(
             helperText = stringResource(id = R.string.password_format_error),
             errorText = stringResource(id = R.string.password_repeat_error),
             hint = stringResource(id = R.string.password_repeat_error),
-            textFieldType = TextFieldType.PASSWORD
+            textFieldType = TextFieldType.PASSWORD,
         )
     }
 }

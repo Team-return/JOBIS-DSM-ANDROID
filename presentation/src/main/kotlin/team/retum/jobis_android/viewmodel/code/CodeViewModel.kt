@@ -26,7 +26,6 @@ internal class CodeViewModel @Inject constructor(
     private val _techs = mutableListOf<CodeEntity>()
 
     internal fun fetchCodes() = intent {
-
         val type = state.type
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,7 +34,7 @@ internal class CodeViewModel @Inject constructor(
                     keyword = state.keyword,
                     type = type,
                     parentCode = state.selectedJobCode,
-                )
+                ),
             ).onSuccess {
                 when (type) {
                     Type.JOB -> setJobs(jobs = it.codes)
@@ -114,8 +113,11 @@ internal class CodeViewModel @Inject constructor(
         val tech = code to keyword
 
         with(state.selectedTechs) {
-            if (contains(tech)) remove(tech)
-            else add(tech)
+            if (contains(tech)) {
+                remove(tech)
+            } else {
+                add(tech)
+            }
         }
         reduce {
             state.copy(selectedTechs = state.selectedTechs)
@@ -125,20 +127,22 @@ internal class CodeViewModel @Inject constructor(
     private fun searchTechCode(
         keyword: String,
     ) = intent {
-
         val resultList = mutableListOf<CodeEntity>()
 
         _techs.filter {
-            (keyword.length <= it.keyword.length && (keyword.uppercase() == it.keyword.substring(
-                keyword.indices
-            ).uppercase()))
+            keyword.length <= it.keyword.length && keyword.uppercase() == it.keyword.substring(
+                keyword.indices,
+            ).uppercase()
         }.map {
             resultList.add(it)
         }
 
         setTechs(
-            techs = if (keyword.isBlank()) _techs
-            else resultList,
+            techs = if (keyword.isBlank()) {
+                _techs
+            } else {
+                resultList
+            },
         )
     }
 }

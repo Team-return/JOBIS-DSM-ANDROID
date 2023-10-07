@@ -30,7 +30,7 @@ internal class ApplicationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             applyCompanyUseCase(
                 recruitmentId = state.recruitmentId,
-                applyCompanyParam = ApplyCompanyParam(attachments = state.attachments)
+                applyCompanyParam = ApplyCompanyParam(attachments = state.attachments),
             ).onSuccess {
                 postSideEffect(sideEffect = ApplicationSideEffect.SuccessApplyCompany)
             }.onFailure {
@@ -61,15 +61,14 @@ internal class ApplicationViewModel @Inject constructor(
         fileUrls: List<String>,
         urls: List<String>,
     ) = intent {
-
         val attachments = mutableListOf<AttachmentsParam>()
 
         fileUrls.forEach {
             attachments.add(
                 AttachmentsParam(
                     url = it,
-                    type = AttachmentDocsType.FILE
-                )
+                    type = AttachmentDocsType.FILE,
+                ),
             )
         }
 
@@ -78,7 +77,7 @@ internal class ApplicationViewModel @Inject constructor(
                 AttachmentsParam(
                     url = it,
                     type = AttachmentDocsType.URL,
-                )
+                ),
             )
         }
 

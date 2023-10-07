@@ -32,7 +32,7 @@ internal class BugViewModel @Inject constructor(
                     content = state.content,
                     developmentArea = state.selectedPosition,
                     attachmentUrls = fileUrls,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(BugSideEffect.SuccessReportBug)
             }.onFailure {
@@ -70,14 +70,6 @@ internal class BugViewModel @Inject constructor(
             reduce {
                 state.copy(selectedPosition = DevelopmentArea.ALL)
             }
-        }
-    }
-
-    internal fun setFileUrls(
-        fileUrls: List<String>
-    ) = intent {
-        reduce {
-            state.copy(fileUrls = fileUrls)
         }
     }
 

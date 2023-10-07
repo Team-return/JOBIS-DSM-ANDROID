@@ -1,7 +1,7 @@
 package team.retum.domain.entity.company
 
 data class CompaniesEntity(
-    val companies: List<CompanyEntity>
+    val companies: List<CompanyEntity>,
 )
 
 data class CompanyEntity(

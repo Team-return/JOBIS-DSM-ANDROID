@@ -4,6 +4,7 @@ data class UploadFileEntity(
     val urls: List<String>,
 )
 
-enum class FileType{
-    LOGO_IMAGE, EXTENSION_FILE
+enum class FileType {
+    LOGO_IMAGE,
+    EXTENSION_FILE,
 }

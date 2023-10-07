@@ -62,7 +62,6 @@ internal fun RecruitmentFilter(
     codeViewModel: CodeViewModel = hiltViewModel(),
     onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
 ) {
-
     val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val selectedTechs = state.selectedTechs
@@ -94,8 +93,11 @@ internal fun RecruitmentFilter(
     var positionsHeight by remember { mutableStateOf(0.dp) }
 
     val foldedOffset by animateDpAsState(
-        targetValue = if (folded) (positionsHeight + 12.dp)
-        else (-12).dp,
+        targetValue = if (folded) {
+            (positionsHeight + 12.dp)
+        } else {
+            (-12).dp
+        },
         animationSpec = tween(
             durationMillis = 1000,
             easing = LinearOutSlowInEasing,
@@ -193,8 +195,11 @@ internal fun RecruitmentFilter(
                                 }
                             },
                             text = stringResource(
-                                id = if (folded) R.string.unfold
-                                else R.string.choose_position,
+                                id = if (folded) {
+                                    R.string.unfold
+                                } else {
+                                    R.string.choose_position
+                                },
                             ),
                             color = JobisColor.Gray600,
                             decoration = TextDecoration.Underline,
@@ -263,7 +268,6 @@ private fun Jobs(
             mainAxisSpacing = 4.dp,
         ) {
             repeat(positions.size) {
-
                 val code = positions[it].code
 
                 Job(
@@ -278,7 +282,6 @@ private fun Jobs(
         }
     }
 }
-
 
 private val JobShape = RoundedCornerShape(18.dp)
 
@@ -295,8 +298,11 @@ private fun Job(
                 shape = JobShape,
             )
             .background(
-                color = if (selected) JobisColor.LightBlue
-                else JobisColor.Gray100,
+                color = if (selected) {
+                    JobisColor.LightBlue
+                } else {
+                    JobisColor.Gray100
+                },
                 shape = JobShape,
             )
             .clip(JobShape)
@@ -312,8 +318,11 @@ private fun Job(
                 vertical = 4.dp,
             ),
             text = keyword,
-            color = if (selected) JobisColor.Gray100
-            else JobisColor.Gray600,
+            color = if (selected) {
+                JobisColor.Gray100
+            } else {
+                JobisColor.Gray600
+            },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -327,10 +336,10 @@ private fun Techs(
     onSelectTech: (code: Long, keyword: String) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(techs) { tech ->
-
             val code = tech.code
             val keyword = tech.keyword
 

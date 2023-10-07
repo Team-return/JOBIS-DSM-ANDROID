@@ -1,6 +1,6 @@
 package team.retum.data.repository
 
-import team.retum.data.remote.datasource.student.StudentsDataSource
+import team.retum.data.remote.datasource.student.StudentDataSource
 import team.retum.data.remote.datasource.user.UserDataSource
 import team.retum.data.remote.request.student.toRequest
 import team.retum.data.remote.request.user.toRequest
@@ -16,28 +16,28 @@ import javax.inject.Inject
 
 // TODO setUserInfo LocalDataSource로 이동
 class StudentRepositoryImpl @Inject constructor(
-    private val studentsDataSource: StudentsDataSource,
+    private val studentDataSource: StudentDataSource,
     private val userDataSource: UserDataSource,
 ) : StudentRepository {
     override suspend fun fetchStudentInformation(): StudentInformationEntity =
-        studentsDataSource.fetchStudentInformation().toEntity()
+        studentDataSource.fetchStudentInformation().toEntity()
 
     override suspend fun comparePassword(password: String) {
-        studentsDataSource.comparePassword(password = password)
+        studentDataSource.comparePassword(password = password)
     }
 
     override suspend fun resetPassword(resetPasswordParam: ResetPasswordParam) {
-        studentsDataSource.resetPassword(resetPasswordRequest = resetPasswordParam.toRequest())
+        studentDataSource.resetPassword(resetPasswordRequest = resetPasswordParam.toRequest())
     }
 
     override suspend fun editProfileImage(editProfileImageParam: EditProfileImageParam) {
-        studentsDataSource.editProfileImage(editProfileImageRequest = editProfileImageParam.toRequest())
+        studentDataSource.editProfileImage(editProfileImageRequest = editProfileImageParam.toRequest())
     }
 
     override suspend fun checkStudentExists(
         checkStudentExistsParam: CheckStudentExistsParam,
     ) {
-        studentsDataSource.checkStudentExists(
+        studentDataSource.checkStudentExists(
             gcn = checkStudentExistsParam.gcn,
             name = checkStudentExistsParam.name,
         )
@@ -46,8 +46,7 @@ class StudentRepositoryImpl @Inject constructor(
     override suspend fun signUp(
         signUpParam: SignUpParam,
     ) {
-
-        val response = studentsDataSource.signUp(
+        val response = studentDataSource.signUp(
             signUpRequest = signUpParam.toRequest(),
         )
 
@@ -59,7 +58,7 @@ class StudentRepositoryImpl @Inject constructor(
                     refreshToken = response.refreshToken,
                     refreshExpiresAt = response.refreshExpiresAt,
                     authority = response.authority,
-                )
+                ),
             )
         }
     }

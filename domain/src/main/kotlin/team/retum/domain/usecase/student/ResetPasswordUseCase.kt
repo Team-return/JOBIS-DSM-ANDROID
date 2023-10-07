@@ -6,10 +6,10 @@ import javax.inject.Inject
 
 class ResetPasswordUseCase @Inject constructor(
     private val studentRepository: StudentRepository,
-){
+) {
     suspend operator fun invoke(
         resetPasswordParam: ResetPasswordParam,
-    ) = runCatching{
+    ) = runCatching {
         studentRepository.resetPassword(
             resetPasswordParam = resetPasswordParam,
         )

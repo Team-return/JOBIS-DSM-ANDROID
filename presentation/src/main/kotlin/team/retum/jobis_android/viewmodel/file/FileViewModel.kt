@@ -34,7 +34,9 @@ internal class FileViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(sideEffect = FileSideEffect.SuccessUploadFile(it.urls))
             }.onFailure {
-                if (it is TooLargeRequestException) postSideEffect(FileSideEffect.FileLargeException)
+                if (it is TooLargeRequestException) {
+                    postSideEffect(FileSideEffect.FileLargeException)
+                }
             }
         }
     }
@@ -43,9 +45,7 @@ internal class FileViewModel @Inject constructor(
         type: FileType,
     ) = intent {
         reduce {
-            state.copy(
-                type = type
-            )
+            state.copy(type = type)
         }
     }
 
@@ -69,4 +69,3 @@ internal class FileViewModel @Inject constructor(
         }
     }
 }
-

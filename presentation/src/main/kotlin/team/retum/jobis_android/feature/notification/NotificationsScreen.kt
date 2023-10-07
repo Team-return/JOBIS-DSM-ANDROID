@@ -29,9 +29,7 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-internal fun NotificationsScreen(
-
-) {
+internal fun NotificationsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,10 +83,12 @@ private fun Notification(
     onClick: (Long) -> Unit,
     isOpened: Boolean,
 ) {
-
     val alpha by animateFloatAsState(
-        targetValue = if (isOpened) 0.4f
-        else 1f,
+        targetValue = if (isOpened) {
+            0.4f
+        } else {
+            1f
+        },
         label = "",
     )
 

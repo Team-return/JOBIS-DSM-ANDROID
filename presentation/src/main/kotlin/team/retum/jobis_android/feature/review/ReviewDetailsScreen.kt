@@ -35,7 +35,6 @@ internal fun ReviewDetailsScreen(
     getString: (key: String) -> String?,
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
-
     val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -54,7 +53,7 @@ internal fun ReviewDetailsScreen(
                 text = stringResource(
                     id = R.string.review_details_review,
                     getString(NavigationProperties.WRITER) ?: "",
-                )
+                ),
             )
             Spacer(modifier = Modifier.height(30.dp))
             InterviewReviews(interviewEntities = state.reviewDetails)
@@ -66,9 +65,7 @@ internal fun ReviewDetailsScreen(
 private fun InterviewReviews(
     interviewEntities: List<ReviewDetailEntity>,
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         items(interviewEntities) {
             InterviewReview(
                 position = it.question,

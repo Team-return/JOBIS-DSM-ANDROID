@@ -49,7 +49,8 @@ class UserDataStorageImpl @Inject constructor(
 
     override fun fetchAutoSignInOption(): Boolean {
         return getPreference(UserPersonalKey.AUTO_SIGN_IN).getBoolean(
-            UserPersonalKey.AUTO_SIGN_IN, false,
+            UserPersonalKey.AUTO_SIGN_IN,
+            false,
         )
     }
 

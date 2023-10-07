@@ -20,7 +20,7 @@ data class Recruitment(
 )
 
 fun RecruitmentsResponse.toEntity() = RecruitmentsEntity(
-    recruitmentEntities = this.recruitments.map { it.toEntity() }
+    recruitmentEntities = this.recruitments.map { it.toEntity() },
 )
 
 private fun Recruitment.toEntity() = RecruitmentEntity(

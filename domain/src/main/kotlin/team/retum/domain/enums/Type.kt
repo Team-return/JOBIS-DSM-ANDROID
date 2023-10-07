@@ -1,6 +1,6 @@
 package team.retum.domain.enums
 
-enum class Type{
+enum class Type {
     JOB,
     TECH,
     BUSINESS_AREA,

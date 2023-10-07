@@ -13,8 +13,8 @@ internal fun JobisBasicToast(
     title: String? = null,
     toastType: ToastType,
     dismissToToast: () -> Unit,
-){
-    when(toastType){
+) {
+    when (toastType) {
         ToastType.Normal -> JobisNormalToast(
             message = message,
             title = title,

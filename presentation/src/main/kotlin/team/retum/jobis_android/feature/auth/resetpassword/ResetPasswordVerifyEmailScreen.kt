@@ -39,7 +39,6 @@ internal fun ResetPasswordVerifyEmailScreen(
     navigateToResetPassword: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
-
     val appState = LocalAppState.current
 
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -116,7 +115,7 @@ internal fun ResetPasswordVerifyEmailScreen(
                 authCodeErrorState = state.authCodeErrorState,
                 sendAuthCodeState = sendAuthCodeState,
                 onAuthCodeChanged = onAuthCodeChanged,
-                onRequestVerification = onRequestVerification
+                onRequestVerification = onRequestVerification,
             )
             Spacer(modifier = Modifier.weight(1f))
             Caption(
@@ -173,8 +172,11 @@ private fun ChangePasswordInputs(
                     Spacer(modifier = Modifier.height(8.dp))
                     JobisSmallButton(
                         text = stringResource(
-                            id = if (sendAuthCodeState) R.string.email_verification_resend
-                            else R.string.email_verification_request_verify,
+                            id = if (sendAuthCodeState) {
+                                R.string.email_verification_resend
+                            } else {
+                                R.string.email_verification_request_verify
+                            },
                         ),
                         color = JobisButtonColor.MainSolidColor,
                         enabled = email.isNotEmpty(),

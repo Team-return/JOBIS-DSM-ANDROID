@@ -17,4 +17,3 @@ interface FileApi {
         @Part file: List<MultipartBody.Part>,
     ): UploadFileResponse
 }
-

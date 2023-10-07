@@ -13,16 +13,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val fetchAutoSignInOptionUseCase: FetchAutoSignInOptionUseCase
+    private val fetchAutoSignInOptionUseCase: FetchAutoSignInOptionUseCase,
 ) : BaseViewModel<MainState, MainSideEffect>() {
 
     override val container = container<MainState, MainSideEffect>(MainState())
 
-    init{
+    init {
         fetchAutoSignInOption()
     }
 
-    internal fun fetchAutoSignInOption() {
+    private fun fetchAutoSignInOption() {
         runBlocking {
             fetchAutoSignInOptionUseCase().onSuccess {
                 setAutoSignInOptionState(it)

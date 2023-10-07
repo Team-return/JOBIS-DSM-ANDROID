@@ -20,11 +20,17 @@ internal fun Modifier.skeleton(
 ) = this
     .clip(shape = shape)
     .then(
-        if (show) Modifier.shimmer()
-        else Modifier
+        if (show) {
+            Modifier.shimmer()
+        } else {
+            Modifier
+        },
     )
     .background(
-        color = if (show) JobisColor.Gray500
-        else Color.Transparent,
+        color = if (show) {
+            JobisColor.Gray500
+        } else {
+            Color.Transparent
+        },
         shape = shape,
     )

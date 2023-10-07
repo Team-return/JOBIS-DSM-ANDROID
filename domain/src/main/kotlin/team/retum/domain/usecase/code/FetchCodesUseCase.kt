@@ -9,7 +9,7 @@ class FetchCodesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         fetchCodesParam: FetchCodesParam,
-    ) = runCatching{
+    ) = runCatching {
         codeRepository.fetchCodes(
             fetchCodesParam = fetchCodesParam,
         )

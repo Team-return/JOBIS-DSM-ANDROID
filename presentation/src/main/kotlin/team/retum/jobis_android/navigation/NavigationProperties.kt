@@ -8,4 +8,4 @@ object NavigationProperties {
     const val WRITER = "writer"
 }
 
-internal fun String.toNavigationRoute() = "{${this}}"
+internal fun String.toNavigationRoute() = "{$this}"

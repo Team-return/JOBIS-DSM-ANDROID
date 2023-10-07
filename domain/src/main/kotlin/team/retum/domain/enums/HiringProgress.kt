@@ -11,5 +11,5 @@ enum class HiringProgress(
     FINAL_INTERVIEW("최종면접"),
     PERSONALITY("인적성 테스트"),
     AI("AI 면접"),
-    CODING_TEST("코딩테스트")
+    CODING_TEST("코딩테스트"),
 }

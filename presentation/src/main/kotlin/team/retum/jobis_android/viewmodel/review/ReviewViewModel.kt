@@ -43,10 +43,8 @@ class ReviewViewModel @Inject constructor(
             }.onFailure { throwable ->
                 postSideEffect(
                     sideEffect = ReviewSideEffect.Exception(
-                        message = getStringFromException(
-                            throwable = throwable,
-                        )
-                    )
+                        message = getStringFromException(throwable),
+                    ),
                 )
             }
         }
@@ -68,11 +66,9 @@ class ReviewViewModel @Inject constructor(
                 postReviewParam = PostReviewParam(
                     companyId = state.companyId,
                     qnaElements = state.qnaElements,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(ReviewSideEffect.SuccessPostReview)
-            }.onFailure {
-
             }
         }
     }

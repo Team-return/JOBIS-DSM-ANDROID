@@ -64,7 +64,6 @@ internal fun RecruitmentDetailsScreen(
     navigateToCompanyDetails: (Long) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
-
     val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val details = state.details
@@ -179,10 +178,11 @@ private fun RecruitmentDetails(
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
 ) {
-
-    val requireGrade =
-        if (details.requiredGrade == null) stringResource(id = R.string.company_details_null)
-        else "${details.requiredGrade}%"
+    val requireGrade = if (details.requiredGrade == null) {
+        stringResource(id = R.string.company_details_null)
+    } else {
+        "${details.requiredGrade}%"
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -196,8 +196,11 @@ private fun RecruitmentDetails(
         Spacer(modifier = Modifier.height(10.dp))
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-            content = if (details.preferentialTreatment.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
-            else details.preferentialTreatment.toString(),
+            content = if (details.preferentialTreatment.isNullOrEmpty()) {
+                stringResource(id = R.string.company_details_null)
+            } else {
+                details.preferentialTreatment.toString()
+            },
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_licenses),
@@ -228,8 +231,7 @@ private fun RecruitmentDetails(
                     append("${it + 1}. ${details.hiringProgress[it].value}")
                     if (it != details.hiringProgress.lastIndex) append("\n")
                 }
-            }
-                .toString(),
+            }.toString(),
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_required_documents),
@@ -237,11 +239,13 @@ private fun RecruitmentDetails(
         )
         RecruitmentDetail(
             title = stringResource(id = R.string.recruitment_details_etc),
-            content = if (details.etc.isNullOrEmpty()) stringResource(id = R.string.company_details_null)
-            else details.etc.toString()
+            content = if (details.etc.isNullOrEmpty()) {
+                stringResource(id = R.string.company_details_null)
+            } else {
+                details.etc.toString()
+            },
         )
     }
-
 }
 
 @Composable
@@ -287,9 +291,7 @@ private fun Positions(
         Column {
             areas.forEach {
                 PositionCard(
-                    position = it.job.toString().replace("[", " ")
-                        .replace("]", " ")
-                        .trim(),
+                    position = it.job.toString().replace("[", " ").replace("]", " ").trim(),
                     workerCount = it.hiring.toString(),
                     majorTask = it.majorTask,
                     mainSkill = it.tech,
@@ -307,12 +309,14 @@ private fun PositionCard(
     majorTask: String,
     mainSkill: List<String>,
 ) {
-
     var showDetails by remember { mutableStateOf(false) }
 
     val maxLines by animateIntAsState(
-        targetValue = if (showDetails) 100
-        else 1,
+        targetValue = if (showDetails) {
+            100
+        } else {
+            1
+        },
         label = "",
     )
 
@@ -382,7 +386,7 @@ private fun PositionCard(
                                 append(", ")
                             }
                         }
-                    }.toString()
+                    }.toString(),
                 )
             }
         }
@@ -394,8 +398,11 @@ private fun PositionCard(
                 modifier = Modifier.jobisClickable {
                     showDetails = !showDetails
                 },
-                text = if (showDetails) stringResource(id = R.string.recruitment_details_show_simply)
-                else stringResource(id = R.string.recruitment_details_show_detail),
+                text = if (showDetails) {
+                    stringResource(id = R.string.recruitment_details_show_simply)
+                } else {
+                    stringResource(id = R.string.recruitment_details_show_detail)
+                },
                 color = JobisColor.Gray600,
             )
         }

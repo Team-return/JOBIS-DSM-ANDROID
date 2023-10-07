@@ -29,7 +29,6 @@ fun RootScreen(
     navigateToPostReview: (Long) -> Unit,
     navigateToNotifications: () -> Unit,
 ) {
-
     val scaffoldState = rememberScaffoldState()
 
     val navHostController = rememberNavController()

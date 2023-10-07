@@ -9,9 +9,9 @@ import team.retum.data.remote.response.user.SignUpResponse
 import team.retum.data.util.HttpHandler
 import javax.inject.Inject
 
-class StudentsDataSourceImpl @Inject constructor(
+class StudentDataSourceImpl @Inject constructor(
     private val studentApi: StudentApi,
-) : StudentsDataSource {
+) : StudentDataSource {
     override suspend fun fetchStudentInformation(): FetchStudentInformationResponse =
         HttpHandler<FetchStudentInformationResponse>().httpRequest {
             studentApi.fetchStudentInformation()

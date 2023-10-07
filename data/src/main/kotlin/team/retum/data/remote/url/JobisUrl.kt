@@ -17,7 +17,7 @@ object JobisUrl {
 
     const val imageUrl = "https://jobis-store.s3.ap-northeast-2.amazonaws.com/"
 
-    object Bookmark{
+    object Bookmark {
         const val bookmark = "$bookmarks/${Properties.recruitmentId}"
     }
 

@@ -8,14 +8,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.JobisAppState
-import team.retum.jobis_android.util.compose.JobisBasicToast
 import team.retum.jobis_android.ToastState
+import team.retum.jobis_android.util.compose.JobisBasicToast
 
 @Composable
 internal fun JobisSnackBarHost(
     appState: JobisAppState,
 ) {
-
     val coroutineScope = rememberCoroutineScope()
 
     var toastState = ToastState()

@@ -61,7 +61,6 @@ internal fun SignUpScreen(
     navigateToMain: () -> Unit,
     navigatePopBackStack: () -> Unit,
 ) {
-
     val appState = LocalAppState.current
 
     var currentProgress by remember { mutableStateOf(1) }
@@ -135,12 +134,13 @@ internal fun SignUpScreen(
         }
     }
 
-
     val progressAnimation by animateFloatAsState(
-        targetValue = (currentProgress.toFloat() / maxProgress.toFloat()), animationSpec = tween(
+        targetValue = (currentProgress.toFloat() / maxProgress.toFloat()),
+        animationSpec = tween(
             durationMillis = 300,
             easing = FastOutSlowInEasing,
-        ), label = ""
+        ),
+        label = "",
     )
 
     val onTopBarClicked = {
@@ -221,8 +221,11 @@ private fun ProgressBarWithButton(
         Spacer(modifier = Modifier.height(20.dp))
         JobisLargeButton(
             text = stringResource(
-                id = if (currentProgress == 2 && !isSuccessVerifyEmail) R.string.verification
-                else R.string.next,
+                id = if (currentProgress == 2 && !isSuccessVerifyEmail) {
+                    R.string.verification
+                } else {
+                    R.string.next
+                },
             ),
             color = JobisButtonColor.MainSolidColor,
             enabled = buttonEnabled,
@@ -243,8 +246,11 @@ private fun SignUpHeader(
     Spacer(modifier = Modifier.height(50.dp))
     Heading5(
         text = stringResource(
-            id = if (currentProgress in 1..3) titleList[currentProgress - 1]
-            else titleList.first()
+            id = if (currentProgress in 1..3) {
+                titleList[currentProgress - 1]
+            } else {
+                titleList.first()
+            },
         ),
     )
 }

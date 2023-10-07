@@ -9,7 +9,7 @@ class FetchCompaniesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         fetchCompaniesParam: FetchCompaniesParam,
-    ) = runCatching{
+    ) = runCatching {
         companyRepository.fetchCompanies(
             fetchCompaniesParam = fetchCompaniesParam,
         )

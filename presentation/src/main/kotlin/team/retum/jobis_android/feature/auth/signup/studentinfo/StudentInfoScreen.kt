@@ -36,7 +36,6 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun StudentInfoScreen(
     signUpViewModel: SignUpViewModel,
 ) {
-
     val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
@@ -46,12 +45,15 @@ internal fun StudentInfoScreen(
     }
 
     LaunchedEffect(Unit) {
-        signUpViewModel.setSignUpButtonEnabled(
-            state.name.isNotBlank() &&
-                    state.grade.isNotBlank() &&
-                    state.classRoom.isNotBlank() &&
-                    state.number.isNotBlank()
-        )
+        with(state) {
+            val nameBlank = name.isNotBlank()
+            val gradeBlank = grade.isNotBlank()
+            val classRoomBlank = classRoom.isNotBlank()
+            val numberBlank = number.isNotBlank()
+            signUpViewModel.setSignUpButtonEnabled(
+                nameBlank && gradeBlank && classRoomBlank && numberBlank,
+            )
+        }
     }
 
     val onManSelected: () -> Unit = {
@@ -68,18 +70,23 @@ internal fun StudentInfoScreen(
 
     val onGradeChanged: (String) -> Unit = { grade: String ->
         signUpViewModel.setGrade(grade = grade.take(1))
-        if (grade.length == 1) focusManager.moveFocus(FocusDirection.Next)
-
+        if (grade.length == 1) {
+            focusManager.moveFocus(FocusDirection.Next)
+        }
     }
 
     val onClassChanged: (String) -> Unit = { `class`: String ->
         signUpViewModel.setClass(`class` = `class`.take(2))
-        if (`class`.length == 1) focusManager.moveFocus(FocusDirection.Next)
+        if (`class`.length == 1) {
+            focusManager.moveFocus(FocusDirection.Next)
+        }
     }
 
     val onNumberChanged: (String) -> Unit = { number: String ->
         signUpViewModel.setNumber(number = number.take(2))
-        if (number.length == 2) clearFocus()
+        if (number.length == 2) {
+            clearFocus()
+        }
     }
 
     Column(
@@ -113,7 +120,6 @@ private fun SelectGender(
     onWomanSelected: () -> Unit,
     gender: Gender,
 ) {
-
     val manButtonColor: ButtonColor
     val womanButtonColor: ButtonColor
 

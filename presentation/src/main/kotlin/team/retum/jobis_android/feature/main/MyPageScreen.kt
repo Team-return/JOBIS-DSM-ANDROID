@@ -75,12 +75,10 @@ internal fun MyPageScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
-
     val appState = LocalAppState.current
 
     val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewableCompanies by
-    companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val reviewableCompanies by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -127,7 +125,7 @@ internal fun MyPageScreen(
                 FileUtil.toFile(
                     context = context,
                     uri = uri,
-                )
+                ),
             )
             fileViewModel.uploadFile()
         }
@@ -190,7 +188,7 @@ internal fun MyPageScreen(
                 navigateBugReport = navigateToBugReport,
                 onInterestClicked = {},
                 navigateToComparePassword = navigateToComparePassword,
-                onSignOutClicked = onSignOutClicked
+                onSignOutClicked = onSignOutClicked,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -205,7 +203,6 @@ private fun UserProfile(
     department: Department,
     studentGcn: String,
 ) {
-
     var grade = ""
     var classRoom = ""
     var number = ""
@@ -271,13 +268,17 @@ private fun UserProfile(
             Body4(
                 modifier = Modifier
                     .defaultMinSize(minWidth = 82.dp)
-                    .skeleton(
-                        show = grade.isEmpty()
-                    ),
-                text = if (grade.isNotEmpty()) stringResource(
-                    id = R.string.student_gcn, grade, classRoom, number
-                )
-                else "",
+                    .skeleton(show = grade.isEmpty()),
+                text = if (grade.isNotEmpty()) {
+                    stringResource(
+                        id = R.string.student_gcn,
+                        grade,
+                        classRoom,
+                        number,
+                    )
+                } else {
+                    ""
+                },
                 color = JobisColor.Gray700,
             )
         }
@@ -425,7 +426,8 @@ private fun SignOutDialog(
                     .weight(0.5f)
                     .height(40.dp)
                     .jobisClickable(
-                        onClick = onSubBtnClick, rippleEnabled = true
+                        onClick = onSubBtnClick,
+                        rippleEnabled = true,
                     ),
                 contentAlignment = Alignment.Center,
             ) {

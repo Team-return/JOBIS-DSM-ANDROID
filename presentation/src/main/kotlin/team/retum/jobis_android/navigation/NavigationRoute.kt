@@ -25,7 +25,6 @@ object AuthDestinations {
     const val StudentInfo = "studentInfo"
     const val VerifyEmail = "verifyEmail"
     const val SetPassword = "setPassword"
-
 }
 
 object MainDestinations {

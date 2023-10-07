@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class CodeDataSourceImpl @Inject constructor(
     private val codeApi: CodeApi,
-): CodeDataSource {
+) : CodeDataSource {
     override suspend fun fetchCodes(
         keyword: String?,
         type: Type,

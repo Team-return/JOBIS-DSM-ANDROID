@@ -23,7 +23,6 @@ import team.returm.jobisdesignsystem.util.Animated
 internal fun SplashScreen(
     moveToScreenBySignInOption: () -> Unit,
 ) {
-
     var visible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {

@@ -5,6 +5,6 @@ import team.retum.jobis_android.util.mvi.State
 
 data class MainState(
     val autoSignInOption: Boolean = false,
-): State
+) : State
 
-sealed class MainSideEffect: SideEffect
+sealed class MainSideEffect : SideEffect

@@ -64,7 +64,6 @@ internal fun RecruitmentApplicationDialog(
     applicationViewModel: ApplicationViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
 ) {
-
     val appState = LocalAppState.current
 
     val context = LocalContext.current
@@ -205,7 +204,7 @@ internal fun RecruitmentApplicationDialog(
             modifier = Modifier
                 .height(280.dp)
                 .padding(bottom = 8.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(25.dp))
             Caption(

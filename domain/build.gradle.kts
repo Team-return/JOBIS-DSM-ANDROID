@@ -23,7 +23,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile(ProjectProperties.PROGUARD),
-                ProjectProperties.PROGUARD_RULES
+                ProjectProperties.PROGUARD_RULES,
             )
         }
     }

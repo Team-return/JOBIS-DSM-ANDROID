@@ -8,7 +8,7 @@ class FetchRecruitmentDetailsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         recruitmentId: Long,
-    ) = runCatching{
+    ) = runCatching {
         recruitmentRepository.fetchRecruitmentDetails(
             recruitmentId = recruitmentId,
         )

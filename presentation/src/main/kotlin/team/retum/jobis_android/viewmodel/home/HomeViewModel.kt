@@ -6,14 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.applications.AppliedCompanyHistoriesEntity
 import team.retum.domain.entity.applications.StudentCountsEntity
 import team.retum.domain.usecase.applications.FetchAppliedCompanyHistoriesUseCase
 import team.retum.domain.usecase.applications.FetchStudentCountsUseCase
-import team.retum.domain.usecase.user.SignOutUseCase
 import team.retum.jobis_android.contract.home.HomeSideEffect
 import team.retum.jobis_android.contract.home.HomeState
 import team.retum.jobis_android.viewmodel.BaseViewModel

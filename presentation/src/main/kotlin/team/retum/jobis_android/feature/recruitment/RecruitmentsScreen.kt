@@ -71,7 +71,6 @@ internal fun RecruitmentsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
-
     val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -164,7 +163,6 @@ private fun RecruitmentInput(
     onFilterClicked: () -> Unit,
     onKeywordChanged: (String) -> Unit,
 ) {
-
     val searchResultTextAlpha = if (name.isNullOrBlank()) 0f else 1f
     val filterAppliedTextAlpha = if (jobCode != null || techCode != null) 1f else 0f
 
@@ -259,11 +257,14 @@ private fun Recruitments(
                     position = position,
                     isBookmarked = isBookmarked,
                     companyName = recruitment.companyName,
-                    trainPay = if (recruitment.trainPay != 0L) stringResource(
-                        id = R.string.search_recruitment_train_pay,
-                        trainPay,
-                    )
-                    else "",
+                    trainPay = if (recruitment.trainPay != 0L) {
+                        stringResource(
+                            id = R.string.search_recruitment_train_pay,
+                            trainPay,
+                        )
+                    } else {
+                        ""
+                    },
                     isMilitarySupported = recruitment.military,
                     onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
                     onItemClicked = { onRecruitmentClicked(recruitment) },
@@ -273,7 +274,9 @@ private fun Recruitments(
                 }
             }
         }
-    } else checkRecruitment(true)
+    } else {
+        checkRecruitment(true)
+    }
     checkRecruitment(false)
 }
 
@@ -288,17 +291,22 @@ private fun Recruitment(
     onBookmarked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
-
     var isItemClicked by remember {
         mutableStateOf(false)
     }
 
     var bookmarked = isBookmarked
-    val bookmarkIcon = if (isBookmarked) R.drawable.ic_bookmarked_filled
-    else R.drawable.ic_bookmarked_outlined
+    val bookmarkIcon = if (isBookmarked) {
+        R.drawable.ic_bookmarked_filled
+    } else {
+        R.drawable.ic_bookmarked_outlined
+    }
 
-    val militaryIcon = if (isMilitarySupported) R.drawable.ic_military_filled
-    else R.drawable.ic_military_outlined
+    val militaryIcon = if (isMilitarySupported) {
+        R.drawable.ic_military_filled
+    } else {
+        R.drawable.ic_military_outlined
+    }
 
     val onBookmarkClicked = {
         onBookmarked()

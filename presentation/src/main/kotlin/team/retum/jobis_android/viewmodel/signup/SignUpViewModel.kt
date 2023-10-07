@@ -46,7 +46,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     internal fun setName(
-        name: String
+        name: String,
     ) = intent {
         reduce { state.copy(name = name.trim()) }
         setSignUpButtonEnabled(
@@ -55,7 +55,7 @@ class SignUpViewModel @Inject constructor(
                 grade = state.grade,
                 `class` = state.classRoom,
                 number = state.number,
-            )
+            ),
         )
     }
 
@@ -69,7 +69,7 @@ class SignUpViewModel @Inject constructor(
                 grade = state.grade,
                 `class` = state.classRoom,
                 number = state.number,
-            )
+            ),
         )
     }
 
@@ -83,7 +83,7 @@ class SignUpViewModel @Inject constructor(
                 grade = state.grade,
                 `class` = `class`,
                 number = state.number,
-            )
+            ),
         )
     }
 
@@ -97,7 +97,7 @@ class SignUpViewModel @Inject constructor(
                 grade = state.grade,
                 `class` = state.classRoom,
                 number = number,
-            )
+            ),
         )
     }
 
@@ -207,7 +207,7 @@ class SignUpViewModel @Inject constructor(
                         number = state.number,
                     ),
                     name = container.stateFlow.value.name,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess)
                 setSignUpButtonEnabled(false)
@@ -224,8 +224,8 @@ class SignUpViewModel @Inject constructor(
                             sideEffect = SignUpSideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -239,7 +239,7 @@ class SignUpViewModel @Inject constructor(
                 sendVerificationCodeParam = SendVerificationCodeParam(
                     email = state.email,
                     authCodeType = AuthCodeType.SIGN_UP,
-                )
+                ),
             ).onSuccess {
                 setAuthCodeEnabled(true)
                 postSideEffect(SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess)
@@ -254,8 +254,8 @@ class SignUpViewModel @Inject constructor(
                             SignUpSideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -269,7 +269,7 @@ class SignUpViewModel @Inject constructor(
                 verifyEmailParam = VerifyEmailParam(
                     email = state.email,
                     authCode = state.verifyCode,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailSuccess)
                 setSignUpButtonEnabled(false)
@@ -289,8 +289,8 @@ class SignUpViewModel @Inject constructor(
                             sideEffect = SignUpSideEffect.Exception(
                                 message = getStringFromException(
                                     throwable = throwable,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -315,7 +315,7 @@ class SignUpViewModel @Inject constructor(
                         gender = state.gender,
                         classRoom = state.classRoom.toLong(),
                         number = state.number.toLong(),
-                    )
+                    ),
                 ).onSuccess {
                     postSideEffect(
                         sideEffect = SignUpSideEffect.SetPassword.SignUpSuccess,
@@ -333,8 +333,8 @@ class SignUpViewModel @Inject constructor(
                                 sideEffect = SignUpSideEffect.Exception(
                                     message = getStringFromException(
                                         throwable = throwable,
-                                    )
-                                )
+                                    ),
+                                ),
                             )
                         }
                     }
@@ -347,7 +347,6 @@ class SignUpViewModel @Inject constructor(
         password: String,
         repeatPassword: String,
     ): Boolean {
-
         val passwordError = !Pattern.matches(Regex.PASSWORD, password)
         val repeatPasswordError = password != repeatPassword
 

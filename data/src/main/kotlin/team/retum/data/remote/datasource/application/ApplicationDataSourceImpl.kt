@@ -22,7 +22,7 @@ class ApplicationDataSourceImpl @Inject constructor(
 
     override suspend fun applyCompany(
         recruitmentId: Long,
-        applyCompanyRequest: ApplyCompanyRequest
+        applyCompanyRequest: ApplyCompanyRequest,
     ) = HttpHandler<Unit>().httpRequest {
         applicationApi.applyCompany(
             recruitmentId = recruitmentId,

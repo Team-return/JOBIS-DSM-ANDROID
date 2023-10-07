@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
@@ -59,7 +58,7 @@ internal class BookmarkViewModel @Inject constructor(
 
     private fun setBookmarkExists(
         bookmarkExists: Boolean,
-    ) = intent{
+    ) = intent {
         reduce {
             state.copy(
                 bookmarkExists = bookmarkExists,
