@@ -777,3 +777,5 @@ buildSrc/build/kotlin/compileKotlin/caches-jvm/lookups/id-to-file.tab.values.at
 presentation/google-services.json
 
 presentation/release/presentation-release.aab
+
+.DS_Store

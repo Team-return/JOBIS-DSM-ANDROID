@@ -29,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile(ProjectProperties.PROGUARD),
-                ProjectProperties.PROGUARD_RULES
+                ProjectProperties.PROGUARD_RULES,
             )
         }
     }
@@ -45,7 +45,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures{
+    buildFeatures {
         compose = true
     }
 }
@@ -60,42 +60,22 @@ dependencies {
 
     implementation(Dependency.COMPOSE.VIEWMODEL)
     implementation(Dependency.COMPOSE.ACTIVITY)
-    implementation(Dependency.COMPOSE.UI)
-    implementation(Dependency.COMPOSE.PREVIEW)
     implementation(Dependency.COMPOSE.MATERIAL)
     implementation(Dependency.COMPOSE.NAVIGATION)
     implementation(Dependency.COMPOSE.NAVIGATION_HILT)
     implementation(Dependency.COMPOSE.FLOW_LAYOUT)
     implementation(Dependency.COMPOSE.NAVIGATION_ANIMATION)
     implementation(Dependency.COMPOSE.SHIMMER)
-    androidTestImplementation(Dependency.COMPOSE.JUNIT)
-    debugImplementation(Dependency.COMPOSE.UI_TEST)
+
     implementation(Dependency.COMPOSE.COLLECT_AS_STATE_WITH_LIFECYCLE)
 
     implementation(Dependency.COIL.COIL)
-
-    implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
-    implementation(Dependency.RETROFIT.GSON_CONVERTER)
-    implementation(Dependency.OKHTTP.OKHTTP)
 
     implementation(Dependency.HILT.HILT)
     kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.SPLASH.SPLASH_SCREEN)
 
-    implementation(Dependency.ORBIT.MVI)
     implementation(Dependency.ORBIT.VIEWMODEL)
     implementation(Dependency.ORBIT.COMPOSE)
-    testImplementation(Dependency.ORBIT.TEST)
-
-    implementation(Dependency.ANDROID.ANDROIDX_CORE)
-    implementation(Dependency.ANDROID.APPCOMMPAT)
-    implementation(Dependency.ANDROID.MATERIAL)
-    implementation(Dependency.ANDROID.ACTIVITY)
-    implementation(Dependency.ANDROID.FRAGMENT)
-
-    implementation(Dependency.ANDROID.CONSTRAINT)
-    testImplementation(Dependency.TEST.JUNIT)
-    androidTestImplementation(Dependency.TEST.EXT_JUNIT)
-    androidTestImplementation(Dependency.TEST.ESPRESSO)
 }

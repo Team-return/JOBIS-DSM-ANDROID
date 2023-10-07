@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">자비스</string>
+    <string name="app_name">JOBIS - 취업의 지름길</string>
     <string name="jobis">JOBIS</string>
 
     <!--    Global-->
@@ -85,21 +85,16 @@
     <!--    Search Recruitment-->
     <string name="search_recruitment_header">모집의뢰서 조회하기</string>
     <string name="search_recruitment_train_pay">실습 수당 %s만 원</string>
-    <string name="search_recruitment_more_details">더보기</string>
     <string name="search_recruitment_filter_hint">회사검색</string>
-    <string name="recruitments_not_exist">모집의뢰서가 존재하지 않습니다</string>
 
     <!--    Recruitment Details-->
     <string name="recruitment_details_get_company">기업 보기</string>
 
-    <string name="recruitment_details_recruit_period">모집기간</string>
     <string name="recruitment_details_position">모집분야</string>
     <string name="recruitment_details_preferential_treatment">우대사항</string>
     <string name="recruitment_details_licenses">자격증</string>
     <string name="recruitment_details_required_grade">필수성적</string>
     <string name="recruitment_details_worker_time">근무시간</string>
-    <string name="recruitment_details_pay">실습수당</string>
-    <string name="recruitment_details_hiring">정규직전환시</string>
     <string name="recruitment_details_benefits">복리후생</string>
     <string name="recruitment_details_hiring_progress">채용절차</string>
     <string name="recruitment_details_required_documents">제출서류</string>
@@ -117,7 +112,6 @@
     <!--    Company List-->
     <string name="company_list_million">%s억</string>
     <string name="company_list_search_company">기업 조회하기</string>
-    <string name="companies_not_exits">기업이 존재하지 않습니다</string>
 
     <!--    Company Details-->
     <string name="company_details_see_recruitents">모집의뢰서 보기</string>
@@ -205,7 +199,6 @@
     <string name="reset_password">비밀번호 재설정</string>
     <string name="reset_password_explain">새로운 비밀번호로 변경하세요.</string>
     <string name="input_new_password">새로운 비밀번호를 입력하세요</string>
-    <string name="check_password">비밀번호 확인</string>
     <string name="password_format_error">8~16자, 영문자, 숫자, 특수문자 포함</string>
     <string name="password_repeat_error">비밀번호가 일치하지 않습니다</string>
     <string name="complete">완료</string>
