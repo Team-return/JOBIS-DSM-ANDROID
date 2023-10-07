@@ -1,0 +1,27 @@
+package team.retum.domain.entity.company
+
+data class CompanyDetailsEntity(
+    val businessNumber: String,
+    val companyName: String,
+    val companyProfileUrl: String,
+    val companyIntroduce: String,
+    val mainZipCode: String,
+    val mainAddress: String,
+    val mainAddressDetail: String,
+    val subAddress: String?,
+    val subAddressDetail: String?,
+    val managerName: String,
+    val managerPhoneNo: String,
+    val subManagerName: String?,
+    val subManagerPhoneNo: String?,
+    val fax: String?,
+    val email: String,
+    val representativeName: String,
+    val foundedAt: String,
+    val workerNumber: Long,
+    val take: Float,
+    val recruitmentId: Long?,
+    val attachments: List<String>,
+    val serviceName: String,
+    val businessArea: String,
+)

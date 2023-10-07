@@ -27,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile(ProjectProperties.PROGUARD),
-                ProjectProperties.PROGUARD_RULES
+                ProjectProperties.PROGUARD_RULES,
             )
         }
     }
@@ -51,11 +51,4 @@ dependencies {
     implementation(Dependency.OKHTTP.OKHTTP)
     implementation(Dependency.RETROFIT.RETROFIT_CLIENT)
     implementation(Dependency.RETROFIT.GSON_CONVERTER)
-
-    implementation(Dependency.ANDROID.ANDROIDX_CORE)
-    implementation(Dependency.ANDROID.APPCOMMPAT)
-    implementation(Dependency.ANDROID.APPCOMMPAT)
-    testImplementation(Dependency.TEST.JUNIT)
-    androidTestImplementation(Dependency.TEST.EXT_JUNIT)
-    androidTestImplementation(Dependency.TEST.ESPRESSO)
 }

@@ -23,7 +23,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile(ProjectProperties.PROGUARD),
-                ProjectProperties.PROGUARD_RULES
+                ProjectProperties.PROGUARD_RULES,
             )
         }
     }
@@ -40,11 +40,4 @@ dependencies {
 
     implementation(Dependency.HILT.HILT)
     kapt(Dependency.HILT.HILT_COMPILER)
-
-    implementation(Dependency.ANDROID.ANDROIDX_CORE)
-    implementation(Dependency.ANDROID.APPCOMMPAT)
-    implementation(Dependency.ANDROID.MATERIAL)
-    testImplementation(Dependency.TEST.JUNIT)
-    androidTestImplementation(Dependency.TEST.EXT_JUNIT)
-    androidTestImplementation(Dependency.TEST.ESPRESSO)
 }
