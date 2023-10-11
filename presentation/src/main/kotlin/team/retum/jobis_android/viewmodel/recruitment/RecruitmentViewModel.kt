@@ -182,9 +182,8 @@ internal class RecruitmentViewModel @Inject constructor(
     }
 
     internal fun setPage() = intent {
-        val currentPage = state.page
         reduce {
-            state.copy(page = currentPage + 1)
+            state.copy(page = state.recruitments.count()/12 + 1)
         }
     }
 

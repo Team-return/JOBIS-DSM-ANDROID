@@ -62,7 +62,7 @@ internal class ResetPasswordViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
-                setAuthCodeState(authCodeErrorState = false)
+                setAuthCodeState()
             }
         }
     }
@@ -185,12 +185,10 @@ internal class ResetPasswordViewModel @Inject constructor(
         }
     }
 
-    private fun setAuthCodeState(
-        authCodeErrorState: Boolean,
-    ) = intent {
+    private fun setAuthCodeState() = intent {
         reduce {
             state.copy(
-                authCodeErrorState = authCodeErrorState,
+                authCodeErrorState = false,
             )
         }
     }

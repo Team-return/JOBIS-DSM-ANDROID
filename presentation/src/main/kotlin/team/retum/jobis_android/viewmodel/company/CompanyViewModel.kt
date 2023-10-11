@@ -107,7 +107,7 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCompanyCount() = intent {
+    fun fetchCompanyCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompanyCountUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
@@ -138,9 +138,8 @@ class CompanyViewModel @Inject constructor(
     }
 
     internal fun setPage() = intent {
-        val currentPage = state.page
         reduce {
-            state.copy(page = currentPage + 1)
+            state.copy(page = state.companies.count()/12+1)
         }
     }
 

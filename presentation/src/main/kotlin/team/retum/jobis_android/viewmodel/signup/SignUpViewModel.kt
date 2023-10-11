@@ -181,10 +181,8 @@ class SignUpViewModel @Inject constructor(
         reduce { state.copy(sendVerifyCodeButtonEnabled = sendVerifyCodeButtonEnabled) }
     }
 
-    private fun setAuthCodeEnabled(
-        authCodeEnabled: Boolean,
-    ) = intent {
-        reduce { state.copy(authCodeEnabled = authCodeEnabled) }
+    private fun setAuthCodeEnabled() = intent {
+        reduce { state.copy(authCodeEnabled = true) }
     }
 
     private fun checkAvailableValues(
@@ -241,7 +239,7 @@ class SignUpViewModel @Inject constructor(
                     authCodeType = AuthCodeType.SIGN_UP,
                 ),
             ).onSuccess {
-                setAuthCodeEnabled(true)
+                setAuthCodeEnabled()
                 postSideEffect(SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess)
             }.onFailure { throwable ->
                 when (throwable) {

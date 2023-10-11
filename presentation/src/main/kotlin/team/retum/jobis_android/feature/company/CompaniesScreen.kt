@@ -2,7 +2,6 @@ package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -60,8 +59,6 @@ fun CompaniesScreen(
         companyViewModel.setCompanyName(name)
     }
 
-    val companies = state.companies
-
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
     val lazyListState = rememberLazyListState()
@@ -71,47 +68,46 @@ fun CompaniesScreen(
         if (checkCompany) {
             companyViewModel.setPage()
             companyViewModel.fetchCompanies()
+            companyViewModel.fetchCompanyCount()
         }
     }
 
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = 24.dp,
+                end = 24.dp,
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(48.dp))
+        Header(text = stringResource(id = R.string.company_list_search_company))
+        Spacer(modifier = Modifier.height(12.dp))
+        CompanyInput(
+            companyName = state.name,
+            onCompanyNameChanged = onCompanyNameChanged,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
-            Header(text = stringResource(id = R.string.company_list_search_company))
-            Spacer(modifier = Modifier.height(12.dp))
-            CompanyInput(
-                companyName = state.name,
-                onCompanyNameChanged = onCompanyNameChanged,
+            Caption(
+                modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                text = stringResource(id = R.string.search_result),
+                color = JobisColor.Gray600,
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Caption(
-                    modifier = Modifier.alpha(alpha = searchResultTextAlpha),
-                    text = stringResource(id = R.string.search_result),
-                    color = JobisColor.Gray600,
-                )
-                Caption(text = state.name ?: "")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Companies(
-                lazyListState = lazyListState,
-                companies = companies,
-                navigateToCompanyDetails = navigateToCompanyDetails,
-                checkCompanies = { checkCompany = it },
-                companyCount = state.companyCount,
-                pageCount = state.page,
-            )
+            Caption(text = state.name ?: "")
         }
+        Spacer(modifier = Modifier.height(4.dp))
+        Companies(
+            lazyListState = lazyListState,
+            companies = state.companies,
+            navigateToCompanyDetails = navigateToCompanyDetails,
+            checkCompanies = { checkCompany = it },
+            companyCount = state.companyCount,
+            pageCount = state.page,
+        )
     }
 }
 
@@ -237,15 +233,12 @@ private fun Company(
                     color = JobisColor.Gray600,
                 )
                 if (hasRecruitment) {
-                    Column(
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_recruitment_exists),
+                        contentDescription = null,
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_recruitment_exists),
-                            contentDescription = null,
-                        )
-                    }
+                        alignment = Alignment.CenterEnd,
+                    )
                 }
             }
         }
