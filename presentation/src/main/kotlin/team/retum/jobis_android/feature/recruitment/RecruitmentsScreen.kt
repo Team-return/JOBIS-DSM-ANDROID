@@ -291,9 +291,6 @@ private fun Recruitment(
     onBookmarked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
-    var isItemClicked by remember {
-        mutableStateOf(false)
-    }
 
     var bookmarked = isBookmarked
     val bookmarkIcon = if (isBookmarked) {
@@ -310,7 +307,6 @@ private fun Recruitment(
 
     val onBookmarkClicked = {
         onBookmarked()
-        isItemClicked = !isItemClicked
         bookmarked = !bookmarked
     }
 

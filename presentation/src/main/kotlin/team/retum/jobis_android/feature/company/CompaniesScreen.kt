@@ -2,7 +2,6 @@ package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -59,8 +58,6 @@ fun CompaniesScreen(
     val onCompanyNameChanged: (String) -> Unit = { name: String ->
         companyViewModel.setCompanyName(name)
     }
-
-    val companies = state.companies
 
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
@@ -237,15 +234,12 @@ private fun Company(
                     color = JobisColor.Gray600,
                 )
                 if (hasRecruitment) {
-                    Column(
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_recruitment_exists),
+                        contentDescription = null,
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_recruitment_exists),
-                            contentDescription = null,
-                        )
-                    }
+                        alignment = Alignment.CenterEnd,
+                    )
                 }
             }
         }
