@@ -68,7 +68,6 @@ fun CompaniesScreen(
         if (checkCompany) {
             companyViewModel.setPage()
             companyViewModel.fetchCompanies()
-            companyViewModel.fetchCompanyCount()
         }
     }
 

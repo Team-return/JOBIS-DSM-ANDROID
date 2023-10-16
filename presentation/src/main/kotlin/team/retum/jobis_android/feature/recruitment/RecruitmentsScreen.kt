@@ -97,7 +97,6 @@ internal fun RecruitmentsScreen(
         if (checkRecruitment) {
             recruitmentViewModel.setPage()
             recruitmentViewModel.fetchRecruitments()
-            recruitmentViewModel.fetchRecruitmentCount()
         }
     }
 

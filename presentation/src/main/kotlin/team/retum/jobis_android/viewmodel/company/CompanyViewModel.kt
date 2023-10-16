@@ -138,8 +138,9 @@ class CompanyViewModel @Inject constructor(
     }
 
     internal fun setPage() = intent {
+        val currentPage = state.page
         reduce {
-            state.copy(page = state.companies.count()/12+1)
+            state.copy(page = currentPage + 1)
         }
     }
 
