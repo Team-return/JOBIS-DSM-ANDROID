@@ -77,34 +77,32 @@ internal fun PostReviewScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(48.dp))
-                Header(text = stringResource(id = R.string.post_review_header))
-                Spacer(modifier = Modifier.height(30.dp))
-                ReviewInputs(
-                    qnaElements = reviewState.qnaElements,
-                    codes = codeState.techs,
-                    onAddButtonClicked = reviewViewModel::addQnaElement,
-                    onQuestionChanged = reviewViewModel::setQuestion,
-                    onAnswerChanged = reviewViewModel::setAnswer,
-                    onItemSelected = reviewViewModel::setJobCode,
-                )
-            }
-            Column {
-                Spacer(modifier = Modifier.weight(1f))
-                JobisLargeButton(
-                    text = stringResource(id = R.string.complete),
-                    color = JobisButtonColor.MainSolidColor,
-                    onClick = reviewViewModel::postReview,
-                )
-                Spacer(modifier = Modifier.height(44.dp))
-            }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(modifier = Modifier.height(48.dp))
+            Header(text = stringResource(id = R.string.post_review_header))
+            Spacer(modifier = Modifier.height(30.dp))
+            ReviewInputs(
+                qnaElements = reviewState.qnaElements,
+                codes = codeState.techs,
+                onAddButtonClicked = reviewViewModel::addQnaElement,
+                onQuestionChanged = reviewViewModel::setQuestion,
+                onAnswerChanged = reviewViewModel::setAnswer,
+                onItemSelected = reviewViewModel::setJobCode,
+            )
+        }
+        Column {
+            Spacer(modifier = Modifier.weight(1f))
+            JobisLargeButton(
+                text = stringResource(id = R.string.complete),
+                color = JobisButtonColor.MainSolidColor,
+                onClick = reviewViewModel::postReview,
+            )
+            Spacer(modifier = Modifier.height(44.dp))
         }
     }
 }

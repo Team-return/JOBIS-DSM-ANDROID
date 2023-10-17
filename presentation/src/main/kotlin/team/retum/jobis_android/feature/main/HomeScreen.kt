@@ -170,53 +170,49 @@ private fun RecruitmentStatus(
                         JobisColor.LightBlue,
                     ),
                 ),
-            ),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Column(
-            modifier = Modifier.padding(
+            )
+            .padding(
                 top = 20.dp,
                 start = 32.dp,
                 end = 32.dp,
                 bottom = 20.dp,
             ),
-            verticalArrangement = Arrangement.Bottom,
-        ) {
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Row(verticalAlignment = Alignment.Bottom) {
             Row(verticalAlignment = Alignment.Bottom) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Heading3(
-                        text = employmentRate.toString(),
-                        color = JobisColor.Gray100,
-                    )
-                    Body1(
-                        modifier = Modifier.padding(
-                            start = 4.dp,
-                            bottom = 4.dp,
-                        ),
-                        text = "%",
-                        color = JobisColor.Gray100,
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Caption(
+                Heading3(
+                    text = employmentRate.toString(),
+                    color = JobisColor.Gray100,
+                )
+                Body1(
                     modifier = Modifier.padding(
+                        start = 4.dp,
                         bottom = 4.dp,
                     ),
-                    text = "${stringResource(id = R.string.home_count_success_candidate)} : $passString",
+                    text = "%",
                     color = JobisColor.Gray100,
                 )
             }
-            Row(verticalAlignment = Alignment.Bottom) {
-                Body4(
-                    text = stringResource(id = R.string.home_employment_rate),
-                    color = JobisColor.Gray100,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Caption(
-                    text = "${stringResource(id = R.string.home_count_apply_candidate)} : $appliedString",
-                    color = JobisColor.Gray100,
-                )
-            }
+            Spacer(modifier = Modifier.weight(1f))
+            Caption(
+                modifier = Modifier.padding(
+                    bottom = 4.dp,
+                ),
+                text = "${stringResource(id = R.string.home_count_success_candidate)} : $passString",
+                color = JobisColor.Gray100,
+            )
+        }
+        Row(verticalAlignment = Alignment.Bottom) {
+            Body4(
+                text = stringResource(id = R.string.home_employment_rate),
+                color = JobisColor.Gray100,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Caption(
+                text = "${stringResource(id = R.string.home_count_apply_candidate)} : $appliedString",
+                color = JobisColor.Gray100,
+            )
         }
     }
 }
