@@ -121,6 +121,8 @@ internal class ResetPasswordViewModel @Inject constructor(
                 ),
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessChangePassword)
+            }.onFailure {
+                postSideEffect(ResetPasswordSideEffect.Exception(getStringFromException(it)))
             }
         }
     }
@@ -135,7 +137,7 @@ internal class ResetPasswordViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(ResetPasswordSideEffect.SuccessResetPassword)
             }.onFailure {
-
+                postSideEffect(ResetPasswordSideEffect.Exception(getStringFromException(it)))
             }
         }
     }
