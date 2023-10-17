@@ -148,9 +148,11 @@ private fun ChangePasswordInputs(
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-        Box(modifier = Modifier
-            .weight(0.25f)
-            .padding(top = 8.dp)) {
+        Box(
+            modifier = Modifier
+                .weight(0.25f)
+                .padding(top = 8.dp)
+        ) {
             JobisSmallButton(
                 text = stringResource(
                     id = if (sendAuthCodeState) {

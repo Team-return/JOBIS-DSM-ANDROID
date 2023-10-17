@@ -26,6 +26,8 @@ internal fun NavGraphBuilder.authNavigation(
     navigateToMain: () -> Unit,
     navigatePopBackStack: () -> Unit,
     navigateToResetPassword: () -> Unit,
+    navigateToSignIn: () -> Unit,
+    getPreviousDestination: () -> String?,
 ) {
     navigation(
         route = NavigationRoute.Auth,
@@ -33,7 +35,6 @@ internal fun NavGraphBuilder.authNavigation(
     ) {
         baseComposable(
             route = AuthDestinations.SignIn,
-            exitTransition = slideOutLeft(),
             popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
@@ -59,21 +60,29 @@ internal fun NavGraphBuilder.authNavigation(
         baseComposable(
             route = AuthDestinations.ResetPasswordVerifyEmail,
             enterTransition = slideInLeft(),
-            exitTransition = slideOutRight(),
+            exitTransition = slideOutLeft(),
             popEnterTransition = fadeIn(tween(300)),
             popExitTransition = slideOutRight(),
         ) {
             ResetPasswordVerifyEmailScreen(navigateToResetPassword)
         }
 
-        baseComposable(route = AuthDestinations.ResetPassword) {
+        baseComposable(
+            route = AuthDestinations.ResetPassword,
+            enterTransition = slideInLeft(),
+        ) {
             ResetPasswordScreen(
+                getPreviousDestination = getPreviousDestination,
                 resetPasswordViewModel = resetPasswordViewModel,
+                navigateToSignIn = navigateToSignIn,
                 navigateToMain = navigateToMain,
             )
         }
 
-        baseComposable(route = AuthDestinations.ComparePassword) {
+        baseComposable(
+            route = AuthDestinations.ComparePassword,
+            exitTransition = slideOutLeft(),
+        ) {
             ComparePasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
                 navigateToResetPassword = navigateToResetPassword,

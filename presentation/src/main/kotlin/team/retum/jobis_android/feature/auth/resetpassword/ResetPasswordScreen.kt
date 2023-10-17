@@ -22,6 +22,7 @@ import com.jobis.jobis_android.R
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
+import team.retum.jobis_android.navigation.AuthDestinations
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -34,7 +35,9 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordScreen(
+    getPreviousDestination: () -> String?,
     navigateToSignIn: () -> Unit,
+    navigateToMain: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
@@ -46,8 +49,26 @@ internal fun ResetPasswordScreen(
     val newPassword = state.newPassword
     val passwordRepeat = state.passwordRepeat
 
+    val onClick: () -> Unit = {
+        when (getPreviousDestination().toString()) {
+            AuthDestinations.ResetPasswordVerifyEmail -> {
+                resetPasswordViewModel.resetPassword()
+            }
+
+            AuthDestinations.ComparePassword -> {
+                resetPasswordViewModel.changePassword()
+            }
+
+            else -> {}
+        }
+    }
+
     resetPasswordViewModel.collectSideEffect {
         when (it) {
+            is ResetPasswordSideEffect.SuccessChangePassword -> {
+                navigateToMain()
+            }
+
             is ResetPasswordSideEffect.SuccessResetPassword -> {
                 navigateToSignIn()
             }
@@ -100,7 +121,7 @@ internal fun ResetPasswordScreen(
             text = stringResource(id = R.string.complete),
             color = JobisButtonColor.MainSolidColor,
             enabled = state.buttonEnabled,
-            onClick = resetPasswordViewModel::changePassword,
+            onClick = onClick,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }

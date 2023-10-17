@@ -12,10 +12,12 @@ import team.retum.domain.enums.AuthCodeType
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.students.ChangePasswordParam
+import team.retum.domain.param.students.ResetPasswordParam
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
 import team.retum.domain.usecase.student.ChangePasswordUseCase
 import team.retum.domain.usecase.student.ComparePasswordUseCase
+import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
@@ -30,6 +32,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     private val verifyEmailUseCase: VerifyEmailUseCase,
     private val comparePasswordUseCase: ComparePasswordUseCase,
     private val changePasswordUseCase: ChangePasswordUseCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase,
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
@@ -117,7 +120,22 @@ internal class ResetPasswordViewModel @Inject constructor(
                     newPassword = state.newPassword,
                 ),
             ).onSuccess {
-                postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessResetPassword)
+                postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessChangePassword)
+            }
+        }
+    }
+
+    internal fun resetPassword() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            resetPasswordUseCase(
+                resetPasswordParam = ResetPasswordParam(
+                    email = state.email,
+                    password = state.newPassword,
+                )
+            ).onSuccess {
+                postSideEffect(ResetPasswordSideEffect.SuccessResetPassword)
+            }.onFailure {
+
             }
         }
     }
