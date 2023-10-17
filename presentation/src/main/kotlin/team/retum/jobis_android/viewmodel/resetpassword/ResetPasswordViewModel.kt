@@ -11,11 +11,11 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.enums.AuthCodeType
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
-import team.retum.domain.param.students.ResetPasswordParam
+import team.retum.domain.param.students.ChangePasswordParam
 import team.retum.domain.param.user.SendVerificationCodeParam
 import team.retum.domain.param.user.VerifyEmailParam
+import team.retum.domain.usecase.student.ChangePasswordUseCase
 import team.retum.domain.usecase.student.ComparePasswordUseCase
-import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
@@ -29,7 +29,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     private val sendVerificationCodeUseCase: SendVerificationCodeUseCase,
     private val verifyEmailUseCase: VerifyEmailUseCase,
     private val comparePasswordUseCase: ComparePasswordUseCase,
-    private val resetPasswordUseCase: ResetPasswordUseCase,
+    private val changePasswordUseCase: ChangePasswordUseCase,
 ) : BaseViewModel<ResetPasswordState, ResetPasswordSideEffect>() {
 
     override val container = container<ResetPasswordState, ResetPasswordSideEffect>(
@@ -109,10 +109,10 @@ internal class ResetPasswordViewModel @Inject constructor(
         }
     }
 
-    internal fun resetPassword() = intent {
+    internal fun changePassword() = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            resetPasswordUseCase(
-                resetPasswordParam = ResetPasswordParam(
+            changePasswordUseCase(
+                changePasswordParam = ChangePasswordParam(
                     currentPassword = state.currentPassword,
                     newPassword = state.newPassword,
                 ),

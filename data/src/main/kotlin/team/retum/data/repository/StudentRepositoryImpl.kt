@@ -7,8 +7,8 @@ import team.retum.data.remote.request.user.toRequest
 import team.retum.data.remote.response.student.toEntity
 import team.retum.data.remote.response.user.SignInResponse
 import team.retum.domain.entity.student.StudentInformationEntity
+import team.retum.domain.param.students.ChangePasswordParam
 import team.retum.domain.param.students.EditProfileImageParam
-import team.retum.domain.param.students.ResetPasswordParam
 import team.retum.domain.param.user.CheckStudentExistsParam
 import team.retum.domain.param.user.SignUpParam
 import team.retum.domain.repository.StudentRepository
@@ -26,8 +26,8 @@ class StudentRepositoryImpl @Inject constructor(
         studentDataSource.comparePassword(password = password)
     }
 
-    override suspend fun resetPassword(resetPasswordParam: ResetPasswordParam) {
-        studentDataSource.resetPassword(resetPasswordRequest = resetPasswordParam.toRequest())
+    override suspend fun changePassword(changePasswordParam: ChangePasswordParam) {
+        studentDataSource.changePassword(changePasswordRequest = changePasswordParam.toRequest())
     }
 
     override suspend fun editProfileImage(editProfileImageParam: EditProfileImageParam) {

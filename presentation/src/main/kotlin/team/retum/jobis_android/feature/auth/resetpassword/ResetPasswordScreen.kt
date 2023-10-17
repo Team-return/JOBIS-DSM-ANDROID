@@ -100,7 +100,7 @@ internal fun ResetPasswordScreen(
             text = stringResource(id = R.string.complete),
             color = JobisButtonColor.MainSolidColor,
             enabled = state.buttonEnabled,
-            onClick = resetPasswordViewModel::resetPassword,
+            onClick = resetPasswordViewModel::changePassword,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }
