@@ -15,11 +15,13 @@ data class ResetPasswordState(
     val passwordFormatErrorState: Boolean = false,
     val passwordRepeatErrorState: Boolean = false,
     val comparePasswordErrorState: Boolean = false,
+    val buttonEnabled: Boolean = false,
 ) : State
 
 sealed class ResetPasswordSideEffect : SideEffect {
     object SuccessVerification : ResetPasswordSideEffect()
     object SuccessResetPassword : ResetPasswordSideEffect()
     object PasswordMismatch : ResetPasswordSideEffect()
+    object ClearFocus: ResetPasswordSideEffect()
     class Exception(val message: String) : ResetPasswordSideEffect()
 }

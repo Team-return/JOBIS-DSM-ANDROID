@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
@@ -34,7 +34,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordScreen(
-    navigateToMain: () -> Unit,
+    navigateToSignIn: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
@@ -46,32 +46,18 @@ internal fun ResetPasswordScreen(
     val newPassword = state.newPassword
     val passwordRepeat = state.passwordRepeat
 
-    LaunchedEffect(Unit) {
-        resetPasswordViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is ResetPasswordSideEffect.SuccessResetPassword -> {
-                    navigateToMain()
-                }
-
-                is ResetPasswordSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
-
-                else -> {}
+    resetPasswordViewModel.collectSideEffect {
+        when (it) {
+            is ResetPasswordSideEffect.SuccessResetPassword -> {
+                navigateToSignIn()
             }
+
+            is ResetPasswordSideEffect.Exception -> {
+                appState.showErrorToast(message = it.message)
+            }
+
+            else -> {}
         }
-    }
-
-    val onResetPasswordButtonClicked: () -> Unit = {
-        resetPasswordViewModel.resetPassword()
-    }
-
-    val onNewPasswordChanged: (String) -> Unit = { newPassword: String ->
-        resetPasswordViewModel.setNewPassword(newPassword = newPassword)
-    }
-
-    val onPasswordRepeatChanged: (String) -> Unit = { passwordRepeat: String ->
-        resetPasswordViewModel.setPasswordRepeat(passwordRepeat = passwordRepeat)
     }
 
     Column(
@@ -106,15 +92,15 @@ internal fun ResetPasswordScreen(
             passwordRepeat = passwordRepeat,
             passwordFormatErrorState = state.passwordFormatErrorState,
             passwordRepeatErrorState = state.passwordRepeatErrorState,
-            onNewPasswordChanged = onNewPasswordChanged,
-            onPasswordRepeatChanged = onPasswordRepeatChanged,
+            onNewPasswordChanged = resetPasswordViewModel::setNewPassword,
+            onPasswordRepeatChanged = resetPasswordViewModel::setPasswordRepeat,
         )
         Spacer(modifier = Modifier.weight(1f))
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
             color = JobisButtonColor.MainSolidColor,
-            enabled = newPassword.isNotEmpty() && passwordRepeat.isNotEmpty() && !state.passwordFormatErrorState && !state.passwordRepeatErrorState,
-            onClick = onResetPasswordButtonClicked,
+            enabled = state.buttonEnabled,
+            onClick = resetPasswordViewModel::resetPassword,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }
