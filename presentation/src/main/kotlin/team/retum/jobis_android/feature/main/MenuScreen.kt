@@ -37,21 +37,18 @@ internal fun MenuScreen(
     navigateToBookmarkRecruitments: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(48.dp))
-        Box(modifier = Modifier.padding(horizontal = 24.dp)) {
-            Header(text = stringResource(id = R.string.menu))
-        }
+        Header(text = stringResource(id = R.string.menu))
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(36.dp))
             Body3(
-                modifier = Modifier.padding(horizontal = 8.dp),
                 text = stringResource(id = R.string.user),
                 color = JobisColor.Gray600,
             )
@@ -63,7 +60,6 @@ internal fun MenuScreen(
             )
             Spacer(modifier = Modifier.height(40.dp))
             Body3(
-                modifier = Modifier.padding(horizontal = 8.dp),
                 text = stringResource(id = R.string.company),
                 color = JobisColor.Gray600,
             )
@@ -101,10 +97,7 @@ private fun Menu(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(8.dp))
             .bounceClick(onClick = onClick)
-            .padding(
-                vertical = 8.dp,
-                horizontal = 10.dp,
-            ),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
