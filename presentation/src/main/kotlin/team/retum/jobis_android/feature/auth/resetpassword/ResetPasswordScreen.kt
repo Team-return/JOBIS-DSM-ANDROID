@@ -102,12 +102,13 @@ internal fun ResetPasswordScreen(
             text = stringResource(id = R.string.reset_password_explain),
             color = JobisColor.Gray600,
         )
-        Spacer(modifier = Modifier.height(26.dp))
         Image(
+            modifier = Modifier
+                .fillMaxSize(0.6f)
+                .padding(vertical = 10.dp),
             painter = painterResource(id = R.drawable.ic_reset_password),
             contentDescription = stringResource(id = R.string.content_description_icon_reset_password),
         )
-        Spacer(modifier = Modifier.height(30.dp))
         ResetPasswordInput(
             newPassword = newPassword,
             passwordRepeat = passwordRepeat,

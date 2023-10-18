@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -86,12 +87,13 @@ internal fun ResetPasswordVerifyEmailScreen(
             text = stringResource(id = R.string.self_verification_explain),
             color = JobisColor.Gray600,
         )
-        Spacer(modifier = Modifier.height(26.dp))
         Image(
+            modifier = Modifier
+                .fillMaxSize(0.4f)
+                .padding(vertical = 10.dp),
             painter = painterResource(id = R.drawable.ic_reset_password_verify_email),
             contentDescription = stringResource(id = R.string.content_description_image_reset_password_verify),
         )
-        Spacer(modifier = Modifier.height(30.dp))
         ChangePasswordInputs(
             email = email,
             emailErrorState = state.emailErrorState,
