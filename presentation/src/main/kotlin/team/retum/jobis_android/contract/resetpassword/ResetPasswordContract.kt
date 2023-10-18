@@ -21,8 +21,8 @@ data class ResetPasswordState(
 sealed class ResetPasswordSideEffect : SideEffect {
     object SuccessVerification : ResetPasswordSideEffect()
     object SuccessChangePassword : ResetPasswordSideEffect()
-    object SuccessResetPassword: ResetPasswordSideEffect()
+    object SuccessResetPassword : ResetPasswordSideEffect()
     object PasswordMismatch : ResetPasswordSideEffect()
-    object ClearFocus: ResetPasswordSideEffect()
+    object ClearFocus : ResetPasswordSideEffect()
     class Exception(val message: String) : ResetPasswordSideEffect()
 }
