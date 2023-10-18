@@ -75,6 +75,8 @@ internal fun JobisApp(
             navigateToMain = navController::navigateToRoot,
             navigatePopBackStack = navController::navigatePopBackStack,
             navigateToResetPassword = navController::navigateToResetPassword,
+            navigateToSignIn = navController::navigateToSignInPopUpWithMain,
+            getPreviousDestination = navController::getPreviousDestination,
         )
 
         mainNavigation(

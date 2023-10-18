@@ -32,6 +32,7 @@ object JobisUrl {
         const val exists = "$student/exists"
         const val my = "$student/my"
         const val password = "$student/password"
+        const val forgottenPassword = "$student/forgotten_password"
         const val profile = "$student/profile"
     }
 

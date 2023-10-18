@@ -1,7 +1,5 @@
 package team.retum.jobis_android.navigation
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
@@ -26,6 +24,8 @@ internal fun NavGraphBuilder.authNavigation(
     navigateToMain: () -> Unit,
     navigatePopBackStack: () -> Unit,
     navigateToResetPassword: () -> Unit,
+    navigateToSignIn: () -> Unit,
+    getPreviousDestination: () -> String?,
 ) {
     navigation(
         route = NavigationRoute.Auth,
@@ -59,21 +59,31 @@ internal fun NavGraphBuilder.authNavigation(
         baseComposable(
             route = AuthDestinations.ResetPasswordVerifyEmail,
             enterTransition = slideInLeft(),
-            exitTransition = slideOutRight(),
-            popEnterTransition = fadeIn(tween(300)),
+            exitTransition = slideOutLeft(),
+            popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
             ResetPasswordVerifyEmailScreen(navigateToResetPassword)
         }
 
-        baseComposable(route = AuthDestinations.ResetPassword) {
+        baseComposable(
+            route = AuthDestinations.ResetPassword,
+            enterTransition = slideInLeft(),
+            popExitTransition = slideOutRight(),
+        ) {
             ResetPasswordScreen(
+                getPreviousDestination = getPreviousDestination,
                 resetPasswordViewModel = resetPasswordViewModel,
+                navigateToSignIn = navigateToSignIn,
                 navigateToMain = navigateToMain,
             )
         }
 
-        baseComposable(route = AuthDestinations.ComparePassword) {
+        baseComposable(
+            route = AuthDestinations.ComparePassword,
+            exitTransition = slideOutLeft(),
+            popEnterTransition = slideInRight(),
+        ) {
             ComparePasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
                 navigateToResetPassword = navigateToResetPassword,

@@ -1,6 +1,7 @@
 package team.retum.data.remote.datasource.student
 
 import team.retum.data.remote.api.StudentApi
+import team.retum.data.remote.request.student.ChangePasswordRequest
 import team.retum.data.remote.request.student.EditProfileImageRequest
 import team.retum.data.remote.request.student.ResetPasswordRequest
 import team.retum.data.remote.request.user.SignUpRequest
@@ -22,11 +23,16 @@ class StudentDataSourceImpl @Inject constructor(
             studentApi.comparePassword(password = password)
         }.sendRequest()
 
+    override suspend fun changePassword(changePasswordRequest: ChangePasswordRequest) =
+        HttpHandler<Unit>().httpRequest {
+            studentApi.changePassword(
+                changePasswordRequest = changePasswordRequest,
+            )
+        }.sendRequest()
+
     override suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest) =
         HttpHandler<Unit>().httpRequest {
-            studentApi.resetPassword(
-                resetPasswordRequest = resetPasswordRequest,
-            )
+            studentApi.resetPassword(resetPasswordRequest)
         }.sendRequest()
 
     override suspend fun editProfileImage(editProfileImageRequest: EditProfileImageRequest) =
