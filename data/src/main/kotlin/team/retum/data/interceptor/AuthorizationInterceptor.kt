@@ -1,7 +1,5 @@
 package team.retum.data.interceptor
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.jobis.data.BuildConfig
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -18,7 +16,6 @@ class AuthorizationInterceptor @Inject constructor(
     private val userDataStorage: UserDataStorage,
 ) : Interceptor {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val path = request.url.encodedPath
@@ -51,7 +48,6 @@ class AuthorizationInterceptor @Inject constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun tokenReissue() {
         val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
