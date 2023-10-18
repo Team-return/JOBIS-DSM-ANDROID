@@ -1,7 +1,5 @@
 package team.retum.jobis_android.navigation
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
@@ -35,6 +33,7 @@ internal fun NavGraphBuilder.authNavigation(
     ) {
         baseComposable(
             route = AuthDestinations.SignIn,
+            exitTransition = slideOutLeft(),
             popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
@@ -61,7 +60,7 @@ internal fun NavGraphBuilder.authNavigation(
             route = AuthDestinations.ResetPasswordVerifyEmail,
             enterTransition = slideInLeft(),
             exitTransition = slideOutLeft(),
-            popEnterTransition = fadeIn(tween(300)),
+            popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
             ResetPasswordVerifyEmailScreen(navigateToResetPassword)
@@ -70,6 +69,7 @@ internal fun NavGraphBuilder.authNavigation(
         baseComposable(
             route = AuthDestinations.ResetPassword,
             enterTransition = slideInLeft(),
+            popExitTransition = slideOutRight(),
         ) {
             ResetPasswordScreen(
                 getPreviousDestination = getPreviousDestination,
@@ -82,6 +82,7 @@ internal fun NavGraphBuilder.authNavigation(
         baseComposable(
             route = AuthDestinations.ComparePassword,
             exitTransition = slideOutLeft(),
+            popEnterTransition = slideInRight(),
         ) {
             ComparePasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,

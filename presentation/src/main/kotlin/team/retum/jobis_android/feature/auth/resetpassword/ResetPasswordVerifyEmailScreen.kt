@@ -136,7 +136,7 @@ private fun ChangePasswordInputs(
         errorText = stringResource(id = R.string.sign_in_email_error),
     )
     Spacer(modifier = Modifier.height(12.dp))
-    Row(verticalAlignment = Alignment.Top) {
+    Row {
         Box(modifier = Modifier.weight(0.75f)) {
             JobisBoxTextField(
                 onValueChanged = onAuthCodeChanged,
