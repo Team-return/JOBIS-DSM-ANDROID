@@ -107,7 +107,7 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCompanyCount() = intent {
+    fun fetchCompanyCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompanyCountUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
