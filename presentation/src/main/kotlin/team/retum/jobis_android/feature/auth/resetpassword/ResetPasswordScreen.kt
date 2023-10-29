@@ -154,7 +154,7 @@ private fun ResetPasswordInput(
             error = passwordRepeatErrorState,
             helperText = stringResource(id = R.string.password_format_error),
             errorText = stringResource(id = R.string.password_repeat_error),
-            hint = stringResource(id = R.string.password_repeat_error),
+            hint = stringResource(id = R.string.set_password_repeat_password_hint),
             textFieldType = TextFieldType.PASSWORD,
         )
     }
