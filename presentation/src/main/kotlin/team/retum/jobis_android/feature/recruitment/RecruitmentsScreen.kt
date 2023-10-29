@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,6 +59,7 @@ import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.JobisSize
 import team.returm.jobisdesignsystem.util.jobisClickable
 import java.text.DecimalFormat
@@ -156,7 +157,7 @@ internal fun RecruitmentsScreen(
 }
 
 @Composable
-private fun RecruitmentInput(
+private fun ColumnScope.RecruitmentInput(
     name: String?,
     jobCode: Long?,
     techCode: String?,
@@ -167,9 +168,7 @@ private fun RecruitmentInput(
     val filterAppliedTextAlpha = if (jobCode != null || techCode != null) 1f else 0f
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -191,22 +190,26 @@ private fun RecruitmentInput(
             imageContentDescription = stringResource(id = R.string.content_description_filter),
         )
     }
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Caption(
-            modifier = Modifier.alpha(alpha = searchResultTextAlpha),
-            text = stringResource(id = R.string.search_result),
-            color = JobisColor.Gray600,
-        )
-        Caption(text = name ?: "")
-        Spacer(modifier = Modifier.weight(1f))
-        Caption(
-            modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
-            text = stringResource(id = R.string.filter_applied),
-            color = JobisColor.Gray600,
-        )
+    Animated(!name.isNullOrBlank() || techCode != null || jobCode != null) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Caption(
+                modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                text = stringResource(id = R.string.search_result),
+                color = JobisColor.Gray600,
+            )
+            Caption(text = name ?: "")
+            Spacer(modifier = Modifier.weight(1f))
+            Caption(
+                modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
+                text = stringResource(id = R.string.filter_applied),
+                color = JobisColor.Gray600,
+            )
+        }
     }
 }
 
@@ -317,10 +320,6 @@ private fun Recruitment(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 8.dp,
-                shape = ApplyCompaniesItemShape,
-            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(

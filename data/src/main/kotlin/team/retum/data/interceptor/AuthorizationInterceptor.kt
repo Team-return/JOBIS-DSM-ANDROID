@@ -29,6 +29,7 @@ class AuthorizationInterceptor @Inject constructor(
             JobisUrl.Student.signup,
             JobisUrl.Auth.code,
             JobisUrl.Student.exists,
+            JobisUrl.Student.forgottenPassword,
         )
 
         val accessExpiresAt = userDataStorage.fetchAccessTokenExpiresAt()

@@ -63,7 +63,10 @@ internal fun NavGraphBuilder.authNavigation(
             popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
-            ResetPasswordVerifyEmailScreen(navigateToResetPassword)
+            ResetPasswordVerifyEmailScreen(
+                navigateToResetPassword = navigateToResetPassword,
+                resetPasswordViewModel = resetPasswordViewModel,
+            )
         }
 
         baseComposable(

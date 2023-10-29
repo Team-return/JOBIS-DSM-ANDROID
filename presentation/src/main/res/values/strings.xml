@@ -203,6 +203,8 @@
     <string name="password_repeat_error">비밀번호가 일치하지 않습니다</string>
     <string name="complete">완료</string>
 
+    <string name="reset_password_success">비밀번호가 변경되었습니다</string>
+
     <!--    Compare Password Screen-->
     <string name="check_original_password">기존 비밀번호 확인</string>
     <string name="enter_original_password">기존 비밀번호를 입력해주세요.</string>

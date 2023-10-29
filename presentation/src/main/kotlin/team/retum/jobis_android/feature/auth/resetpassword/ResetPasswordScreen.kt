@@ -63,13 +63,17 @@ internal fun ResetPasswordScreen(
         }
     }
 
+    val successMessage = stringResource(id = R.string.reset_password_success)
+
     resetPasswordViewModel.collectSideEffect {
         when (it) {
             is ResetPasswordSideEffect.SuccessChangePassword -> {
+                appState.showSuccessToast(message = successMessage)
                 navigateToMain()
             }
 
             is ResetPasswordSideEffect.SuccessResetPassword -> {
+                appState.showSuccessToast(message = successMessage)
                 navigateToSignIn()
             }
 
@@ -154,7 +158,7 @@ private fun ResetPasswordInput(
             error = passwordRepeatErrorState,
             helperText = stringResource(id = R.string.password_format_error),
             errorText = stringResource(id = R.string.password_repeat_error),
-            hint = stringResource(id = R.string.password_repeat_error),
+            hint = stringResource(id = R.string.set_password_repeat_password_hint),
             textFieldType = TextFieldType.PASSWORD,
         )
     }

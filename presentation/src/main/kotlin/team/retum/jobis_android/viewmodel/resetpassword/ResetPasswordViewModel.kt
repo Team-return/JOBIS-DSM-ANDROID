@@ -133,7 +133,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                 resetPasswordParam = ResetPasswordParam(
                     email = state.email,
                     password = state.newPassword,
-                )
+                ),
             ).onSuccess {
                 postSideEffect(ResetPasswordSideEffect.SuccessResetPassword)
             }.onFailure {
@@ -181,6 +181,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                 copy(
                     newPassword = newPassword,
                     passwordFormatErrorState = !Regex(Regex.PASSWORD).matches(newPassword),
+                    passwordRepeatErrorState = newPassword != passwordRepeat && passwordRepeat.isNotBlank(),
                 )
             }
         }
