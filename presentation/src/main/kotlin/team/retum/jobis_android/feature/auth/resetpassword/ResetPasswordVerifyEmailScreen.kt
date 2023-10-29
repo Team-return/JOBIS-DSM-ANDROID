@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -37,7 +36,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun ResetPasswordVerifyEmailScreen(
     navigateToResetPassword: () -> Unit,
-    resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
+    resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
 
@@ -153,7 +152,7 @@ private fun ChangePasswordInputs(
         Box(
             modifier = Modifier
                 .weight(0.25f)
-                .padding(top = 8.dp)
+                .padding(top = 8.dp),
         ) {
             JobisSmallButton(
                 text = stringResource(

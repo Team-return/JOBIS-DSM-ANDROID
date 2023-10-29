@@ -63,13 +63,17 @@ internal fun ResetPasswordScreen(
         }
     }
 
+    val successMessage = stringResource(id = R.string.reset_password_success)
+
     resetPasswordViewModel.collectSideEffect {
         when (it) {
             is ResetPasswordSideEffect.SuccessChangePassword -> {
+                appState.showSuccessToast(message = successMessage)
                 navigateToMain()
             }
 
             is ResetPasswordSideEffect.SuccessResetPassword -> {
+                appState.showSuccessToast(message = successMessage)
                 navigateToSignIn()
             }
 
