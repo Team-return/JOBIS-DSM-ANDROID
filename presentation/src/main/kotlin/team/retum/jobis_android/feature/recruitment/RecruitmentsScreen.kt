@@ -294,7 +294,6 @@ private fun Recruitment(
     onBookmarked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
-
     var bookmarked = isBookmarked
     val bookmarkIcon = if (isBookmarked) {
         R.drawable.ic_bookmarked_filled

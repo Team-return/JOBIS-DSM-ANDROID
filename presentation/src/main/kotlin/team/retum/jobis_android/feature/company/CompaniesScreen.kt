@@ -55,10 +55,6 @@ fun CompaniesScreen(
 ) {
     val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val onCompanyNameChanged: (String) -> Unit = { name: String ->
-        companyViewModel.setCompanyName(name)
-    }
-
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
     val lazyListState = rememberLazyListState()
@@ -85,7 +81,7 @@ fun CompaniesScreen(
         Spacer(modifier = Modifier.height(12.dp))
         CompanyInput(
             companyName = state.name,
-            onCompanyNameChanged = onCompanyNameChanged,
+            onCompanyNameChanged = companyViewModel::setCompanyName,
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
