@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,6 +46,7 @@ import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
 import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
+import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
@@ -91,18 +91,19 @@ fun CompaniesScreen(
                 companyName = state.name,
                 onCompanyNameChanged = onCompanyNameChanged,
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Caption(
-                    modifier = Modifier.alpha(alpha = searchResultTextAlpha),
-                    text = stringResource(id = R.string.search_result),
-                    color = JobisColor.Gray600,
-                )
-                Caption(text = state.name ?: "")
+            Animated(!state.name.isNullOrBlank()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Caption(
+                        modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                        text = stringResource(id = R.string.search_result),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = state.name ?: "")
+                }
             }
-            Spacer(modifier = Modifier.height(4.dp))
             Companies(
                 lazyListState = lazyListState,
                 companies = companies,
@@ -123,7 +124,7 @@ private fun CompanyInput(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp),
+            .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         JobisBoxTextField(
@@ -180,10 +181,6 @@ private fun Company(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 8.dp,
-                shape = ApplyCompaniesItemShape,
-            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(
