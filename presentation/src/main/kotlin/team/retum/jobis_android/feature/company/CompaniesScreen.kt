@@ -107,7 +107,7 @@ fun CompaniesScreen(
             }
             Companies(
                 lazyListState = lazyListState,
-                companies = companies,
+                companies = state.companies,
                 navigateToCompanyDetails = navigateToCompanyDetails,
                 checkCompanies = { checkCompany = it },
                 companyCount = state.companyCount,
