@@ -110,15 +110,17 @@ internal fun SignInScreen(
     }
 
     Box {
-        Animated(visible = showBackgroundIcon) {
-            Image(
-                modifier = Modifier.offset(
-                    x = 120.dp,
-                    y = (-220).dp,
-                ),
-                painter = painterResource(R.drawable.ic_sign_in_background),
-                contentDescription = stringResource(id = R.string.content_description_image_splash),
-            )
+        Column {
+            Animated(visible = showBackgroundIcon) {
+                Image(
+                    modifier = Modifier.offset(
+                        x = 120.dp,
+                        y = (-220).dp,
+                    ),
+                    painter = painterResource(R.drawable.ic_sign_in_background),
+                    contentDescription = stringResource(id = R.string.content_description_image_splash),
+                )
+            }
         }
         Column(
             modifier = Modifier

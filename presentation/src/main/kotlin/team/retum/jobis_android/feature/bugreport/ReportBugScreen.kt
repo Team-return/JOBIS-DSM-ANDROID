@@ -117,14 +117,6 @@ internal fun ReportBugScreen(
         focusManager.clearFocus()
     }
 
-    val onTitleChanged: (String) -> Unit = { title: String ->
-        bugViewModel.setTitle(title)
-    }
-
-    val onContentChanged: (String) -> Unit = { content: String ->
-        bugViewModel.setContent(content)
-    }
-
     val addScreenshot = {
         if (fileState.files.size <= 5) {
             activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -166,9 +158,9 @@ internal fun ReportBugScreen(
             Header(text = stringResource(id = R.string.bug_report))
             Spacer(modifier = Modifier.height(14.dp))
             ContentInputs(
-                onTitleChanged = onTitleChanged,
+                onTitleChanged = bugViewModel::setTitle,
                 title = bugState.title,
-                onContentChanged = onContentChanged,
+                onContentChanged = bugViewModel::setContent,
                 content = bugState.content,
                 titleError = bugState.titleError,
                 contentError = bugState.contentError,

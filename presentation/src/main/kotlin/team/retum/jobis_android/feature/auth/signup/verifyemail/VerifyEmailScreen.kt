@@ -31,10 +31,6 @@ fun VerifyEmailScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val onEmailChanged: (String) -> Unit = { email: String ->
-        signUpViewModel.setEmail(email = email)
-    }
-
     val onVerifyCodeChanged = { verifyCode: String ->
         signUpViewModel.setVerifyCode(verifyCode = verifyCode)
         if (verifyCode.length == 6) focusManager.clearFocus()
@@ -48,7 +44,7 @@ fun VerifyEmailScreen(
     Column {
         JobisBoxTextField(
             color = JobisTextFieldColor.MainColor,
-            onValueChanged = onEmailChanged,
+            onValueChanged = signUpViewModel::setEmail,
             value = state.email,
             hint = stringResource(id = R.string.please_enter_email),
             helperText = stringResource(id = R.string.email_verification_email_hint),
@@ -57,12 +53,8 @@ fun VerifyEmailScreen(
             error = state.emailError,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            verticalAlignment = Alignment.Top,
-        ) {
-            Box(
-                modifier = Modifier.weight(3f),
-            ) {
+        Row(verticalAlignment = Alignment.Top) {
+            Box(modifier = Modifier.weight(3f)) {
                 JobisBoxTextField(
                     color = JobisTextFieldColor.MainColor,
                     onValueChanged = onVerifyCodeChanged,
@@ -75,9 +67,7 @@ fun VerifyEmailScreen(
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Box(
-                modifier = Modifier.weight(1f),
-            ) {
+            Box(modifier = Modifier.weight(1f)) {
                 Column {
                     Spacer(modifier = Modifier.height(10.dp))
                     JobisSmallButton(

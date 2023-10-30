@@ -2,7 +2,6 @@ package team.retum.jobis_android.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,9 +43,7 @@ internal fun MenuScreen(
     ) {
         Spacer(modifier = Modifier.height(48.dp))
         Header(text = stringResource(id = R.string.menu))
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(36.dp))
             Body3(
                 text = stringResource(id = R.string.user),

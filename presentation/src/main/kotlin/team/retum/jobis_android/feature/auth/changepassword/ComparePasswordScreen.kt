@@ -38,10 +38,6 @@ internal fun ComparePasswordScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val onComparePasswordButtonClicked: () -> Unit = {
-        resetPasswordViewModel.comparePassword()
-    }
-
     val passwordMismatchMessage = stringResource(id = R.string.set_password_mismatch_password)
 
     LaunchedEffect(Unit) {
@@ -76,9 +72,7 @@ internal fun ComparePasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .jobisClickable {
-                focusManager.clearFocus()
-            }
+            .jobisClickable { focusManager.clearFocus() }
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -103,12 +97,11 @@ internal fun ComparePasswordScreen(
             errorText = stringResource(id = R.string.password_format_error),
             error = state.comparePasswordErrorState,
         )
-
         Spacer(modifier = Modifier.weight(1f))
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
             enabled = state.currentPassword.isNotEmpty() && !state.comparePasswordErrorState,
-            onClick = onComparePasswordButtonClicked,
+            onClick = resetPasswordViewModel::comparePassword,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }

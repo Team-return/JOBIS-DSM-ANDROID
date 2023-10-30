@@ -55,8 +55,10 @@ internal fun PostReviewScreen(
     val successPostReviewMessage = stringResource(id = R.string.post_review_success_toast_message)
 
     LaunchedEffect(Unit) {
-        codeViewModel.setType(Type.TECH)
-        codeViewModel.fetchCodes()
+        with(codeViewModel) {
+            setType(Type.TECH)
+            fetchCodes()
+        }
 
         with(reviewViewModel) {
             addQnaElement()

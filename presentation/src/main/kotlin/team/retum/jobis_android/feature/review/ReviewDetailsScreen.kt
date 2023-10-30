@@ -38,8 +38,10 @@ internal fun ReviewDetailsScreen(
     val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        reviewViewModel.setReviewId(reviewId)
-        reviewViewModel.fetchReviewDetails()
+        with(reviewViewModel) {
+            setReviewId(reviewId)
+            fetchReviewDetails()
+        }
     }
 
     Column(

@@ -86,10 +86,6 @@ internal fun RecruitmentsScreen(
         }
     }
 
-    val onNameChanged: (String) -> Unit = { name: String ->
-        recruitmentViewModel.setName(name)
-    }
-
     val lazyListState = rememberLazyListState()
     var checkRecruitment by remember { mutableStateOf(false) }
 
@@ -121,37 +117,35 @@ internal fun RecruitmentsScreen(
         ),
         sheetState = sheetState,
     ) {
-        Box {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = 48.dp,
-                        start = 24.dp,
-                        end = 24.dp,
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Header(text = stringResource(id = R.string.search_recruitment_header))
-                Spacer(modifier = Modifier.height(12.dp))
-                RecruitmentInput(
-                    name = state.name,
-                    jobCode = state.jobCode,
-                    techCode = state.techCode,
-                    onFilterClicked = onFilterClicked,
-                    onKeywordChanged = onNameChanged,
-                )
-                Recruitments(
-                    lazyListState = lazyListState,
-                    recruitmentUiModels = recruitments,
-                    bookmarkViewModel = bookmarkViewModel,
-                    putString = putString,
-                    navigateToRecruitmentDetails = navigateToRecruitmentDetails,
-                    checkRecruitment = { checkRecruitment = it },
-                    recruitmentCount = state.recruitmentCount,
-                    pageCount = state.page,
-                )
-            }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = 48.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Header(text = stringResource(id = R.string.search_recruitment_header))
+            Spacer(modifier = Modifier.height(12.dp))
+            RecruitmentInput(
+                name = state.name,
+                jobCode = state.jobCode,
+                techCode = state.techCode,
+                onFilterClicked = onFilterClicked,
+                onKeywordChanged = recruitmentViewModel::setName,
+            )
+            Recruitments(
+                lazyListState = lazyListState,
+                recruitmentUiModels = recruitments,
+                bookmarkViewModel = bookmarkViewModel,
+                putString = putString,
+                navigateToRecruitmentDetails = navigateToRecruitmentDetails,
+                checkRecruitment = { checkRecruitment = it },
+                recruitmentCount = state.recruitmentCount,
+                pageCount = state.page,
+            )
         }
     }
 }
@@ -171,9 +165,7 @@ private fun ColumnScope.RecruitmentInput(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier.weight(0.9f),
-        ) {
+        Box(modifier = Modifier.weight(0.9f)) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
                 onValueChanged = onKeywordChanged,
@@ -245,7 +237,6 @@ private fun Recruitments(
             contentPadding = PaddingValues(vertical = 20.dp),
         ) {
             itemsIndexed(recruitmentUiModels) { index, recruitment ->
-
                 val position = recruitment.jobCodeList.replace(',', '/')
                 val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
 
