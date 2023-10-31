@@ -2,7 +2,6 @@ package team.retum.jobis_android.feature.company
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -56,12 +55,6 @@ fun CompaniesScreen(
 ) {
     val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val onCompanyNameChanged: (String) -> Unit = { name: String ->
-        companyViewModel.setCompanyName(name)
-    }
-
-    val companies = state.companies
-
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
 
     val lazyListState = rememberLazyListState()
@@ -74,22 +67,30 @@ fun CompaniesScreen(
         }
     }
 
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = 24.dp,
+                end = 24.dp,
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(48.dp))
+        Header(text = stringResource(id = R.string.company_list_search_company))
+        Spacer(modifier = Modifier.height(12.dp))
+        CompanyInput(
+            companyName = state.name,
+            onCompanyNameChanged = companyViewModel::setCompanyName,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
-            Header(text = stringResource(id = R.string.company_list_search_company))
-            Spacer(modifier = Modifier.height(12.dp))
-            CompanyInput(
-                companyName = state.name,
-                onCompanyNameChanged = onCompanyNameChanged,
+            Caption(
+                modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                text = stringResource(id = R.string.search_result),
+                color = JobisColor.Gray600,
             )
             Animated(!state.name.isNullOrBlank()) {
                 Row(
@@ -106,13 +107,22 @@ fun CompaniesScreen(
             }
             Companies(
                 lazyListState = lazyListState,
-                companies = companies,
+                companies = state.companies,
                 navigateToCompanyDetails = navigateToCompanyDetails,
                 checkCompanies = { checkCompany = it },
                 companyCount = state.companyCount,
                 pageCount = state.page,
             )
         }
+        Spacer(modifier = Modifier.height(4.dp))
+        Companies(
+            lazyListState = lazyListState,
+            companies = state.companies,
+            navigateToCompanyDetails = navigateToCompanyDetails,
+            checkCompanies = { checkCompany = it },
+            companyCount = state.companyCount,
+            pageCount = state.page,
+        )
     }
 }
 
@@ -234,15 +244,12 @@ private fun Company(
                     color = JobisColor.Gray600,
                 )
                 if (hasRecruitment) {
-                    Column(
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_recruitment_exists),
+                        contentDescription = null,
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_recruitment_exists),
-                            contentDescription = null,
-                        )
-                    }
+                        alignment = Alignment.CenterEnd,
+                    )
                 }
             }
         }

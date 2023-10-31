@@ -141,25 +141,23 @@ private fun ResetPasswordInput(
     onNewPasswordChanged: (String) -> Unit,
     onPasswordRepeatChanged: (String) -> Unit,
 ) {
-    Column {
-        JobisBoxTextField(
-            onValueChanged = onNewPasswordChanged,
-            value = newPassword,
-            error = passwordFormatErrorState,
-            helperText = stringResource(id = R.string.password_format_error),
-            errorText = stringResource(id = R.string.password_format_error),
-            hint = stringResource(id = R.string.input_new_password),
-            textFieldType = TextFieldType.PASSWORD,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        JobisBoxTextField(
-            onValueChanged = onPasswordRepeatChanged,
-            value = passwordRepeat,
-            error = passwordRepeatErrorState,
-            helperText = stringResource(id = R.string.password_format_error),
-            errorText = stringResource(id = R.string.password_repeat_error),
-            hint = stringResource(id = R.string.set_password_repeat_password_hint),
-            textFieldType = TextFieldType.PASSWORD,
-        )
-    }
+    JobisBoxTextField(
+        onValueChanged = onNewPasswordChanged,
+        value = newPassword,
+        error = passwordFormatErrorState,
+        helperText = stringResource(id = R.string.password_format_error),
+        errorText = stringResource(id = R.string.password_format_error),
+        hint = stringResource(id = R.string.input_new_password),
+        textFieldType = TextFieldType.PASSWORD,
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+    JobisBoxTextField(
+        onValueChanged = onPasswordRepeatChanged,
+        value = passwordRepeat,
+        error = passwordRepeatErrorState,
+        helperText = stringResource(id = R.string.password_format_error),
+        errorText = stringResource(id = R.string.password_repeat_error),
+        hint = stringResource(id = R.string.set_password_repeat_password_hint),
+        textFieldType = TextFieldType.PASSWORD,
+    )
 }

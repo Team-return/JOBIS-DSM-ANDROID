@@ -73,11 +73,15 @@ fun CompanyDetailsScreen(
         detailButtonVisibility =
             getPreviousDestination()?.getNavigationRoute() != MainDestinations.RecruitmentDetails.getNavigationRoute()
 
-        companyViewModel.setCompanyId(companyId)
-        companyViewModel.fetchCompanyDetails()
+        with(companyViewModel) {
+            setCompanyId(companyId)
+            fetchCompanyDetails()
+        }
 
-        reviewViewModel.setCompanyId(companyId)
-        reviewViewModel.fetchReviews()
+        with(reviewViewModel) {
+            setCompanyId(companyId)
+            fetchReviews()
+        }
     }
 
     Box(

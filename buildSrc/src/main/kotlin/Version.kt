@@ -25,4 +25,6 @@ object Version {
     const val DESIGN_SYSTEM = "v1.2.3"
 
     const val SHIMMER = "1.0.5"
+
+    const val JODA_TIME = "2.12.5"
 }
