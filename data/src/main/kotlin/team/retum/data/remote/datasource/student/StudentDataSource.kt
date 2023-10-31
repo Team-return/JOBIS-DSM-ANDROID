@@ -1,5 +1,6 @@
 package team.retum.data.remote.datasource.student
 
+import team.retum.data.remote.request.student.ChangePasswordRequest
 import team.retum.data.remote.request.student.EditProfileImageRequest
 import team.retum.data.remote.request.student.ResetPasswordRequest
 import team.retum.data.remote.request.user.SignUpRequest
@@ -10,6 +11,8 @@ interface StudentDataSource {
     suspend fun fetchStudentInformation(): FetchStudentInformationResponse
 
     suspend fun comparePassword(password: String)
+
+    suspend fun changePassword(changePasswordRequest: ChangePasswordRequest)
 
     suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest)
 

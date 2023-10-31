@@ -24,7 +24,8 @@ object Dependency {
             "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.COMPOSE_LIFECYCLE}"
         const val ACTIVITY = "androidx.activity:activity-compose:${Version.COMPOSE_ACTIVITY}"
         const val MATERIAL = "androidx.compose.material:material:${Version.COMPOSE_MATERIAL}"
-        const val NAVIGATION = "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATION}"
+        const val NAVIGATION =
+            "androidx.navigation:navigation-compose:${Version.COMPOSE_NAVIGATION}"
         const val NAVIGATION_HILT =
             "androidx.hilt:hilt-navigation-compose:${Version.COMPOSE_NAVIGATION_HILT}"
         const val FLOW_LAYOUT =
@@ -43,6 +44,10 @@ object Dependency {
     object ORBIT {
         const val VIEWMODEL = "org.orbit-mvi:orbit-viewmodel:${Version.ORBIT_MVI}"
         const val COMPOSE = "org.orbit-mvi:orbit-compose:${Version.ORBIT_MVI}"
+    }
+
+    object JODA {
+        const val JODA_TIME = "net.danlew:android.joda:${Version.JODA_TIME}"
     }
 
     object DESIGNSYSTEM {

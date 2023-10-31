@@ -117,14 +117,6 @@ internal fun ReportBugScreen(
         focusManager.clearFocus()
     }
 
-    val onTitleChanged: (String) -> Unit = { title: String ->
-        bugViewModel.setTitle(title)
-    }
-
-    val onContentChanged: (String) -> Unit = { content: String ->
-        bugViewModel.setContent(content)
-    }
-
     val addScreenshot = {
         if (fileState.files.size <= 5) {
             activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -156,54 +148,52 @@ internal fun ReportBugScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .jobisClickable(onClick = clearFocus),
     ) {
-        Box {
-            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                Spacer(modifier = Modifier.height(48.dp))
-                Header(text = stringResource(id = R.string.bug_report))
-                Spacer(modifier = Modifier.height(14.dp))
-                ContentInputs(
-                    onTitleChanged = onTitleChanged,
-                    title = bugState.title,
-                    onContentChanged = onContentChanged,
-                    content = bugState.content,
-                    titleError = bugState.titleError,
-                    contentError = bugState.contentError,
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                ScreenShots(
-                    uriList = bugState.uris,
-                    addScreenshot = addScreenshot,
-                    removeScreenshot = removeScreenshot,
-                    screenShotCount = fileState.files.size,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                JobisLargeButton(
-                    text = stringResource(id = R.string.complete),
-                    color = JobisButtonColor.MainSolidColor,
-                    onClick = onCompleteButtonClicked,
-                    enabled = bugState.reportBugButtonState,
-                )
-                Spacer(modifier = Modifier.height(44.dp))
-            }
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                Spacer(modifier = Modifier.height(88.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-                    Box(modifier = Modifier.width(116.dp)) {
-                        JobisDropDown(
-                            color = JobisDropDownColor.MainColor,
-                            itemList = positions,
-                            onItemSelected = onItemSelected,
-                            title = stringResource(id = R.string.bug_report_all),
-                        )
-                    }
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            Spacer(modifier = Modifier.height(48.dp))
+            Header(text = stringResource(id = R.string.bug_report))
+            Spacer(modifier = Modifier.height(14.dp))
+            ContentInputs(
+                onTitleChanged = bugViewModel::setTitle,
+                title = bugState.title,
+                onContentChanged = bugViewModel::setContent,
+                content = bugState.content,
+                titleError = bugState.titleError,
+                contentError = bugState.contentError,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            ScreenShots(
+                uriList = bugState.uris,
+                addScreenshot = addScreenshot,
+                removeScreenshot = removeScreenshot,
+                screenShotCount = fileState.files.size,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            JobisLargeButton(
+                text = stringResource(id = R.string.complete),
+                color = JobisButtonColor.MainSolidColor,
+                onClick = onCompleteButtonClicked,
+                enabled = bugState.reportBugButtonState,
+            )
+            Spacer(modifier = Modifier.height(44.dp))
+        }
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Spacer(modifier = Modifier.height(88.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Box(modifier = Modifier.width(116.dp)) {
+                    JobisDropDown(
+                        color = JobisDropDownColor.MainColor,
+                        itemList = positions,
+                        onItemSelected = onItemSelected,
+                        title = stringResource(id = R.string.bug_report_all),
+                    )
                 }
             }
         }
@@ -257,9 +247,9 @@ private fun ScreenShots(
                         .border(
                             width = 1.dp,
                             color = JobisColor.Gray400,
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(4.dp),
                         )
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(4.dp))
                         .jobisClickable(
                             rippleEnabled = true,
                             onClick = addScreenshot,

@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
+import team.retum.data.remote.request.student.ChangePasswordRequest
 import team.retum.data.remote.request.student.EditProfileImageRequest
 import team.retum.data.remote.request.student.ResetPasswordRequest
 import team.retum.data.remote.request.user.SignUpRequest
@@ -23,6 +24,11 @@ interface StudentApi {
     )
 
     @PATCH(JobisUrl.Student.password)
+    suspend fun changePassword(
+        @Body changePasswordRequest: ChangePasswordRequest,
+    ): Response<Void>
+
+    @PATCH(JobisUrl.Student.forgottenPassword)
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
     ): Response<Void>

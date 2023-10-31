@@ -101,9 +101,7 @@ internal fun RecruitmentDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
-            .jobisClickable {
-                applicationDialogState = false
-            },
+            .jobisClickable { applicationDialogState = false },
         contentAlignment = Alignment.BottomCenter,
     ) {
         Column(
@@ -253,13 +251,9 @@ private fun RecruitmentDetail(
     title: String,
     content: String,
 ) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-    ) {
+    Row(horizontalArrangement = Arrangement.Start) {
         Caption(
-            modifier = Modifier.defaultMinSize(
-                minWidth = 68.dp,
-            ),
+            modifier = Modifier.defaultMinSize(minWidth = 68.dp),
             text = title,
             color = JobisColor.Gray700,
         )
@@ -281,9 +275,7 @@ private fun Positions(
         verticalAlignment = Alignment.Top,
     ) {
         Caption(
-            modifier = Modifier.defaultMinSize(
-                minWidth = 68.dp,
-            ),
+            modifier = Modifier.defaultMinSize(minWidth = 68.dp),
             text = stringResource(id = R.string.recruitment_details_position),
             color = JobisColor.Gray700,
         )
@@ -355,12 +347,10 @@ private fun PositionCard(
             visible = showDetails,
             isBounce = true,
         ) {
-            Column {
-                Caption(
-                    text = stringResource(id = R.string.recruitment_details_main_work),
-                    color = JobisColor.Gray600,
-                )
-            }
+            Caption(
+                text = stringResource(id = R.string.recruitment_details_main_work),
+                color = JobisColor.Gray600,
+            )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Caption(
@@ -373,22 +363,20 @@ private fun PositionCard(
             visible = showDetails,
             isBounce = true,
         ) {
-            Column {
-                Caption(
-                    text = stringResource(id = R.string.recruitment_details_main_skills),
-                    color = JobisColor.Gray600,
-                )
-                Caption(
-                    text = StringBuilder().apply {
-                        mainSkill.forEach {
-                            append(it)
-                            if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
-                                append(", ")
-                            }
+            Caption(
+                text = stringResource(id = R.string.recruitment_details_main_skills),
+                color = JobisColor.Gray600,
+            )
+            Caption(
+                text = StringBuilder().apply {
+                    mainSkill.forEach {
+                        append(it)
+                        if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
+                            append(", ")
                         }
-                    }.toString(),
-                )
-            }
+                    }
+                }.toString(),
+            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),

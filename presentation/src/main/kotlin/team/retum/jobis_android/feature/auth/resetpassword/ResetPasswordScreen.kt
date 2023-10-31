@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,8 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.resetpassword.ResetPasswordSideEffect
+import team.retum.jobis_android.navigation.AuthDestinations
 import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -34,6 +35,8 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun ResetPasswordScreen(
+    getPreviousDestination: () -> String?,
+    navigateToSignIn: () -> Unit,
     navigateToMain: () -> Unit,
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
@@ -46,32 +49,40 @@ internal fun ResetPasswordScreen(
     val newPassword = state.newPassword
     val passwordRepeat = state.passwordRepeat
 
-    LaunchedEffect(Unit) {
-        resetPasswordViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is ResetPasswordSideEffect.SuccessResetPassword -> {
-                    navigateToMain()
-                }
-
-                is ResetPasswordSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
-
-                else -> {}
+    val onClick: () -> Unit = {
+        when (getPreviousDestination().toString()) {
+            AuthDestinations.ResetPasswordVerifyEmail -> {
+                resetPasswordViewModel.resetPassword()
             }
+
+            AuthDestinations.ComparePassword -> {
+                resetPasswordViewModel.changePassword()
+            }
+
+            else -> {}
         }
     }
 
-    val onResetPasswordButtonClicked: () -> Unit = {
-        resetPasswordViewModel.resetPassword()
-    }
+    val successMessage = stringResource(id = R.string.reset_password_success)
 
-    val onNewPasswordChanged: (String) -> Unit = { newPassword: String ->
-        resetPasswordViewModel.setNewPassword(newPassword = newPassword)
-    }
+    resetPasswordViewModel.collectSideEffect {
+        when (it) {
+            is ResetPasswordSideEffect.SuccessChangePassword -> {
+                appState.showSuccessToast(message = successMessage)
+                navigateToMain()
+            }
 
-    val onPasswordRepeatChanged: (String) -> Unit = { passwordRepeat: String ->
-        resetPasswordViewModel.setPasswordRepeat(passwordRepeat = passwordRepeat)
+            is ResetPasswordSideEffect.SuccessResetPassword -> {
+                appState.showSuccessToast(message = successMessage)
+                navigateToSignIn()
+            }
+
+            is ResetPasswordSideEffect.Exception -> {
+                appState.showErrorToast(message = it.message)
+            }
+
+            else -> {}
+        }
     }
 
     Column(
@@ -95,26 +106,27 @@ internal fun ResetPasswordScreen(
             text = stringResource(id = R.string.reset_password_explain),
             color = JobisColor.Gray600,
         )
-        Spacer(modifier = Modifier.height(26.dp))
         Image(
+            modifier = Modifier
+                .fillMaxSize(0.6f)
+                .padding(vertical = 10.dp),
             painter = painterResource(id = R.drawable.ic_reset_password),
             contentDescription = stringResource(id = R.string.content_description_icon_reset_password),
         )
-        Spacer(modifier = Modifier.height(30.dp))
         ResetPasswordInput(
             newPassword = newPassword,
             passwordRepeat = passwordRepeat,
             passwordFormatErrorState = state.passwordFormatErrorState,
             passwordRepeatErrorState = state.passwordRepeatErrorState,
-            onNewPasswordChanged = onNewPasswordChanged,
-            onPasswordRepeatChanged = onPasswordRepeatChanged,
+            onNewPasswordChanged = resetPasswordViewModel::setNewPassword,
+            onPasswordRepeatChanged = resetPasswordViewModel::setPasswordRepeat,
         )
         Spacer(modifier = Modifier.weight(1f))
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
             color = JobisButtonColor.MainSolidColor,
-            enabled = newPassword.isNotEmpty() && passwordRepeat.isNotEmpty() && !state.passwordFormatErrorState && !state.passwordRepeatErrorState,
-            onClick = onResetPasswordButtonClicked,
+            enabled = state.buttonEnabled,
+            onClick = onClick,
         )
         Spacer(modifier = Modifier.height(32.dp))
     }
@@ -129,25 +141,23 @@ private fun ResetPasswordInput(
     onNewPasswordChanged: (String) -> Unit,
     onPasswordRepeatChanged: (String) -> Unit,
 ) {
-    Column {
-        JobisBoxTextField(
-            onValueChanged = onNewPasswordChanged,
-            value = newPassword,
-            error = passwordFormatErrorState,
-            helperText = stringResource(id = R.string.password_format_error),
-            errorText = stringResource(id = R.string.password_format_error),
-            hint = stringResource(id = R.string.input_new_password),
-            textFieldType = TextFieldType.PASSWORD,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        JobisBoxTextField(
-            onValueChanged = onPasswordRepeatChanged,
-            value = passwordRepeat,
-            error = passwordRepeatErrorState,
-            helperText = stringResource(id = R.string.password_format_error),
-            errorText = stringResource(id = R.string.password_repeat_error),
-            hint = stringResource(id = R.string.password_repeat_error),
-            textFieldType = TextFieldType.PASSWORD,
-        )
-    }
+    JobisBoxTextField(
+        onValueChanged = onNewPasswordChanged,
+        value = newPassword,
+        error = passwordFormatErrorState,
+        helperText = stringResource(id = R.string.password_format_error),
+        errorText = stringResource(id = R.string.password_format_error),
+        hint = stringResource(id = R.string.input_new_password),
+        textFieldType = TextFieldType.PASSWORD,
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+    JobisBoxTextField(
+        onValueChanged = onPasswordRepeatChanged,
+        value = passwordRepeat,
+        error = passwordRepeatErrorState,
+        helperText = stringResource(id = R.string.password_format_error),
+        errorText = stringResource(id = R.string.password_repeat_error),
+        hint = stringResource(id = R.string.set_password_repeat_password_hint),
+        textFieldType = TextFieldType.PASSWORD,
+    )
 }

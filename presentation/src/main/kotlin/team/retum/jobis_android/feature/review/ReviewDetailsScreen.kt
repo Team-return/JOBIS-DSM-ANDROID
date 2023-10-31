@@ -38,26 +38,26 @@ internal fun ReviewDetailsScreen(
     val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        reviewViewModel.setReviewId(reviewId)
-        reviewViewModel.fetchReviewDetails()
+        with(reviewViewModel) {
+            setReviewId(reviewId)
+            fetchReviewDetails()
+        }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp),
-        ) {
-            Spacer(modifier = Modifier.height(48.dp))
-            Header(
-                text = stringResource(
-                    id = R.string.review_details_review,
-                    getString(NavigationProperties.WRITER) ?: "",
-                ),
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            InterviewReviews(interviewEntities = state.reviewDetails)
-        }
+        Spacer(modifier = Modifier.height(48.dp))
+        Header(
+            text = stringResource(
+                id = R.string.review_details_review,
+                getString(NavigationProperties.WRITER) ?: "",
+            ),
+        )
+        Spacer(modifier = Modifier.height(30.dp))
+        InterviewReviews(interviewEntities = state.reviewDetails)
     }
 }
 

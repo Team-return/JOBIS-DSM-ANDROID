@@ -133,10 +133,6 @@ internal fun MyPageScreen(
 
     var showSignOutDialog by remember { mutableStateOf(false) }
 
-    val onSignOutMainBtnClick: () -> Unit = { myPageViewModel.signOut() }
-    val onSignOutSubBtnClick: () -> Unit = { showSignOutDialog = false }
-    val onSignOutClicked: () -> Unit = { showSignOutDialog = true }
-
     val editProfileImage: () -> Unit = {
         activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         fileViewModel.setType(FileType.LOGO_IMAGE)
@@ -148,8 +144,8 @@ internal fun MyPageScreen(
                 title = stringResource(id = R.string.sign_out_dialog_title),
                 mainBtnText = stringResource(id = R.string.check),
                 subBtnText = stringResource(id = R.string.cancel),
-                onMainBtnClick = onSignOutMainBtnClick,
-                onSubBtnClick = onSignOutSubBtnClick,
+                onMainBtnClick = myPageViewModel::signOut,
+                onSubBtnClick = { showSignOutDialog = false },
             )
         }
     }
@@ -188,7 +184,7 @@ internal fun MyPageScreen(
                 navigateBugReport = navigateToBugReport,
                 onInterestClicked = {},
                 navigateToComparePassword = navigateToComparePassword,
-                onSignOutClicked = onSignOutClicked,
+                onSignOutClicked = { showSignOutDialog = true },
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -214,9 +210,7 @@ private fun UserProfile(
             studentGcn.substring((if (Integer.parseInt(studentGcn[2].toString()) == 0) 3 else 2)..3)
     }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Box(contentAlignment = Alignment.BottomEnd) {
             AsyncImage(
                 modifier = Modifier

@@ -64,10 +64,6 @@ internal fun StudentInfoScreen(
         signUpViewModel.setGender(gender = Gender.WOMAN)
     }
 
-    val onNameChanged: (String) -> Unit = { name: String ->
-        signUpViewModel.setName(name = name)
-    }
-
     val onGradeChanged: (String) -> Unit = { grade: String ->
         signUpViewModel.setGrade(grade = grade.take(1))
         if (grade.length == 1) {
@@ -105,7 +101,7 @@ internal fun StudentInfoScreen(
             classRoom = state.classRoom,
             number = state.number,
             studentNotFound = state.studentNotFound,
-            onNameChanged = onNameChanged,
+            onNameChanged = signUpViewModel::setName,
             onGradeChanged = onGradeChanged,
             onClassChanged = onClassChanged,
             onNumberChanged = onNumberChanged,

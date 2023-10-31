@@ -5,7 +5,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,6 +63,8 @@ internal fun SignUpScreen(
 ) {
     val appState = LocalAppState.current
 
+    val context = LocalContext.current
+
     var currentProgress by remember { mutableStateOf(1) }
 
     val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
@@ -70,14 +72,6 @@ internal fun SignUpScreen(
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
 
     val navController = rememberNavController()
-
-    val notFoundToastMessage = stringResource(id = R.string.student_info_not_found_student)
-    val sendAuthCodeSuccessToastTitle =
-        stringResource(id = R.string.email_verification_send_auth_code_success_title)
-    val sendAuthCodeSuccessToastMessage =
-        stringResource(id = R.string.email_verification_send_auth_code_success_message)
-    val emailConflict = stringResource(id = R.string.email_verification_conflict)
-    val signUpAccountConflict = stringResource(id = R.string.sign_up_account_conflict)
 
     val moveToBack = {
         when (currentProgress) {
@@ -100,7 +94,7 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
-                    appState.showErrorToast(message = notFoundToastMessage)
+                    appState.showErrorToast(message = context.getString(R.string.student_info_not_found_student))
                 }
 
                 is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
@@ -109,18 +103,18 @@ internal fun SignUpScreen(
                 }
 
                 is SignUpSideEffect.VerifyEmail.EmailConflict -> {
-                    appState.showErrorToast(message = emailConflict)
+                    appState.showErrorToast(message = context.getString(R.string.email_verification_conflict))
                 }
 
                 is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
                     appState.showSuccessToast(
-                        title = sendAuthCodeSuccessToastTitle,
-                        message = sendAuthCodeSuccessToastMessage,
+                        title = context.getString(R.string.email_verification_send_auth_code_success_title),
+                        message = context.getString(R.string.email_verification_send_auth_code_success_message),
                     )
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpConflict -> {
-                    appState.showErrorToast(message = signUpAccountConflict)
+                    appState.showErrorToast(message = context.getString(R.string.sign_up_account_conflict))
                 }
 
                 is SignUpSideEffect.SetPassword.SignUpSuccess -> {
@@ -143,10 +137,6 @@ internal fun SignUpScreen(
         label = "",
     )
 
-    val onTopBarClicked = {
-        moveToBack()
-    }
-
     val onNextButtonClicked: () -> Unit = {
         when (currentProgress) {
             1 -> signUpViewModel.checkStudentExists()
@@ -155,44 +145,40 @@ internal fun SignUpScreen(
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp),
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(56.dp))
-            SignUpHeader(
-                currentProgress = currentProgress,
-                onTopBarClicked = onTopBarClicked,
-            )
-            Spacer(modifier = Modifier.height(50.dp))
-            NavHost(
-                navController = navController,
-                startDestination = AuthDestinations.StudentInfo,
-            ) {
-                composable(route = AuthDestinations.StudentInfo) {
-                    StudentInfoScreen(signUpViewModel = signUpViewModel)
-                }
-                composable(route = AuthDestinations.VerifyEmail) {
-                    VerifyEmailScreen(signUpViewModel = signUpViewModel)
-                }
-                composable(route = AuthDestinations.SetPassword) {
-                    SetPasswordScreen(signUpViewModel = signUpViewModel)
-                }
+        Spacer(modifier = Modifier.height(56.dp))
+        SignUpHeader(
+            currentProgress = currentProgress,
+            onTopBarClicked = moveToBack,
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        NavHost(
+            navController = navController,
+            startDestination = AuthDestinations.StudentInfo,
+        ) {
+            composable(route = AuthDestinations.StudentInfo) {
+                StudentInfoScreen(signUpViewModel = signUpViewModel)
+            }
+            composable(route = AuthDestinations.VerifyEmail) {
+                VerifyEmailScreen(signUpViewModel = signUpViewModel)
+            }
+            composable(route = AuthDestinations.SetPassword) {
+                SetPasswordScreen(signUpViewModel = signUpViewModel)
             }
         }
-        Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.weight(1f))
-            ProgressBarWithButton(
-                currentProgress = currentProgress,
-                progress = progressAnimation,
-                buttonEnabled = state.signUpButtonEnabled,
-                isSuccessVerifyEmail = isSuccessVerifyEmail,
-                onClick = onNextButtonClicked,
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-        }
+        Spacer(modifier = Modifier.weight(1f))
+        ProgressBarWithButton(
+            currentProgress = currentProgress,
+            progress = progressAnimation,
+            buttonEnabled = state.signUpButtonEnabled,
+            isSuccessVerifyEmail = isSuccessVerifyEmail,
+            onClick = onNextButtonClicked,
+        )
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -204,34 +190,32 @@ private fun ProgressBarWithButton(
     isSuccessVerifyEmail: Boolean,
     onClick: () -> Unit,
 ) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Caption(text = "$currentProgress / $maxProgress")
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth(),
-            progress = progress,
-            backgroundColor = JobisColor.Gray500,
-            color = JobisColor.LightBlue,
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        JobisLargeButton(
-            text = stringResource(
-                id = if (currentProgress == 2 && !isSuccessVerifyEmail) {
-                    R.string.verification
-                } else {
-                    R.string.next
-                },
-            ),
-            color = JobisButtonColor.MainSolidColor,
-            enabled = buttonEnabled,
-            onClick = onClick,
-        )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+    ) {
+        Caption(text = "$currentProgress / $maxProgress")
     }
+    Spacer(modifier = Modifier.height(4.dp))
+    LinearProgressIndicator(
+        modifier = Modifier.fillMaxWidth(),
+        progress = progress,
+        backgroundColor = JobisColor.Gray500,
+        color = JobisColor.LightBlue,
+    )
+    Spacer(modifier = Modifier.height(20.dp))
+    JobisLargeButton(
+        text = stringResource(
+            id = if (currentProgress == 2 && !isSuccessVerifyEmail) {
+                R.string.verification
+            } else {
+                R.string.next
+            },
+        ),
+        color = JobisButtonColor.MainSolidColor,
+        enabled = buttonEnabled,
+        onClick = onClick,
+    )
 }
 
 @Composable

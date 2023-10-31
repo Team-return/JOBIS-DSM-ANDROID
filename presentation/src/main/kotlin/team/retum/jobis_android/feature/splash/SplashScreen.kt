@@ -42,6 +42,7 @@ internal fun SplashScreen(
             isBounce = true,
         ) {
             Image(
+                modifier = Modifier.fillMaxSize(0.8f),
                 painter = painterResource(id = R.drawable.ic_splash),
                 contentDescription = stringResource(id = R.string.content_description_splash_image),
             )

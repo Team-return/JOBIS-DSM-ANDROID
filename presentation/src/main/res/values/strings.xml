@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JOBIS - 취업의 지름길</string>
+    <string name="app_name">JOBIS</string>
     <string name="jobis">JOBIS</string>
 
     <!--    Global-->
@@ -202,6 +202,8 @@
     <string name="password_format_error">8~16자, 영문자, 숫자, 특수문자 포함</string>
     <string name="password_repeat_error">비밀번호가 일치하지 않습니다</string>
     <string name="complete">완료</string>
+
+    <string name="reset_password_success">비밀번호가 변경되었습니다</string>
 
     <!--    Compare Password Screen-->
     <string name="check_original_password">기존 비밀번호 확인</string>

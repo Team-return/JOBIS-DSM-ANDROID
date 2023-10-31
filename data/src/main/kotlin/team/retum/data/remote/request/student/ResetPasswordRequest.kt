@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 import team.retum.domain.param.students.ResetPasswordParam
 
 data class ResetPasswordRequest(
-    @SerializedName("current_password") val currentPassword: String,
-    @SerializedName("new_password") val newPassword: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String,
 )
 
 fun ResetPasswordParam.toRequest() = ResetPasswordRequest(
-    currentPassword = this.currentPassword,
-    newPassword = this.newPassword,
+    email = this.email,
+    password = this.password,
 )
