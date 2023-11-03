@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -83,38 +84,24 @@ fun CompaniesScreen(
             companyName = state.name,
             onCompanyNameChanged = companyViewModel::setCompanyName,
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Animated(!state.name.isNullOrBlank()) {
             Caption(
                 modifier = Modifier.alpha(alpha = searchResultTextAlpha),
                 text = stringResource(id = R.string.search_result),
                 color = JobisColor.Gray600,
             )
-            Animated(!state.name.isNullOrBlank()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Caption(
-                        modifier = Modifier.alpha(alpha = searchResultTextAlpha),
-                        text = stringResource(id = R.string.search_result),
-                        color = JobisColor.Gray600,
-                    )
-                    Caption(text = state.name ?: "")
-                }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Caption(
+                    modifier = Modifier.alpha(alpha = searchResultTextAlpha),
+                    text = stringResource(id = R.string.search_result),
+                    color = JobisColor.Gray600,
+                )
+                Caption(text = state.name ?: "")
             }
-            Companies(
-                lazyListState = lazyListState,
-                companies = state.companies,
-                navigateToCompanyDetails = navigateToCompanyDetails,
-                checkCompanies = { checkCompany = it },
-                companyCount = state.companyCount,
-                pageCount = state.page,
-            )
         }
-        Spacer(modifier = Modifier.height(4.dp))
         Companies(
             lazyListState = lazyListState,
             companies = state.companies,
@@ -191,6 +178,10 @@ private fun Company(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(
+                elevation = 4.dp,
+                shape = ApplyCompaniesItemShape,
+            )
             .clip(shape = ApplyCompaniesItemShape)
             .background(color = JobisColor.Gray100)
             .jobisClickable(
