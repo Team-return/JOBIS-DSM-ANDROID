@@ -41,7 +41,7 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentsUseCase(
-                fetchRecruitmentListParam = FetchRecruitmentsParam(
+                fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
                     jobCode = state.jobCode,
                     techCode = state.techCode,
@@ -80,7 +80,7 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun fetchRecruitmentCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentCountUseCase(
-                fetchRecruitmentListParam = FetchRecruitmentsParam(
+                fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
                     name = state.name,
                     jobCode = state.jobCode,
