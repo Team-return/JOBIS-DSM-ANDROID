@@ -17,8 +17,8 @@ sealed class NavigationItem(
     )
 
     object Bookmarked : NavigationItem(
-        drawableId = R.drawable.ic_recruitment,
-        stringResId = R.string.bottom_nav_recruitment,
+        drawableId = R.drawable.ic_bookmark,
+        stringResId = R.string.bottom_nav_bookmark,
         route = NavigationRoute.BottomNavigation.BookmarkRecruitments,
     )
 

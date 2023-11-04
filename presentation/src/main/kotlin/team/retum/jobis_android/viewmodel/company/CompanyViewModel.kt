@@ -42,6 +42,39 @@ class CompanyViewModel @Inject constructor(
 
     private val _companies: SnapshotStateList<CompanyEntity> = mutableStateListOf()
 
+    internal fun addCompaniesDummy() = intent {
+        repeat(8) {
+            _companies.add(
+                CompanyEntity(
+                    id = 0,
+                    name = "",
+                    logoUrl = "",
+                    take = 0f,
+                    hasRecruitment = false,
+                ),
+            )
+        }
+        reduce { state.copy(companies = _companies) }
+    }
+
+    private fun clearCompaniesDummy() = intent {
+        if (_companies.contains(
+                CompanyEntity(
+                    id = 0,
+                    name = "",
+                    logoUrl = "",
+                    take = 0f,
+                    hasRecruitment = false,
+                ),
+            )
+        ) {
+            _companies.clear()
+            reduce {
+                state.copy(companies = _companies)
+            }
+        }
+    }
+
     internal fun fetchCompanies() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompaniesUseCase(
@@ -50,6 +83,7 @@ class CompanyViewModel @Inject constructor(
                     name = state.name,
                 ),
             ).onSuccess { it ->
+                clearCompaniesDummy()
                 setCompanies(companies = it.companies.map { it.copy(logoUrl = JobisUrl.imageUrl + it.logoUrl) })
             }.onFailure { throwable ->
                 when (throwable) {

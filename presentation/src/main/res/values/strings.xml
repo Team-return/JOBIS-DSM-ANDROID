@@ -13,7 +13,7 @@
 
     <!--    Bottom Navigation-->
     <string name="bottom_nav_home">홈</string>
-    <string name="bottom_nav_recruitment">의뢰서</string>
+    <string name="bottom_nav_bookmark">북마크</string>
     <string name="bottom_nav_my_page">마이페이지</string>
     <string name="bottom_nav_menu">메뉴</string>
 
