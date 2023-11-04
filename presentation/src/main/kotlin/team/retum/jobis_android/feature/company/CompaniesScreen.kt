@@ -111,7 +111,11 @@ fun CompaniesScreen(
         Companies(
             lazyListState = lazyListState,
             companies = state.companies,
-            navigateToCompanyDetails = navigateToCompanyDetails,
+            navigateToCompanyDetails = {
+                if (it != 0L) {
+                    navigateToCompanyDetails(it)
+                }
+            },
             checkCompanies = { checkCompany = it },
             companyCount = state.companyCount,
             pageCount = state.page,
@@ -143,7 +147,7 @@ private fun CompanyInput(
 private fun Companies(
     lazyListState: LazyListState,
     companies: List<CompanyEntity>,
-    navigateToCompanyDetails: (Long) -> Unit,
+    navigateToCompanyDetails: (companyId: Long) -> Unit,
     checkCompanies: (Boolean) -> Unit,
     companyCount: Long,
     pageCount: Int,

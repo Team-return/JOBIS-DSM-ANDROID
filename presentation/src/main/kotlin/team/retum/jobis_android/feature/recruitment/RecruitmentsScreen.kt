@@ -269,7 +269,11 @@ private fun Recruitments(
                     },
                     isMilitarySupported = recruitment.military,
                     onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
-                    onItemClicked = { onRecruitmentClicked(recruitment) },
+                    onItemClicked = {
+                        if (recruitment.recruitId != 0L) {
+                            onRecruitmentClicked(recruitment)
+                        }
+                    },
                 )
                 if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
                     checkRecruitment(true)
