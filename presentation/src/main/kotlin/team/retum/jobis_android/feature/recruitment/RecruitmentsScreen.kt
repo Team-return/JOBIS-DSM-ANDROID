@@ -92,8 +92,10 @@ internal fun RecruitmentsScreen(
 
     LaunchedEffect(checkRecruitment) {
         if (checkRecruitment) {
-            recruitmentViewModel.setPage()
-            recruitmentViewModel.fetchRecruitments()
+            with(recruitmentViewModel) {
+                setPage()
+                fetchRecruitments()
+            }
         }
     }
 

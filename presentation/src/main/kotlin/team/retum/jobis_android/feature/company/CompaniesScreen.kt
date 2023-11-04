@@ -63,9 +63,15 @@ fun CompaniesScreen(
 
     LaunchedEffect(checkCompany) {
         if (checkCompany) {
-            companyViewModel.setPage()
-            companyViewModel.fetchCompanies()
+            with(companyViewModel) {
+                setPage()
+                fetchCompanies()
+            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        companyViewModel.addCompaniesDummy()
     }
 
     Column(
@@ -149,6 +155,7 @@ private fun Companies(
         ) {
             items(companies) { item ->
                 Company(
+                    companyId = item.id,
                     name = item.name,
                     logoUrl = item.logoUrl,
                     take = item.take,
@@ -169,6 +176,7 @@ private fun Companies(
 
 @Composable
 private fun Company(
+    companyId: Long,
     name: String,
     logoUrl: String,
     take: Float,
@@ -234,7 +242,7 @@ private fun Company(
                     },
                     color = JobisColor.Gray600,
                 )
-                if (hasRecruitment) {
+                if (hasRecruitment && companyId != 0L) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_recruitment_exists),
                         contentDescription = null,
