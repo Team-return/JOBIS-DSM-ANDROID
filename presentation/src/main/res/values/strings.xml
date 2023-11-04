@@ -88,8 +88,8 @@
     <string name="search_recruitment_filter_hint">회사검색</string>
 
     <!--    Recruitment Details-->
-    <string name="recruitment_details_get_company">기업 보기</string>
-
+    <string name="recruitment_details_get_company">기업보기</string>
+    <string name="recruitment_details_period">모집기간</string>
     <string name="recruitment_details_position">모집분야</string>
     <string name="recruitment_details_preferential_treatment">우대사항</string>
     <string name="recruitment_details_licenses">자격증</string>
