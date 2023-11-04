@@ -363,20 +363,22 @@ private fun PositionCard(
             visible = showDetails,
             isBounce = true,
         ) {
-            Caption(
-                text = stringResource(id = R.string.recruitment_details_main_skills),
-                color = JobisColor.Gray600,
-            )
-            Caption(
-                text = StringBuilder().apply {
-                    mainSkill.forEach {
-                        append(it)
-                        if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
-                            append(", ")
+            Column {
+                Caption(
+                    text = stringResource(id = R.string.recruitment_details_main_skills),
+                    color = JobisColor.Gray600,
+                )
+                Caption(
+                    text = StringBuilder().apply {
+                        mainSkill.forEach {
+                            append(it)
+                            if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
+                                append(", ")
+                            }
                         }
-                    }
-                }.toString(),
-            )
+                    }.toString(),
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
