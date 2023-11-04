@@ -24,7 +24,8 @@ interface RecruitmentApi {
 
     @GET(JobisUrl.Recruitment.recruitmentCount)
     suspend fun fetchRecruitmentCount(
-        @Query("page") page: Int,
         @Query("name") name: String?,
+        @Query("job_code") jobCode: Long?,
+        @Query("tech_code") techCode: String?,
     ): FetchRecruitmentCountResponse
 }
