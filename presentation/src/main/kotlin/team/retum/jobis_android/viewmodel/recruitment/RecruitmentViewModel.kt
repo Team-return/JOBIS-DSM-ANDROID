@@ -38,6 +38,45 @@ internal class RecruitmentViewModel @Inject constructor(
 
     private val _recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf()
 
+    internal fun addRecruitmentsDummy() = intent {
+        repeat(8) {
+            _recruitments.add(
+                RecruitmentUiModel(
+                    recruitId = 0,
+                    companyName = "",
+                    companyProfileUrl = "",
+                    trainPay = 0,
+                    military = false,
+                    totalHiring = 0,
+                    jobCodeList = "",
+                    bookmarked = false,
+                ),
+            )
+        }
+        reduce { state.copy(recruitments = _recruitments) }
+    }
+
+    private fun clearRecruitmentsDummy() = intent {
+        if (_recruitments.contains(
+                RecruitmentUiModel(
+                    recruitId = 0,
+                    companyName = "",
+                    companyProfileUrl = "",
+                    trainPay = 0,
+                    military = false,
+                    totalHiring = 0,
+                    jobCodeList = "",
+                    bookmarked = false,
+                ),
+            )
+        ) {
+            _recruitments.clear()
+            reduce {
+                state.copy(recruitments = _recruitments)
+            }
+        }
+    }
+
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentListUseCase(
@@ -48,6 +87,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     name = state.name,
                 ),
             ).onSuccess { it ->
+                clearRecruitmentsDummy()
                 setRecruitments(it.recruitmentEntities.map { it.toModel() })
             }.onFailure { throwable ->
                 postSideEffect(
