@@ -114,7 +114,7 @@
     <string name="company_list_search_company">기업 조회하기</string>
 
     <!--    Company Details-->
-    <string name="company_details_see_recruitents">모집의뢰서 보기</string>
+    <string name="company_details_see_recruitments">모집의뢰서 보기</string>
 
     <string name="company_details_representative_name">대표자</string>
     <string name="company_details_founded_at">설립일</string>
@@ -131,6 +131,8 @@
 
     <string name="company_details_null">없음</string>
     <string name="company_details_review_interview">면접 후기</string>
+
+    <string name="company_details_company_profile">기업 프로필 이미지</string>
 
     <!--    Reviews-->
     <string name="reviews_writer">%s님의 후기</string>

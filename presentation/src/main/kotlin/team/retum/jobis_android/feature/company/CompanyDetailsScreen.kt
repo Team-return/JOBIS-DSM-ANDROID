@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -35,18 +33,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
+import team.retum.jobis_android.feature.recruitment.CompanyInformation
+import team.retum.jobis_android.feature.recruitment.Detail
 import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.navigation.NavigationProperties
+import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.company.CompanyViewModel
 import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor
-import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
@@ -124,7 +123,7 @@ fun CompanyDetailsScreen(
         if (detailButtonVisibility) {
             Column {
                 JobisLargeButton(
-                    text = stringResource(id = R.string.company_details_see_recruitents),
+                    text = stringResource(id = R.string.company_details_see_recruitments),
                     color = JobisButtonColor.MainSolidColor,
                     enabled = companyState.companyDetails.recruitmentId != null,
                     onClick = {
@@ -154,111 +153,113 @@ private fun CompanyDetails(
         label = "",
     )
 
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AsyncImage(
-                modifier = Modifier.size(80.dp),
-                model = details.companyProfileUrl,
-                contentDescription = null,
+    with(details) {
+        Column {
+            CompanyInformation(
+                companyProfileUrl = companyProfileUrl,
+                companyName = companyName,
             )
-            Spacer(modifier = Modifier.width(16.dp))
-            Body1(text = details.companyName)
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Caption(
-            text = details.companyIntroduce,
-            color = JobisColor.Gray700,
-            maxLines = maxLines,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(modifier = Modifier.height(14.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
+            Spacer(modifier = Modifier.height(12.dp))
             Caption(
-                modifier = Modifier.jobisClickable {
-                    showDetails = !showDetails
-                },
-                text = if (showDetails) {
-                    stringResource(id = R.string.recruitment_details_show_simply)
-                } else {
-                    stringResource(id = R.string.recruitment_details_show_detail)
-                },
-                color = JobisColor.Gray600,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .skeleton(companyIntroduce.isBlank()),
+                text = companyIntroduce,
+                color = JobisColor.Gray700,
+                maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
-                decoration = TextDecoration.Underline,
             )
+            Spacer(modifier = Modifier.height(14.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Caption(
+                    modifier = Modifier.jobisClickable {
+                        showDetails = !showDetails
+                    },
+                    text = if (showDetails) {
+                        stringResource(id = R.string.recruitment_details_show_simply)
+                    } else {
+                        stringResource(id = R.string.recruitment_details_show_detail)
+                    },
+                    color = JobisColor.Gray600,
+                    overflow = TextOverflow.Ellipsis,
+                    decoration = TextDecoration.Underline,
+                )
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = JobisColor.Gray400,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Detail(
+                title = stringResource(id = R.string.company_details_representative_name),
+                content = representativeName,
+            )
+            Detail(
+                title = stringResource(id = R.string.company_details_founded_at),
+                content = foundedAt,
+            )
+            Detail(
+                title = stringResource(id = R.string.company_details_worker_number),
+                content = if (workerNumber == 0L) {
+                    ""
+                } else {
+                    "${workerNumber}명"
+                },
+            )
+            Detail(
+                title = stringResource(id = R.string.company_details_take),
+                content = if (take == 0f) {
+                    ""
+                } else {
+                    "${take.toInt()}억"
+                },
+            )
+            Detail(
+                title = stringResource(id = R.string.company_details_address1),
+                content = mainAddress,
+            )
+            subAddress?.run {
+                Detail(
+                    title = stringResource(id = R.string.company_details_address2),
+                    content = this,
+                )
+            }
+            Detail(
+                title = stringResource(id = R.string.company_details_manager1),
+                content = managerName,
+            )
+            Detail(
+                title = stringResource(id = R.string.company_details_phone_number1),
+                content = managerPhoneNo.toPhoneNumber(),
+            )
+            subManagerName?.run {
+                Detail(
+                    title = stringResource(id = R.string.company_details_manager2),
+                    content = this,
+                )
+            }
+            subManagerPhoneNo?.run {
+                Detail(
+                    title = stringResource(id = R.string.company_details_phone_number2),
+                    content = this,
+                )
+            }
+            Detail(
+                title = stringResource(id = R.string.company_details_email),
+                content = email,
+            )
+            fax?.run {
+                Detail(
+                    title = stringResource(id = R.string.company_details_fax),
+                    content = this,
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(32.dp))
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            color = JobisColor.Gray400,
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_representative_name),
-            content = details.representativeName,
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_founded_at),
-            content = details.foundedAt,
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_worker_number),
-            content = "${details.workerNumber}명",
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_take),
-            content = "${details.take.toInt()}억",
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_address1),
-            content = details.mainAddress,
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_address2),
-            content = if (details.subAddress.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.subAddress.toString()
-            },
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_manager1),
-            content = details.managerName,
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_phone_number1),
-            content = details.managerPhoneNo.toPhoneNumber(),
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_manager2),
-            content = if (details.subManagerName.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.subManagerName.toString()
-            },
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_phone_number2),
-            content = if (details.subManagerPhoneNo.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.subManagerPhoneNo.toPhoneNumber()
-            },
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_email),
-            content = details.email,
-        )
-        CompanyDetail(
-            title = stringResource(id = R.string.company_details_fax),
-            content = details.fax ?: stringResource(id = R.string.company_details_null),
-        )
     }
 }
 
@@ -290,30 +291,6 @@ private fun Reviews(
         }
         Spacer(modifier = Modifier.fillMaxHeight(0.5f))
     }
-}
-
-@Composable
-private fun CompanyDetail(
-    title: String,
-    content: String,
-) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-    ) {
-        Caption(
-            modifier = Modifier.defaultMinSize(
-                minWidth = 68.dp,
-            ),
-            text = title,
-            color = JobisColor.Gray700,
-        )
-        Spacer(modifier = Modifier.width(24.dp))
-        Caption(
-            text = content,
-            color = JobisColor.Gray900,
-        )
-    }
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
