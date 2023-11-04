@@ -30,12 +30,14 @@ class RecruitmentDataSourceImpl @Inject constructor(
         }.sendRequest()
 
     override suspend fun fetRecruitmentCount(
-        page: Int,
         name: String?,
+        jobCode: Long?,
+        techCode: String?,
     ): FetchRecruitmentCountResponse = HttpHandler<FetchRecruitmentCountResponse>().httpRequest {
         recruitmentApi.fetchRecruitmentCount(
-            page = page,
             name = name,
+            jobCode = jobCode,
+            techCode = techCode,
         )
     }.sendRequest()
 }

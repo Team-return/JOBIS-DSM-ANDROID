@@ -13,10 +13,10 @@ import org.orbitmvi.orbit.viewmodel.container
 import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.domain.entity.recruitment.RecruitmentEntity
-import team.retum.domain.param.recruitment.FetchRecruitmentListParam
+import team.retum.domain.param.recruitment.FetchRecruitmentsParam
 import team.retum.domain.usecase.recruitment.FetchRecruitmentCountUseCase
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
-import team.retum.domain.usecase.recruitment.FetchRecruitmentListUseCase
+import team.retum.domain.usecase.recruitment.FetchRecruitmentsUseCase
 import team.retum.jobis_android.contract.recruitment.RecruitmentSideEffect
 import team.retum.jobis_android.contract.recruitment.RecruitmentState
 import team.retum.jobis_android.viewmodel.BaseViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class RecruitmentViewModel @Inject constructor(
-    private val fetchRecruitmentListUseCase: FetchRecruitmentListUseCase,
+    private val fetchRecruitmentsUseCase: FetchRecruitmentsUseCase,
     private val fetchRecruitmentDetailsUseCase: FetchRecruitmentDetailsUseCase,
     private val fetchRecruitmentCountUseCase: FetchRecruitmentCountUseCase,
 ) : BaseViewModel<RecruitmentState, RecruitmentSideEffect>() {
@@ -40,8 +40,8 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            fetchRecruitmentListUseCase(
-                fetchRecruitmentListParam = FetchRecruitmentListParam(
+            fetchRecruitmentsUseCase(
+                fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
                     jobCode = state.jobCode,
                     techCode = state.techCode,
@@ -80,7 +80,7 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun fetchRecruitmentCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentCountUseCase(
-                fetchRecruitmentListParam = FetchRecruitmentListParam(
+                fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
                     name = state.name,
                     jobCode = state.jobCode,
