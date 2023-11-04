@@ -176,73 +176,71 @@ private fun RecruitmentDetails(
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
 ) {
-    val requireGrade = if (details.requiredGrade == null) {
-        stringResource(id = R.string.company_details_null)
-    } else {
-        "${details.requiredGrade}%"
-    }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
     ) {
-        RecruitmentDetail(
-            title = stringResource(R.string.recruitment_details_get_company),
-            content = "${details.startDate}~${details.endDate}",
-        )
-        Positions(areas = areas)
-        Spacer(modifier = Modifier.height(10.dp))
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-            content = if (details.preferentialTreatment.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.preferentialTreatment.toString()
-            },
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_licenses),
-            content = StringBuilder().apply {
-                details.requiredLicenses?.forEach {
-                    append(it)
-                    append(" ")
-                }
-            }.toString().trim().replace(" ", ", ")
-                .ifEmpty { stringResource(id = R.string.company_details_null) },
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_required_grade),
-            content = requireGrade,
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_worker_time),
-            content = "${details.workHours}시간",
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_benefits),
-            content = "${details.benefits}",
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_hiring_progress),
-            content = StringBuilder().apply {
-                repeat(details.hiringProgress.size) {
-                    append("${it + 1}. ${details.hiringProgress[it].value}")
-                    if (it != details.hiringProgress.lastIndex) append("\n")
-                }
-            }.toString(),
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_required_documents),
-            content = details.submitDocument,
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_etc),
-            content = if (details.etc.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.etc.toString()
-            },
-        )
+        with(details) {
+            RecruitmentDetail(
+                title = stringResource(R.string.recruitment_details_get_company),
+                content = "$startDate~$endDate",
+            )
+            Positions(areas = areas)
+            Spacer(modifier = Modifier.height(10.dp))
+            preferentialTreatment?.run {
+                RecruitmentDetail(
+                    title = stringResource(id = R.string.recruitment_details_preferential_treatment),
+                    content = this,
+                )
+            }
+            if (!requiredLicenses.isNullOrEmpty()) {
+                RecruitmentDetail(
+                    title = stringResource(id = R.string.recruitment_details_licenses),
+                    content = StringBuilder().apply {
+                        requiredLicenses?.forEach {
+                            append("$it ")
+                        }
+                    }.toString().trim().replace(" ", ", "),
+                )
+            }
+            if (requiredGrade != null) {
+                RecruitmentDetail(
+                    title = stringResource(id = R.string.recruitment_details_required_grade),
+                    content = "$requiredGrade%",
+                )
+            }
+            RecruitmentDetail(
+                title = stringResource(id = R.string.recruitment_details_worker_time),
+                content = "${workHours}시간",
+            )
+            if (!benefits.isNullOrEmpty()) {
+                RecruitmentDetail(
+                    title = stringResource(id = R.string.recruitment_details_benefits),
+                    content = "$benefits",
+                )
+            }
+            RecruitmentDetail(
+                title = stringResource(id = R.string.recruitment_details_hiring_progress),
+                content = StringBuilder().apply {
+                    hiringProgress.forEachIndexed { index, it ->
+                        append("${index + 1}.${it.value} ")
+                        if (index != hiringProgress.lastIndex) {
+                            append("\n")
+                        }
+                    }
+                }.toString(),
+            )
+            RecruitmentDetail(
+                title = stringResource(id = R.string.recruitment_details_required_documents),
+                content = submitDocument,
+            )
+            if (!etc.isNullOrEmpty()) {
+                RecruitmentDetail(
+                    title = stringResource(id = R.string.recruitment_details_etc),
+                    content = etc ?: "",
+                )
+            }
+        }
     }
 }
 
