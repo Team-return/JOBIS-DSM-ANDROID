@@ -194,12 +194,6 @@ private fun RecruitmentDetails(
             )
             Positions(areas = areas)
             Spacer(modifier = Modifier.height(10.dp))
-            preferentialTreatment?.run {
-                Detail(
-                    title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-                    content = this,
-                )
-            }
             if (!requiredLicenses.isNullOrEmpty()) {
                 Detail(
                     title = stringResource(id = R.string.recruitment_details_licenses),
@@ -216,12 +210,18 @@ private fun RecruitmentDetails(
                     content = "$requiredGrade%",
                 )
             }
-            if (workHours != 0L) {
-                Detail(
-                    title = stringResource(id = R.string.recruitment_details_worker_time),
-                    content = "${workHours}시간",
-                )
-            }
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_worker_time),
+                content = "$startTime ${if (startTime.isNotBlank()) "~" else ""} $endTime",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_train_pay),
+                content = if (trainPay != 0L) "${trainPay}만원" else "",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_pay),
+                content = if (pay != 0L) "${pay}만원" else "",
+            )
             if (!benefits.isNullOrEmpty()) {
                 Detail(
                     title = stringResource(id = R.string.recruitment_details_benefits),
@@ -298,6 +298,7 @@ private fun Positions(
                         workerCount = it.hiring.toString(),
                         majorTask = it.majorTask,
                         mainSkill = it.tech,
+                        preferentialTreatment = it.preferentialTreatment,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -319,6 +320,7 @@ private fun PositionCard(
     workerCount: String,
     majorTask: String,
     mainSkill: List<String>,
+    preferentialTreatment: String?,
 ) {
     var showDetails by remember { mutableStateOf(false) }
 
@@ -397,6 +399,14 @@ private fun PositionCard(
                         }
                     }.toString(),
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                if (preferentialTreatment != null) {
+                    Caption(
+                        text = stringResource(id = R.string.recruitment_details_preferential_treatment),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = preferentialTreatment)
+                }
             }
         }
         Row(
