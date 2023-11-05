@@ -118,9 +118,10 @@ internal fun RecruitmentDetailsScreen(
                 companyDetailsButtonShowed = companyDetailsButtonVisibility,
                 onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
             )
-            Spacer(modifier = Modifier.height(30.dp))
             Divider(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(vertical = 12.dp)
+                    .fillMaxWidth(),
                 color = JobisColor.Gray400,
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -169,14 +170,15 @@ private fun CompanyInformation(
             text = companyName,
         )
     }
-    Spacer(modifier = Modifier.height(12.dp))
     if (companyDetailsButtonShowed) {
+        Spacer(modifier = Modifier.height(12.dp))
         JobisLargeButton(
             text = stringResource(id = R.string.recruitment_details_get_company),
             color = JobisButtonColor.MainGrayColor,
             onClick = onGetCompanyButtonClicked,
             enabled = companyName.isNotEmpty(),
         )
+        Spacer(modifier = Modifier.height(30.dp))
     }
 }
 
