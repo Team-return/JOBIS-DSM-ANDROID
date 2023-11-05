@@ -144,7 +144,7 @@ internal fun RecruitmentApplicationDialog(
             ),
         )
         fileCount += 1
-        applicationViewModel.setButtonState(urlCount > 0)
+        applicationViewModel.setButtonState(fileCount > 0)
     }
 
     val onAddFile: (ActivityResult) -> Unit = { result: ActivityResult ->
@@ -167,6 +167,7 @@ internal fun RecruitmentApplicationDialog(
     val onRemoveFile = { index: Int ->
         fileViewModel.removeFile(index)
         fileCount -= 1
+        applicationViewModel.setButtonState(fileCount > 0)
     }
 
     val onAddUrl: () -> Unit = {
