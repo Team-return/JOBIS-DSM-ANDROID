@@ -15,7 +15,8 @@ interface RecruitmentDataSource {
     suspend fun fetchRecruitmentDetails(recruitmentId: Long): FetchRecruitmentDetailsResponse
 
     suspend fun fetRecruitmentCount(
-        page: Int,
         name: String?,
+        jobCode: Long?,
+        techCode: String?,
     ): FetchRecruitmentCountResponse
 }

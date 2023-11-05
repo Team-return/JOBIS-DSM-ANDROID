@@ -44,6 +44,7 @@ import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.feature.company.getNavigationRoute
 import team.retum.jobis_android.navigation.MainDestinations
+import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.recruitment.RecruitmentViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -75,9 +76,9 @@ internal fun RecruitmentDetailsScreen(
         companyDetailsButtonVisibility =
             getPreviousDestination()?.getNavigationRoute() != MainDestinations.CompanyDetails.getNavigationRoute()
 
-        recruitmentViewModel.setRecruitmentId(
-            recruitmentId = recruitmentId ?: 0,
-        )
+        if (recruitmentId != null) {
+            recruitmentViewModel.setRecruitmentId(recruitmentId)
+        }
     }
 
     var applicationDialogState by remember { mutableStateOf(false) }
@@ -104,150 +105,162 @@ internal fun RecruitmentDetailsScreen(
             .jobisClickable { applicationDialogState = false },
         contentAlignment = Alignment.BottomCenter,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(state = ScrollState(0)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.height(48.dp))
-            CompanyInformation(
-                companyName = details.companyName,
-                companyProfileUrl = details.companyProfileUrl,
-                companyDetailsButtonShowed = companyDetailsButtonVisibility,
-                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                color = JobisColor.Gray400,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            RecruitmentDetails(
-                details = details,
-                areas = areas,
-            )
-            Spacer(modifier = Modifier.height(80.dp))
-        }
-        Column {
-            JobisLargeButton(
-                text = stringResource(id = R.string.recruitment_details_do_apply),
-                color = JobisButtonColor.MainSolidColor,
-                onClick = onApplyButtonClicked,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        with(details) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(ScrollState(0)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                CompanyInformation(
+                    modifier = Modifier.padding(
+                        top = 48.dp,
+                        bottom = 12.dp,
+                    ),
+                    companyName = companyName,
+                    companyProfileUrl = companyProfileUrl,
+                )
+                if (companyDetailsButtonVisibility) {
+                    JobisLargeButton(
+                        text = stringResource(id = R.string.recruitment_details_get_company),
+                        color = JobisButtonColor.MainGrayColor,
+                        onClick = { navigateToCompanyDetails(companyId) },
+                        enabled = companyName.isNotEmpty(),
+                    )
+                }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 30.dp,
+                            bottom = 20.dp,
+                        ),
+                    color = JobisColor.Gray400,
+                )
+                RecruitmentDetails(
+                    modifier = Modifier.padding(bottom = 80.dp),
+                    details = this@with,
+                    areas = areas,
+                )
+            }
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                JobisLargeButton(
+                    text = stringResource(id = R.string.recruitment_details_do_apply),
+                    color = JobisButtonColor.MainSolidColor,
+                    onClick = onApplyButtonClicked,
+                    enabled = companyId != 0L,
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyInformation(
+internal fun CompanyInformation(
+    modifier: Modifier = Modifier,
     companyProfileUrl: String,
     companyName: String,
-    companyDetailsButtonShowed: Boolean,
-    onGetCompanyButtonClicked: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
             modifier = Modifier
                 .size(80.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .skeleton(show = companyProfileUrl.isBlank()),
             model = companyProfileUrl,
-            contentDescription = null,
+            contentDescription = stringResource(id = R.string.company_details_company_profile),
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Body1(text = companyName)
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    if (companyDetailsButtonShowed) {
-        JobisLargeButton(
-            text = stringResource(id = R.string.recruitment_details_get_company),
-            color = JobisButtonColor.MainGrayColor,
-            onClick = onGetCompanyButtonClicked,
+        Body1(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .skeleton(companyName.isBlank()),
+            text = companyName,
         )
     }
 }
 
 @Composable
 private fun RecruitmentDetails(
+    modifier: Modifier = Modifier,
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
 ) {
-    val requireGrade = if (details.requiredGrade == null) {
-        stringResource(id = R.string.company_details_null)
-    } else {
-        "${details.requiredGrade}%"
-    }
-
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
     ) {
-        RecruitmentDetail(
-            title = stringResource(R.string.recruitment_details_get_company),
-            content = "${details.startDate}~${details.endDate}",
-        )
-        Positions(areas = areas)
-        Spacer(modifier = Modifier.height(10.dp))
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-            content = if (details.preferentialTreatment.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.preferentialTreatment.toString()
-            },
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_licenses),
-            content = StringBuilder().apply {
-                details.requiredLicenses?.forEach {
-                    append(it)
-                    append(" ")
-                }
-            }.toString().trim().replace(" ", ", ")
-                .ifEmpty { stringResource(id = R.string.company_details_null) },
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_required_grade),
-            content = requireGrade,
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_worker_time),
-            content = "${details.workHours}시간",
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_benefits),
-            content = "${details.benefits}",
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_hiring_progress),
-            content = StringBuilder().apply {
-                repeat(details.hiringProgress.size) {
-                    append("${it + 1}. ${details.hiringProgress[it].value}")
-                    if (it != details.hiringProgress.lastIndex) append("\n")
-                }
-            }.toString(),
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_required_documents),
-            content = details.submitDocument,
-        )
-        RecruitmentDetail(
-            title = stringResource(id = R.string.recruitment_details_etc),
-            content = if (details.etc.isNullOrEmpty()) {
-                stringResource(id = R.string.company_details_null)
-            } else {
-                details.etc.toString()
-            },
-        )
+        with(details) {
+            Detail(
+                title = stringResource(R.string.recruitment_details_period),
+                content = "$startDate${if (startDate.isNotBlank()) '~' else ""}$endDate",
+            )
+            Positions(areas = areas)
+            Spacer(modifier = Modifier.height(10.dp))
+            if (!requiredLicenses.isNullOrEmpty()) {
+                Detail(
+                    title = stringResource(id = R.string.recruitment_details_licenses),
+                    content = StringBuilder().apply {
+                        requiredLicenses?.forEach {
+                            append("$it ")
+                        }
+                    }.toString().trim().replace(" ", ", "),
+                )
+            }
+            if (requiredGrade != null) {
+                Detail(
+                    title = stringResource(id = R.string.recruitment_details_required_grade),
+                    content = "$requiredGrade%",
+                )
+            }
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_worker_time),
+                content = "$startTime ${if (startTime.isNotBlank()) "~" else ""} $endTime",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_train_pay),
+                content = if (trainPay != 0L) "${trainPay}만원" else "",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_pay),
+                content = if (pay != 0L) "${pay}만원" else "",
+            )
+            if (!benefits.isNullOrEmpty()) {
+                Detail(
+                    title = stringResource(id = R.string.recruitment_details_benefits),
+                    content = "$benefits",
+                )
+            }
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_hiring_progress),
+                content = StringBuilder().apply {
+                    hiringProgress.forEachIndexed { index, it ->
+                        append("${index + 1}.${it.value} ")
+                        if (index != hiringProgress.lastIndex) {
+                            append("\n")
+                        }
+                    }
+                }.toString(),
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_required_documents),
+                content = submitDocument,
+            )
+            if (!etc.isNullOrEmpty()) {
+                Detail(
+                    title = stringResource(id = R.string.recruitment_details_etc),
+                    content = etc ?: "",
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun RecruitmentDetail(
+internal fun Detail(
     title: String,
     content: String,
 ) {
@@ -259,6 +272,9 @@ private fun RecruitmentDetail(
         )
         Spacer(modifier = Modifier.width(24.dp))
         Caption(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .skeleton(content.isBlank() || content == "0"),
             text = content,
             color = JobisColor.Gray900,
         )
@@ -280,16 +296,26 @@ private fun Positions(
             color = JobisColor.Gray700,
         )
         Spacer(modifier = Modifier.width(24.dp))
-        Column {
-            areas.forEach {
-                PositionCard(
-                    position = it.job.toString().replace("[", " ").replace("]", " ").trim(),
-                    workerCount = it.hiring.toString(),
-                    majorTask = it.majorTask,
-                    mainSkill = it.tech,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+        if (areas.isNotEmpty()) {
+            Column {
+                areas.forEach {
+                    PositionCard(
+                        position = it.job.toString().replace("[", " ").replace("]", " ").trim(),
+                        workerCount = it.hiring.toString(),
+                        majorTask = it.majorTask,
+                        mainSkill = it.tech,
+                        preferentialTreatment = it.preferentialTreatment,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
+        } else {
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .skeleton(areas.isEmpty()),
+            )
         }
     }
 }
@@ -300,6 +326,7 @@ private fun PositionCard(
     workerCount: String,
     majorTask: String,
     mainSkill: List<String>,
+    preferentialTreatment: String?,
 ) {
     var showDetails by remember { mutableStateOf(false) }
 
@@ -363,20 +390,30 @@ private fun PositionCard(
             visible = showDetails,
             isBounce = true,
         ) {
-            Caption(
-                text = stringResource(id = R.string.recruitment_details_main_skills),
-                color = JobisColor.Gray600,
-            )
-            Caption(
-                text = StringBuilder().apply {
-                    mainSkill.forEach {
-                        append(it)
-                        if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
-                            append(", ")
+            Column {
+                Caption(
+                    text = stringResource(id = R.string.recruitment_details_main_skills),
+                    color = JobisColor.Gray600,
+                )
+                Caption(
+                    text = StringBuilder().apply {
+                        mainSkill.forEach {
+                            append(it)
+                            if (mainSkill.indexOf(it) != mainSkill.lastIndex) {
+                                append(", ")
+                            }
                         }
-                    }
-                }.toString(),
-            )
+                    }.toString(),
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                if (preferentialTreatment != null) {
+                    Caption(
+                        text = stringResource(id = R.string.recruitment_details_preferential_treatment),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = preferentialTreatment)
+                }
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),

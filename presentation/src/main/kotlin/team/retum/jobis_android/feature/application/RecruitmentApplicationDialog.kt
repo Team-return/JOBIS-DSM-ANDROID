@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -144,7 +144,7 @@ internal fun RecruitmentApplicationDialog(
             ),
         )
         fileCount += 1
-        applicationViewModel.setButtonState(urlCount > 0)
+        applicationViewModel.setButtonState(fileCount > 0)
     }
 
     val onAddFile: (ActivityResult) -> Unit = { result: ActivityResult ->
@@ -167,6 +167,7 @@ internal fun RecruitmentApplicationDialog(
     val onRemoveFile = { index: Int ->
         fileViewModel.removeFile(index)
         fileCount -= 1
+        applicationViewModel.setButtonState(fileCount > 0)
     }
 
     val onAddUrl: () -> Unit = {
@@ -191,6 +192,7 @@ internal fun RecruitmentApplicationDialog(
 
     Column(
         modifier = Modifier
+            .fillMaxHeight(0.8f)
             .clip(shape = RoundedCornerShape(14.dp))
             .background(JobisColor.Gray100)
             .padding(
@@ -202,57 +204,73 @@ internal fun RecruitmentApplicationDialog(
         Header(text = stringResource(id = R.string.do_apply))
         Column(
             modifier = Modifier
-                .height(280.dp)
-                .padding(bottom = 8.dp)
+                .fillMaxHeight(0.9f)
+                .padding(
+                    top = 24.dp,
+                )
                 .verticalScroll(rememberScrollState()),
         ) {
-            Spacer(modifier = Modifier.height(25.dp))
             Caption(
                 text = stringResource(id = R.string.submitted_document, "없음"),
                 color = JobisColor.Gray600,
             )
-            Spacer(modifier = Modifier.height(14.dp))
             Caption(
+                modifier = Modifier.padding(
+                    top = 14.dp,
+                    bottom = 6.dp,
+                ),
                 text = stringResource(id = R.string.attached_file),
                 color = JobisColor.Gray600,
             )
-            Spacer(modifier = Modifier.height(6.dp))
-            repeat(fileCount) {
-                AttachedFile(
-                    fileName = files[it].name,
-                    fileSize = (files[it].length() / 1024).toString(),
-                    onClick = { onRemoveFile(it) },
-                )
-                Spacer(modifier = Modifier.height(6.dp))
+            Column(
+                modifier = Modifier.padding(bottom = 6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                repeat(fileCount) {
+                    AttachedFile(
+                        fileName = files[it].name,
+                        fileSize = (files[it].length() / 1024).toString(),
+                        onClick = { onRemoveFile(it) },
+                    )
+                }
             }
             SubmitSpace(description = stringResource(id = R.string.add_to_press_file)) {
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "*/*"
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                launcher.launch(intent)
+                Intent(Intent.ACTION_GET_CONTENT).apply {
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    launcher.launch(this)
+                }
             }
-            Spacer(modifier = Modifier.height(18.dp))
             Caption(
+                modifier = Modifier.padding(top = 18.dp),
                 text = stringResource(id = R.string.url),
                 color = JobisColor.Gray600,
             )
-            Spacer(modifier = Modifier.height(6.dp))
-            repeat(urlCount) { index ->
-                AttachedUrl(
-                    onValueChanged = { onUrlChanged(index, it) },
-                    url = urls[index],
-                    onRemoveUrl = { onRemoveUrl(index) },
-                )
-                Spacer(modifier = Modifier.height(6.dp))
+            Column(
+                modifier = Modifier.padding(vertical = 6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                repeat(urlCount) { index ->
+                    AttachedUrl(
+                        onValueChanged = { onUrlChanged(index, it) },
+                        url = urls[index],
+                        onRemoveUrl = { onRemoveUrl(index) },
+                    )
+                }
             }
             SubmitSpace(
+                modifier = Modifier.padding(bottom = 8.dp),
                 description = stringResource(id = R.string.add_to_press_url),
                 onClick = onAddUrl,
             )
-            Spacer(modifier = Modifier.height(32.dp))
         }
-        Box(modifier = Modifier.padding(horizontal = 96.dp)) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 96.dp),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
             JobisMediumButton(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
@@ -265,11 +283,12 @@ internal fun RecruitmentApplicationDialog(
 
 @Composable
 private fun SubmitSpace(
+    modifier: Modifier = Modifier,
     description: String,
     onClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 60.dp)
             .shadow(
@@ -281,9 +300,10 @@ private fun SubmitSpace(
                 color = JobisColor.Gray100,
                 shape = RoundedCornerShape(16.dp),
             )
-            .jobisClickable(rippleEnabled = true) {
-                onClick()
-            },
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = onClick,
+            ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

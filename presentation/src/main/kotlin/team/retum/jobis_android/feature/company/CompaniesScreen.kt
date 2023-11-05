@@ -63,9 +63,15 @@ fun CompaniesScreen(
 
     LaunchedEffect(checkCompany) {
         if (checkCompany) {
-            companyViewModel.setPage()
-            companyViewModel.fetchCompanies()
+            with(companyViewModel) {
+                setPage()
+                fetchCompanies()
+            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        companyViewModel.addCompaniesDummy()
     }
 
     Column(
@@ -105,7 +111,11 @@ fun CompaniesScreen(
         Companies(
             lazyListState = lazyListState,
             companies = state.companies,
-            navigateToCompanyDetails = navigateToCompanyDetails,
+            navigateToCompanyDetails = {
+                if (it != 0L) {
+                    navigateToCompanyDetails(it)
+                }
+            },
             checkCompanies = { checkCompany = it },
             companyCount = state.companyCount,
             pageCount = state.page,
@@ -137,7 +147,7 @@ private fun CompanyInput(
 private fun Companies(
     lazyListState: LazyListState,
     companies: List<CompanyEntity>,
-    navigateToCompanyDetails: (Long) -> Unit,
+    navigateToCompanyDetails: (companyId: Long) -> Unit,
     checkCompanies: (Boolean) -> Unit,
     companyCount: Long,
     pageCount: Int,
@@ -149,6 +159,7 @@ private fun Companies(
         ) {
             items(companies) { item ->
                 Company(
+                    companyId = item.id,
                     name = item.name,
                     logoUrl = item.logoUrl,
                     take = item.take,
@@ -169,6 +180,7 @@ private fun Companies(
 
 @Composable
 private fun Company(
+    companyId: Long,
     name: String,
     logoUrl: String,
     take: Float,
@@ -234,7 +246,7 @@ private fun Company(
                     },
                     color = JobisColor.Gray600,
                 )
-                if (hasRecruitment) {
+                if (hasRecruitment && companyId != 0L) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_recruitment_exists),
                         contentDescription = null,

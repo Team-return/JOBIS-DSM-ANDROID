@@ -92,9 +92,15 @@ internal fun RecruitmentsScreen(
 
     LaunchedEffect(checkRecruitment) {
         if (checkRecruitment) {
-            recruitmentViewModel.setPage()
-            recruitmentViewModel.fetchRecruitments()
+            with(recruitmentViewModel) {
+                setPage()
+                fetchRecruitments()
+            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        recruitmentViewModel.addRecruitmentsDummy()
     }
 
     ModalBottomSheetLayout(
@@ -248,6 +254,7 @@ private fun Recruitments(
                 }
 
                 Recruitment(
+                    recruitId = recruitment.recruitId,
                     imageUrl = recruitment.companyProfileUrl,
                     position = position,
                     isBookmarked = isBookmarked,
@@ -262,7 +269,11 @@ private fun Recruitments(
                     },
                     isMilitarySupported = recruitment.military,
                     onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
-                    onItemClicked = { onRecruitmentClicked(recruitment) },
+                    onItemClicked = {
+                        if (recruitment.recruitId != 0L) {
+                            onRecruitmentClicked(recruitment)
+                        }
+                    },
                 )
                 if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
                     checkRecruitment(true)
@@ -277,6 +288,7 @@ private fun Recruitments(
 
 @Composable
 private fun Recruitment(
+    recruitId: Long,
     imageUrl: String,
     position: String,
     isBookmarked: Boolean,
@@ -350,13 +362,15 @@ private fun Recruitment(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    Image(
-                        modifier = Modifier
-                            .size(18.dp)
-                            .jobisClickable(onClick = onBookmarkClicked),
-                        painter = painterResource(id = bookmarkIcon),
-                        contentDescription = stringResource(id = R.string.content_description_bookmark),
-                    )
+                    if (recruitId != 0L) {
+                        Image(
+                            modifier = Modifier
+                                .size(18.dp)
+                                .jobisClickable(onClick = onBookmarkClicked),
+                            painter = painterResource(id = bookmarkIcon),
+                            contentDescription = stringResource(id = R.string.content_description_bookmark),
+                        )
+                    }
                 }
                 Caption(
                     modifier = Modifier
@@ -378,11 +392,13 @@ private fun Recruitment(
                             .skeleton(trainPay.isBlank()),
                         text = trainPay,
                     )
-                    Image(
-                        modifier = Modifier.size(18.dp),
-                        painter = painterResource(id = militaryIcon),
-                        contentDescription = stringResource(id = R.string.content_description_military),
-                    )
+                    if (recruitId != 0L) {
+                        Image(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(id = militaryIcon),
+                            contentDescription = stringResource(id = R.string.content_description_military),
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.width(20.dp))

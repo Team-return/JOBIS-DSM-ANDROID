@@ -1,17 +1,17 @@
 package team.retum.domain.usecase.recruitment
 
-import team.retum.domain.param.recruitment.FetchRecruitmentListParam
+import team.retum.domain.param.recruitment.FetchRecruitmentsParam
 import team.retum.domain.repository.RecruitmentRepository
 import javax.inject.Inject
 
-class FetchRecruitmentListUseCase @Inject constructor(
+class FetchRecruitmentsUseCase @Inject constructor(
     private val recruitmentRepository: RecruitmentRepository,
 ) {
     suspend operator fun invoke(
-        fetchRecruitmentListParam: FetchRecruitmentListParam,
+        fetchRecruitmentsParam: FetchRecruitmentsParam,
     ) = runCatching {
         recruitmentRepository.fetchRecruitmentList(
-            fetchRecruitmentListParam = fetchRecruitmentListParam,
+            fetchRecruitmentsParam = fetchRecruitmentsParam,
         )
     }
 }
