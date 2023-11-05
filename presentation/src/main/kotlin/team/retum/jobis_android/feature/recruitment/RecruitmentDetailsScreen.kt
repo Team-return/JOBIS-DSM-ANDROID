@@ -181,6 +181,16 @@ internal fun CompanyInformation(
             text = companyName,
         )
     }
+    if (companyDetailsButtonShowed) {
+        Spacer(modifier = Modifier.height(12.dp))
+        JobisLargeButton(
+            text = stringResource(id = R.string.recruitment_details_get_company),
+            color = JobisButtonColor.MainGrayColor,
+            onClick = onGetCompanyButtonClicked,
+            enabled = companyName.isNotEmpty(),
+        )
+        Spacer(modifier = Modifier.height(30.dp))
+    }
 }
 
 @Composable
