@@ -105,52 +105,64 @@ internal fun RecruitmentDetailsScreen(
             .jobisClickable { applicationDialogState = false },
         contentAlignment = Alignment.BottomCenter,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(state = ScrollState(0)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.height(48.dp))
-            CompanyInformation(
-                companyName = details.companyName,
-                companyProfileUrl = details.companyProfileUrl,
-                companyDetailsButtonShowed = companyDetailsButtonVisibility,
-                onGetCompanyButtonClicked = { navigateToCompanyDetails(details.companyId) },
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                color = JobisColor.Gray400,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            RecruitmentDetails(
-                details = details,
-                areas = areas,
-            )
-            Spacer(modifier = Modifier.height(80.dp))
-        }
-        Column {
-            JobisLargeButton(
-                text = stringResource(id = R.string.recruitment_details_do_apply),
-                color = JobisButtonColor.MainSolidColor,
-                onClick = onApplyButtonClicked,
-                enabled = details.companyId != 0L,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        with(details) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(ScrollState(0)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                CompanyInformation(
+                    modifier = Modifier.padding(
+                        top = 48.dp,
+                        bottom = 12.dp,
+                    ),
+                    companyName = companyName,
+                    companyProfileUrl = companyProfileUrl,
+                )
+                if (companyDetailsButtonVisibility) {
+                    JobisLargeButton(
+                        text = stringResource(id = R.string.recruitment_details_get_company),
+                        color = JobisButtonColor.MainGrayColor,
+                        onClick = { navigateToCompanyDetails(companyId) },
+                        enabled = companyName.isNotEmpty(),
+                    )
+                }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 30.dp,
+                            bottom = 20.dp,
+                        ),
+                    color = JobisColor.Gray400,
+                )
+                RecruitmentDetails(
+                    modifier = Modifier.padding(bottom = 80.dp),
+                    details = this@with,
+                    areas = areas,
+                )
+            }
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
+                JobisLargeButton(
+                    text = stringResource(id = R.string.recruitment_details_do_apply),
+                    color = JobisButtonColor.MainSolidColor,
+                    onClick = onApplyButtonClicked,
+                    enabled = companyId != 0L,
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CompanyInformation(
+internal fun CompanyInformation(
+    modifier: Modifier = Modifier,
     companyProfileUrl: String,
     companyName: String,
-    companyDetailsButtonShowed: Boolean,
-    onGetCompanyButtonClicked: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -159,7 +171,7 @@ private fun CompanyInformation(
                 .clip(CircleShape)
                 .skeleton(show = companyProfileUrl.isBlank()),
             model = companyProfileUrl,
-            contentDescription = null,
+            contentDescription = stringResource(id = R.string.company_details_company_profile),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Body1(
@@ -169,41 +181,27 @@ private fun CompanyInformation(
             text = companyName,
         )
     }
-    Spacer(modifier = Modifier.height(12.dp))
-    if (companyDetailsButtonShowed) {
-        JobisLargeButton(
-            text = stringResource(id = R.string.recruitment_details_get_company),
-            color = JobisButtonColor.MainGrayColor,
-            onClick = onGetCompanyButtonClicked,
-            enabled = companyName.isNotEmpty(),
-        )
-    }
 }
 
 @Composable
 private fun RecruitmentDetails(
+    modifier: Modifier = Modifier,
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
     ) {
         with(details) {
-            RecruitmentDetail(
+            Detail(
                 title = stringResource(R.string.recruitment_details_period),
                 content = "$startDate${if (startDate.isNotBlank()) '~' else ""}$endDate",
             )
             Positions(areas = areas)
             Spacer(modifier = Modifier.height(10.dp))
-            preferentialTreatment?.run {
-                RecruitmentDetail(
-                    title = stringResource(id = R.string.recruitment_details_preferential_treatment),
-                    content = this,
-                )
-            }
             if (!requiredLicenses.isNullOrEmpty()) {
-                RecruitmentDetail(
+                Detail(
                     title = stringResource(id = R.string.recruitment_details_licenses),
                     content = StringBuilder().apply {
                         requiredLicenses?.forEach {
@@ -213,24 +211,30 @@ private fun RecruitmentDetails(
                 )
             }
             if (requiredGrade != null) {
-                RecruitmentDetail(
+                Detail(
                     title = stringResource(id = R.string.recruitment_details_required_grade),
                     content = "$requiredGrade%",
                 )
             }
-            if (workHours != 0L) {
-                RecruitmentDetail(
-                    title = stringResource(id = R.string.recruitment_details_worker_time),
-                    content = "${workHours}시간",
-                )
-            }
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_worker_time),
+                content = "$startTime ${if (startTime.isNotBlank()) "~" else ""} $endTime",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_train_pay),
+                content = if (trainPay != 0L) "${trainPay}만원" else "",
+            )
+            Detail(
+                title = stringResource(id = R.string.recruitment_details_pay),
+                content = if (pay != 0L) "${pay}만원" else "",
+            )
             if (!benefits.isNullOrEmpty()) {
-                RecruitmentDetail(
+                Detail(
                     title = stringResource(id = R.string.recruitment_details_benefits),
                     content = "$benefits",
                 )
             }
-            RecruitmentDetail(
+            Detail(
                 title = stringResource(id = R.string.recruitment_details_hiring_progress),
                 content = StringBuilder().apply {
                     hiringProgress.forEachIndexed { index, it ->
@@ -241,12 +245,12 @@ private fun RecruitmentDetails(
                     }
                 }.toString(),
             )
-            RecruitmentDetail(
+            Detail(
                 title = stringResource(id = R.string.recruitment_details_required_documents),
                 content = submitDocument,
             )
             if (!etc.isNullOrEmpty()) {
-                RecruitmentDetail(
+                Detail(
                     title = stringResource(id = R.string.recruitment_details_etc),
                     content = etc ?: "",
                 )
@@ -256,7 +260,7 @@ private fun RecruitmentDetails(
 }
 
 @Composable
-private fun RecruitmentDetail(
+internal fun Detail(
     title: String,
     content: String,
 ) {
@@ -270,7 +274,7 @@ private fun RecruitmentDetail(
         Caption(
             modifier = Modifier
                 .fillMaxWidth(0.8f)
-                .skeleton(content.isBlank()),
+                .skeleton(content.isBlank() || content == "0"),
             text = content,
             color = JobisColor.Gray900,
         )
@@ -300,6 +304,7 @@ private fun Positions(
                         workerCount = it.hiring.toString(),
                         majorTask = it.majorTask,
                         mainSkill = it.tech,
+                        preferentialTreatment = it.preferentialTreatment,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -321,6 +326,7 @@ private fun PositionCard(
     workerCount: String,
     majorTask: String,
     mainSkill: List<String>,
+    preferentialTreatment: String?,
 ) {
     var showDetails by remember { mutableStateOf(false) }
 
@@ -399,6 +405,14 @@ private fun PositionCard(
                         }
                     }.toString(),
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                if (preferentialTreatment != null) {
+                    Caption(
+                        text = stringResource(id = R.string.recruitment_details_preferential_treatment),
+                        color = JobisColor.Gray600,
+                    )
+                    Caption(text = preferentialTreatment)
+                }
             }
         }
         Row(

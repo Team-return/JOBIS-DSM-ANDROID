@@ -9,17 +9,17 @@ data class RecruitmentDetailsEntity(
     val companyName: String,
     val companyProfileUrl: String,
     val endDate: String,
+    val endTime: String,
     val etc: String?,
     val hiringProgress: List<HiringProgress>,
     val military: Boolean,
     val pay: Long?,
-    val preferentialTreatment: String?,
     val requiredGrade: Long?,
     val requiredLicenses: List<String>?,
     val startDate: String,
+    val startTime: String,
     val submitDocument: String,
     val trainPay: Long,
-    val workHours: Long,
 )
 
 data class AreasEntity(
@@ -28,4 +28,5 @@ data class AreasEntity(
     val job: List<String>,
     val majorTask: String,
     val tech: List<String>,
+    val preferentialTreatment: String?,
 )
