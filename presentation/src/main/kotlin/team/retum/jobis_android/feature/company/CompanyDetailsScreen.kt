@@ -146,7 +146,7 @@ private fun CompanyDetails(
 
     val maxLines by animateIntAsState(
         targetValue = if (showDetails) {
-            20
+            100
         } else {
             3
         },
@@ -159,18 +159,19 @@ private fun CompanyDetails(
                 companyProfileUrl = companyProfileUrl,
                 companyName = companyName,
             )
-            Spacer(modifier = Modifier.height(12.dp))
             Caption(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .padding(
+                        top = 12.dp,
+                        bottom = 14.dp,
+                    )
                     .skeleton(companyIntroduce.isBlank()),
                 text = companyIntroduce,
                 color = JobisColor.Gray700,
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
             )
-            Spacer(modifier = Modifier.height(14.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -189,12 +190,15 @@ private fun CompanyDetails(
                     decoration = TextDecoration.Underline,
                 )
             }
-            Spacer(modifier = Modifier.height(32.dp))
             Divider(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 32.dp,
+                        bottom = 10.dp,
+                    ),
                 color = JobisColor.Gray400,
             )
-            Spacer(modifier = Modifier.height(10.dp))
             Detail(
                 title = stringResource(id = R.string.company_details_representative_name),
                 content = representativeName,

@@ -112,12 +112,14 @@ internal fun RecruitmentDetailsScreen(
                     .verticalScroll(ScrollState(0)),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(48.dp))
                 CompanyInformation(
+                    modifier = Modifier.padding(
+                        top = 48.dp,
+                        bottom = 12.dp,
+                    ),
                     companyName = companyName,
                     companyProfileUrl = companyProfileUrl,
                 )
-                Spacer(modifier = Modifier.height(12.dp))
                 if (companyDetailsButtonVisibility) {
                     JobisLargeButton(
                         text = stringResource(id = R.string.recruitment_details_get_company),
@@ -126,26 +128,28 @@ internal fun RecruitmentDetailsScreen(
                         enabled = companyName.isNotEmpty(),
                     )
                 }
-                Spacer(modifier = Modifier.height(30.dp))
                 Divider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 30.dp,
+                            bottom = 20.dp,
+                        ),
                     color = JobisColor.Gray400,
                 )
-                Spacer(modifier = Modifier.height(20.dp))
                 RecruitmentDetails(
+                    modifier = Modifier.padding(bottom = 80.dp),
                     details = this@with,
                     areas = areas,
                 )
-                Spacer(modifier = Modifier.height(80.dp))
             }
-            Column {
+            Column(modifier = Modifier.padding(bottom = 24.dp)) {
                 JobisLargeButton(
                     text = stringResource(id = R.string.recruitment_details_do_apply),
                     color = JobisButtonColor.MainSolidColor,
                     onClick = onApplyButtonClicked,
                     enabled = companyId != 0L,
                 )
-                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
@@ -153,11 +157,12 @@ internal fun RecruitmentDetailsScreen(
 
 @Composable
 internal fun CompanyInformation(
+    modifier: Modifier = Modifier,
     companyProfileUrl: String,
     companyName: String,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -180,11 +185,12 @@ internal fun CompanyInformation(
 
 @Composable
 private fun RecruitmentDetails(
+    modifier: Modifier = Modifier,
     details: RecruitmentDetailsEntity,
     areas: List<AreasEntity>,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
     ) {
         with(details) {
