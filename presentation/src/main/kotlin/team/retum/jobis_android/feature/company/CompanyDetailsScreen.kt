@@ -172,24 +172,21 @@ private fun CompanyDetails(
                 maxLines = maxLines,
                 overflow = TextOverflow.Ellipsis,
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Caption(
-                    modifier = Modifier.jobisClickable {
+            Caption(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .jobisClickable {
                         showDetails = !showDetails
                     },
-                    text = if (showDetails) {
-                        stringResource(id = R.string.recruitment_details_show_simply)
-                    } else {
-                        stringResource(id = R.string.recruitment_details_show_detail)
-                    },
-                    color = JobisColor.Gray600,
-                    overflow = TextOverflow.Ellipsis,
-                    decoration = TextDecoration.Underline,
-                )
-            }
+                text = if (showDetails) {
+                    stringResource(id = R.string.recruitment_details_show_simply)
+                } else {
+                    stringResource(id = R.string.recruitment_details_show_detail)
+                },
+                color = JobisColor.Gray600,
+                overflow = TextOverflow.Ellipsis,
+                decoration = TextDecoration.Underline,
+            )
             Divider(
                 modifier = Modifier
                     .fillMaxWidth()
