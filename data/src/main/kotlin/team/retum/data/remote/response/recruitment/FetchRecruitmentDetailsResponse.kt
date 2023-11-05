@@ -12,17 +12,17 @@ data class FetchRecruitmentDetailsResponse(
     @SerializedName("company_name") val companyName: String,
     @SerializedName("company_profile_url") val companyProfileUrl: String,
     @SerializedName("end_date") val endDate: String,
+    @SerializedName("end_time") val endTime: String,
     @SerializedName("etc") val etc: String?,
     @SerializedName("hiring_progress") val hiringProgress: List<HiringProgress>,
     @SerializedName("military") val military: Boolean,
     @SerializedName("pay") val pay: Long?,
-    @SerializedName("preferential_treatment") val preferentialTreatment: String?,
     @SerializedName("required_grade") val requiredGrade: Long?,
     @SerializedName("required_licenses") val requiredLicenses: List<String>?,
     @SerializedName("start_date") val startDate: String,
+    @SerializedName("start_time") val startTime: String,
     @SerializedName("submit_document") val submitDocument: String,
     @SerializedName("train_pay") val trainPay: Long,
-    @SerializedName("work_hours") val workHours: Long,
 )
 
 data class Areas(
@@ -31,6 +31,7 @@ data class Areas(
     @SerializedName("job") val job: List<String>,
     @SerializedName("major_task") val majorTask: String,
     @SerializedName("tech") val tech: List<String>,
+    @SerializedName("preferential_treatment") val preferentialTreatment: String?,
 )
 
 fun FetchRecruitmentDetailsResponse.toEntity() = RecruitmentDetailsEntity(
@@ -40,17 +41,17 @@ fun FetchRecruitmentDetailsResponse.toEntity() = RecruitmentDetailsEntity(
     companyName = this.companyName,
     companyProfileUrl = this.companyProfileUrl,
     endDate = this.endDate,
+    endTime = this.endTime,
     etc = this.etc,
     hiringProgress = this.hiringProgress,
     military = this.military,
     pay = this.pay,
-    preferentialTreatment = this.preferentialTreatment,
     requiredGrade = this.requiredGrade,
     requiredLicenses = this.requiredLicenses,
     startDate = this.startDate,
+    startTime = this.startTime,
     submitDocument = this.submitDocument,
     trainPay = this.trainPay,
-    workHours = this.workHours,
 )
 
 private fun Areas.toEntity() = AreasEntity(
@@ -59,4 +60,5 @@ private fun Areas.toEntity() = AreasEntity(
     job = this.job,
     majorTask = this.majorTask,
     tech = this.tech,
+    preferentialTreatment = this.preferentialTreatment,
 )
