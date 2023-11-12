@@ -136,15 +136,17 @@ internal fun RecruitmentApplicationDialog(
         }
     }
 
-    val addFile = { uri: Uri ->
-        fileViewModel.addFile(
-            FileUtil.toFile(
-                context = context,
-                uri = uri,
-            ),
-        )
-        fileCount += 1
-        applicationViewModel.setButtonState(fileCount > 0)
+    val addFile = { uri: Uri? ->
+        uri?.run {
+            fileViewModel.addFile(
+                FileUtil.toFile(
+                    context = context,
+                    uri = uri,
+                ),
+            )
+            fileCount += 1
+            applicationViewModel.setButtonState(fileCount > 0)
+        }
     }
 
     val onAddFile: (ActivityResult) -> Unit = { result: ActivityResult ->
