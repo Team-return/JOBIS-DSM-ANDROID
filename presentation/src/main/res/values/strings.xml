@@ -72,7 +72,6 @@
 
     <string name="sign_up_account_conflict">이미 존재하는 계정입니다</string>
 
-
     <!--    Home-->
     <string name="home_do_get_recruitment">모집의뢰서\n조회하기</string>
     <string name="home_do_get_company">기업 찾기</string>
@@ -96,7 +95,7 @@
     <string name="recruitment_details_required_grade">필수성적</string>
     <string name="recruitment_details_worker_time">근무시간</string>
     <string name="recruitment_details_train_pay">실습수당</string>
-    <string name="recruitment_details_pay">연봉</string>
+    <string name="recruitment_details_pay">정규직 전환시</string>
     <string name="recruitment_details_benefits">복리후생</string>
     <string name="recruitment_details_hiring_progress">채용절차</string>
     <string name="recruitment_details_required_documents">제출서류</string>
