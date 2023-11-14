@@ -224,10 +224,10 @@ private fun CompanyDetails(
                 title = stringResource(id = R.string.company_details_address1),
                 content = mainAddress,
             )
-            subAddress?.run {
+            if (!subAddress.isNullOrBlank()) {
                 Detail(
                     title = stringResource(id = R.string.company_details_address2),
-                    content = this,
+                    content = subAddress ?: "",
                 )
             }
             Detail(
@@ -238,16 +238,16 @@ private fun CompanyDetails(
                 title = stringResource(id = R.string.company_details_phone_number1),
                 content = managerPhoneNo.toPhoneNumber(),
             )
-            subManagerName?.run {
+            if (!subManagerName.isNullOrBlank()) {
                 Detail(
                     title = stringResource(id = R.string.company_details_manager2),
-                    content = this,
+                    content = subManagerName ?: "",
                 )
             }
-            subManagerPhoneNo?.run {
+            if (!subManagerPhoneNo.isNullOrBlank()) {
                 Detail(
                     title = stringResource(id = R.string.company_details_phone_number2),
-                    content = this,
+                    content = subManagerPhoneNo ?: "",
                 )
             }
             Detail(
