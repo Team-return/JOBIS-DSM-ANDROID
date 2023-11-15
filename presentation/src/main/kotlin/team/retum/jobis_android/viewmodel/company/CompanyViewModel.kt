@@ -201,6 +201,10 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
+    internal fun resetPage() = intent{
+        reduce { state.copy(page = 1) }
+    }
+
     private fun setReviewableCompanies(reviewableCompanies: List<ReviewableCompanyEntity>) =
         intent {
             reduce {

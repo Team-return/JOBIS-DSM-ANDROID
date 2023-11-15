@@ -71,6 +71,7 @@ fun CompaniesScreen(
     }
 
     LaunchedEffect(Unit) {
+        companyViewModel.resetPage()
         companyViewModel.addCompaniesDummy()
     }
 
