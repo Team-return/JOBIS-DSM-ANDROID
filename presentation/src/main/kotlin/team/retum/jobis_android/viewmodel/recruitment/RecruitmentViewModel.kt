@@ -31,11 +31,6 @@ internal class RecruitmentViewModel @Inject constructor(
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
-    init {
-        fetchRecruitments()
-        fetchRecruitmentCount()
-    }
-
     private val _recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf()
 
     internal fun addRecruitmentsDummy() = intent {
@@ -235,6 +230,12 @@ internal class RecruitmentViewModel @Inject constructor(
                 recruitments = _recruitments,
                 page = 1,
             )
+        }
+    }
+
+    internal fun resetPage() = intent{
+        reduce {
+            state.copy(page = 1)
         }
     }
 }

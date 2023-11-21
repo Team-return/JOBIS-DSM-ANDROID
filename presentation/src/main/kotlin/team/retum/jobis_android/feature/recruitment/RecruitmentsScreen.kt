@@ -73,6 +73,14 @@ internal fun RecruitmentsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(Unit) {
+        with(recruitmentViewModel){
+            resetPage()
+            fetchRecruitments()
+            fetchRecruitmentCount()
+        }
+    }
+
     val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
