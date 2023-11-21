@@ -88,7 +88,6 @@ internal fun RecruitmentApplicationDialog(
                         fileUrls = it.fileUrls,
                         urls = urls,
                     )
-                    applicationViewModel.applyCompany()
                 }
 
                 is FileSideEffect.FileLargeException -> {
@@ -128,7 +127,7 @@ internal fun RecruitmentApplicationDialog(
     val coroutineScope = rememberCoroutineScope()
 
     val onClickConfirmButton: () -> Unit = {
-        fileViewModel.uploadFile()
+        applicationViewModel.applyCompany()
         applicationViewModel.setButtonState(buttonState = false)
         coroutineScope.launch {
             delay(3000)
@@ -144,7 +143,6 @@ internal fun RecruitmentApplicationDialog(
                     uri = uri,
                 ),
             )
-            fileCount += 1
             applicationViewModel.setButtonState(fileCount > 0)
         }
     }
@@ -159,11 +157,14 @@ internal fun RecruitmentApplicationDialog(
                     uri = item.uri
                 }
                 addFile(uri)
+                fileCount += 1
             }
         } else {
             uri = result.data?.data
+            fileCount += 1
             addFile(uri)
         }
+        fileViewModel.uploadFile()
     }
 
     val onRemoveFile = { index: Int ->
