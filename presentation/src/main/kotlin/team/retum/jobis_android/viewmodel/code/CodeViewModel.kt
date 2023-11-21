@@ -1,5 +1,6 @@
 package team.retum.jobis_android.viewmodel.code
 
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +66,7 @@ internal class CodeViewModel @Inject constructor(
         techs: MutableList<CodeEntity>,
     ) = intent {
         reduce {
-            state.copy(techs = techs)
+            state.copy(techs = techs.toMutableStateList())
         }
     }
 

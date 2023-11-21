@@ -13,7 +13,7 @@ data class RecruitmentDetailsEntity(
     val etc: String?,
     val hiringProgress: List<HiringProgress>,
     val military: Boolean,
-    val pay: Long?,
+    val pay: String?,
     val requiredGrade: Long?,
     val requiredLicenses: List<String>?,
     val startDate: String,
