@@ -16,7 +16,7 @@ data class FetchRecruitmentDetailsResponse(
     @SerializedName("etc") val etc: String?,
     @SerializedName("hiring_progress") val hiringProgress: List<HiringProgress>,
     @SerializedName("military") val military: Boolean,
-    @SerializedName("pay") val pay: Long?,
+    @SerializedName("pay") val pay: String?,
     @SerializedName("required_grade") val requiredGrade: Long?,
     @SerializedName("required_licenses") val requiredLicenses: List<String>?,
     @SerializedName("start_date") val startDate: String,

@@ -224,10 +224,12 @@ private fun RecruitmentDetails(
                 title = stringResource(id = R.string.recruitment_details_train_pay),
                 content = if (trainPay != 0L) "${trainPay}만원/월" else "",
             )
-            Detail(
-                title = stringResource(id = R.string.recruitment_details_pay),
-                content = if (pay != 0L) "${pay}만원/년" else "",
-            )
+            if (!pay.isNullOrBlank()) {
+                Detail(
+                    title = stringResource(id = R.string.recruitment_details_pay),
+                    content = "${pay}만원/년",
+                )
+            }
             if (!benefits.isNullOrEmpty()) {
                 Detail(
                     title = stringResource(id = R.string.recruitment_details_benefits),
