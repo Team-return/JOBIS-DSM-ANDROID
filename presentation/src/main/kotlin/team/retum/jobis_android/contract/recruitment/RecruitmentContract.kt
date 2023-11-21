@@ -25,7 +25,7 @@ data class RecruitmentState(
         etc = null,
         hiringProgress = emptyList(),
         military = false,
-        pay = 0,
+        pay = "",
         requiredGrade = null,
         requiredLicenses = null,
         startDate = "",
