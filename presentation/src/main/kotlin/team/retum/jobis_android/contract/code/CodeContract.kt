@@ -9,7 +9,7 @@ import team.retum.jobis_android.util.mvi.State
 
 data class CodeState(
     val jobs: List<CodeEntity> = emptyList(),
-    val techs: MutableList<CodeEntity> = mutableListOf(),
+    val techs: SnapshotStateList<CodeEntity> = mutableStateListOf(),
     val businessAreas: List<CodeEntity> = emptyList(),
     val selectedTechs: SnapshotStateList<Pair<Long, String>> = mutableStateListOf(),
     val keyword: String? = null,
