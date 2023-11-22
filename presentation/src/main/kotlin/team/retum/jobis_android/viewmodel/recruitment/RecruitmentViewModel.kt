@@ -2,6 +2,7 @@ package team.retum.jobis_android.viewmodel.recruitment
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -218,7 +219,7 @@ internal class RecruitmentViewModel @Inject constructor(
     ) = intent {
         _recruitments.addAll(recruitments)
         reduce {
-            state.copy(recruitments = _recruitments)
+            state.copy(recruitments = _recruitments.toMutableStateList())
         }
     }
 

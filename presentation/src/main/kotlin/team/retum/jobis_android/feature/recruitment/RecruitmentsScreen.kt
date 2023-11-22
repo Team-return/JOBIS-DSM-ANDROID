@@ -293,7 +293,6 @@ private fun Recruitments(
     } else {
         checkRecruitment(true)
     }
-    checkRecruitment(false)
 }
 
 @Composable
