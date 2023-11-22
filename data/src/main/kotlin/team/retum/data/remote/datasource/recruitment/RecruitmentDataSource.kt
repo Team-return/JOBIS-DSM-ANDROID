@@ -10,6 +10,7 @@ interface RecruitmentDataSource {
         jobCode: Long?,
         techCode: String?,
         name: String?,
+        winterIntern: Boolean,
     ): RecruitmentsResponse
 
     suspend fun fetchRecruitmentDetails(recruitmentId: Long): FetchRecruitmentDetailsResponse

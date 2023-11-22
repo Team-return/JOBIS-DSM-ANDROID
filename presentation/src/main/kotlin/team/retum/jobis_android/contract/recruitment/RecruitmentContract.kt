@@ -13,6 +13,7 @@ data class RecruitmentState(
     var jobCode: Long? = null,
     var techCode: String? = null,
     var name: String? = null,
+    val winterIntern: Boolean = false,
     var recruitmentId: Long = 0L,
     var details: RecruitmentDetailsEntity = RecruitmentDetailsEntity(
         areas = emptyList(),

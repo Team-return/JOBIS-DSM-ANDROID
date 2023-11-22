@@ -5,4 +5,5 @@ data class FetchRecruitmentsParam(
     val name: String?,
     val jobCode: Long?,
     val techCode: String?,
+    val winterIntern: Boolean,
 )
