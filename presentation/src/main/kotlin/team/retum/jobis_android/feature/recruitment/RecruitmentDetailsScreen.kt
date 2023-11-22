@@ -222,7 +222,7 @@ private fun RecruitmentDetails(
             )
             Detail(
                 title = stringResource(id = R.string.recruitment_details_train_pay),
-                content = if (trainPay != 0L) "${trainPay}만원/월" else "",
+                content = if (trainPay != 0L) "${trainPay}원/월" else "",
             )
             if (!pay.isNullOrBlank()) {
                 Detail(

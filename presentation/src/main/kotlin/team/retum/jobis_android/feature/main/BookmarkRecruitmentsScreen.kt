@@ -58,7 +58,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 @Composable
 internal fun BookmarkRecruitmentsScreen(
     navigateToRecruitmentDetails: (Long) -> Unit,
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -119,7 +119,7 @@ internal fun BookmarkRecruitmentsScreen(
 
 @Composable
 private fun BookmarkNotExistText(
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     bookmarkNotExistTextAlpha: Float,
 ) {
     Column(
@@ -133,11 +133,29 @@ private fun BookmarkNotExistText(
         Body1(text = stringResource(id = R.string.bookmarked_not_exist))
         Spacer(modifier = Modifier.height(10.dp))
         Row(
-            modifier = Modifier.jobisClickable(onClick = navigateToRecruitments),
+            modifier = Modifier.jobisClickable(onClick = { navigateToRecruitments(false) }),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Caption(
                 text = stringResource(id = R.string.bookmarked_get_recruitments),
+                color = JobisColor.Gray600,
+            )
+            Image(
+                modifier = Modifier
+                    .size(14.dp)
+                    .padding(top = 2.dp),
+                painter = painterResource(JobisIcon.RightArrow),
+                contentDescription = null,
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .jobisClickable(onClick = { navigateToRecruitments(true) }),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Caption(
+                text = stringResource(id = R.string.bookmarked_get_winter_interns),
                 color = JobisColor.Gray600,
             )
             Image(

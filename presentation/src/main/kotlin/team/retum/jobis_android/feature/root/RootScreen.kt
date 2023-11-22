@@ -20,7 +20,7 @@ import team.retum.jobis_android.util.compose.navigation.BottomBar
 
 @Composable
 fun RootScreen(
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
     navigateToSignInPopUpWithMain: () -> Unit,

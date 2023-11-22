@@ -28,7 +28,7 @@ object AuthDestinations {
 }
 
 object MainDestinations {
-    const val Recruitments = "recruitments"
+    const val Recruitments = "recruitments/"
     const val RecruitmentDetails = "recruitmentDetails/"
     const val Companies = "companies"
     const val CompanyDetails = "companyDetails/"
