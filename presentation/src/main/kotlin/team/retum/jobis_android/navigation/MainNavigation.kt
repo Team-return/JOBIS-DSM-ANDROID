@@ -28,16 +28,24 @@ internal fun NavGraphBuilder.mainNavigation(
 ) {
     navigation(
         route = NavigationRoute.Main,
-        startDestination = MainDestinations.Recruitments,
+        startDestination = MainDestinations.Recruitments.plus(NavigationProperties.IS_WINTER_INTERN.toNavigationRoute()),
     ) {
         baseComposable(
-            route = MainDestinations.Recruitments,
+            route = MainDestinations.Recruitments.plus(NavigationProperties.IS_WINTER_INTERN.toNavigationRoute()),
+            arguments = listOf(
+                getArgument(
+                    name = NavigationProperties.IS_WINTER_INTERN,
+                    type = NavType.BoolType,
+                )
+            ),
             exitTransition = slideOutLeft(),
             popEnterTransition = slideInRight(),
             popExitTransition = fadeOut(tween(300)),
         ) {
             RecruitmentsScreen(
                 putString = putString,
+                isWinterIntern = it.arguments?.getBoolean(NavigationProperties.IS_WINTER_INTERN)
+                    ?: false,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
             )
         }
