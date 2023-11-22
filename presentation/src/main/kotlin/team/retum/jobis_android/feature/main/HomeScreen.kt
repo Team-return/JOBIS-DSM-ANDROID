@@ -340,7 +340,6 @@ private fun ApplyCompany(
             .fillMaxWidth()
             .height(68.dp)
             .clip(shape = ApplyCompaniesItemShape)
-            .clip(shape = ApplyCompaniesItemShape)
             .border(
                 width = 1.dp,
                 color = JobisColor.Gray400,

@@ -148,9 +148,10 @@ private fun BookmarkNotExistText(
                 contentDescription = null,
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.jobisClickable(onClick = { navigateToRecruitments(true) }),
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .jobisClickable(onClick = { navigateToRecruitments(true) }),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Caption(
