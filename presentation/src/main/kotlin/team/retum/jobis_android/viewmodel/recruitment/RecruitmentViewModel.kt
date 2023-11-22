@@ -2,6 +2,7 @@ package team.retum.jobis_android.viewmodel.recruitment
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -74,24 +75,27 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun fetchRecruitments() = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            fetchRecruitmentsUseCase(
-                fetchRecruitmentsParam = FetchRecruitmentsParam(
-                    page = state.page,
-                    jobCode = state.jobCode,
-                    techCode = state.techCode,
-                    name = state.name,
-                ),
-            ).onSuccess { it ->
-                clearRecruitmentsDummy()
-                setRecruitments(it.recruitmentEntities.map { it.toModel() })
-            }.onFailure { throwable ->
-                postSideEffect(
-                    sideEffect = RecruitmentSideEffect.Exception(
-                        message = getStringFromException(
-                            throwable = throwable,
-                        ),
+            with(state) {
+                fetchRecruitmentsUseCase(
+                    fetchRecruitmentsParam = FetchRecruitmentsParam(
+                        page = page,
+                        jobCode = jobCode,
+                        techCode = techCode,
+                        name = name,
+                        winterIntern = isWinterIntern,
                     ),
-                )
+                ).onSuccess { it ->
+                    clearRecruitmentsDummy()
+                    setRecruitments(it.recruitmentEntities.map { it.toModel() })
+                }.onFailure { throwable ->
+                    postSideEffect(
+                        sideEffect = RecruitmentSideEffect.Exception(
+                            message = getStringFromException(
+                                throwable = throwable,
+                            ),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -114,15 +118,18 @@ internal class RecruitmentViewModel @Inject constructor(
 
     internal fun fetchRecruitmentCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            fetchRecruitmentCountUseCase(
-                fetchRecruitmentsParam = FetchRecruitmentsParam(
-                    page = state.page,
-                    name = state.name,
-                    jobCode = state.jobCode,
-                    techCode = state.techCode,
-                ),
-            ).onSuccess {
-                setRecruitmentCount(it.totalPageCount)
+            with(state) {
+                fetchRecruitmentCountUseCase(
+                    fetchRecruitmentsParam = FetchRecruitmentsParam(
+                        page = page,
+                        name = name,
+                        jobCode = jobCode,
+                        techCode = techCode,
+                        winterIntern = isWinterIntern,
+                    ),
+                ).onSuccess {
+                    setRecruitmentCount(it.totalPageCount)
+                }
             }
         }
     }
@@ -212,7 +219,7 @@ internal class RecruitmentViewModel @Inject constructor(
     ) = intent {
         _recruitments.addAll(recruitments)
         reduce {
-            state.copy(recruitments = _recruitments)
+            state.copy(recruitments = _recruitments.toMutableStateList())
         }
     }
 
@@ -233,9 +240,15 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 
-    internal fun resetPage() = intent{
+    internal fun resetPage() = intent {
         reduce {
             state.copy(page = 1)
+        }
+    }
+
+    internal fun setIsWinterIntern(isWinterIntern: Boolean) = intent {
+        reduce {
+            state.copy(isWinterIntern = isWinterIntern)
         }
     }
 }

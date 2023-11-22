@@ -8,8 +8,8 @@ object ProjectProperties {
     const val COMPILE_SDK = 33
     const val MIN_SDK = 24
 
-    const val VERSION_CODE = 15
-    const val VERSION_NAME = "1.0.6"
+    const val VERSION_CODE = 16
+    const val VERSION_NAME = "1.1.0"
 
     const val TEST_RUNNER = "androidx.test.runner.AndroidJUnitRunner"
 

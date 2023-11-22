@@ -139,7 +139,7 @@ private fun CompanyInput(
             color = JobisTextFieldColor.MainColor,
             onValueChanged = onCompanyNameChanged,
             value = companyName ?: "",
-            hint = stringResource(id = R.string.search_recruitment_filter_hint),
+            hint = stringResource(id = R.string.recruitments_filter_hint),
         )
     }
 }

@@ -1,16 +1,16 @@
 package team.retum.jobis_android.feature.main
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,7 +72,7 @@ private val recruitmentStatusShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navigateToMyPage: () -> Unit,
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToNotifications: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -130,9 +133,25 @@ internal fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(26.dp))
                 MenuCardGroup(
-                    onRecruitmentsMenuClicked = navigateToRecruitments,
-                    onCompaniesMenuClicked = navigateToCompanies,
-                )
+                    menus = listOf(
+                        Menu(
+                            stringRes = R.string.home_do_get_recruitment,
+                            drawableRes = R.drawable.ic_get_recruitment,
+                            onClick = { navigateToRecruitments(false) },
+                        ),
+                        Menu(
+                            stringRes = R.string.home_do_get_company,
+                            drawableRes = R.drawable.ic_get_company,
+                            onClick = navigateToCompanies,
+                        ),
+                        Menu(
+                            stringRes = R.string.home_do_get_winter_intern,
+                            drawableRes = R.drawable.ic_gift,
+                            onClick = { navigateToRecruitments(true) },
+                        )
+                    ),
+
+                    )
                 Spacer(modifier = Modifier.height(48.dp))
             }
         }
@@ -357,34 +376,26 @@ private fun ApplyCompany(
     }
 }
 
+data class Menu(
+    @StringRes val stringRes: Int,
+    @DrawableRes val drawableRes: Int,
+    val onClick: () -> Unit,
+)
+
 @Composable
 private fun MenuCardGroup(
-    onRecruitmentsMenuClicked: () -> Unit,
-    onCompaniesMenuClicked: () -> Unit,
+    menus: List<Menu>,
 ) {
-    Row(
-        modifier = Modifier.padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.Center,
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(horizontal = 24.dp),
     ) {
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
+        items(menus) {
             MenuCard(
-                text = stringResource(id = R.string.home_do_get_recruitment),
-                drawable = R.drawable.ic_get_recruitment,
-                onClick = onRecruitmentsMenuClicked,
-            )
-        }
-        Spacer(modifier = Modifier.width(10.dp))
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            MenuCard(
-                text = stringResource(id = R.string.home_do_get_company),
-                drawable = R.drawable.ic_get_company,
-                onClick = onCompaniesMenuClicked,
+                text = stringResource(id = it.stringRes),
+                drawable = painterResource(id = it.drawableRes),
+                onClick = it.onClick,
             )
         }
     }
@@ -393,29 +404,30 @@ private fun MenuCardGroup(
 @Composable
 private fun MenuCard(
     text: String,
-    @DrawableRes drawable: Int,
+    drawable: Painter,
     onClick: () -> Unit,
 ) {
     val interactionSource = MutableInteractionSource()
 
     Column(
         modifier = Modifier
-            .aspectRatio(0.8f)
             .clip(shape = JobisSize.Shape.Large)
-            .background(
-                color = JobisColor.Gray100,
-            )
+            .height(180.dp)
+            .background(color = JobisColor.Gray100)
             .jobisClickable(
                 rippleEnabled = true,
                 interactionSource = interactionSource,
                 onClick = onClick,
             )
-            .padding(16.dp),
+            .padding(
+                vertical = 16.dp,
+                horizontal = 22.dp,
+            ),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Body1(text = text)
         Image(
-            painter = painterResource(id = drawable),
+            painter = drawable,
             contentDescription = null,
         )
     }

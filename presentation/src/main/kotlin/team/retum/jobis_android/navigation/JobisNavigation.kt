@@ -46,8 +46,8 @@ internal fun NavHostController.navigateToMyPage() {
     this.navigate(NavigationRoute.BottomNavigation.MyPage)
 }
 
-internal fun NavHostController.navigateToRecruitments() {
-    this.navigate(MainDestinations.Recruitments)
+internal fun NavHostController.navigateToRecruitments(isWinterInter: Boolean) {
+    this.navigate(MainDestinations.Recruitments.plus(isWinterInter))
 }
 
 internal fun NavHostController.navigateToCompanies() {

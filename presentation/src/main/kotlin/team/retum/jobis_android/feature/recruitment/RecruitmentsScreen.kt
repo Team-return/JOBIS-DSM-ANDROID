@@ -70,11 +70,13 @@ import java.text.DecimalFormat
 internal fun RecruitmentsScreen(
     putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
+    isWinterIntern: Boolean,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
-        with(recruitmentViewModel){
+        recruitmentViewModel.setIsWinterIntern(isWinterIntern)
+        with(recruitmentViewModel) {
             resetPage()
             fetchRecruitments()
             fetchRecruitmentCount()
@@ -142,7 +144,10 @@ internal fun RecruitmentsScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Header(text = stringResource(id = R.string.search_recruitment_header))
+            Header(
+                text = if (!isWinterIntern) stringResource(id = R.string.recruitments_header)
+                else stringResource(id = R.string.recruitments_winter_interns)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             RecruitmentInput(
                 name = state.name,
@@ -185,7 +190,7 @@ private fun ColumnScope.RecruitmentInput(
                 color = JobisTextFieldColor.MainColor,
                 onValueChanged = onKeywordChanged,
                 value = name ?: "",
-                hint = stringResource(id = R.string.search_recruitment_filter_hint),
+                hint = stringResource(id = R.string.recruitments_filter_hint),
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
@@ -269,7 +274,7 @@ private fun Recruitments(
                     companyName = recruitment.companyName,
                     trainPay = if (recruitment.trainPay != 0L) {
                         stringResource(
-                            id = R.string.search_recruitment_train_pay,
+                            id = R.string.recruitments_train_pay,
                             trainPay,
                         )
                     } else {
@@ -283,7 +288,7 @@ private fun Recruitments(
                         }
                     },
                 )
-                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
+                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount && recruitmentCount != 1L) {
                     checkRecruitment(true)
                 }
             }
