@@ -31,7 +31,7 @@ import team.returm.jobisdesignsystem.theme.Body3
 @Composable
 internal fun MenuScreen(
     navigateToMyPage: () -> Unit,
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToBookmarkRecruitments: () -> Unit,
 ) {
@@ -64,13 +64,13 @@ internal fun MenuScreen(
             Menu(
                 drawableRes = R.drawable.ic_fetch_recruitments,
                 content = stringResource(id = R.string.fetch_recruitments),
-                onClick = navigateToRecruitments,
+                onClick = { navigateToRecruitments(true) },
             )
             Spacer(modifier = Modifier.height(20.dp))
             Menu(
                 drawableRes = R.drawable.ic_gift,
                 content = stringResource(id = R.string.home_do_get_winter_intern),
-                onClick = navigateToRecruitments,
+                onClick = { navigateToRecruitments(true) },
             )
             Spacer(modifier = Modifier.height(20.dp))
             Menu(

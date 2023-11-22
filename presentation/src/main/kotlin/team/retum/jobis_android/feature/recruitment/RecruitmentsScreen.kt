@@ -70,11 +70,13 @@ import java.text.DecimalFormat
 internal fun RecruitmentsScreen(
     putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
+    isWinterIntern: Boolean,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
-        with(recruitmentViewModel){
+        recruitmentViewModel.setIsWinterIntern(isWinterIntern)
+        with(recruitmentViewModel) {
             resetPage()
             fetchRecruitments()
             fetchRecruitmentCount()

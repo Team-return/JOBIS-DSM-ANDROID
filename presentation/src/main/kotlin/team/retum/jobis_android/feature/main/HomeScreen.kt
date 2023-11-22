@@ -72,7 +72,7 @@ private val recruitmentStatusShape = RoundedCornerShape(
 @Composable
 internal fun HomeScreen(
     navigateToMyPage: () -> Unit,
-    navigateToRecruitments: () -> Unit,
+    navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     navigateToCompanies: () -> Unit,
     navigateToNotifications: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -137,7 +137,7 @@ internal fun HomeScreen(
                         Menu(
                             stringRes = R.string.home_do_get_recruitment,
                             drawableRes = R.drawable.ic_get_recruitment,
-                            onClick = navigateToRecruitments,
+                            onClick = { navigateToRecruitments(false) },
                         ),
                         Menu(
                             stringRes = R.string.home_do_get_company,
@@ -147,7 +147,7 @@ internal fun HomeScreen(
                         Menu(
                             stringRes = R.string.home_do_get_winter_intern,
                             drawableRes = R.drawable.ic_gift,
-                            onClick = navigateToRecruitments,
+                            onClick = { navigateToRecruitments(true) },
                         )
                     ),
 

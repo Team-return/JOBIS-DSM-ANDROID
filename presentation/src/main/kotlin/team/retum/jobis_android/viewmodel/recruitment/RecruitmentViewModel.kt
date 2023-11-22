@@ -81,7 +81,7 @@ internal class RecruitmentViewModel @Inject constructor(
                         jobCode = jobCode,
                         techCode = techCode,
                         name = name,
-                        winterIntern = winterIntern,
+                        winterIntern = isWinterIntern,
                     ),
                 ).onSuccess { it ->
                     clearRecruitmentsDummy()
@@ -124,7 +124,7 @@ internal class RecruitmentViewModel @Inject constructor(
                         name = name,
                         jobCode = jobCode,
                         techCode = techCode,
-                        winterIntern = winterIntern
+                        winterIntern = isWinterIntern
                     ),
                 ).onSuccess {
                     setRecruitmentCount(it.totalPageCount)
@@ -242,6 +242,12 @@ internal class RecruitmentViewModel @Inject constructor(
     internal fun resetPage() = intent {
         reduce {
             state.copy(page = 1)
+        }
+    }
+
+    internal fun setIsWinterIntern(isWinterIntern: Boolean) = intent {
+        reduce {
+            state.copy(isWinterIntern = isWinterIntern)
         }
     }
 }
