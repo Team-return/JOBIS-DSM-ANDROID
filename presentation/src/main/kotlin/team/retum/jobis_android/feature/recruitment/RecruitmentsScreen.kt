@@ -144,7 +144,10 @@ internal fun RecruitmentsScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Header(text = stringResource(id = R.string.search_recruitment_header))
+            Header(
+                text = if (!isWinterIntern) stringResource(id = R.string.recruitments_header)
+                else stringResource(id = R.string.recruitments_winter_interns)
+            )
             Spacer(modifier = Modifier.height(12.dp))
             RecruitmentInput(
                 name = state.name,
@@ -187,7 +190,7 @@ private fun ColumnScope.RecruitmentInput(
                 color = JobisTextFieldColor.MainColor,
                 onValueChanged = onKeywordChanged,
                 value = name ?: "",
-                hint = stringResource(id = R.string.search_recruitment_filter_hint),
+                hint = stringResource(id = R.string.recruitments_filter_hint),
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
@@ -271,7 +274,7 @@ private fun Recruitments(
                     companyName = recruitment.companyName,
                     trainPay = if (recruitment.trainPay != 0L) {
                         stringResource(
-                            id = R.string.search_recruitment_train_pay,
+                            id = R.string.recruitments_train_pay,
                             trainPay,
                         )
                     } else {
@@ -293,6 +296,7 @@ private fun Recruitments(
     } else {
         checkRecruitment(true)
     }
+    checkRecruitment(false)
 }
 
 @Composable

@@ -82,10 +82,11 @@
     <string name="home_no_apply_companies">아직 지원한 기업이 없어요</string>
     <string name="home_do_get_winter_intern">겨울인턴</string>
 
-    <!--    Search Recruitment-->
-    <string name="search_recruitment_header">모집의뢰서 조회하기</string>
-    <string name="search_recruitment_train_pay">실습 수당 %s만 원</string>
-    <string name="search_recruitment_filter_hint">회사검색</string>
+    <!--Recruitments Screen-->
+    <string name="recruitments_header">모집의뢰서 조회하기</string>
+    <string name="recruitments_winter_interns">겨울인턴 조회하기</string>
+    <string name="recruitments_train_pay">실습 수당 %s만 원</string>
+    <string name="recruitments_filter_hint">회사검색</string>
 
     <!--    Recruitment Details-->
     <string name="recruitment_details_get_company">기업보기</string>
@@ -154,6 +155,7 @@
     <string name="bookmarked_date">북마크한 날짜 : %s</string>
     <string name="bookmarked_not_exist">아직 북마크한 모집의뢰서가 없어요</string>
     <string name="bookmarked_get_recruitments">모집의뢰서 보러가기</string>
+    <string name="bookmarked_get_winter_interns">겨울인턴 보러가기</string>
     <string name="bookmark_remove">삭제</string>
     <string name="bookmark_recruitment_details">상세보기</string>
 

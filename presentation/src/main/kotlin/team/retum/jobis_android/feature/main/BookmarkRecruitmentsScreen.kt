@@ -148,6 +148,23 @@ private fun BookmarkNotExistText(
                 contentDescription = null,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.jobisClickable(onClick = { navigateToRecruitments(true) }),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Caption(
+                text = stringResource(id = R.string.bookmarked_get_winter_interns),
+                color = JobisColor.Gray600,
+            )
+            Image(
+                modifier = Modifier
+                    .size(14.dp)
+                    .padding(top = 2.dp),
+                painter = painterResource(JobisIcon.RightArrow),
+                contentDescription = null,
+            )
+        }
     }
 }
 
