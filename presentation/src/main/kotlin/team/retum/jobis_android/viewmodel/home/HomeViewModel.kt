@@ -1,6 +1,5 @@
 package team.retum.jobis_android.viewmodel.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -42,8 +41,6 @@ internal class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             fetchAppliedCompanyHistoriesUseCase().onSuccess {
                 setAppliedCompanyHistories(appliedCompanyHistories = it)
-            }.onFailure {
-                Log.d("TEST", it.toString())
             }
         }
     }
