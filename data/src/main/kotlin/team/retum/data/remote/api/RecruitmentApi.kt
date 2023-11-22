@@ -28,5 +28,6 @@ interface RecruitmentApi {
         @Query("name") name: String?,
         @Query("job_code") jobCode: Long?,
         @Query("tech_code") techCode: String?,
+        @Query("winter_intern") winterIntern: Boolean,
     ): FetchRecruitmentCountResponse
 }

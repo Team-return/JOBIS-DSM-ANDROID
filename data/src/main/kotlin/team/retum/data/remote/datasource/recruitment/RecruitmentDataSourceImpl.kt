@@ -35,11 +35,13 @@ class RecruitmentDataSourceImpl @Inject constructor(
         name: String?,
         jobCode: Long?,
         techCode: String?,
+        winterIntern: Boolean,
     ): FetchRecruitmentCountResponse = HttpHandler<FetchRecruitmentCountResponse>().httpRequest {
         recruitmentApi.fetchRecruitmentCount(
             name = name,
             jobCode = jobCode,
             techCode = techCode,
+            winterIntern = winterIntern,
         )
     }.sendRequest()
 }

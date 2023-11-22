@@ -19,5 +19,6 @@ interface RecruitmentDataSource {
         name: String?,
         jobCode: Long?,
         techCode: String?,
+        winterIntern: Boolean,
     ): FetchRecruitmentCountResponse
 }

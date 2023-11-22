@@ -288,7 +288,7 @@ private fun Recruitments(
                         }
                     },
                 )
-                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount) {
+                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount && recruitmentCount != 1L) {
                     checkRecruitment(true)
                 }
             }

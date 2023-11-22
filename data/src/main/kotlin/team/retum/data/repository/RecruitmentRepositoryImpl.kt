@@ -31,5 +31,6 @@ class RecruitmentRepositoryImpl @Inject constructor(
         name = fetchRecruitmentsParam.name,
         jobCode = fetchRecruitmentsParam.jobCode,
         techCode = fetchRecruitmentsParam.techCode,
+        winterIntern = fetchRecruitmentsParam.winterIntern,
     ).toEntity()
 }

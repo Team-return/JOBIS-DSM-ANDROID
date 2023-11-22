@@ -125,7 +125,7 @@ internal class RecruitmentViewModel @Inject constructor(
                         name = name,
                         jobCode = jobCode,
                         techCode = techCode,
-                        winterIntern = isWinterIntern
+                        winterIntern = isWinterIntern,
                     ),
                 ).onSuccess {
                     setRecruitmentCount(it.totalPageCount)
