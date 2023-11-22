@@ -68,6 +68,12 @@ internal fun MenuScreen(
             )
             Spacer(modifier = Modifier.height(20.dp))
             Menu(
+                drawableRes = R.drawable.ic_gift,
+                content = stringResource(id = R.string.home_do_get_winter_intern),
+                onClick = navigateToRecruitments,
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Menu(
                 drawableRes = R.drawable.ic_fetch_companies,
                 content = stringResource(id = R.string.fetch_companies),
                 onClick = navigateToCompanies,
