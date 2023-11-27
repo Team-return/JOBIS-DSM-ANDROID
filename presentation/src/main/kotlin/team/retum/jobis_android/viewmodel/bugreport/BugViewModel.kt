@@ -62,14 +62,9 @@ internal class BugViewModel @Inject constructor(
     internal fun setPosition(
         position: String,
     ) = intent {
-        runCatching {
-            reduce {
-                state.copy(selectedPosition = DevelopmentArea.valueOf(position))
-            }
-        }.onFailure {
-            reduce {
-                state.copy(selectedPosition = DevelopmentArea.ALL)
-            }
+        reduce {
+            state.copy(selectedPosition = DevelopmentArea.values().find { it.value == position }
+                ?: DevelopmentArea.ALL)
         }
     }
 

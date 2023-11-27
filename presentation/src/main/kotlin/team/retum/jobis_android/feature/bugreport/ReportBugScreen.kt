@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.contract.bugreport.BugSideEffect
 import team.retum.jobis_android.contract.file.FileSideEffect
@@ -129,11 +130,11 @@ internal fun ReportBugScreen(
     }
 
     val positions = listOf(
-        stringResource(id = R.string.bug_report_all),
-        stringResource(id = R.string.bug_report_server),
-        stringResource(id = R.string.bug_report_ios),
-        stringResource(id = R.string.bug_report_android),
-        stringResource(id = R.string.bug_report_web),
+        DevelopmentArea.ALL.value,
+        DevelopmentArea.SERVER.value,
+        DevelopmentArea.IOS.value,
+        DevelopmentArea.ANDROID.value,
+        DevelopmentArea.WEB.value,
     )
 
     val onItemSelected: (Int) -> Unit = { index: Int ->
@@ -192,7 +193,7 @@ internal fun ReportBugScreen(
                         color = JobisDropDownColor.MainColor,
                         itemList = positions,
                         onItemSelected = onItemSelected,
-                        title = stringResource(id = R.string.bug_report_all),
+                        title = DevelopmentArea.ALL.value,
                     )
                 }
             }
