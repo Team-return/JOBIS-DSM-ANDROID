@@ -87,7 +87,7 @@ internal fun ReportBugScreen(
         fileViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is FileSideEffect.SuccessUploadFile -> {
-                    bugViewModel.reportBug(fileUrls = it.fileUrls)
+                    bugViewModel.addUrl(it.fileUrls.first())
                 }
 
                 is FileSideEffect.FileLargeException -> {
@@ -104,18 +104,18 @@ internal fun ReportBugScreen(
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
-        if (uri != null) {
-            val file = FileUtil.toFile(
-                context = context,
-                uri = uri,
-            )
-            fileViewModel.addFile(file)
-            bugViewModel.addUri(uri)
+        with(fileViewModel) {
+            if (uri != null) {
+                addFile(
+                    FileUtil.toFile(
+                        context = context,
+                        uri = uri,
+                    )
+                )
+                bugViewModel.imageUris.add(uri)
+                uploadFile()
+            }
         }
-    }
-
-    val clearFocus = {
-        focusManager.clearFocus()
     }
 
     val addScreenshot = {
@@ -124,9 +124,11 @@ internal fun ReportBugScreen(
         }
     }
 
-    val removeScreenshot: (Int) -> Unit = { index: Int ->
-        fileViewModel.removeFile(index)
-        bugViewModel.removeUri(index)
+    val removeScreenshot: (index: Int) -> Unit = {
+        with(bugViewModel) {
+            removeUrl(index = it)
+            imageUris.removeAt(it)
+        }
     }
 
     val positions = listOf(
@@ -141,18 +143,10 @@ internal fun ReportBugScreen(
         bugViewModel.setPosition(positions[index])
     }
 
-    val onCompleteButtonClicked: () -> Unit = {
-        if (fileState.urls.isNotEmpty()) {
-            fileViewModel.uploadFile()
-        } else {
-            bugViewModel.reportBug()
-        }
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .jobisClickable(onClick = clearFocus),
+            .jobisClickable(onClick = focusManager::clearFocus),
     ) {
         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
             Spacer(modifier = Modifier.height(48.dp))
@@ -168,16 +162,16 @@ internal fun ReportBugScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
             ScreenShots(
-                uriList = bugState.uris,
+                uriList = bugViewModel.imageUris,
                 addScreenshot = addScreenshot,
                 removeScreenshot = removeScreenshot,
-                screenShotCount = fileState.files.size,
+                screenShotCount = bugViewModel.imageUris.size,
             )
             Spacer(modifier = Modifier.weight(1f))
             JobisLargeButton(
                 text = stringResource(id = R.string.complete),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = onCompleteButtonClicked,
+                onClick = bugViewModel::reportBug,
                 enabled = bugState.reportBugButtonState,
             )
             Spacer(modifier = Modifier.height(44.dp))
