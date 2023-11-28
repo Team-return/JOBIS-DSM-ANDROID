@@ -85,7 +85,10 @@ internal fun RecruitmentsScreen(
 
     val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true,
+    )
 
     val recruitments = state.recruitments
 

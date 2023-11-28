@@ -1,6 +1,8 @@
 package team.retum.jobis_android.viewmodel.bugreport
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +26,10 @@ internal class BugViewModel @Inject constructor(
 
     override val container = container<BugState, BugSideEffect>(BugState())
 
-    internal fun reportBug(fileUrls: List<String>? = null) = intent {
+    private val fileUrls: MutableList<String> = mutableListOf()
+    internal val imageUris: SnapshotStateList<Uri> = mutableStateListOf()
+
+    internal fun reportBug() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reportBugUseCase(
                 ReportBugParam(
@@ -62,39 +67,18 @@ internal class BugViewModel @Inject constructor(
     internal fun setPosition(
         position: String,
     ) = intent {
-        runCatching {
-            reduce {
-                state.copy(selectedPosition = DevelopmentArea.valueOf(position))
-            }
-        }.onFailure {
-            reduce {
-                state.copy(selectedPosition = DevelopmentArea.ALL)
-            }
+        reduce {
+            state.copy(selectedPosition = DevelopmentArea.values().find { it.value == position }
+                ?: DevelopmentArea.ALL)
         }
     }
 
-    internal fun addUri(uri: Uri) = intent {
-        reduce {
-            val uris = mutableListOf<Uri>()
-            uris.run {
-                addAll(state.uris)
-                add(uri)
-            }
-            state.copy(uris = uris)
-        }
-        setReportBugButtonState()
+    internal fun addUrl(url: String) {
+        fileUrls.add(url)
     }
 
-    internal fun removeUri(index: Int) = intent {
-        reduce {
-            val uris = mutableListOf<Uri>()
-            uris.run {
-                addAll(state.uris)
-                removeAt(index)
-            }
-            state.copy(uris = uris)
-        }
-        setReportBugButtonState()
+    internal fun removeUrl(index: Int) {
+        fileUrls.removeAt(index)
     }
 
     private fun setReportBugButtonState(enabled: Boolean = true) = intent {
