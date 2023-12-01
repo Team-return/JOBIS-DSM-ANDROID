@@ -128,7 +128,11 @@ internal fun RecruitmentApplicationDialog(
     val coroutineScope = rememberCoroutineScope()
 
     val onClickConfirmButton: () -> Unit = {
-        applicationViewModel.applyCompany()
+        if (isReApply) {
+            applicationViewModel.reApplyCompany()
+        } else {
+            applicationViewModel.applyCompany()
+        }
         applicationViewModel.setButtonState(buttonState = false)
         coroutineScope.launch {
             delay(3000)
