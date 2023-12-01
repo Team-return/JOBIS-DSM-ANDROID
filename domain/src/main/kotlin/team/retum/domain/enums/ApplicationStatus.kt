@@ -8,4 +8,5 @@ enum class ApplicationStatus(
     FAILED("탈락"),
     PASS("합격"),
     REJECTED("반려"),
+    SEND("전송됨"),
 }
