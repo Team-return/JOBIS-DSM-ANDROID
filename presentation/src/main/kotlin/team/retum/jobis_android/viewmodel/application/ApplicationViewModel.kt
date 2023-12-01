@@ -26,6 +26,8 @@ internal class ApplicationViewModel @Inject constructor(
 
     override val container = container<ApplicationState, ApplicationSideEffect>(ApplicationState())
 
+    private val attachments: MutableList<AttachmentsParam> = mutableListOf()
+
     internal fun applyCompany() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             applyCompanyUseCase(
@@ -59,10 +61,7 @@ internal class ApplicationViewModel @Inject constructor(
 
     internal fun setAttachments(
         fileUrls: List<String>,
-        urls: List<String>,
     ) = intent {
-        val attachments = mutableListOf<AttachmentsParam>()
-
         fileUrls.forEach {
             attachments.add(
                 AttachmentsParam(
@@ -72,18 +71,22 @@ internal class ApplicationViewModel @Inject constructor(
             )
         }
 
+        reduce {
+            state.copy(
+                attachments = attachments,
+            )
+        }
+    }
+
+    internal fun setUrls(
+        urls: List<String>,
+    ) = intent {
         urls.forEach {
             attachments.add(
                 AttachmentsParam(
                     url = it,
                     type = AttachmentDocsType.URL,
                 ),
-            )
-        }
-
-        reduce {
-            state.copy(
-                attachments = attachments,
             )
         }
     }
