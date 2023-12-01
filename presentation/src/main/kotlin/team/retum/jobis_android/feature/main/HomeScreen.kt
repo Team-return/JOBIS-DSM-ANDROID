@@ -28,6 +28,9 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,12 +41,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.enums.Department
+import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.viewmodel.home.HomeViewModel
 import team.retum.jobis_android.viewmodel.mypage.MyPageViewModel
@@ -83,6 +88,18 @@ internal fun HomeScreen(
 
     val studentCounts = homeState.studentCounts
 
+    var showApplicationDialog by remember { mutableStateOf(false) }
+
+    var applicationId: Long? by remember { mutableStateOf(null) }
+
+    if (showApplicationDialog) {
+        Dialog(onDismissRequest = { showApplicationDialog = false }) {
+            RecruitmentApplicationDialog(recruitmentId = applicationId ?: 0L) {
+                showApplicationDialog = false
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -116,7 +133,13 @@ internal fun HomeScreen(
                     color = JobisColor.Gray600,
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                ApplyCompanies(appliedCompanies = homeState.appliedCompanyHistories)
+                ApplyCompanies(
+                    appliedCompanies = homeState.appliedCompanyHistories,
+                    showApplicationDialog = {
+                        applicationId = it
+                        showApplicationDialog = true
+                    }
+                )
             }
             Column(
                 modifier = Modifier
@@ -308,6 +331,7 @@ private fun UserInformation(
 @Composable
 private fun ApplyCompanies(
     appliedCompanies: List<AppliedCompanyEntity>,
+    showApplicationDialog: ((recruitmentId: Long?) -> Unit)?,
 ) {
     if (appliedCompanies.isNotEmpty()) {
         Column(
@@ -318,8 +342,10 @@ private fun ApplyCompanies(
         ) {
             repeat(appliedCompanies.size) { index ->
                 ApplyCompany(
+                    applicationId = appliedCompanies[index].applicationId,
                     company = appliedCompanies[index].company,
                     status = appliedCompanies[index].applicationStatus.status,
+                    showApplicationDialog = showApplicationDialog,
                 )
             }
         }
@@ -331,15 +357,22 @@ private fun ApplyCompanies(
 
 @Composable
 private fun ApplyCompany(
+    applicationId: Long? = null,
     company: String? = null,
     status: String? = null,
     isEmpty: Boolean? = null,
+    showApplicationDialog: ((recruitmentId: Long?) -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(68.dp)
             .clip(shape = ApplyCompaniesItemShape)
+            .jobisClickable(
+                rippleEnabled = true,
+                onClick = { showApplicationDialog?.invoke(applicationId) },
+                enabled = applicationId != null
+            )
             .border(
                 width = 1.dp,
                 color = JobisColor.Gray400,
