@@ -2,6 +2,7 @@ package team.retum.data.remote.api
 
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import team.retum.data.remote.request.application.ApplyCompanyRequest
@@ -19,6 +20,12 @@ interface ApplicationApi {
     @POST(JobisUrl.Application.apply)
     suspend fun applyCompany(
         @Path("recruitment-id") recruitmentId: Long,
+        @Body applyCompanyRequest: ApplyCompanyRequest,
+    )
+
+    @PATCH(JobisUrl.Application.reApply)
+    suspend fun reApplyCompany(
+        @Path("application-id") applicationId: Long,
         @Body applyCompanyRequest: ApplyCompanyRequest,
     )
 }

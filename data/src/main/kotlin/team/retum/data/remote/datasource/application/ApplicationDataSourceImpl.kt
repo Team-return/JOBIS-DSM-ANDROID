@@ -29,4 +29,14 @@ class ApplicationDataSourceImpl @Inject constructor(
             applyCompanyRequest = applyCompanyRequest,
         )
     }.sendRequest()
+
+    override suspend fun reApplyCompany(
+        applicationId: Long,
+        applyCompanyRequest: ApplyCompanyRequest,
+    ) = HttpHandler<Unit>().httpRequest {
+        applicationApi.reApplyCompany(
+            applicationId = applicationId,
+            applyCompanyRequest = applyCompanyRequest,
+        )
+    }.sendRequest()
 }

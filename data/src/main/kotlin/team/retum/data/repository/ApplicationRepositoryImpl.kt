@@ -25,4 +25,12 @@ class ApplicationRepositoryImpl @Inject constructor(
         recruitmentId = recruitmentId,
         applyCompanyRequest = applyCompanyParam.toRequest(),
     )
+
+    override suspend fun reApplyCompany(
+        applicationId: Long,
+        applyCompanyParam: ApplyCompanyParam,
+    ) = applicationDataSource.reApplyCompany(
+        applicationId = applicationId,
+        applyCompanyRequest = applyCompanyParam.toRequest(),
+    )
 }
