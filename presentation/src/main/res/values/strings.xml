@@ -185,6 +185,7 @@
     <string name="add_to_press_url">URL 입력란 추가하기</string>
     <string name="check">확인</string>
     <string name="input_url">URL 입력</string>
+    <string name="do_re_apply">재지원하기</string>
 
     <string name="recruitment_application_not_found">존재하지 않는 모집의뢰서 입니다</string>
     <string name="recruitment_application_conflict">이미 지원한 이력이 있습니다</string>

@@ -94,7 +94,10 @@ internal fun HomeScreen(
 
     if (showApplicationDialog) {
         Dialog(onDismissRequest = { showApplicationDialog = false }) {
-            RecruitmentApplicationDialog(recruitmentId = applicationId ?: 0L) {
+            RecruitmentApplicationDialog(
+                isReApply = true,
+                recruitmentId = applicationId ?: 0L,
+            ) {
                 showApplicationDialog = false
             }
         }
