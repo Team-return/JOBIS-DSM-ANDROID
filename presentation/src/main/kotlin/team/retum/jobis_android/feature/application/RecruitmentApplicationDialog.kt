@@ -84,10 +84,7 @@ internal fun RecruitmentApplicationDialog(
         fileViewModel.container.sideEffectFlow.collect {
             when (it) {
                 is FileSideEffect.SuccessUploadFile -> {
-                    applicationViewModel.setAttachments(
-                        fileUrls = it.fileUrls,
-                        urls = urls,
-                    )
+                    applicationViewModel.setAttachments(fileUrls = it.fileUrls)
                 }
 
                 is FileSideEffect.FileLargeException -> {
@@ -127,6 +124,7 @@ internal fun RecruitmentApplicationDialog(
     val coroutineScope = rememberCoroutineScope()
 
     val onClickConfirmButton: () -> Unit = {
+        applicationViewModel.setUrls(urls = urls)
         applicationViewModel.applyCompany()
         applicationViewModel.setButtonState(buttonState = false)
         coroutineScope.launch {
@@ -164,7 +162,9 @@ internal fun RecruitmentApplicationDialog(
                 fileCount += 1
             }
         }
+        applicationViewModel.setButtonState(fileCount > 0)
         fileViewModel.uploadFile()
+
     }
 
     val onRemoveFile = { index: Int ->
