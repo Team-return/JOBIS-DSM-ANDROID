@@ -14,6 +14,7 @@ import team.retum.domain.exception.NotFoundException
 import team.retum.domain.param.application.ApplyCompanyParam
 import team.retum.domain.param.application.AttachmentsParam
 import team.retum.domain.usecase.applications.ApplyCompanyUseCase
+import team.retum.domain.usecase.applications.ReApplyCompanyUseCase
 import team.retum.jobis_android.contract.application.ApplicationSideEffect
 import team.retum.jobis_android.contract.application.ApplicationState
 import team.retum.jobis_android.viewmodel.BaseViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ApplicationViewModel @Inject constructor(
     private val applyCompanyUseCase: ApplyCompanyUseCase,
+    private val reApplyCompanyUseCase: ReApplyCompanyUseCase,
 ) : BaseViewModel<ApplicationState, ApplicationSideEffect>() {
 
     override val container = container<ApplicationState, ApplicationSideEffect>(ApplicationState())
@@ -33,18 +35,32 @@ internal class ApplicationViewModel @Inject constructor(
             applyCompanyUseCase(
                 recruitmentId = state.recruitmentId,
                 applyCompanyParam = ApplyCompanyParam(attachments = state.attachments),
-            ).onSuccess {
-                postSideEffect(sideEffect = ApplicationSideEffect.SuccessApplyCompany)
-            }.onFailure {
-                when (it) {
-                    is NotFoundException -> postSideEffect(ApplicationSideEffect.RecruitmentNotFound)
-                    is ConflictException -> postSideEffect(ApplicationSideEffect.ApplyConflict)
-                    else -> postSideEffect(
-                        ApplicationSideEffect.Exception(
-                            message = getStringFromException(it),
-                        ),
-                    )
-                }
+            ).handleApplyEffect()
+        }
+    }
+
+    internal fun reApplyCompany() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            reApplyCompanyUseCase(
+                applicationId = state.recruitmentId,
+                applyCompanyParam = ApplyCompanyParam(attachments = state.attachments),
+            ).handleApplyEffect()
+        }
+    }
+
+    private fun Result<Unit>.handleApplyEffect() = intent {
+        onSuccess {
+            postSideEffect(sideEffect = ApplicationSideEffect.SuccessApplyCompany)
+        }.onFailure {
+            when (it) {
+                is NotFoundException -> postSideEffect(ApplicationSideEffect.RecruitmentNotFound)
+                is ConflictException -> postSideEffect(ApplicationSideEffect.ApplyConflict)
+                is KotlinNullPointerException -> postSideEffect(ApplicationSideEffect.SuccessApplyCompany)
+                else -> postSideEffect(
+                    ApplicationSideEffect.Exception(
+                        message = getStringFromException(it),
+                    ),
+                )
             }
         }
     }

@@ -13,4 +13,9 @@ interface ApplicationsRepository {
         recruitmentId: Long,
         applyCompanyParam: ApplyCompanyParam,
     )
+
+    suspend fun reApplyCompany(
+        applicationId: Long,
+        applyCompanyParam: ApplyCompanyParam,
+    )
 }

@@ -55,6 +55,7 @@ object JobisUrl {
         const val employment = "$applications/employment/count"
         const val students = "$applications/students"
         const val apply = "$applications/{recruitment-id}"
+        const val reApply = "$applications/{application-id}"
     }
 
     object Company {
