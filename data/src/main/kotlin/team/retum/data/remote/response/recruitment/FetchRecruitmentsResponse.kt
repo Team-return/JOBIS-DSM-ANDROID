@@ -9,13 +9,13 @@ data class RecruitmentsResponse(
 )
 
 data class Recruitment(
-    @SerializedName("recruit_id") val recruitId: Long,
+    @SerializedName("id") val recruitId: Long,
     @SerializedName("company_name") val companyName: String,
     @SerializedName("company_profile_url") val companyProfileUrl: String,
     @SerializedName("train_pay") val trainPay: Long,
-    @SerializedName("military") val military: Boolean,
+    @SerializedName("military_support") val military: Boolean,
     @SerializedName("total_hiring") val totalHiring: Long,
-    @SerializedName("job_code_list") val jobCodeList: String,
+    @SerializedName("hiring_jobs") val jobCodeList: String,
     @SerializedName("bookmarked") val bookmarked: Boolean,
 )
 
