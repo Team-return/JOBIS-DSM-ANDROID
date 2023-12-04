@@ -59,6 +59,7 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentApplicationDialog(
+    isReApply: Boolean = false,
     recruitmentId: Long,
     fileViewModel: FileViewModel = hiltViewModel(),
     applicationViewModel: ApplicationViewModel = hiltViewModel(),
@@ -125,7 +126,11 @@ internal fun RecruitmentApplicationDialog(
 
     val onClickConfirmButton: () -> Unit = {
         applicationViewModel.setUrls(urls = urls)
-        applicationViewModel.applyCompany()
+        if (isReApply) {
+            applicationViewModel.reApplyCompany()
+        } else {
+            applicationViewModel.applyCompany()
+        }
         applicationViewModel.setButtonState(buttonState = false)
         coroutineScope.launch {
             delay(3000)
@@ -204,7 +209,12 @@ internal fun RecruitmentApplicationDialog(
             ),
         horizontalAlignment = Alignment.Start,
     ) {
-        Header(text = stringResource(id = R.string.do_apply))
+        Header(
+            text = stringResource(
+                id = if (isReApply) R.string.do_re_apply
+                else R.string.do_apply,
+            ),
+        )
         Column(
             modifier = Modifier
                 .fillMaxHeight(0.9f)
@@ -214,12 +224,7 @@ internal fun RecruitmentApplicationDialog(
                 .verticalScroll(rememberScrollState()),
         ) {
             Caption(
-                text = stringResource(id = R.string.submitted_document, "없음"),
-                color = JobisColor.Gray600,
-            )
-            Caption(
                 modifier = Modifier.padding(
-                    top = 14.dp,
                     bottom = 6.dp,
                 ),
                 text = stringResource(id = R.string.attached_file),
