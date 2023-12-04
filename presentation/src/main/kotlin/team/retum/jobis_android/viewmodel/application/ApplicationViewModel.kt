@@ -55,6 +55,7 @@ internal class ApplicationViewModel @Inject constructor(
             when (it) {
                 is NotFoundException -> postSideEffect(ApplicationSideEffect.RecruitmentNotFound)
                 is ConflictException -> postSideEffect(ApplicationSideEffect.ApplyConflict)
+                is KotlinNullPointerException -> postSideEffect(ApplicationSideEffect.SuccessApplyCompany)
                 else -> postSideEffect(
                     ApplicationSideEffect.Exception(
                         message = getStringFromException(it),
