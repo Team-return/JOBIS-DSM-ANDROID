@@ -141,7 +141,7 @@ internal fun HomeScreen(
                     showApplicationDialog = {
                         applicationId = it
                         showApplicationDialog = true
-                    }
+                    },
                 )
             }
             Column(
@@ -174,10 +174,9 @@ internal fun HomeScreen(
                             stringRes = R.string.home_do_get_winter_intern,
                             drawableRes = R.drawable.ic_gift,
                             onClick = { navigateToRecruitments(true) },
-                        )
+                        ),
                     ),
-
-                    )
+                )
                 Spacer(modifier = Modifier.height(48.dp))
             }
         }
@@ -374,7 +373,7 @@ private fun ApplyCompany(
             .jobisClickable(
                 rippleEnabled = true,
                 onClick = { showApplicationDialog?.invoke(applicationId) },
-                enabled = applicationId != null
+                enabled = applicationId != null,
             )
             .border(
                 width = 1.dp,
