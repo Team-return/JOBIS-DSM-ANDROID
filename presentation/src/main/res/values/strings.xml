@@ -85,7 +85,7 @@
     <!--Recruitments Screen-->
     <string name="recruitments_header">모집의뢰서 조회하기</string>
     <string name="recruitments_winter_interns">겨울인턴 조회하기</string>
-    <string name="recruitments_train_pay">실습 수당 %s 원</string>
+    <string name="recruitments_train_pay">실습 수당 %s만 원</string>
     <string name="recruitments_filter_hint">회사검색</string>
 
     <!--    Recruitment Details-->
