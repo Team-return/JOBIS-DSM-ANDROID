@@ -193,7 +193,7 @@ private fun RecruitmentStatus(
     val passString = "$passCount / $totalStudentCount"
     val appliedString = "$approvedCount / $totalStudentCount"
 
-    if (approvedCount != 0L) {
+    if (passCount != 0L) {
         employmentRate =
             DecimalFormat("##0.0").format(passCount.toFloat() / totalStudentCount.toFloat() * 100)
                 .toFloat()

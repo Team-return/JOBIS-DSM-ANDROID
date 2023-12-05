@@ -54,6 +54,7 @@ import team.returm.jobisdesignsystem.theme.Body3
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
+import java.text.DecimalFormat
 
 @Stable
 val PositionCardShape = RoundedCornerShape(4.dp)
@@ -222,12 +223,12 @@ private fun RecruitmentDetails(
             )
             Detail(
                 title = stringResource(id = R.string.recruitment_details_train_pay),
-                content = if (trainPay != 0L) "${trainPay}원/월" else "",
+                content = if (trainPay != 0L) "${DecimalFormat("#,###").format(trainPay)}원/월" else "",
             )
             if (!pay.isNullOrBlank()) {
                 Detail(
                     title = stringResource(id = R.string.recruitment_details_pay),
-                    content = "${pay}만원/년",
+                    content = "${pay}만 원/년",
                 )
             }
             if (!benefits.isNullOrEmpty()) {
