@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
+import team.retum.domain.enums.ApplicationStatus
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -346,7 +347,7 @@ private fun ApplyCompanies(
                 ApplyCompany(
                     applicationId = appliedCompanies[index].applicationId,
                     company = appliedCompanies[index].company,
-                    status = appliedCompanies[index].applicationStatus.status,
+                    status = appliedCompanies[index].applicationStatus,
                     showApplicationDialog = showApplicationDialog,
                 )
             }
@@ -361,10 +362,16 @@ private fun ApplyCompanies(
 private fun ApplyCompany(
     applicationId: Long? = null,
     company: String? = null,
-    status: String? = null,
+    status: ApplicationStatus? = null,
     isEmpty: Boolean? = null,
     showApplicationDialog: ((recruitmentId: Long?) -> Unit)? = null,
 ) {
+    val statusValid = when (status) {
+        ApplicationStatus.REQUESTED -> true
+        ApplicationStatus.REJECTED -> true
+        else -> false
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -373,7 +380,7 @@ private fun ApplyCompany(
             .jobisClickable(
                 rippleEnabled = true,
                 onClick = { showApplicationDialog?.invoke(applicationId) },
-                enabled = applicationId != null,
+                enabled = applicationId != null && statusValid,
             )
             .border(
                 width = 1.dp,
@@ -401,7 +408,7 @@ private fun ApplyCompany(
                 ) {
                     Body3(text = company!!)
                     Body3(
-                        text = " $status ",
+                        text = " ${status?.status} ",
                         color = JobisColor.LightBlue,
                     )
                 }
