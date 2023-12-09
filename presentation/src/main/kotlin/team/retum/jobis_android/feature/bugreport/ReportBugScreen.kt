@@ -37,12 +37,10 @@ import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.contract.bugreport.BugSideEffect
-import team.retum.jobis_android.contract.file.FileSideEffect
+import team.retum.jobis_android.feature.common.FileSideEffect
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.bugreport.BugViewModel
-import team.retum.jobis_android.viewmodel.file.FileViewModel
+import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallIconButton

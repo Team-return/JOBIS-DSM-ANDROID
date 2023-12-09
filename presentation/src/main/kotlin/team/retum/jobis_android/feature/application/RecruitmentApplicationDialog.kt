@@ -43,12 +43,10 @@ import com.jobis.jobis_android.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.contract.application.ApplicationSideEffect
-import team.retum.jobis_android.contract.file.FileSideEffect
+import team.retum.jobis_android.feature.common.FileSideEffect
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.application.ApplicationViewModel
-import team.retum.jobis_android.viewmodel.file.FileViewModel
+import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.colors.JobisColor
