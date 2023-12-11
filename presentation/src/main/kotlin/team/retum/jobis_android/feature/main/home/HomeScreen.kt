@@ -51,8 +51,8 @@ import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.enums.ApplicationStatus
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
-import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.feature.main.mypage.MyPageViewModel
+import team.retum.jobis_android.util.compose.animation.skeleton
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body2

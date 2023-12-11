@@ -50,11 +50,11 @@ import team.retum.domain.entity.FileType
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.common.FileSideEffect
+import team.retum.jobis_android.feature.common.FileViewModel
+import team.retum.jobis_android.feature.company.CompanyViewModel
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.company.CompanyViewModel
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4

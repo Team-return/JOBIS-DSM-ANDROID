@@ -20,8 +20,8 @@ import team.retum.domain.usecase.user.CheckStudentExistUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.SignUpUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.Regex
 import java.util.regex.Pattern
 import javax.inject.Inject
 

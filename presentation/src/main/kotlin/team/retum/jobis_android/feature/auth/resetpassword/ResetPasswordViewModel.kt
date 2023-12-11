@@ -20,8 +20,8 @@ import team.retum.domain.usecase.student.ComparePasswordUseCase
 import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.Regex
 import javax.inject.Inject
 
 @HiltViewModel

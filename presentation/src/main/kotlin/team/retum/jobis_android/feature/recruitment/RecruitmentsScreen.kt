@@ -46,11 +46,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
+import team.retum.jobis_android.feature.main.bookmark.BookmarkViewModel
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.main.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -146,8 +146,11 @@ internal fun RecruitmentsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Header(
-                text = if (!isWinterIntern) stringResource(id = R.string.recruitments_header)
-                else stringResource(id = R.string.recruitments_winter_interns)
+                text = if (!isWinterIntern) {
+                    stringResource(id = R.string.recruitments_header)
+                } else {
+                    stringResource(id = R.string.recruitments_winter_interns)
+                },
             )
             Spacer(modifier = Modifier.height(12.dp))
             RecruitmentInput(

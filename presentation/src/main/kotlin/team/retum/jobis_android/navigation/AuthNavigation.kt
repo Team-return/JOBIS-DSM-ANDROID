@@ -5,15 +5,15 @@ import androidx.navigation.navigation
 import team.retum.jobis_android.feature.auth.changepassword.ComparePasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordScreen
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordVerifyEmailScreen
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.feature.auth.signin.SignInScreen
 import team.retum.jobis_android.feature.auth.signup.SignUpScreen
+import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 import team.retum.jobis_android.util.compose.animation.slideInLeft
 import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
 import team.retum.jobis_android.util.compose.animation.slideOutRight
 import team.retum.jobis_android.util.compose.navigation.baseComposable
-import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 
 internal fun NavGraphBuilder.authNavigation(
     signUpViewModel: SignUpViewModel,
