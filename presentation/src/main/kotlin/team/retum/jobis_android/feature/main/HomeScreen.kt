@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.applications.AppliedCompanyEntity
@@ -93,14 +94,19 @@ internal fun HomeScreen(
 
     var applicationId: Long? by remember { mutableStateOf(null) }
 
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current?.viewModelStore
+    val onDismissRequest: () -> Unit = {
+        showApplicationDialog = false
+        viewModelStoreOwner?.clear()
+    }
+
     if (showApplicationDialog) {
-        Dialog(onDismissRequest = { showApplicationDialog = false }) {
+        Dialog(onDismissRequest = onDismissRequest) {
             RecruitmentApplicationDialog(
                 isReApply = true,
                 recruitmentId = applicationId ?: 0L,
-            ) {
-                showApplicationDialog = false
-            }
+                onDismissRequest = onDismissRequest,
+            )
         }
     }
 
