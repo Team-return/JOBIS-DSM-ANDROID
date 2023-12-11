@@ -12,8 +12,8 @@ import team.retum.jobis_android.util.compose.animation.slideInRight
 import team.retum.jobis_android.util.compose.animation.slideOutLeft
 import team.retum.jobis_android.util.compose.animation.slideOutRight
 import team.retum.jobis_android.util.compose.navigation.baseComposable
-import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
+import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 
 internal fun NavGraphBuilder.authNavigation(
     signUpViewModel: SignUpViewModel,

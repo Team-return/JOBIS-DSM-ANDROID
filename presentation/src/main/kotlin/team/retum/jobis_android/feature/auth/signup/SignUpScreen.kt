@@ -30,7 +30,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.contract.signup.SignUpSideEffect
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
 import team.retum.jobis_android.feature.auth.signup.verifyemail.VerifyEmailScreen
@@ -38,7 +37,6 @@ import team.retum.jobis_android.navigation.AuthDestinations
 import team.retum.jobis_android.navigation.navigateToSetPassword
 import team.retum.jobis_android.navigation.navigateToVerifyEmail
 import team.retum.jobis_android.util.compose.component.TopBar
-import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor
