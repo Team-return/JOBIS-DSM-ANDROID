@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import team.retum.jobis_android.feature.main.BookmarkRecruitmentsScreen
-import team.retum.jobis_android.feature.main.HomeScreen
-import team.retum.jobis_android.feature.main.MenuScreen
-import team.retum.jobis_android.feature.main.MyPageScreen
+import team.retum.jobis_android.feature.main.bookmark.BookmarkRecruitmentsScreen
+import team.retum.jobis_android.feature.main.home.HomeScreen
+import team.retum.jobis_android.feature.main.menu.MenuScreen
+import team.retum.jobis_android.feature.main.mypage.MyPageScreen
 import team.retum.jobis_android.navigation.NavigationRoute
 import team.retum.jobis_android.navigation.navigateToBookmarkRecruitments
 import team.retum.jobis_android.navigation.navigateToMyPage

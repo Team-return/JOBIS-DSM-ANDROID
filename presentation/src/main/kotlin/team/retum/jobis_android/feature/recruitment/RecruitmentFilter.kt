@@ -43,7 +43,6 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.enums.Type
-import team.retum.jobis_android.viewmodel.code.CodeViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.checkbox.JobisCheckBox

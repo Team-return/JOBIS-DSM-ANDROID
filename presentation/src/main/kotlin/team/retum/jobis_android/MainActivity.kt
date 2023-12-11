@@ -15,9 +15,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import dagger.hilt.android.AndroidEntryPoint
 import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
-import team.retum.jobis_android.viewmodel.main.MainViewModel
-import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
+import team.retum.jobis_android.feature.main.MainViewModel
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
+import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

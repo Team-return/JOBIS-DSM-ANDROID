@@ -35,8 +35,8 @@ import team.retum.jobis_android.navigation.navigateToSignInPopUpWithMain
 import team.retum.jobis_android.navigation.navigateToSignUp
 import team.retum.jobis_android.navigation.putString
 import team.retum.jobis_android.navigation.userNavigation
-import team.retum.jobis_android.viewmodel.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.viewmodel.signup.SignUpViewModel
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
+import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

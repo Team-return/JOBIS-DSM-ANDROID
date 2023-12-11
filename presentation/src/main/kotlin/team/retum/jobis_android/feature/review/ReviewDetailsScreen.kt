@@ -23,7 +23,6 @@ import com.jobis.jobis_android.R
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.viewmodel.review.ReviewViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
 import team.returm.jobisdesignsystem.theme.Body4
