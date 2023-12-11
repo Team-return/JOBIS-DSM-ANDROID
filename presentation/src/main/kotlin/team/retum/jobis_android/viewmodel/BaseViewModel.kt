@@ -19,7 +19,7 @@ import javax.inject.Inject
 abstract class BaseViewModel<S : State, E : SideEffect> : ContainerHost<S, E>, ViewModel() {
 
     @Inject
-    lateinit var application: Application
+    protected lateinit var application: Application
     protected fun getStringFromException(
         throwable: Throwable,
     ) = when (throwable) {
