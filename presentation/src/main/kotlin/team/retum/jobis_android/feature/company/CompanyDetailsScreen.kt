@@ -38,10 +38,10 @@ import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.feature.recruitment.CompanyInformation
 import team.retum.jobis_android.feature.recruitment.Detail
+import team.retum.jobis_android.feature.review.ReviewViewModel
 import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
-import team.retum.jobis_android.feature.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor

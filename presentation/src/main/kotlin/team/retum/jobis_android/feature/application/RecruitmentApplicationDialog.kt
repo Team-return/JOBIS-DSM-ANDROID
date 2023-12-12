@@ -44,9 +44,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.common.FileSideEffect
+import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -157,7 +157,6 @@ internal fun RecruitmentApplicationDialog(
                     addFile(item.uri)
                     fileCount += 1
                 }
-
             }
         } else {
             result.data?.data?.run {
@@ -167,7 +166,6 @@ internal fun RecruitmentApplicationDialog(
         }
         applicationViewModel.setButtonState(fileCount > 0)
         fileViewModel.uploadFile()
-
     }
 
     val onRemoveFile = { index: Int ->
@@ -209,8 +207,11 @@ internal fun RecruitmentApplicationDialog(
     ) {
         Header(
             text = stringResource(
-                id = if (isReApply) R.string.do_re_apply
-                else R.string.do_apply,
+                id = if (isReApply) {
+                    R.string.do_re_apply
+                } else {
+                    R.string.do_apply
+                },
             ),
         )
         Column(

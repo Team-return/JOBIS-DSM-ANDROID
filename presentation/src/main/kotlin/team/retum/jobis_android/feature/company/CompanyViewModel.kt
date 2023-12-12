@@ -199,7 +199,7 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
-    internal fun resetPage() = intent{
+    internal fun resetPage() = intent {
         reduce { state.copy(page = 1) }
     }
 

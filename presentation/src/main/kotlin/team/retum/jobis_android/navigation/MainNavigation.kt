@@ -36,7 +36,7 @@ internal fun NavGraphBuilder.mainNavigation(
                 getArgument(
                     name = NavigationProperties.IS_WINTER_INTERN,
                     type = NavType.BoolType,
-                )
+                ),
             ),
             exitTransition = slideOutLeft(),
             popEnterTransition = slideInRight(),

@@ -38,9 +38,9 @@ import com.jobis.jobis_android.R
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.common.FileSideEffect
+import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.button.JobisSmallIconButton
@@ -108,7 +108,7 @@ internal fun ReportBugScreen(
                     FileUtil.toFile(
                         context = context,
                         uri = uri,
-                    )
+                    ),
                 )
                 bugViewModel.imageUris.add(uri)
                 uploadFile()

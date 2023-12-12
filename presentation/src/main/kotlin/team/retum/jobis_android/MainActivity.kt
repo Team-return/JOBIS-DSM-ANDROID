@@ -14,10 +14,10 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
 import dagger.hilt.android.AndroidEntryPoint
-import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
-import team.retum.jobis_android.feature.main.MainViewModel
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
+import team.retum.jobis_android.feature.main.MainViewModel
+import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
