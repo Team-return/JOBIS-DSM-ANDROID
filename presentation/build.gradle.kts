@@ -72,6 +72,7 @@ dependencies {
     implementation(Dependency.COIL.COIL)
 
     implementation(Dependency.HILT.HILT)
+    implementation(Dependency.GOOGLE.APP_UPDATE)
     kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.SPLASH.SPLASH_SCREEN)
