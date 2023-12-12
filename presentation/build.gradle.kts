@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = ProjectProperties.NAME_SPACE
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = ProjectProperties.NAME_SPACE
