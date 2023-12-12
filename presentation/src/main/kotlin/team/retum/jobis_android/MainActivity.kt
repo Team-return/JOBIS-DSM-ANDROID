@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
             if (isUpdateAvailable && it.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 appUpdateManager.startUpdateFlowForResult(
                     it,
-                    AppUpdateType.FLEXIBLE,
+                    AppUpdateType.IMMEDIATE,
                     this,
                     0,
                 )
