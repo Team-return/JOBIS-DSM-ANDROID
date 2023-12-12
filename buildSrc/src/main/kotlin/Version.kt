@@ -18,6 +18,8 @@ object Version {
     const val COMPOSE_NAVIGATION_ANIMATION = "0.32.0"
     const val COLLECT_AS_STATE_WITH_LIFECYCLE = "2.6.2"
 
+    const val APP_UPDATE = "2.1.0"
+
     const val SPLASH_SCREEN = "1.0.1"
 
     const val ORBIT_MVI = "6.1.0"
