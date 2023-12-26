@@ -4,9 +4,12 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import team.retum.data.remote.datasource.file.FileDataSource
+import team.retum.data.remote.request.files.toEntity
+import team.retum.data.remote.request.files.toRequest
 import team.retum.data.remote.response.file.toEntity
 import team.retum.domain.entity.FileType
 import team.retum.domain.entity.UploadFileEntity
+import team.retum.domain.param.files.PresignedUrlParam
 import team.retum.domain.repository.FileRepository
 import java.io.File
 import javax.inject.Inject
@@ -21,6 +24,11 @@ class FileRepositoryImpl @Inject constructor(
         type = type,
         files = files.map { it.getImageMultipart(key = "file") },
     ).toEntity()
+
+    override suspend fun createPresignedUrl(presignedUrlParam: PresignedUrlParam) =
+        fileDataSource.createPresignedUrl(
+            createPresignedUrlRequest = presignedUrlParam.toRequest(),
+        ).toEntity()
 }
 
 private fun File.getImageMultipart(key: String): MultipartBody.Part =
