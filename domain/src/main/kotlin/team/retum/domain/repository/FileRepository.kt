@@ -13,4 +13,9 @@ interface FileRepository {
     ): UploadFileEntity
 
     suspend fun createPresignedUrl(presignedUrlParam: PresignedUrlParam): PresignedUrlEntity
+
+    suspend fun uploadFile(
+        presignedUrl: String,
+        file: File,
+    )
 }

@@ -1,6 +1,7 @@
 package team.retum.data.remote.datasource.file
 
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import team.retum.data.remote.request.files.CreatePresignedUrlRequest
 import team.retum.data.remote.request.files.CreatePresignedUrlResponse
 import team.retum.data.remote.response.file.UploadFileResponse
@@ -13,4 +14,9 @@ interface FileDataSource {
     ): UploadFileResponse
 
     suspend fun createPresignedUrl(createPresignedUrlRequest: CreatePresignedUrlRequest): CreatePresignedUrlResponse
+
+    suspend fun uploadFile(
+        presignedUrl: String,
+        file: RequestBody,
+    )
 }
