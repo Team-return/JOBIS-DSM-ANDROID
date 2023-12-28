@@ -7,7 +7,6 @@ import team.retum.jobis_android.util.mvi.State
 internal data class ApplicationState(
     val recruitmentId: Long = 0,
     val attachments: List<AttachmentsParam> = emptyList(),
-    val buttonState: Boolean = false,
 ) : State
 
 internal sealed class ApplicationSideEffect : SideEffect {

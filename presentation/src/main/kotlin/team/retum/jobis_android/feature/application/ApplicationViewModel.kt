@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.application
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,13 +27,33 @@ internal class ApplicationViewModel @Inject constructor(
 
     override val container = container<ApplicationState, ApplicationSideEffect>(ApplicationState())
 
-    private val attachments: MutableList<AttachmentsParam> = mutableListOf()
+    private val attachments = mutableStateListOf<AttachmentsParam>()
+    internal val urls = mutableStateListOf<String>()
 
-    internal fun applyCompany() = intent {
+    internal fun applyCompany(filePaths: List<String>) = intent {
+        attachments.run {
+            addAll(
+                filePaths.map { filePath: String ->
+                    AttachmentsParam(
+                        url = filePath,
+                        type = AttachmentDocsType.FILE,
+                    )
+                },
+            )
+            addAll(
+                urls.map { url: String ->
+                    AttachmentsParam(
+                        url = url,
+                        type = AttachmentDocsType.URL,
+                    )
+                },
+            )
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             applyCompanyUseCase(
                 recruitmentId = state.recruitmentId,
-                applyCompanyParam = ApplyCompanyParam(attachments = state.attachments),
+                applyCompanyParam = ApplyCompanyParam(attachments),
             ).handleApplyEffect()
         }
     }
@@ -47,6 +68,8 @@ internal class ApplicationViewModel @Inject constructor(
     }
 
     private fun Result<Unit>.handleApplyEffect() = intent {
+        attachments.clear()
+        urls.clear()
         onSuccess {
             postSideEffect(sideEffect = ApplicationSideEffect.SuccessApplyCompany)
         }.onFailure {
@@ -69,48 +92,6 @@ internal class ApplicationViewModel @Inject constructor(
         reduce {
             state.copy(
                 recruitmentId = recruitmentId,
-            )
-        }
-    }
-
-    internal fun setAttachments(
-        fileUrls: List<String>,
-    ) = intent {
-        fileUrls.forEach {
-            attachments.add(
-                AttachmentsParam(
-                    url = it,
-                    type = AttachmentDocsType.FILE,
-                ),
-            )
-        }
-
-        reduce {
-            state.copy(
-                attachments = attachments,
-            )
-        }
-    }
-
-    internal fun setUrls(
-        urls: List<String>,
-    ) = intent {
-        urls.forEach {
-            attachments.add(
-                AttachmentsParam(
-                    url = it,
-                    type = AttachmentDocsType.URL,
-                ),
-            )
-        }
-    }
-
-    internal fun setButtonState(
-        buttonState: Boolean,
-    ) = intent {
-        reduce {
-            state.copy(
-                buttonState = buttonState,
             )
         }
     }
