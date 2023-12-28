@@ -64,6 +64,14 @@ internal fun RecruitmentApplicationDialog(
 
     fileViewModel.collectSideEffect {
         when (it) {
+            is FileSideEffect.Success -> {
+                if (isReApply) {
+                    applicationViewModel.reApplyCompany(fileViewModel.filePaths)
+                } else {
+                    applicationViewModel.applyCompany(fileViewModel.filePaths)
+                }
+            }
+
             is FileSideEffect.InvalidFileExtension -> {
                 context.getString(R.string.recruitment_application_invalid_file_extension)
             }
@@ -123,7 +131,6 @@ internal fun RecruitmentApplicationDialog(
                     }
                 }
             }
-            fileViewModel.createPresignedUrl()
         }
 
     Column(
@@ -165,7 +172,7 @@ internal fun RecruitmentApplicationDialog(
                     AttachedFile(
                         fileName = file.name,
                         fileSize = file.getFileSize(),
-                        onClick = { fileViewModel.removeFile(index) },
+                        onClick = { fileViewModel.files.removeAt(index) },
                     )
                 }
             }
@@ -210,7 +217,7 @@ internal fun RecruitmentApplicationDialog(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
                 enabled = fileViewModel.files.isNotEmpty(),
-                onClick = { applicationViewModel.applyCompany(filePaths = fileViewModel.filePaths) },
+                onClick = fileViewModel::createPresignedUrl,
             )
         }
     }
