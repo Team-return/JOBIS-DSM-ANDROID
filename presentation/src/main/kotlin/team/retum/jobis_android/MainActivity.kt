@@ -11,12 +11,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.jobis.jobis_android.R
 import dagger.hilt.android.AndroidEntryPoint
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 import team.retum.jobis_android.feature.main.MainViewModel
@@ -42,9 +42,7 @@ class MainActivity : ComponentActivity() {
             }
 
             val appState = rememberAppState()
-
-            val signInOption =
-                mainViewModel.container.stateFlow.collectAsStateWithLifecycle().value.autoSignInOption
+            val signInOption = mainViewModel.collectAsState().value.autoSignInOption
 
             CompositionLocalProvider(LocalAppState provides appState) {
                 Scaffold(
