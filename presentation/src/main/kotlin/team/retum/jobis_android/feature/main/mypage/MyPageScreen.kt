@@ -43,9 +43,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.FileType
 import team.retum.domain.enums.Department
@@ -74,25 +74,25 @@ internal fun MyPageScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
-    val appState = LocalAppState.current
-
-    val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewableCompanies by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by myPageViewModel.collectAsState()
+    val reviewableCompanies by companyViewModel.collectAsState()
 
     val context = LocalContext.current
 
-    myPageViewModel.collectSideEffect {
-        when (it) {
-            is MyPageSideEffect.SuccessSignOut -> {
-                navigateToSignInPopUpWithMain()
-            }
+    LocalAppState.current.run {
+        myPageViewModel.collectSideEffect {
+            when (it) {
+                is MyPageSideEffect.SuccessSignOut -> {
+                    navigateToSignInPopUpWithMain()
+                }
 
-            is MyPageSideEffect.SuccessEditProfileImage -> {
-                appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
-            }
+                is MyPageSideEffect.SuccessEditProfileImage -> {
+                    showSuccessToast(context.getString(R.string.success_edit_profile_image))
+                }
 
-            is MyPageSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                is MyPageSideEffect.Exception -> {
+                    showErrorToast(message = it.message)
+                }
             }
         }
     }

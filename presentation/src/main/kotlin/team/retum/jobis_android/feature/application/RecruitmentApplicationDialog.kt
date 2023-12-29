@@ -55,8 +55,9 @@ internal fun RecruitmentApplicationDialog(
     applicationViewModel: ApplicationViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
 ) {
-    val appState = LocalAppState.current
     val context = LocalContext.current
+    val filePaths = fileViewModel.filePaths
+    val files = fileViewModel.files
 
     LaunchedEffect(Unit) {
         applicationViewModel.setRecruitmentId(recruitmentId = recruitmentId)
@@ -65,10 +66,12 @@ internal fun RecruitmentApplicationDialog(
     fileViewModel.collectSideEffect {
         when (it) {
             is FileSideEffect.Success -> {
-                if (isReApply) {
-                    applicationViewModel.reApplyCompany(fileViewModel.filePaths)
-                } else {
-                    applicationViewModel.applyCompany(fileViewModel.filePaths)
+                applicationViewModel.run {
+                    if (isReApply) {
+                        reApplyCompany(filePaths)
+                    } else {
+                        applyCompany(filePaths)
+                    }
                 }
             }
 
@@ -80,25 +83,27 @@ internal fun RecruitmentApplicationDialog(
         }
     }
 
-    applicationViewModel.collectSideEffect {
-        fileViewModel.resetFiles()
-        onDismissRequest()
-        when (it) {
-            is ApplicationSideEffect.SuccessApplyCompany -> {
-                onDismissRequest()
-                appState.showErrorToast(context.getString(R.string.recruitment_application_success))
-            }
+    LocalAppState.current.run {
+        applicationViewModel.collectSideEffect {
+            fileViewModel.resetFiles()
+            onDismissRequest()
+            when (it) {
+                is ApplicationSideEffect.SuccessApplyCompany -> {
+                    onDismissRequest()
+                    showErrorToast(context.getString(R.string.recruitment_application_success))
+                }
 
-            is ApplicationSideEffect.RecruitmentNotFound -> {
-                appState.showErrorToast(context.getString(R.string.recruitment_application_not_found))
-            }
+                is ApplicationSideEffect.RecruitmentNotFound -> {
+                    showErrorToast(context.getString(R.string.recruitment_application_not_found))
+                }
 
-            is ApplicationSideEffect.ApplyConflict -> {
-                appState.showErrorToast(context.getString(R.string.recruitment_application_conflict))
-            }
+                is ApplicationSideEffect.ApplyConflict -> {
+                    showErrorToast(context.getString(R.string.recruitment_application_conflict))
+                }
 
-            is ApplicationSideEffect.Exception -> {
-                appState.showErrorToast(it.message)
+                is ApplicationSideEffect.Exception -> {
+                    showErrorToast(it.message)
+                }
             }
         }
     }
@@ -110,7 +115,7 @@ internal fun RecruitmentApplicationDialog(
                     // 파일 한 개인 경우
                     null -> {
                         this?.data?.run {
-                            fileViewModel.files.add(
+                            fileViewModel.addFile(
                                 FileUtil.toFile(
                                     context = context,
                                     uri = this,
@@ -121,7 +126,7 @@ internal fun RecruitmentApplicationDialog(
                     // 파일 두 개 이상인 경우
                     else -> {
                         repeat(this.clipData?.itemCount ?: 0) {
-                            fileViewModel.files.add(
+                            fileViewModel.addFile(
                                 FileUtil.toFile(
                                     context = context,
                                     uri = this.clipData?.getItemAt(it)?.uri!!,
@@ -168,11 +173,11 @@ internal fun RecruitmentApplicationDialog(
                 modifier = Modifier.padding(bottom = 6.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                fileViewModel.files.forEachIndexed { index, file ->
+                files.forEachIndexed { index, file ->
                     AttachedFile(
                         fileName = file.name,
                         fileSize = file.getFileSize(),
-                        onClick = { fileViewModel.files.removeAt(index) },
+                        onClick = { fileViewModel.removeFile(index) },
                     )
                 }
             }
@@ -216,7 +221,7 @@ internal fun RecruitmentApplicationDialog(
             JobisMediumButton(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
-                enabled = fileViewModel.files.isNotEmpty(),
+                enabled = files.isNotEmpty(),
                 onClick = fileViewModel::createPresignedUrl,
             )
         }

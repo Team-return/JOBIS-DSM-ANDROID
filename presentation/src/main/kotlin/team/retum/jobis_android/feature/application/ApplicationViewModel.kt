@@ -89,13 +89,9 @@ internal class ApplicationViewModel @Inject constructor(
         }
     }
 
-    internal fun setRecruitmentId(
-        recruitmentId: Long,
-    ) = intent {
+    internal fun setRecruitmentId(recruitmentId: Long) = intent {
         reduce {
-            state.copy(
-                recruitmentId = recruitmentId,
-            )
+            state.copy(recruitmentId = recruitmentId)
         }
     }
 }

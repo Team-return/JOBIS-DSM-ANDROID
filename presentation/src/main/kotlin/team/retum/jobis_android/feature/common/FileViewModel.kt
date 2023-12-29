@@ -82,10 +82,11 @@ internal class FileViewModel @Inject constructor(
         }
     }
 
-    internal fun addFile(file: File) = intent {
+    internal fun addFile(file: File) {
         files.add(file)
-        reduce {
-            state.copy(files = files)
-        }
+    }
+
+    internal fun removeFile(index: Int) {
+        files.removeAt(index)
     }
 }

@@ -31,9 +31,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
@@ -57,8 +57,7 @@ internal fun ReportBugScreen(
     fileViewModel: FileViewModel = hiltViewModel(),
     navigatePopBackStack: () -> Unit,
 ) {
-    val appState = LocalAppState.current
-    val bugState by bugViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val bugState by bugViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
 
     val context = LocalContext.current
@@ -73,16 +72,18 @@ internal fun ReportBugScreen(
         }
     }
 
-    bugViewModel.collectSideEffect {
-        when (it) {
-            is BugSideEffect.SuccessReportBug -> {
-                fileViewModel.resetFiles()
-                appState.showSuccessToast(message = context.getString(R.string.report_bug_success))
-                navigatePopBackStack()
-            }
+    LocalAppState.current.run {
+        bugViewModel.collectSideEffect {
+            when (it) {
+                is BugSideEffect.SuccessReportBug -> {
+                    fileViewModel.resetFiles()
+                    showSuccessToast(message = context.getString(R.string.report_bug_success))
+                    navigatePopBackStack()
+                }
 
-            is BugSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                is BugSideEffect.Exception -> {
+                    showErrorToast(message = it.message)
+                }
             }
         }
     }
@@ -90,7 +91,7 @@ internal fun ReportBugScreen(
     val activityResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
             result?.run {
-                fileViewModel.files.add(
+                fileViewModel.addFile(
                     FileUtil.toFile(
                         context = context,
                         uri = this,
@@ -144,7 +145,7 @@ internal fun ReportBugScreen(
                     )
                 },
                 removeScreenshot = { index ->
-                    fileViewModel.files.removeAt(index)
+                    fileViewModel.removeFile(index)
                     bugViewModel.imageUris.removeAt(index)
                 },
             )
