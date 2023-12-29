@@ -16,4 +16,5 @@ sealed class FileSideEffect : SideEffect {
     object FileLargeException : FileSideEffect()
     class Exception(val message: String) : FileSideEffect()
     object InvalidFileExtension : FileSideEffect()
+    object Success : FileSideEffect()
 }

@@ -53,6 +53,7 @@ internal class FileViewModel @Inject constructor(
                         file = files[index],
                     )
                 }
+                postSideEffect(FileSideEffect.Success)
             }.onFailure {
                 when (it) {
                     is BadRequestException -> {
@@ -86,10 +87,5 @@ internal class FileViewModel @Inject constructor(
         reduce {
             state.copy(files = files)
         }
-    }
-
-    internal fun removeFile(index: Int) = intent {
-        files.removeAt(index)
-        filePaths.removeAt(index)
     }
 }
