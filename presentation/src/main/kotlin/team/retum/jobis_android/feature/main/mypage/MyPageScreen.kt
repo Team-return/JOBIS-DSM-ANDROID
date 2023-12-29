@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.FileType
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.LocalAppState
@@ -80,34 +81,29 @@ internal fun MyPageScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        myPageViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is MyPageSideEffect.SuccessSignOut -> {
-                    navigateToSignInPopUpWithMain()
-                }
+    myPageViewModel.collectSideEffect {
+        when (it) {
+            is MyPageSideEffect.SuccessSignOut -> {
+                navigateToSignInPopUpWithMain()
+            }
 
-                is MyPageSideEffect.SuccessEditProfileImage -> {
-                    appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
-                }
+            is MyPageSideEffect.SuccessEditProfileImage -> {
+                appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
+            }
 
-                is MyPageSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
+            is MyPageSideEffect.Exception -> {
+                appState.showErrorToast(message = it.message)
             }
         }
     }
 
-    LaunchedEffect(Unit) {
-        fileViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is FileSideEffect.SuccessUploadFile -> {
-                    myPageViewModel.setEditProfileImageUrl(it.fileUrls.first())
-                    myPageViewModel.editProfileImage()
-                }
-
-                else -> {}
+    fileViewModel.collectSideEffect {
+        when (it) {
+            is FileSideEffect.Success -> {
+                myPageViewModel.editProfileImage(fileViewModel.filePaths.first())
             }
+
+            else -> {}
         }
     }
 
@@ -125,7 +121,7 @@ internal fun MyPageScreen(
                     uri = uri,
                 ),
             )
-            fileViewModel.uploadFile()
+            fileViewModel.createPresignedUrl()
         }
     }
 
