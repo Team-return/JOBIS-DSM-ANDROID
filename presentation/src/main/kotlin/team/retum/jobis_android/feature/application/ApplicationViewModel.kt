@@ -31,6 +31,24 @@ internal class ApplicationViewModel @Inject constructor(
     internal val urls = mutableStateListOf<String>()
 
     internal fun applyCompany(filePaths: List<String>) = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            applyCompanyUseCase(
+                recruitmentId = state.recruitmentId,
+                applyCompanyParam = getApplyCompanyParam(filePaths = filePaths),
+            ).handleApplyEffect()
+        }
+    }
+
+    internal fun reApplyCompany(filePaths: List<String>) = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            reApplyCompanyUseCase(
+                applicationId = state.recruitmentId,
+                applyCompanyParam = getApplyCompanyParam(filePaths = filePaths),
+            ).handleApplyEffect()
+        }
+    }
+
+    private fun getApplyCompanyParam(filePaths: List<String>): ApplyCompanyParam {
         attachments.run {
             addAll(
                 filePaths.map { filePath: String ->
@@ -49,22 +67,7 @@ internal class ApplicationViewModel @Inject constructor(
                 },
             )
         }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            applyCompanyUseCase(
-                recruitmentId = state.recruitmentId,
-                applyCompanyParam = ApplyCompanyParam(attachments),
-            ).handleApplyEffect()
-        }
-    }
-
-    internal fun reApplyCompany() = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            reApplyCompanyUseCase(
-                applicationId = state.recruitmentId,
-                applyCompanyParam = ApplyCompanyParam(attachments = state.attachments),
-            ).handleApplyEffect()
-        }
+        return ApplyCompanyParam(attachments)
     }
 
     private fun Result<Unit>.handleApplyEffect() = intent {

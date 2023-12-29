@@ -24,17 +24,16 @@ internal class BugViewModel @Inject constructor(
 
     override val container = container<BugState, BugSideEffect>(BugState())
 
-    private val fileUrls: MutableList<String> = mutableListOf()
     internal val imageUris: SnapshotStateList<Uri> = mutableStateListOf()
 
-    internal fun reportBug() = intent {
+    internal fun reportBug(attachmentUrls: List<String>) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reportBugUseCase(
                 ReportBugParam(
                     title = state.title,
                     content = state.content,
                     developmentArea = state.selectedPosition,
-                    attachmentUrls = fileUrls,
+                    attachmentUrls = attachmentUrls,
                 ),
             ).onSuccess {
                 postSideEffect(BugSideEffect.SuccessReportBug)
@@ -42,6 +41,7 @@ internal class BugViewModel @Inject constructor(
                 postSideEffect(BugSideEffect.Exception(getStringFromException(it)))
             }
         }
+        imageUris.clear()
     }
 
     internal fun setTitle(
@@ -72,14 +72,6 @@ internal class BugViewModel @Inject constructor(
                 } ?: DevelopmentArea.ALL,
             )
         }
-    }
-
-    internal fun addUrl(url: String) {
-        fileUrls.add(url)
-    }
-
-    internal fun removeUrl(index: Int) {
-        fileUrls.removeAt(index)
     }
 
     private fun setReportBugButtonState(enabled: Boolean = true) = intent {
