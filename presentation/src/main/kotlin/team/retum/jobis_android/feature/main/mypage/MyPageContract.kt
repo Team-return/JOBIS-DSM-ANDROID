@@ -9,7 +9,6 @@ internal data class MyPageState(
     val studentGcn: String = "",
     val department: Department = Department.DEFAULT,
     val profileImageUrl: String = "",
-    val editProfileImageUrl: String = "",
 ) : State
 
 internal sealed class MyPageSideEffect : SideEffect {

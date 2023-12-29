@@ -191,6 +191,7 @@
     <string name="recruitment_application_conflict">이미 지원한 이력이 있습니다</string>
 
     <string name="recruitment_application_file_too_large">파일의 용량을 초과했습니다</string>
+    <string name="recruitment_application_invalid_file_extension">지원하지 않는 형식의 파일입니다</string>
 
     <string name="recruitment_application_success">성공적으로 지원되었습니다!</string>
 

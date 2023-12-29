@@ -9,8 +9,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,9 +31,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.common.FileSideEffect
@@ -57,77 +57,49 @@ internal fun ReportBugScreen(
     fileViewModel: FileViewModel = hiltViewModel(),
     navigatePopBackStack: () -> Unit,
 ) {
-    val appState = LocalAppState.current
-
-    val bugState by bugViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val fileState by fileViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val bugState by bugViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        bugViewModel.container.sideEffectFlow.collect {
+    fileViewModel.collectSideEffect {
+        when (it) {
+            is FileSideEffect.Success -> {
+                bugViewModel.reportBug(fileViewModel.filePaths)
+            }
+
+            else -> {}
+        }
+    }
+
+    LocalAppState.current.run {
+        bugViewModel.collectSideEffect {
             when (it) {
                 is BugSideEffect.SuccessReportBug -> {
-                    appState.showSuccessToast(message = context.getString(R.string.report_bug_success))
+                    fileViewModel.resetFiles()
+                    showSuccessToast(message = context.getString(R.string.report_bug_success))
                     navigatePopBackStack()
                 }
 
                 is BugSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
+                    showErrorToast(message = it.message)
                 }
             }
         }
     }
 
-    LaunchedEffect(Unit) {
-        fileViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is FileSideEffect.SuccessUploadFile -> {
-                    bugViewModel.addUrl(it.fileUrls.first())
-                }
-
-                is FileSideEffect.FileLargeException -> {
-                    appState.showErrorToast(context.getString(R.string.recruitment_application_file_too_large))
-                }
-
-                is FileSideEffect.Exception -> {
-                    appState.showErrorToast(it.message)
-                }
-            }
-        }
-    }
-
-    val activityResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-    ) { uri: Uri? ->
-        with(fileViewModel) {
-            if (uri != null) {
-                addFile(
+    val activityResultLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
+            result?.run {
+                fileViewModel.addFile(
                     FileUtil.toFile(
                         context = context,
-                        uri = uri,
+                        uri = this,
                     ),
                 )
-                bugViewModel.imageUris.add(uri)
-                uploadFile()
+                bugViewModel.imageUris.add(this)
             }
         }
-    }
-
-    val addScreenshot = {
-        if (fileState.files.size <= 5) {
-            activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-    }
-
-    val removeScreenshot: (index: Int) -> Unit = {
-        with(bugViewModel) {
-            removeUrl(index = it)
-            imageUris.removeAt(it)
-        }
-    }
 
     val positions = listOf(
         DevelopmentArea.ALL.value,
@@ -146,10 +118,15 @@ internal fun ReportBugScreen(
             .fillMaxSize()
             .jobisClickable(onClick = focusManager::clearFocus),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            Spacer(modifier = Modifier.height(48.dp))
+        Column(
+            modifier = Modifier.padding(
+                top = 48.dp,
+                start = 20.dp,
+                end = 20.dp,
+                bottom = 44.dp,
+            ),
+        ) {
             Header(text = stringResource(id = R.string.bug_report))
-            Spacer(modifier = Modifier.height(14.dp))
             ContentInputs(
                 onTitleChanged = bugViewModel::setTitle,
                 title = bugState.title,
@@ -158,36 +135,44 @@ internal fun ReportBugScreen(
                 titleError = bugState.titleError,
                 contentError = bugState.contentError,
             )
-            Spacer(modifier = Modifier.height(24.dp))
             ScreenShots(
-                uriList = bugViewModel.imageUris,
-                addScreenshot = addScreenshot,
-                removeScreenshot = removeScreenshot,
-                screenShotCount = bugViewModel.imageUris.size,
+                uris = bugViewModel.imageUris,
+                addScreenshot = {
+                    activityResultLauncher.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly,
+                        ),
+                    )
+                },
+                removeScreenshot = { index ->
+                    fileViewModel.removeFile(index)
+                    bugViewModel.imageUris.removeAt(index)
+                },
             )
-            Spacer(modifier = Modifier.weight(1f))
             JobisLargeButton(
                 text = stringResource(id = R.string.complete),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = bugViewModel::reportBug,
+                onClick = { fileViewModel.createPresignedUrl()/*bugViewModel.reportBug(fileViewModel.filePaths)*/ },
                 enabled = bugState.reportBugButtonState,
             )
-            Spacer(modifier = Modifier.height(44.dp))
         }
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            Spacer(modifier = Modifier.height(88.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-            ) {
-                Box(modifier = Modifier.width(116.dp)) {
-                    JobisDropDown(
-                        color = JobisDropDownColor.MainColor,
-                        itemList = positions,
-                        onItemSelected = onItemSelected,
-                        title = DevelopmentArea.ALL.value,
-                    )
-                }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 88.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                ),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Box(modifier = Modifier.width(116.dp)) {
+                JobisDropDown(
+                    color = JobisDropDownColor.MainColor,
+                    itemList = positions,
+                    onItemSelected = onItemSelected,
+                    title = DevelopmentArea.ALL.value,
+                )
             }
         }
     }
@@ -202,38 +187,46 @@ private fun ContentInputs(
     content: String,
     contentError: Boolean,
 ) {
-    JobisBoxTextField(
-        hint = stringResource(id = R.string.bug_report_title),
-        onValueChanged = onTitleChanged,
-        value = title,
-        fieldText = stringResource(id = R.string.bug_report_title),
-        error = titleError,
-    )
-    Spacer(modifier = Modifier.height(24.dp))
-    JobisBoxTextField(
-        hint = stringResource(id = R.string.bug_report_content),
-        onValueChanged = onContentChanged,
-        value = content,
-        fieldText = stringResource(id = R.string.bug_report_content),
-        error = contentError,
-    )
+    Column(
+        modifier = Modifier.padding(top = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+    ) {
+        JobisBoxTextField(
+            hint = stringResource(id = R.string.bug_report_title),
+            onValueChanged = onTitleChanged,
+            value = title,
+            fieldText = stringResource(id = R.string.bug_report_title),
+            error = titleError,
+        )
+        JobisBoxTextField(
+            hint = stringResource(id = R.string.bug_report_content),
+            onValueChanged = onContentChanged,
+            value = content,
+            fieldText = stringResource(id = R.string.bug_report_content),
+            error = contentError,
+        )
+    }
 }
 
 @Composable
-private fun ScreenShots(
-    uriList: List<Uri>,
+private fun ColumnScope.ScreenShots(
+    uris: List<Uri>,
     addScreenshot: () -> Unit,
     removeScreenshot: (Int) -> Unit,
-    screenShotCount: Int,
 ) {
-    Column {
+    val uriSize = uris.size
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .padding(top = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
         Caption(
-            text = "${stringResource(id = R.string.bug_report_screenshots)} ($screenShotCount/5)",
+            text = "${stringResource(id = R.string.bug_report_screenshots)} ($uriSize/5)",
             color = JobisColor.Gray700,
         )
-        Spacer(modifier = Modifier.height(4.dp))
         Box(modifier = Modifier.height(150.dp)) {
-            if (screenShotCount == 0) {
+            if (uriSize == 0) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -260,7 +253,7 @@ private fun ScreenShots(
                 }
             }
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                itemsIndexed(uriList) { index, uri ->
+                itemsIndexed(uris) { index, uri ->
                     Box(contentAlignment = Alignment.BottomEnd) {
                         AsyncImage(
                             model = uri,
@@ -282,10 +275,12 @@ private fun ScreenShots(
                         }
                     }
                 }
-                if (screenShotCount in 1..4) {
+                if (uriSize in 1..4) {
                     item {
                         Row(
-                            modifier = Modifier.fillMaxHeight(),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(end = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             JobisSmallIconButton(
@@ -295,7 +290,6 @@ private fun ScreenShots(
                                 shadow = true,
                                 imageContentDescription = stringResource(id = R.string.content_description_icon_add),
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
                         }
                     }
                 }

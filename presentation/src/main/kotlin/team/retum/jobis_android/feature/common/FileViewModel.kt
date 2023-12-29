@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.common
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -9,61 +10,83 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.entity.FileType
-import team.retum.domain.exception.TooLargeRequestException
-import team.retum.domain.usecase.file.UploadFileUseCase
+import team.retum.domain.exception.BadRequestException
+import team.retum.domain.param.files.PresignedUrlParam
+import team.retum.domain.usecase.file.CreatePresignedUrlUseCase
+import team.retum.domain.usecase.file.UploadPresignedUrlFileUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 internal class FileViewModel @Inject constructor(
-    private val uploadFileUseCase: UploadFileUseCase,
+    private val createPresignedUrlUseCase: CreatePresignedUrlUseCase,
+    private val uploadFileUseCase: UploadPresignedUrlFileUseCase,
 ) : BaseViewModel<FileState, FileSideEffect>() {
 
     override val container = container<FileState, FileSideEffect>(FileState())
 
-    private val files = container.stateFlow.value.files
+    internal val files = mutableStateListOf<File>()
+    internal val filePaths = mutableListOf<String>()
 
-    internal fun uploadFile() = intent {
+    internal fun resetFiles() {
+        files.clear()
+        filePaths.clear()
+    }
+
+    internal fun createPresignedUrl() = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            uploadFileUseCase(
-                type = state.type,
-                files = state.files,
+            createPresignedUrlUseCase(
+                presignedUrlParam = PresignedUrlParam(
+                    files = files.map {
+                        PresignedUrlParam.File(
+                            type = FileType.EXTENSION_FILE,
+                            fileName = it.name,
+                        )
+                    },
+                ),
             ).onSuccess {
-                postSideEffect(sideEffect = FileSideEffect.SuccessUploadFile(it.urls))
+                it.urls.forEachIndexed { index, url ->
+                    filePaths.add(url.filePath)
+                    uploadFile(
+                        presignedUrl = url.presignedUrl,
+                        file = files[index],
+                    )
+                }
+                postSideEffect(FileSideEffect.Success)
             }.onFailure {
-                if (it is TooLargeRequestException) {
-                    postSideEffect(FileSideEffect.FileLargeException)
+                when (it) {
+                    is BadRequestException -> {
+                        postSideEffect(FileSideEffect.InvalidFileExtension)
+                    }
                 }
             }
         }
     }
 
-    internal fun setType(
-        type: FileType,
+    private fun uploadFile(
+        presignedUrl: String,
+        file: File,
     ) = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            uploadFileUseCase(
+                presignedUrl = presignedUrl,
+                file = file,
+            )
+        }
+    }
+
+    internal fun setType(type: FileType) = intent {
         reduce {
             state.copy(type = type)
         }
     }
 
-    internal fun addFile(
-        file: File,
-    ) = intent {
+    internal fun addFile(file: File) {
         files.add(file)
-        reduce {
-            state.copy(files = files)
-        }
     }
 
-    internal fun removeFile(
-        index: Int,
-    ) = intent {
+    internal fun removeFile(index: Int) {
         files.removeAt(index)
-        reduce {
-            state.copy(
-                files = files,
-            )
-        }
     }
 }

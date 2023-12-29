@@ -37,7 +37,7 @@ class AuthorizationInterceptor @Inject constructor(
             tokenReissue()
         }
 
-        if (ignorePath.contains(path)) {
+        if (ignorePath.contains(path) || request.url.toString().contains(JobisUrl.imageUrl)) {
             return chain.proceed(request)
         }
 

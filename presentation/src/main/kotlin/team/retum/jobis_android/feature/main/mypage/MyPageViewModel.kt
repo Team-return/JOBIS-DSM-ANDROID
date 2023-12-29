@@ -38,9 +38,9 @@ internal class MyPageViewModel @Inject constructor(
         }
     }
 
-    internal fun editProfileImage() = intent {
+    internal fun editProfileImage(profileImageUrl: String) = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            editProfileImageUseCase(EditProfileImageParam(state.editProfileImageUrl)).onSuccess {
+            editProfileImageUseCase(EditProfileImageParam(profileImageUrl)).onSuccess {
                 fetchStudentInformation()
             }.onSuccess {
                 fetchStudentInformation()
@@ -69,12 +69,6 @@ internal class MyPageViewModel @Inject constructor(
                     profileImageUrl = JobisUrl.imageUrl + profileImageUrl,
                 )
             }
-        }
-    }
-
-    internal fun setEditProfileImageUrl(profileImageUrl: String) = intent {
-        reduce {
-            state.copy(editProfileImageUrl = profileImageUrl)
         }
     }
 }

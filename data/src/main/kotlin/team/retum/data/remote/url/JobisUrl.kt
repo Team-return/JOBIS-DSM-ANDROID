@@ -80,4 +80,8 @@ object JobisUrl {
         const val companyId = "{company-id}"
         const val reviewId = "{review-id}"
     }
+
+    object Files {
+        const val presigned = "$files/pre-signed"
+    }
 }
