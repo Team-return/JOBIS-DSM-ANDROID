@@ -12,9 +12,7 @@ data class FileState(
 ) : State
 
 sealed class FileSideEffect : SideEffect {
-    class SuccessUploadFile(val fileUrls: List<String>) : FileSideEffect()
-    object FileLargeException : FileSideEffect()
-    class Exception(val message: String) : FileSideEffect()
-    object InvalidFileExtension : FileSideEffect()
     object Success : FileSideEffect()
+    object InvalidFileExtension : FileSideEffect()
+    class Exception(val message: String) : FileSideEffect()
 }
