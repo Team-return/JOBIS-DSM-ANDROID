@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,11 +38,9 @@ internal fun ResetPasswordVerifyEmailScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
-
+    val context = LocalContext.current
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
     val focusManager = LocalFocusManager.current
-
     val email = state.email
     val authCode = state.authCode
     val sendAuthCodeState = state.sendAuthCodeState
@@ -53,7 +52,7 @@ internal fun ResetPasswordVerifyEmailScreen(
             }
 
             is ResetPasswordSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                appState.showErrorToast(context.getString(it.message))
             }
 
             is ResetPasswordSideEffect.ClearFocus -> {

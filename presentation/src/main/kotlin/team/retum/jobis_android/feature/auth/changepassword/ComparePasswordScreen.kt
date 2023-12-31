@@ -7,15 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordSideEffect
 import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
@@ -33,30 +34,25 @@ internal fun ComparePasswordScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
-
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
 
-    val focusManager = LocalFocusManager.current
-
-    val passwordMismatchMessage = stringResource(id = R.string.set_password_mismatch_password)
-
-    LaunchedEffect(Unit) {
-        resetPasswordViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is ResetPasswordSideEffect.SuccessVerification -> {
-                    navigateToResetPassword()
-                }
-
-                is ResetPasswordSideEffect.PasswordMismatch -> {
-                    appState.showErrorToast(message = passwordMismatchMessage)
-                }
-
-                is ResetPasswordSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
-
-                else -> {}
+    resetPasswordViewModel.collectSideEffect {
+        when (it) {
+            is ResetPasswordSideEffect.SuccessVerification -> {
+                navigateToResetPassword()
             }
+
+            is ResetPasswordSideEffect.PasswordMismatch -> {
+                appState.showErrorToast(context.getString(R.string.set_password_mismatch_password))
+            }
+
+            is ResetPasswordSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
+            }
+
+            else -> {}
         }
     }
 

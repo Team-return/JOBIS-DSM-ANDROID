@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
 import team.retum.jobis_android.feature.auth.signup.studentinfo.StudentInfoScreen
@@ -60,17 +61,11 @@ internal fun SignUpScreen(
     navigatePopBackStack: () -> Unit,
 ) {
     val appState = LocalAppState.current
-
     val context = LocalContext.current
-
-    var currentProgress by remember { mutableStateOf(1) }
-
+    var currentProgress by remember { mutableIntStateOf(1) }
     val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
-
     val navController = rememberNavController()
-
     val moveToBack = {
         when (currentProgress) {
             1 -> navigatePopBackStack()
@@ -83,45 +78,43 @@ internal fun SignUpScreen(
         moveToBack()
     }
 
-    LaunchedEffect(Unit) {
-        signUpViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
-                    navController.navigateToVerifyEmail()
-                    currentProgress = 2
-                }
+    signUpViewModel.collectSideEffect {
+        when (it) {
+            is SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess -> {
+                navController.navigateToVerifyEmail()
+                currentProgress = 2
+            }
 
-                is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
-                    appState.showErrorToast(message = context.getString(R.string.student_info_not_found_student))
-                }
+            is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
+                appState.showErrorToast(message = context.getString(R.string.student_info_not_found_student))
+            }
 
-                is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
-                    navController.navigateToSetPassword()
-                    currentProgress = 3
-                }
+            is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
+                navController.navigateToSetPassword()
+                currentProgress = 3
+            }
 
-                is SignUpSideEffect.VerifyEmail.EmailConflict -> {
-                    appState.showErrorToast(message = context.getString(R.string.email_verification_conflict))
-                }
+            is SignUpSideEffect.VerifyEmail.EmailConflict -> {
+                appState.showErrorToast(message = context.getString(R.string.email_verification_conflict))
+            }
 
-                is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
-                    appState.showSuccessToast(
-                        title = context.getString(R.string.email_verification_send_auth_code_success_title),
-                        message = context.getString(R.string.email_verification_send_auth_code_success_message),
-                    )
-                }
+            is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
+                appState.showSuccessToast(
+                    title = context.getString(R.string.email_verification_send_auth_code_success_title),
+                    message = context.getString(R.string.email_verification_send_auth_code_success_message),
+                )
+            }
 
-                is SignUpSideEffect.SetPassword.SignUpConflict -> {
-                    appState.showErrorToast(message = context.getString(R.string.sign_up_account_conflict))
-                }
+            is SignUpSideEffect.SetPassword.SignUpConflict -> {
+                appState.showErrorToast(message = context.getString(R.string.sign_up_account_conflict))
+            }
 
-                is SignUpSideEffect.SetPassword.SignUpSuccess -> {
-                    navigateToMain()
-                }
+            is SignUpSideEffect.SetPassword.SignUpSuccess -> {
+                navigateToMain()
+            }
 
-                is SignUpSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
+            is SignUpSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
             }
         }
     }

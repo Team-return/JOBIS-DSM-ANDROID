@@ -78,8 +78,6 @@ internal fun RecruitmentApplicationDialog(
             is FileSideEffect.InvalidFileExtension -> {
                 context.getString(R.string.recruitment_application_invalid_file_extension)
             }
-
-            else -> {}
         }
     }
 
@@ -102,7 +100,7 @@ internal fun RecruitmentApplicationDialog(
                 }
 
                 is ApplicationSideEffect.Exception -> {
-                    showErrorToast(it.message)
+                    showErrorToast(context.getString(it.message))
                 }
             }
         }

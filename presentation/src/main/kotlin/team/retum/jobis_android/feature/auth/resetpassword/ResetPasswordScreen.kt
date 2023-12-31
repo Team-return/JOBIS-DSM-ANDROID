@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,14 +40,11 @@ internal fun ResetPasswordScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
-
+    val context = LocalContext.current
     val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
     val focusManager = LocalFocusManager.current
-
     val newPassword = state.newPassword
     val passwordRepeat = state.passwordRepeat
-
     val onClick: () -> Unit = {
         when (getPreviousDestination().toString()) {
             AuthDestinations.ResetPasswordVerifyEmail -> {
@@ -61,22 +59,20 @@ internal fun ResetPasswordScreen(
         }
     }
 
-    val successMessage = stringResource(id = R.string.reset_password_success)
-
     resetPasswordViewModel.collectSideEffect {
         when (it) {
             is ResetPasswordSideEffect.SuccessChangePassword -> {
-                appState.showSuccessToast(message = successMessage)
+                appState.showSuccessToast(context.getString(R.string.reset_password_success))
                 navigateToMain()
             }
 
             is ResetPasswordSideEffect.SuccessResetPassword -> {
-                appState.showSuccessToast(message = successMessage)
+                appState.showSuccessToast(context.getString(R.string.reset_password_success))
                 navigateToSignIn()
             }
 
             is ResetPasswordSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                appState.showErrorToast(context.getString(it.message))
             }
 
             else -> {}

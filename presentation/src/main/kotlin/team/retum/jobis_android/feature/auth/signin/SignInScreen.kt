@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -50,32 +52,31 @@ internal fun SignInScreen(
     navigateToSignUp: () -> Unit,
 ) {
     val appState = LocalAppState.current
-
+    val context = LocalContext.current
     val state by signInViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
     val focusManager = LocalFocusManager.current
-
     var showBackgroundIcon by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         showBackgroundIcon = true
-        signInViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is SignInSideEffect.MoveToMain -> {
-                    navigateToMainWithPopUpSignIn()
-                }
+    }
 
-                is SignInSideEffect.UnAuthorization -> {
-                    signInViewModel.setPasswordError(true)
-                }
+    signInViewModel.collectSideEffect {
+        when (it) {
+            is SignInSideEffect.MoveToMain -> {
+                navigateToMainWithPopUpSignIn()
+            }
 
-                is SignInSideEffect.NotFound -> {
-                    signInViewModel.setEmailError(true)
-                }
+            is SignInSideEffect.UnAuthorization -> {
+                signInViewModel.setPasswordError(true)
+            }
 
-                is SignInSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
-                }
+            is SignInSideEffect.NotFound -> {
+                signInViewModel.setEmailError(true)
+            }
+
+            is SignInSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
             }
         }
     }
