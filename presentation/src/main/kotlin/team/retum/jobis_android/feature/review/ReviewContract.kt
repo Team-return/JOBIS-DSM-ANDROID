@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.review
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.review.ReviewDetailEntity
@@ -19,5 +20,5 @@ data class ReviewState(
 
 sealed class ReviewSideEffect : SideEffect {
     object SuccessPostReview : ReviewSideEffect()
-    class Exception(val message: String) : ReviewSideEffect()
+    class Exception(@StringRes val message: Int) : ReviewSideEffect()
 }

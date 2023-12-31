@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signin
 
+import androidx.annotation.StringRes
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
@@ -16,5 +17,5 @@ sealed class SignInSideEffect : SideEffect {
     object MoveToMain : SignInSideEffect()
     object UnAuthorization : SignInSideEffect()
     object NotFound : SignInSideEffect()
-    class Exception(val message: String) : SignInSideEffect()
+    class Exception(@StringRes val message: Int) : SignInSideEffect()
 }
