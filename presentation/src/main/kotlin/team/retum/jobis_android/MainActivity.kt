@@ -17,16 +17,12 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.jobis.jobis_android.R
 import dagger.hilt.android.AndroidEntryPoint
-import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 import team.retum.jobis_android.feature.main.MainViewModel
 import team.retum.jobis_android.util.compose.component.JobisSnackBarHost
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel by viewModels<MainViewModel>()
-    private val signUpViewModel by viewModels<SignUpViewModel>()
-    private val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
 
     private var delay = 0L
 
@@ -51,11 +47,7 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = appState.scaffoldState,
                     snackbarHost = { JobisSnackBarHost(appState) },
                 ) {
-                    JobisApp(
-                        signInOption = signInOption,
-                        signUpViewModel = signUpViewModel,
-                        resetPasswordViewModel = resetPasswordViewModel,
-                    )
+                    JobisApp(signInOption = signInOption)
                 }
             }
         }
