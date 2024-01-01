@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobisui.colors.JobisButtonColor
@@ -39,7 +39,7 @@ internal fun ResetPasswordVerifyEmailScreen(
 ) {
     val appState = LocalAppState.current
     val context = LocalContext.current
-    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by resetPasswordViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
     val email = state.email
     val authCode = state.authCode

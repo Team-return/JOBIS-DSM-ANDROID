@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.auth.signup.setpassword.SetPasswordScreen
@@ -63,7 +63,7 @@ internal fun SignUpScreen(
     val appState = LocalAppState.current
     val context = LocalContext.current
     var currentProgress by remember { mutableIntStateOf(1) }
-    val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by signUpViewModel.collectAsState()
     val isSuccessVerifyEmail by remember { mutableStateOf(false) }
     val navController = rememberNavController()
     val moveToBack = {

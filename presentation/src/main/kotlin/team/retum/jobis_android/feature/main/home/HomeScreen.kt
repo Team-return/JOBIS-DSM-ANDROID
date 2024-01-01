@@ -43,10 +43,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.enums.ApplicationStatus
 import team.retum.domain.enums.Department
@@ -84,8 +84,8 @@ internal fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     myPageViewModel: MyPageViewModel = hiltViewModel(),
 ) {
-    val homeState by homeViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val myPageState by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val homeState by homeViewModel.collectAsState()
+    val myPageState by myPageViewModel.collectAsState()
 
     val studentCounts = homeState.studentCounts
 

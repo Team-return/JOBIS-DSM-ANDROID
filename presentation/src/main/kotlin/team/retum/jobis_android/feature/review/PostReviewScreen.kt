@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.enums.Type
@@ -47,8 +47,8 @@ internal fun PostReviewScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
     codeViewModel: CodeViewModel = hiltViewModel(),
 ) {
-    val codeState by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val codeState by codeViewModel.collectAsState()
+    val reviewState by reviewViewModel.collectAsState()
     val context = LocalContext.current
     val appState = LocalAppState.current
 
@@ -174,7 +174,10 @@ private fun PostReviewCard(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ReviewTitle(title = title)
+            Heading6(
+                modifier = Modifier.fillMaxWidth(),
+                text = title,
+            )
             Spacer(modifier = Modifier.height(32.dp))
             PostReviewInputs(
                 question = question,
@@ -197,16 +200,6 @@ private fun PostReviewCard(
             }
         }
     }
-}
-
-@Composable
-private fun ReviewTitle(
-    title: String,
-) {
-    Heading6(
-        modifier = Modifier.fillMaxWidth(),
-        text = title,
-    )
 }
 
 @Composable

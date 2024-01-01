@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobisui.colors.JobisButtonColor
@@ -53,7 +53,7 @@ internal fun SignInScreen(
 ) {
     val appState = LocalAppState.current
     val context = LocalContext.current
-    val state by signInViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by signInViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
     var showBackgroundIcon by remember { mutableStateOf(false) }
 

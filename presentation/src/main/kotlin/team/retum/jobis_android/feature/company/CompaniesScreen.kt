@@ -33,9 +33,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -53,10 +53,8 @@ fun CompaniesScreen(
     navigateToCompanyDetails: (Long) -> Unit,
     companyViewModel: CompanyViewModel = hiltViewModel(),
 ) {
-    val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by companyViewModel.collectAsState()
     val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
-
     val lazyListState = rememberLazyListState()
     var checkCompany by remember { mutableStateOf(false) }
 
@@ -70,8 +68,10 @@ fun CompaniesScreen(
     }
 
     LaunchedEffect(Unit) {
-        companyViewModel.resetPage()
-        companyViewModel.addCompaniesDummy()
+        with(companyViewModel) {
+            resetPage()
+            addCompaniesDummy()
+        }
     }
 
     Column(

@@ -42,10 +42,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.jobis_android.feature.main.bookmark.BookmarkViewModel
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.navigation.NavigationProperties
@@ -72,34 +72,30 @@ internal fun RecruitmentsScreen(
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
+    val state by recruitmentViewModel.collectAsState()
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true,
+    )
+    val recruitments = state.recruitments
+    val coroutineScope = rememberCoroutineScope()
+    val onFilterClicked: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.show()
+        }
+    }
+    val lazyListState = rememberLazyListState()
+    var checkRecruitment by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         recruitmentViewModel.setIsWinterIntern(isWinterIntern)
+        recruitmentViewModel.addRecruitmentsDummy()
         with(recruitmentViewModel) {
             resetPage()
             fetchRecruitments()
             fetchRecruitmentCount()
         }
     }
-
-    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = true,
-    )
-
-    val recruitments = state.recruitments
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val onFilterClicked: () -> Unit = {
-        coroutineScope.launch {
-            sheetState.show()
-        }
-    }
-
-    val lazyListState = rememberLazyListState()
-    var checkRecruitment by remember { mutableStateOf(false) }
 
     LaunchedEffect(checkRecruitment) {
         if (checkRecruitment) {
@@ -108,10 +104,6 @@ internal fun RecruitmentsScreen(
                 fetchRecruitments()
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        recruitmentViewModel.addRecruitmentsDummy()
     }
 
     ModalBottomSheetLayout(
