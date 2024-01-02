@@ -88,7 +88,7 @@ internal fun RecruitmentApplicationDialog(
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
                     onDismissRequest()
-                    showErrorToast(context.getString(R.string.recruitment_application_success))
+                    showSuccessToast(context.getString(R.string.recruitment_application_success))
                 }
 
                 is ApplicationSideEffect.RecruitmentNotFound -> {

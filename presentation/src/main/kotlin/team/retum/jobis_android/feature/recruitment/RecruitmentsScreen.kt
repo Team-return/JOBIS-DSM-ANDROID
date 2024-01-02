@@ -88,9 +88,9 @@ internal fun RecruitmentsScreen(
     var checkRecruitment by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        recruitmentViewModel.setIsWinterIntern(isWinterIntern)
-        recruitmentViewModel.addRecruitmentsDummy()
         with(recruitmentViewModel) {
+            setIsWinterIntern(isWinterIntern)
+            addRecruitmentsDummy()
             resetPage()
             fetchRecruitments()
             fetchRecruitmentCount()

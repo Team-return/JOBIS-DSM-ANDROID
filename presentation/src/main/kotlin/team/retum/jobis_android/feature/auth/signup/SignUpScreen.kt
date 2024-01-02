@@ -87,7 +87,7 @@ internal fun SignUpScreen(
             }
 
             is SignUpSideEffect.StudentInfo.CheckStudentExistsNotFound -> {
-                appState.showErrorToast(message = context.getString(R.string.student_info_not_found_student))
+                appState.showErrorToast(context.getString(R.string.student_info_not_found_student))
             }
 
             is SignUpSideEffect.VerifyEmail.VerifyEmailSuccess -> {
@@ -96,7 +96,7 @@ internal fun SignUpScreen(
             }
 
             is SignUpSideEffect.VerifyEmail.EmailConflict -> {
-                appState.showErrorToast(message = context.getString(R.string.email_verification_conflict))
+                appState.showErrorToast(context.getString(R.string.email_verification_conflict))
             }
 
             is SignUpSideEffect.VerifyEmail.SendAuthCodeSuccess -> {
@@ -107,7 +107,7 @@ internal fun SignUpScreen(
             }
 
             is SignUpSideEffect.SetPassword.SignUpConflict -> {
-                appState.showErrorToast(message = context.getString(R.string.sign_up_account_conflict))
+                appState.showErrorToast(context.getString(R.string.sign_up_account_conflict))
             }
 
             is SignUpSideEffect.SetPassword.SignUpSuccess -> {
