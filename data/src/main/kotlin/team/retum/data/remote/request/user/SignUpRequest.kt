@@ -2,6 +2,7 @@ package team.retum.data.remote.request.user
 
 import com.google.gson.annotations.SerializedName
 import team.retum.domain.enums.Gender
+import team.retum.domain.enums.PlatformType
 import team.retum.domain.param.user.SignUpParam
 
 data class SignUpRequest(
@@ -12,6 +13,7 @@ data class SignUpRequest(
     @SerializedName("gender") val gender: Gender,
     @SerializedName("class_room") val classRoom: Long,
     @SerializedName("number") val number: Long,
+    @SerializedName("platform-type") val platformType: PlatformType = PlatformType.ANDROID,
 )
 
 fun SignUpParam.toRequest() = SignUpRequest(

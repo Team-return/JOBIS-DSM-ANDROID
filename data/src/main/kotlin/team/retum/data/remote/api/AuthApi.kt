@@ -9,11 +9,13 @@ import retrofit2.http.Query
 import team.retum.data.remote.request.user.SendVerificationCodeRequest
 import team.retum.data.remote.response.user.SignInResponse
 import team.retum.data.remote.url.JobisUrl
+import team.retum.domain.enums.PlatformType
 
 interface AuthApi {
     @PUT(JobisUrl.Auth.reissue)
     suspend fun tokenReissue(
         @Header("X-Refresh-Token") xRefreshToken: String,
+        @Query("platform-type") platformType: PlatformType = PlatformType.ANDROID,
     ): SignInResponse
 
     @PATCH(JobisUrl.Auth.code)
