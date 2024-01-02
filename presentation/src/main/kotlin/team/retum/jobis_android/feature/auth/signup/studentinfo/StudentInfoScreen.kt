@@ -61,13 +61,9 @@ internal fun StudentInfoScreen(
 
     LaunchedEffect(Unit) {
         with(state) {
-            val nameBlank = name.isNotBlank()
-            val gradeBlank = grade.isNotBlank()
-            val classRoomBlank = classRoom.isNotBlank()
-            val numberBlank = number.isNotBlank()
-            signUpViewModel.setSignUpButtonEnabled(
-                nameBlank && gradeBlank && classRoomBlank && numberBlank,
-            )
+            val signUpValidation =
+                name.isNotBlank() && grade.isNotBlank() && classRoom.isNotBlank() && number.isNotBlank()
+            signUpViewModel.setSignUpButtonEnabled(signUpValidation)
         }
     }
 
