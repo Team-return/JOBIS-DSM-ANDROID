@@ -22,7 +22,7 @@ class AuthorizationInterceptor @Inject constructor(
 
         val ignorePath = arrayListOf(
             JobisUrl.User.login,
-            JobisUrl.User.reissue,
+            JobisUrl.Auth.reissue,
             JobisUrl.Student.signup,
             JobisUrl.Auth.code,
             JobisUrl.Student.exists,

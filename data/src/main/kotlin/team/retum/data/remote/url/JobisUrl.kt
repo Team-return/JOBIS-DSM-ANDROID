@@ -23,7 +23,6 @@ object JobisUrl {
 
     object User {
         const val login = "$users/login"
-        const val reissue = "$users/reissue"
     }
 
     object Student {
