@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.usecase.applications.FetchAppliedCompanyHistoriesUseCase
 import team.retum.domain.usecase.applications.FetchStudentCountsUseCase
 import team.retum.domain.usecase.student.FetchStudentInformationUseCase
@@ -47,7 +48,8 @@ internal class HomeScreenViewModel @Inject constructor(
     private fun fetchStudentInformation() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchStudentInformationUseCase().onSuccess {
-                reduce { state.copy(studentInformation = it) }
+                val profileImageUrl = JobisUrl.imageUrl + it.profileImageUrl
+                reduce { state.copy(studentInformation = it.copy(profileImageUrl = profileImageUrl)) }
             }
         }
     }
