@@ -15,7 +15,5 @@ data class SignInState(
 
 sealed class SignInSideEffect : SideEffect {
     object MoveToMain : SignInSideEffect()
-    object UnAuthorization : SignInSideEffect()
-    object NotFound : SignInSideEffect()
     class Exception(@StringRes val message: Int) : SignInSideEffect()
 }

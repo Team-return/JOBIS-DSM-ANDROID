@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,66 +45,31 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
-    signInViewModel: SignInViewModel = hiltViewModel(),
+    signInScreenViewModel: SignInScreenViewModel = hiltViewModel(),
     navigateToMainWithPopUpSignIn: () -> Unit,
     navigateToResetPasswordVerifyEmail: () -> Unit,
     navigateToSignUp: () -> Unit,
 ) {
     val appState = LocalAppState.current
     val context = LocalContext.current
-    val state by signInViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
+    val state by signInScreenViewModel.collectAsState()
     var showBackgroundIcon by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         showBackgroundIcon = true
     }
 
-    signInViewModel.collectSideEffect {
+    signInScreenViewModel.collectSideEffect {
         when (it) {
             is SignInSideEffect.MoveToMain -> {
                 navigateToMainWithPopUpSignIn()
-            }
-
-            is SignInSideEffect.UnAuthorization -> {
-                signInViewModel.setPasswordError(true)
-            }
-
-            is SignInSideEffect.NotFound -> {
-                signInViewModel.setEmailError(true)
             }
 
             is SignInSideEffect.Exception -> {
                 appState.showErrorToast(context.getString(it.message))
             }
         }
-    }
-
-    val onEmailChanged: (String) -> Unit = { email: String ->
-        signInViewModel.setEmail(email)
-        signInViewModel.setEmailError(false)
-    }
-
-    val onPasswordChanged: (String) -> Unit = { password: String ->
-        signInViewModel.setPassword(password)
-        signInViewModel.setPasswordError(false)
-    }
-
-    val onSignInCheckChanged = {
-        signInViewModel.setAutoSignIn(!state.autoSignIn)
-        focusManager.clearFocus()
-    }
-
-    val onResetPasswordClicked = {
-        navigateToResetPasswordVerifyEmail()
-    }
-
-    val onDoSignUpClicked = {
-        navigateToSignUp()
-    }
-
-    val postLogin: () -> Unit = {
-        signInViewModel.postLogin()
     }
 
     Box {
@@ -149,27 +113,27 @@ internal fun SignInScreen(
             SignInInputs(
                 email = state.email,
                 password = state.password,
-                onEmailChanged = onEmailChanged,
-                onPasswordChanged = onPasswordChanged,
+                onEmailChanged = signInScreenViewModel::setEmail,
+                onPasswordChanged = signInScreenViewModel::setPassword,
                 emailError = state.emailError,
                 passwordError = state.passwordError,
             )
             Spacer(modifier = Modifier.height(22.dp))
             SignInOptions(
                 autoSignInChecked = state.autoSignIn,
-                onSignInCheckChanged = onSignInCheckChanged,
-                onResetPasswordClicked = onResetPasswordClicked,
+                onSignInCheckChanged = { signInScreenViewModel.setAutoSignIn(!state.autoSignIn) },
+                onResetPasswordClicked = navigateToResetPasswordVerifyEmail,
             )
             Spacer(modifier = Modifier.weight(1f))
             Row(
-                modifier = Modifier.jobisClickable(onClick = onDoSignUpClicked),
+                modifier = Modifier.jobisClickable(onClick = navigateToSignUp),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Caption(
                     text = stringResource(id = R.string.sign_in_sign_up_question),
                     color = JobisColor.Gray600,
                 )
-                Spacer(modifier = Modifier.width(4.dp))
                 Caption(
                     text = stringResource(id = R.string.sign_up),
                     decoration = TextDecoration.Underline,
@@ -179,7 +143,7 @@ internal fun SignInScreen(
             JobisLargeButton(
                 text = stringResource(id = R.string.sign_in),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = postLogin,
+                onClick = signInScreenViewModel::postLogin,
                 enabled = state.signInButtonEnabled,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -230,13 +194,13 @@ private fun SignInOptions(
         Row(
             modifier = Modifier.jobisClickable(onClick = onSignInCheckChanged),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             JobisCheckBox(
                 color = JobisCheckBoxColor.MainColor,
                 isChecked = autoSignInChecked,
                 onChecked = onSignInCheckChanged,
             )
-            Spacer(modifier = Modifier.width(8.dp))
             Caption(text = stringResource(id = R.string.sign_in_auto_sign_in))
         }
         Caption(

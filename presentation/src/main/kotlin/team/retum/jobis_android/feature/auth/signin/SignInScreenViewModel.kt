@@ -7,6 +7,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import team.retum.domain.exception.BadRequestException
 import team.retum.domain.exception.NotFoundException
 import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.user.SignInParam
@@ -15,7 +16,7 @@ import team.retum.jobis_android.feature.root.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(
+class SignInScreenViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
 ) : BaseViewModel<SignInState, SignInSideEffect>() {
 
@@ -32,69 +33,61 @@ class SignInViewModel @Inject constructor(
             ).onSuccess {
                 postSideEffect(SignInSideEffect.MoveToMain)
             }.onFailure { throwable ->
-                postSignInErrorEffect(
-                    throwable = throwable,
-                )
+                when (throwable) {
+                    is UnAuthorizationException, is BadRequestException -> {
+                        reduce {
+                            state.copy(
+                                passwordError = true,
+                                signInButtonEnabled = false,
+                            )
+                        }
+                    }
+
+                    is NotFoundException -> {
+                        reduce {
+                            state.copy(
+                                emailError = true,
+                                signInButtonEnabled = false,
+                            )
+                        }
+                    }
+
+                    else -> {
+                        postSideEffect(
+                            SignInSideEffect.Exception(
+                                message = getStringFromException(
+                                    throwable = throwable,
+                                ),
+                            ),
+                        )
+                    }
+                }
             }
         }
     }
 
-    private fun postSignInErrorEffect(
-        throwable: Throwable,
-    ) = intent {
-        when (throwable) {
-            is UnAuthorizationException -> {
-                postSideEffect(SignInSideEffect.UnAuthorization)
-            }
-
-            is NotFoundException -> {
-                postSideEffect(SignInSideEffect.NotFound)
-            }
-
-            else -> {
-                postSideEffect(
-                    SignInSideEffect.Exception(
-                        message = getStringFromException(
-                            throwable = throwable,
-                        ),
-                    ),
-                )
-            }
+    internal fun setEmail(email: String) = intent {
+        setSignInButtonEnabled()
+        reduce {
+            state.copy(
+                email = email,
+                emailError = false,
+            )
         }
     }
 
-    internal fun setEmail(
-        email: String,
-    ) = intent {
+    internal fun setPassword(password: String) = intent {
         setSignInButtonEnabled()
-        reduce { state.copy(email = email) }
+        reduce {
+            state.copy(
+                password = password,
+                passwordError = false,
+            )
+        }
     }
 
-    internal fun setPassword(
-        password: String,
-    ) = intent {
-        setSignInButtonEnabled()
-        reduce { state.copy(password = password) }
-    }
-
-    internal fun setAutoSignIn(
-        autoSignIn: Boolean,
-    ) = intent {
+    internal fun setAutoSignIn(autoSignIn: Boolean) = intent {
         reduce { state.copy(autoSignIn = autoSignIn) }
-    }
-
-    internal fun setEmailError(
-        emailError: Boolean,
-    ) = intent {
-        setSignInButtonEnabled()
-        reduce { state.copy(emailError = emailError) }
-    }
-
-    internal fun setPasswordError(
-        passwordError: Boolean,
-    ) = intent {
-        setSignInButtonEnabled()
-        reduce { state.copy(passwordError = passwordError) }
     }
 
     private fun setSignInButtonEnabled() = intent {
