@@ -4,11 +4,12 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
+import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
 data class RecruitmentState(
-    var page: Int = 1,
+    var page: Long = 1,
     var recruitmentCount: Long = 0,
     var jobCode: Long? = null,
     var techCode: String? = null,
@@ -34,7 +35,7 @@ data class RecruitmentState(
         submitDocument = "",
         trainPay = 0,
     ),
-    val recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf(),
+    val recruitments: SnapshotStateList<RecruitmentEntity> = mutableStateListOf(),
 ) : State
 
 sealed class RecruitmentSideEffect : SideEffect {
