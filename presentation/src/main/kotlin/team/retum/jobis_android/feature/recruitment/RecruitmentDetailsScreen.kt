@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
@@ -65,12 +65,14 @@ internal fun RecruitmentDetailsScreen(
     navigateToCompanyDetails: (Long) -> Unit,
     recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
 ) {
-    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by recruitmentViewModel.collectAsState()
     val details = state.details
     val areas = state.details.areas
-
     var companyDetailsButtonVisibility by remember { mutableStateOf(true) }
+    var applicationDialogState by remember { mutableStateOf(false) }
+    val onApplyButtonClicked = {
+        applicationDialogState = true
+    }
 
     LaunchedEffect(Unit) {
         companyDetailsButtonVisibility =
@@ -79,12 +81,6 @@ internal fun RecruitmentDetailsScreen(
         if (recruitmentId != null) {
             recruitmentViewModel.setRecruitmentId(recruitmentId)
         }
-    }
-
-    var applicationDialogState by remember { mutableStateOf(false) }
-
-    val onApplyButtonClicked = {
-        applicationDialogState = true
     }
 
     if (applicationDialogState) {

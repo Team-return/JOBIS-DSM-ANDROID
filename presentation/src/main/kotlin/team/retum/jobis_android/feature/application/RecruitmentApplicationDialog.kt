@@ -78,8 +78,6 @@ internal fun RecruitmentApplicationDialog(
             is FileSideEffect.InvalidFileExtension -> {
                 context.getString(R.string.recruitment_application_invalid_file_extension)
             }
-
-            else -> {}
         }
     }
 
@@ -90,7 +88,7 @@ internal fun RecruitmentApplicationDialog(
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
                     onDismissRequest()
-                    showErrorToast(context.getString(R.string.recruitment_application_success))
+                    showSuccessToast(context.getString(R.string.recruitment_application_success))
                 }
 
                 is ApplicationSideEffect.RecruitmentNotFound -> {
@@ -102,7 +100,7 @@ internal fun RecruitmentApplicationDialog(
                 }
 
                 is ApplicationSideEffect.Exception -> {
-                    showErrorToast(it.message)
+                    showErrorToast(context.getString(it.message))
                 }
             }
         }

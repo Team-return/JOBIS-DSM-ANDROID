@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.application
 
+import androidx.annotation.StringRes
 import team.retum.domain.param.application.AttachmentsParam
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -13,5 +14,5 @@ internal sealed class ApplicationSideEffect : SideEffect {
     object SuccessApplyCompany : ApplicationSideEffect()
     object RecruitmentNotFound : ApplicationSideEffect()
     object ApplyConflict : ApplicationSideEffect()
-    class Exception(val message: String) : ApplicationSideEffect()
+    class Exception(@StringRes val message: Int) : ApplicationSideEffect()
 }

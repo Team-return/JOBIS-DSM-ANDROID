@@ -21,11 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.enums.Gender
 import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
-import team.retum.jobisui.colors.ButtonColor
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumButton
 import team.returm.jobisdesignsystem.colors.JobisTextFieldColor
@@ -36,52 +35,35 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 internal fun StudentInfoScreen(
     signUpViewModel: SignUpViewModel,
 ) {
-    val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by signUpViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-
     val clearFocus = {
         focusManager.clearFocus()
     }
-
-    LaunchedEffect(Unit) {
-        with(state) {
-            val nameBlank = name.isNotBlank()
-            val gradeBlank = grade.isNotBlank()
-            val classRoomBlank = classRoom.isNotBlank()
-            val numberBlank = number.isNotBlank()
-            signUpViewModel.setSignUpButtonEnabled(
-                nameBlank && gradeBlank && classRoomBlank && numberBlank,
-            )
-        }
-    }
-
-    val onManSelected: () -> Unit = {
-        signUpViewModel.setGender(gender = Gender.MAN)
-    }
-
-    val onWomanSelected: () -> Unit = {
-        signUpViewModel.setGender(gender = Gender.WOMAN)
-    }
-
     val onGradeChanged: (String) -> Unit = { grade: String ->
         signUpViewModel.setGrade(grade = grade.take(1))
         if (grade.length == 1) {
             focusManager.moveFocus(FocusDirection.Next)
         }
     }
-
     val onClassChanged: (String) -> Unit = { `class`: String ->
         signUpViewModel.setClass(`class` = `class`.take(2))
         if (`class`.length == 1) {
             focusManager.moveFocus(FocusDirection.Next)
         }
     }
-
     val onNumberChanged: (String) -> Unit = { number: String ->
         signUpViewModel.setNumber(number = number.take(2))
         if (number.length == 2) {
             clearFocus()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        with(state) {
+            val signUpValidation =
+                name.isNotBlank() && grade.isNotBlank() && classRoom.isNotBlank() && number.isNotBlank()
+            signUpViewModel.setSignUpButtonEnabled(signUpValidation)
         }
     }
 
@@ -90,8 +72,8 @@ internal fun StudentInfoScreen(
         horizontalAlignment = Alignment.Start,
     ) {
         SelectGender(
-            onManSelected = onManSelected,
-            onWomanSelected = onWomanSelected,
+            onManSelected = { signUpViewModel.setGender(gender = Gender.MAN) },
+            onWomanSelected = { signUpViewModel.setGender(gender = Gender.WOMAN) },
             gender = state.gender,
         )
         Spacer(modifier = Modifier.height(28.dp))
@@ -116,27 +98,18 @@ private fun SelectGender(
     onWomanSelected: () -> Unit,
     gender: Gender,
 ) {
-    val manButtonColor: ButtonColor
-    val womanButtonColor: ButtonColor
-
-    when (gender) {
+    val (manButtonColor, womanButtonColor) = when (gender) {
         Gender.MAN -> {
-            manButtonColor = JobisButtonColor.MainSolidColor
-            womanButtonColor = JobisButtonColor.MainShadowColor
+            JobisButtonColor.MainSolidColor to JobisButtonColor.MainShadowColor
         }
 
-        else -> {
-            manButtonColor = JobisButtonColor.MainShadowColor
-            womanButtonColor = JobisButtonColor.MainSolidColor
+        Gender.WOMAN -> {
+            JobisButtonColor.MainShadowColor to JobisButtonColor.MainSolidColor
         }
     }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Box(
-            modifier = Modifier.weight(1f),
-        ) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.weight(1f)) {
             JobisMediumButton(
                 text = Gender.MAN.value,
                 color = manButtonColor,
@@ -145,9 +118,7 @@ private fun SelectGender(
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Box(
-            modifier = Modifier.weight(1f),
-        ) {
+        Box(modifier = Modifier.weight(1f)) {
             JobisMediumButton(
                 text = Gender.WOMAN.value,
                 color = womanButtonColor,
@@ -180,9 +151,7 @@ private fun InformationFields(
         error = studentNotFound,
     )
     Spacer(modifier = Modifier.height(12.dp))
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
         Box(
             modifier = Modifier.weight(0.9f),
         ) {
@@ -197,9 +166,7 @@ private fun InformationFields(
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Box(
-            modifier = Modifier.weight(0.9f),
-        ) {
+        Box(modifier = Modifier.weight(0.9f)) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
                 hint = stringResource(id = R.string.input_hint_class),
@@ -211,9 +178,7 @@ private fun InformationFields(
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Box(
-            modifier = Modifier.weight(0.9f),
-        ) {
+        Box(modifier = Modifier.weight(0.9f)) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
                 hint = stringResource(id = R.string.input_hint_number),

@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
+import androidx.annotation.StringRes
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
@@ -24,5 +25,5 @@ sealed class ResetPasswordSideEffect : SideEffect {
     object SuccessResetPassword : ResetPasswordSideEffect()
     object PasswordMismatch : ResetPasswordSideEffect()
     object ClearFocus : ResetPasswordSideEffect()
-    class Exception(val message: String) : ResetPasswordSideEffect()
+    class Exception(@StringRes val message: Int) : ResetPasswordSideEffect()
 }

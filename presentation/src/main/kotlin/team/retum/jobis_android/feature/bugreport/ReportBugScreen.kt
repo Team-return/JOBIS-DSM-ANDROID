@@ -59,8 +59,29 @@ internal fun ReportBugScreen(
 ) {
     val bugState by bugViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-
     val context = LocalContext.current
+    val activityResultLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
+            result?.run {
+                fileViewModel.addFile(
+                    FileUtil.toFile(
+                        context = context,
+                        uri = this,
+                    ),
+                )
+                bugViewModel.imageUris.add(this)
+            }
+        }
+    val positions = listOf(
+        DevelopmentArea.ALL.value,
+        DevelopmentArea.SERVER.value,
+        DevelopmentArea.IOS.value,
+        DevelopmentArea.ANDROID.value,
+        DevelopmentArea.WEB.value,
+    )
+    val onItemSelected: (Int) -> Unit = { index: Int ->
+        bugViewModel.setPosition(positions[index])
+    }
 
     fileViewModel.collectSideEffect {
         when (it) {
@@ -77,40 +98,15 @@ internal fun ReportBugScreen(
             when (it) {
                 is BugSideEffect.SuccessReportBug -> {
                     fileViewModel.resetFiles()
-                    showSuccessToast(message = context.getString(R.string.report_bug_success))
+                    showSuccessToast(context.getString(R.string.report_bug_success))
                     navigatePopBackStack()
                 }
 
                 is BugSideEffect.Exception -> {
-                    showErrorToast(message = it.message)
+                    showErrorToast(context.getString(it.message))
                 }
             }
         }
-    }
-
-    val activityResultLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
-            result?.run {
-                fileViewModel.addFile(
-                    FileUtil.toFile(
-                        context = context,
-                        uri = this,
-                    ),
-                )
-                bugViewModel.imageUris.add(this)
-            }
-        }
-
-    val positions = listOf(
-        DevelopmentArea.ALL.value,
-        DevelopmentArea.SERVER.value,
-        DevelopmentArea.IOS.value,
-        DevelopmentArea.ANDROID.value,
-        DevelopmentArea.WEB.value,
-    )
-
-    val onItemSelected: (Int) -> Unit = { index: Int ->
-        bugViewModel.setPosition(positions[index])
     }
 
     Box(
@@ -152,7 +148,7 @@ internal fun ReportBugScreen(
             JobisLargeButton(
                 text = stringResource(id = R.string.complete),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = { fileViewModel.createPresignedUrl()/*bugViewModel.reportBug(fileViewModel.filePaths)*/ },
+                onClick = { fileViewModel.createPresignedUrl() },
                 enabled = bugState.reportBugButtonState,
             )
         }

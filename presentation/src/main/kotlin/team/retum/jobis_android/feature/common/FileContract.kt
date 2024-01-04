@@ -12,5 +12,4 @@ data class FileState(
 sealed class FileSideEffect : SideEffect {
     object Success : FileSideEffect()
     object InvalidFileExtension : FileSideEffect()
-    class Exception(val message: String) : FileSideEffect()
 }
