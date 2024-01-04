@@ -11,7 +11,7 @@ class RecruitmentDataSourceImpl @Inject constructor(
     private val recruitmentApi: RecruitmentApi,
 ) : RecruitmentDataSource {
     override suspend fun fetchRecruitmentList(
-        page: Int,
+        page: Long,
         jobCode: Long?,
         techCode: String?,
         name: String?,
