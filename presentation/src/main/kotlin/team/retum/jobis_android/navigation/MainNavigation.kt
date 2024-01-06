@@ -43,7 +43,6 @@ internal fun NavGraphBuilder.mainNavigation(
             popExitTransition = fadeOut(tween(300)),
         ) {
             RecruitmentsScreen(
-                putString = putString,
                 isWinterIntern = it.arguments?.getBoolean(NavigationProperties.IS_WINTER_INTERN)
                     ?: false,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,

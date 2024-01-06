@@ -30,19 +30,19 @@ internal class RecruitmentViewModel @Inject constructor(
 
     override val container = container<RecruitmentState, RecruitmentSideEffect>(RecruitmentState())
 
-    private val _recruitments: SnapshotStateList<RecruitmentUiModel> = mutableStateListOf()
+    private val _recruitments: SnapshotStateList<RecruitmentEntity> = mutableStateListOf()
 
     internal fun addRecruitmentsDummy() = intent {
         repeat(8) {
             _recruitments.add(
-                RecruitmentUiModel(
+                RecruitmentEntity(
                     recruitId = 0,
                     companyName = "",
                     companyProfileUrl = "",
                     trainPay = 0,
                     military = false,
                     totalHiring = 0,
-                    jobCodeList = "",
+                    hiringJobs = "",
                     bookmarked = false,
                 ),
             )
@@ -52,14 +52,14 @@ internal class RecruitmentViewModel @Inject constructor(
 
     private fun clearRecruitmentsDummy() = intent {
         if (_recruitments.contains(
-                RecruitmentUiModel(
+                RecruitmentEntity(
                     recruitId = 0,
                     companyName = "",
                     companyProfileUrl = "",
                     trainPay = 0,
                     military = false,
                     totalHiring = 0,
-                    jobCodeList = "",
+                    hiringJobs = "",
                     bookmarked = false,
                 ),
             )
@@ -84,7 +84,7 @@ internal class RecruitmentViewModel @Inject constructor(
                     ),
                 ).onSuccess { it ->
                     clearRecruitmentsDummy()
-                    setRecruitments(it.recruitmentEntities.map { it.toModel() })
+                    // setRecruitments(it.recruitmentEntities.map { it.toModel() })
                 }.onFailure { throwable ->
                     postSideEffect(
                         sideEffect = RecruitmentSideEffect.Exception(
@@ -213,7 +213,7 @@ internal class RecruitmentViewModel @Inject constructor(
     }
 
     private fun setRecruitments(
-        recruitments: List<RecruitmentUiModel>,
+        recruitments: List<RecruitmentEntity>,
     ) = intent {
         _recruitments.addAll(recruitments)
         reduce {
@@ -250,25 +250,3 @@ internal class RecruitmentViewModel @Inject constructor(
         }
     }
 }
-
-data class RecruitmentUiModel(
-    val recruitId: Long,
-    val companyName: String,
-    val companyProfileUrl: String,
-    val trainPay: Long,
-    val military: Boolean,
-    val totalHiring: Long,
-    val jobCodeList: String,
-    var bookmarked: Boolean,
-)
-
-internal fun RecruitmentEntity.toModel() = RecruitmentUiModel(
-    recruitId = this.recruitId,
-    companyName = this.companyName,
-    companyProfileUrl = JobisUrl.imageUrl + this.companyProfileUrl,
-    trainPay = this.trainPay,
-    military = this.military,
-    totalHiring = this.totalHiring,
-    jobCodeList = this.jobCodeList,
-    bookmarked = this.bookmarked,
-)
