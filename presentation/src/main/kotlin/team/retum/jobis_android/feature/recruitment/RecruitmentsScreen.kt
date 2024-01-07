@@ -98,6 +98,7 @@ internal fun RecruitmentsScreen(
                 )
                 coroutineScope.launch {
                     sheetState.hide()
+                    lazyListState.animateScrollToItem(0)
                 }
             }
         },
