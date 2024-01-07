@@ -58,9 +58,9 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentFilter(
-    sheetState: Boolean = false,
     codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
+    sheetState: Boolean = false,
+    setCode: (jobCode: Long?, techCode: String?) -> Unit,
 ) {
     val state by codeViewModel.collectAsState()
     val selectedTechs = state.selectedTechs
@@ -224,7 +224,7 @@ internal fun RecruitmentFilter(
                     color = JobisButtonColor.MainSolidColor,
                     enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
                     onClick = {
-                        onDismissDialog(
+                        setCode(
                             state.selectedJobCode,
                             getTechCodes(selectedTechs),
                         )
@@ -377,8 +377,12 @@ private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.densit
 
 private fun getTechCodes(
     techCodes: List<Pair<Long, String>>,
-): String {
-    return StringBuilder().apply {
-        techCodes.forEach { append("${it.first} ") }
-    }.toString().trim().replace(" ", ",")
+): String? {
+    return if (techCodes.isNotEmpty()) {
+        StringBuilder().apply {
+            techCodes.forEach { append("${it.first} ") }
+        }.toString().trim().replace(" ", ",")
+    } else {
+        null
+    }
 }
