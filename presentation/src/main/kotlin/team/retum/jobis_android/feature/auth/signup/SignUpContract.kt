@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signup
 
+import androidx.annotation.StringRes
 import team.retum.domain.enums.Gender
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -41,5 +42,5 @@ sealed class SignUpSideEffect() : SideEffect {
         object SignUpConflict : SignUpSideEffect()
     }
 
-    class Exception(val message: String) : SignUpSideEffect()
+    class Exception(@StringRes val message: Int) : SignUpSideEffect()
 }

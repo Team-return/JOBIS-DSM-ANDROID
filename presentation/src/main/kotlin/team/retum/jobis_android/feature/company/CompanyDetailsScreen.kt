@@ -32,8 +32,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.feature.recruitment.CompanyInformation
@@ -63,9 +63,8 @@ fun CompanyDetailsScreen(
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
     var detailButtonVisibility by remember { mutableStateOf(true) }
-
-    val companyState by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val companyState by companyViewModel.collectAsState()
+    val reviewState by reviewViewModel.collectAsState()
 
     LaunchedEffect(Unit) {
         detailButtonVisibility =

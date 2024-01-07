@@ -15,8 +15,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisSmallButton
@@ -27,8 +27,7 @@ import team.returm.jobisdesignsystem.textfield.JobisBoxTextField
 fun VerifyEmailScreen(
     signUpViewModel: SignUpViewModel,
 ) {
-    val state by signUpViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by signUpViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
 
     val onVerifyCodeChanged = { verifyCode: String ->

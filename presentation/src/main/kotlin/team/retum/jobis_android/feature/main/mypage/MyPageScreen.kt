@@ -76,41 +76,7 @@ internal fun MyPageScreen(
 ) {
     val state by myPageViewModel.collectAsState()
     val reviewableCompanies by companyViewModel.collectAsState()
-
     val context = LocalContext.current
-
-    LocalAppState.current.run {
-        myPageViewModel.collectSideEffect {
-            when (it) {
-                is MyPageSideEffect.SuccessSignOut -> {
-                    navigateToSignInPopUpWithMain()
-                }
-
-                is MyPageSideEffect.SuccessEditProfileImage -> {
-                    showSuccessToast(context.getString(R.string.success_edit_profile_image))
-                }
-
-                is MyPageSideEffect.Exception -> {
-                    showErrorToast(message = it.message)
-                }
-            }
-        }
-    }
-
-    fileViewModel.collectSideEffect {
-        when (it) {
-            is FileSideEffect.Success -> {
-                myPageViewModel.editProfileImage(fileViewModel.filePaths.first())
-            }
-
-            else -> {}
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        companyViewModel.fetchReviewableCompanies()
-    }
-
     val activityResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
@@ -124,12 +90,42 @@ internal fun MyPageScreen(
             fileViewModel.createPresignedUrl()
         }
     }
-
     var showSignOutDialog by remember { mutableStateOf(false) }
-
     val editProfileImage: () -> Unit = {
         activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         fileViewModel.setType(FileType.LOGO_IMAGE)
+    }
+
+    LaunchedEffect(Unit) {
+        companyViewModel.fetchReviewableCompanies()
+    }
+
+    LocalAppState.current.run {
+        myPageViewModel.collectSideEffect {
+            when (it) {
+                is MyPageSideEffect.SuccessSignOut -> {
+                    navigateToSignInPopUpWithMain()
+                }
+
+                is MyPageSideEffect.SuccessEditProfileImage -> {
+                    showSuccessToast(context.getString(R.string.success_edit_profile_image))
+                }
+
+                is MyPageSideEffect.Exception -> {
+                    showErrorToast(context.getString(it.message))
+                }
+            }
+        }
+    }
+
+    fileViewModel.collectSideEffect {
+        when (it) {
+            is FileSideEffect.Success -> {
+                myPageViewModel.editProfileImage(fileViewModel.filePaths.first())
+            }
+
+            else -> {}
+        }
     }
 
     if (showSignOutDialog) {

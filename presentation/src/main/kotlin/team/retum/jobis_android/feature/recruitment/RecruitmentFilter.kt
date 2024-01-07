@@ -37,10 +37,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.enums.Type
 import team.retum.jobisui.colors.JobisButtonColor
@@ -62,36 +62,20 @@ internal fun RecruitmentFilter(
     codeViewModel: CodeViewModel = hiltViewModel(),
     onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
 ) {
-    val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by codeViewModel.collectAsState()
     val selectedTechs = state.selectedTechs
-
     var folded by remember { mutableStateOf(false) }
-
     val onKeywordChanged: (String) -> Unit = { keyword: String ->
         if (folded) folded = false
         codeViewModel.setKeyword(keyword)
     }
-
     val selectedTech = StringBuilder().apply {
         selectedTechs.forEach {
             append(it.second)
             append(" ")
         }
     }.toString().trim().replace(" ", " | ")
-
-    LaunchedEffect(sheetState) {
-        if (sheetState) {
-            with(codeViewModel) {
-                fetchCodes()
-                setType(Type.TECH)
-                fetchCodes()
-            }
-        }
-    }
-
     var positionsHeight by remember { mutableStateOf(0.dp) }
-
     val foldedOffset by animateDpAsState(
         targetValue = if (folded) {
             (positionsHeight + 12.dp)
@@ -104,7 +88,6 @@ internal fun RecruitmentFilter(
         ),
         label = "",
     )
-
     val onSelectJob: (jobCode: Long) -> Unit = {
         with(codeViewModel) {
             setType(Type.TECH)
@@ -112,7 +95,6 @@ internal fun RecruitmentFilter(
             fetchCodes()
         }
     }
-
     val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
         with(codeViewModel) {
             onSelectTech(
@@ -121,8 +103,17 @@ internal fun RecruitmentFilter(
             )
         }
     }
-
     val setOnPositionsHeight: (Int) -> Unit = { positionsHeight = it.dp }
+
+    LaunchedEffect(sheetState) {
+        if (sheetState) {
+            with(codeViewModel) {
+                fetchCodes()
+                setType(Type.TECH)
+                fetchCodes()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),

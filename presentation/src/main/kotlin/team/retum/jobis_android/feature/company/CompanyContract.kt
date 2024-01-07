@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import team.retum.domain.entity.company.CompanyDetailsEntity
@@ -11,7 +12,7 @@ import java.util.Collections.emptyList
 
 sealed class CompanySideEffect : SideEffect {
     object NotFoundCompany : CompanySideEffect()
-    class Exception(val message: String) : CompanySideEffect()
+    class Exception(@StringRes val message: Int) : CompanySideEffect()
 }
 
 data class CompanyState(

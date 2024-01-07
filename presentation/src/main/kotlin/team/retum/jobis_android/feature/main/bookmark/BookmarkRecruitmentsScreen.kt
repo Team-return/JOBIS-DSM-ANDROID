@@ -42,8 +42,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectState
 import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobis_android.util.compose.vibrate
@@ -61,30 +62,15 @@ internal fun BookmarkRecruitmentsScreen(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-
-    val state by bookmarkViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        bookmarkViewModel.fetchBookmarkedRecruitments()
-    }
-
+    val state by bookmarkViewModel.collectAsState()
     val bookmarks = remember {
         mutableStateListOf<BookmarkedRecruitmentEntity>()
     }
-
     val removeRecruitments = { it: BookmarkedRecruitmentEntity ->
         bookmarkViewModel.bookmarkRecruitment(recruitmentId = it.recruitmentId)
         bookmarks.remove(it)
         vibrate(context = context)
     }
-
-    LaunchedEffect(Unit) {
-        bookmarkViewModel.container.stateFlow.collect {
-            bookmarks.clear()
-            bookmarks.addAll(it.bookmarkedRecruitments)
-        }
-    }
-
     val bookmarkNotExistTextAlpha by animateFloatAsState(
         targetValue = if (!state.bookmarkExists) {
             1f
@@ -93,6 +79,15 @@ internal fun BookmarkRecruitmentsScreen(
         },
         label = "",
     )
+
+    LaunchedEffect(Unit) {
+        bookmarkViewModel.fetchBookmarkedRecruitments()
+    }
+
+    bookmarkViewModel.collectState {
+        bookmarks.clear()
+        bookmarks.addAll(it.bookmarkedRecruitments)
+    }
 
     Column(
         modifier = Modifier

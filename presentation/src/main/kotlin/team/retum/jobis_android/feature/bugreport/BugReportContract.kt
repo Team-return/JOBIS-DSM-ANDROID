@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.bugreport
 
+import androidx.annotation.StringRes
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
@@ -15,5 +16,5 @@ internal data class BugState(
 
 sealed class BugSideEffect : SideEffect {
     object SuccessReportBug : BugSideEffect()
-    class Exception(val message: String) : BugSideEffect()
+    class Exception(@StringRes val message: Int) : BugSideEffect()
 }

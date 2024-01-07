@@ -13,12 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobisui.colors.JobisButtonColor
@@ -37,11 +38,9 @@ internal fun ResetPasswordVerifyEmailScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
-
-    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
+    val state by resetPasswordViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-
     val email = state.email
     val authCode = state.authCode
     val sendAuthCodeState = state.sendAuthCodeState
@@ -53,7 +52,7 @@ internal fun ResetPasswordVerifyEmailScreen(
             }
 
             is ResetPasswordSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                appState.showErrorToast(context.getString(it.message))
             }
 
             is ResetPasswordSideEffect.ClearFocus -> {
