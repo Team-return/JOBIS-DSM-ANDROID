@@ -85,17 +85,21 @@ internal fun RecruitmentsScreen(
     LaunchedEffect(Unit) {
         with(recruitmentsScreenViewModel) {
             setWinterIntern(isWinterIntern)
-            val layoutInformation = lazyListState.layoutInfo
-            snapshotFlow { layoutInformation.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
+            snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
         }
     }
 
     ModalBottomSheetLayout(
         sheetContent = {
-            /*RecruitmentFilter(
-                sheetState = sheetState.isVisible,
-                setCode = recruitmentsScreenViewModel::setCodes
-            )*/
+            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode: Long?, techCode: String? ->
+                recruitmentsScreenViewModel.setCodes(
+                    jobCode = jobCode,
+                    techCode = techCode,
+                )
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+            }
         },
         sheetShape = RoundedCornerShape(
             topStart = 16.dp,

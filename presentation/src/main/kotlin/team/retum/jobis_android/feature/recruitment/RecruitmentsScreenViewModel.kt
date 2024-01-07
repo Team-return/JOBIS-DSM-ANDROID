@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.data.remote.url.JobisUrl
@@ -41,15 +42,18 @@ class RecruitmentsScreenViewModel @Inject constructor(
         fetchRecruitmentCount()
     }
 
-    private fun fetchRecruitments() = intent {
+    private fun fetchRecruitments(
+        jobCode: Long? = null,
+        techCode: String? = null,
+    ) = intent {
         reduce { state.copy(page = state.page + 1) }
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentsUseCase(
                 fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
                     name = state.name,
-                    jobCode = state.jobCode,
-                    techCode = state.techCode,
+                    jobCode = jobCode,
+                    techCode = techCode,
                     winterIntern = state.isWinterIntern,
                 ),
             ).onSuccess { it ->
@@ -63,14 +67,17 @@ class RecruitmentsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun fetchRecruitmentCount() = intent {
+    private fun fetchRecruitmentCount(
+        jobCode: Long? = null,
+        techCode: String? = null,
+    ) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchRecruitmentCountUseCase(
                 FetchRecruitmentsParam(
                     page = state.page,
                     name = state.name,
-                    jobCode = state.jobCode,
-                    techCode = state.techCode,
+                    jobCode = jobCode,
+                    techCode = techCode,
                     winterIntern = state.isWinterIntern,
                 ),
             ).onSuccess {
@@ -91,9 +98,22 @@ class RecruitmentsScreenViewModel @Inject constructor(
                 }
             }
             fetchNextPage.start()
-            container.stateFlow.collect {
-                if (it.page == state.totalPage && state.totalPage != 0L) {
-                    fetchNextPage.cancel()
+            with(container) {
+                launch {
+                    stateFlow.collect {
+                        if (it.page == state.totalPage && state.totalPage != 0L) {
+                            fetchNextPage.cancel()
+                        }
+                    }
+                }
+                launch {
+                    sideEffectFlow.collect { sideEffect: SideEffect ->
+                        when (sideEffect) {
+                            is RecruitmentsSideEffect.StartFetchNextPage -> {
+                                fetchNextPage.start()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -107,9 +127,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
         val recruitmentId = recruitmentEntity.recruitId
         recruitments[index] = recruitmentEntity.copy(bookmarked = !bookmarked)
         viewModelScope.launch(Dispatchers.IO) {
-            bookmarkRecruitmentUseCase(recruitmentId = recruitmentId).onSuccess {
-            }.onFailure {
-            }
+            bookmarkRecruitmentUseCase(recruitmentId = recruitmentId)
         }
     }
 
@@ -123,14 +141,25 @@ class RecruitmentsScreenViewModel @Inject constructor(
 
     internal fun setCodes(
         jobCode: Long?,
-        techCode: String,
+        techCode: String?,
     ) = intent {
         reduce {
             state.copy(
                 jobCode = jobCode,
                 techCode = techCode,
+                page = 0,
             )
         }
+        recruitments.clear()
+        postSideEffect(RecruitmentsSideEffect.StartFetchNextPage)
+        fetchRecruitmentCount(
+            jobCode = jobCode,
+            techCode = techCode,
+        )
+        fetchRecruitments(
+            jobCode = jobCode,
+            techCode = techCode,
+        )
     }
 }
 
@@ -143,4 +172,6 @@ data class RecruitmentsState(
     val totalPage: Long = 0,
 ) : State
 
-sealed interface RecruitmentsSideEffect : SideEffect
+sealed interface RecruitmentsSideEffect : SideEffect {
+    object StartFetchNextPage : RecruitmentsSideEffect
+}
