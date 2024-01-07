@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -37,12 +38,12 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         installSplashScreen()
         setContent {
+            val appState = rememberAppState()
+            val state by mainViewModel.collectAsState()
+
             BackHandler {
                 setBackHandler()
             }
-
-            val appState = rememberAppState()
-            val signInOption = mainViewModel.collectAsState().value.autoSignInOption
 
             CompositionLocalProvider(LocalAppState provides appState) {
                 Scaffold(
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { JobisSnackBarHost(appState) },
                 ) {
                     JobisApp(
-                        signInOption = signInOption,
+                        signInOption = state.autoSignInOption,
                         signUpViewModel = signUpViewModel,
                         resetPasswordViewModel = resetPasswordViewModel,
                     )
