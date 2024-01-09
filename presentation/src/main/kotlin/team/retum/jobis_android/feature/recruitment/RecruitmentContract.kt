@@ -8,13 +8,7 @@ import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 
-data class RecruitmentState(
-    var page: Long = 1,
-    var recruitmentCount: Long = 0,
-    var jobCode: Long? = null,
-    var techCode: String? = null,
-    var name: String? = null,
-    val isWinterIntern: Boolean = false,
+data class RecruitmentDetailsState(
     var recruitmentId: Long = 0L,
     var details: RecruitmentDetailsEntity = RecruitmentDetailsEntity(
         areas = emptyList(),
@@ -38,6 +32,7 @@ data class RecruitmentState(
     val recruitments: SnapshotStateList<RecruitmentEntity> = mutableStateListOf(),
 ) : State
 
-sealed class RecruitmentSideEffect : SideEffect {
-    class Exception(@StringRes val message: Int) : RecruitmentSideEffect()
+sealed interface RecruitmentDetailsSideEffect : SideEffect {
+    object RecruitmentNotFound : RecruitmentDetailsSideEffect
+    class Exception(@StringRes val message: Int) : RecruitmentDetailsSideEffect
 }
