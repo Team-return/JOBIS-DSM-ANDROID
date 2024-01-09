@@ -34,8 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.feature.common.FileSideEffect
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisButtonColor
@@ -51,43 +49,24 @@ import java.io.File
 internal fun RecruitmentApplicationDialog(
     isReApply: Boolean = false,
     recruitmentId: Long,
-    fileViewModel: FileViewModel = hiltViewModel(),
-    applicationViewModel: ApplicationViewModel = hiltViewModel(),
+    applicationDialogViewModel: ApplicationDialogViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
 ) {
     val context = LocalContext.current
-    val filePaths = fileViewModel.filePaths
-    val files = fileViewModel.files
+    val files = applicationDialogViewModel.files
 
     LaunchedEffect(Unit) {
-        applicationViewModel.setRecruitmentId(recruitmentId = recruitmentId)
-    }
-
-    fileViewModel.collectSideEffect {
-        when (it) {
-            is FileSideEffect.Success -> {
-                applicationViewModel.run {
-                    if (isReApply) {
-                        reApplyCompany(filePaths)
-                    } else {
-                        applyCompany(filePaths)
-                    }
-                }
-            }
-
-            is FileSideEffect.InvalidFileExtension -> {
-                context.getString(R.string.recruitment_application_invalid_file_extension)
-            }
-        }
+        applicationDialogViewModel.setRecruitmentState(
+            recruitmentId = recruitmentId,
+            isReApply = isReApply,
+        )
     }
 
     LocalAppState.current.run {
-        applicationViewModel.collectSideEffect {
-            fileViewModel.resetFiles()
+        applicationDialogViewModel.collectSideEffect {
             onDismissRequest()
             when (it) {
                 is ApplicationSideEffect.SuccessApplyCompany -> {
-                    onDismissRequest()
                     showSuccessToast(context.getString(R.string.recruitment_application_success))
                 }
 
@@ -97,6 +76,10 @@ internal fun RecruitmentApplicationDialog(
 
                 is ApplicationSideEffect.ApplyConflict -> {
                     showErrorToast(context.getString(R.string.recruitment_application_conflict))
+                }
+
+                is ApplicationSideEffect.InvalidFileExtension -> {
+                    showErrorToast(context.getString(R.string.recruitment_application_invalid_file_extension))
                 }
 
                 is ApplicationSideEffect.Exception -> {
@@ -113,8 +96,8 @@ internal fun RecruitmentApplicationDialog(
                     // 파일 한 개인 경우
                     null -> {
                         this?.data?.run {
-                            fileViewModel.addFile(
-                                FileUtil.toFile(
+                            applicationDialogViewModel.addFile(
+                                file = FileUtil.toFile(
                                     context = context,
                                     uri = this,
                                 ),
@@ -124,7 +107,7 @@ internal fun RecruitmentApplicationDialog(
                     // 파일 두 개 이상인 경우
                     else -> {
                         repeat(this.clipData?.itemCount ?: 0) {
-                            fileViewModel.addFile(
+                            applicationDialogViewModel.addFile(
                                 FileUtil.toFile(
                                     context = context,
                                     uri = this.clipData?.getItemAt(it)?.uri!!,
@@ -175,7 +158,7 @@ internal fun RecruitmentApplicationDialog(
                     AttachedFile(
                         fileName = file.name,
                         fileSize = file.getFileSize(),
-                        onClick = { fileViewModel.removeFile(index) },
+                        onClick = { applicationDialogViewModel.removeFile(index) },
                     )
                 }
             }
@@ -196,18 +179,18 @@ internal fun RecruitmentApplicationDialog(
                 modifier = Modifier.padding(vertical = 6.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                applicationViewModel.urls.forEachIndexed { index, url ->
+                applicationDialogViewModel.urls.forEachIndexed { index, url ->
                     AttachedUrl(
-                        onValueChanged = { applicationViewModel.urls[index] = it },
+                        onValueChanged = { applicationDialogViewModel.urls[index] = it },
                         url = url,
-                        onRemoveUrl = { applicationViewModel.urls.removeAt(index) },
+                        onRemoveUrl = { applicationDialogViewModel.urls.removeAt(index) },
                     )
                 }
             }
             SubmitSpace(
                 modifier = Modifier.padding(bottom = 8.dp),
                 description = stringResource(id = R.string.add_to_press_url),
-                onClick = { applicationViewModel.urls.add("") },
+                onClick = { applicationDialogViewModel.urls.add("") },
             )
         }
         Box(
@@ -220,7 +203,7 @@ internal fun RecruitmentApplicationDialog(
                 text = stringResource(id = R.string.check),
                 color = JobisButtonColor.MainSolidColor,
                 enabled = files.isNotEmpty(),
-                onClick = fileViewModel::createPresignedUrl,
+                onClick = applicationDialogViewModel::createPresignedUrl,
             )
         }
     }
