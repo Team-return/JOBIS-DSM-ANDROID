@@ -37,8 +37,6 @@ import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.enums.DevelopmentArea
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.feature.common.FileSideEffect
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisButtonColor
@@ -52,24 +50,23 @@ import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-internal fun ReportBugScreen(
-    bugViewModel: BugViewModel = hiltViewModel(),
-    fileViewModel: FileViewModel = hiltViewModel(),
+internal fun BugReportScreen(
+    bugReportScreenViewModel: BugReportScreenViewModel = hiltViewModel(),
     navigatePopBackStack: () -> Unit,
 ) {
-    val bugState by bugViewModel.collectAsState()
+    val bugState by bugReportScreenViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val activityResultLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
             result?.run {
-                fileViewModel.addFile(
-                    FileUtil.toFile(
+                bugReportScreenViewModel.addFile(
+                    file = FileUtil.toFile(
                         context = context,
                         uri = this,
                     ),
+                    uri = this,
                 )
-                bugViewModel.imageUris.add(this)
             }
         }
     val positions = listOf(
@@ -80,24 +77,13 @@ internal fun ReportBugScreen(
         DevelopmentArea.WEB.value,
     )
     val onItemSelected: (Int) -> Unit = { index: Int ->
-        bugViewModel.setPosition(positions[index])
-    }
-
-    fileViewModel.collectSideEffect {
-        when (it) {
-            is FileSideEffect.Success -> {
-                bugViewModel.reportBug(fileViewModel.filePaths)
-            }
-
-            else -> {}
-        }
+        bugReportScreenViewModel.setPosition(positions[index])
     }
 
     LocalAppState.current.run {
-        bugViewModel.collectSideEffect {
+        bugReportScreenViewModel.collectSideEffect {
             when (it) {
                 is BugSideEffect.SuccessReportBug -> {
-                    fileViewModel.resetFiles()
                     showSuccessToast(context.getString(R.string.report_bug_success))
                     navigatePopBackStack()
                 }
@@ -124,15 +110,15 @@ internal fun ReportBugScreen(
         ) {
             Header(text = stringResource(id = R.string.bug_report))
             ContentInputs(
-                onTitleChanged = bugViewModel::setTitle,
+                onTitleChanged = bugReportScreenViewModel::setTitle,
                 title = bugState.title,
-                onContentChanged = bugViewModel::setContent,
+                onContentChanged = bugReportScreenViewModel::setContent,
                 content = bugState.content,
                 titleError = bugState.titleError,
                 contentError = bugState.contentError,
             )
             ScreenShots(
-                uris = bugViewModel.imageUris,
+                uris = bugReportScreenViewModel.uris,
                 addScreenshot = {
                     activityResultLauncher.launch(
                         PickVisualMediaRequest(
@@ -141,14 +127,13 @@ internal fun ReportBugScreen(
                     )
                 },
                 removeScreenshot = { index ->
-                    fileViewModel.removeFile(index)
-                    bugViewModel.imageUris.removeAt(index)
+                    bugReportScreenViewModel.removeFile(index)
                 },
             )
             JobisLargeButton(
                 text = stringResource(id = R.string.complete),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = { fileViewModel.createPresignedUrl() },
+                onClick = bugReportScreenViewModel::createPresignedUrl,
                 enabled = bugState.reportBugButtonState,
             )
         }
