@@ -12,7 +12,7 @@ class CompanyDataSourceImpl @Inject constructor(
     private val companyApi: CompanyApi,
 ) : CompanyDataSource {
     override suspend fun fetchCompanies(
-        page: Int,
+        page: Long,
         name: String?,
     ): FetchCompaniesResponse = HttpHandler<FetchCompaniesResponse>().httpRequest {
         companyApi.fetchCompanies(
@@ -34,7 +34,7 @@ class CompanyDataSourceImpl @Inject constructor(
     }.sendRequest()
 
     override suspend fun fetchCompanyCount(
-        page: Int,
+        page: Long,
         name: String?,
     ): FetchCompanyCountResponse = HttpHandler<FetchCompanyCountResponse>().httpRequest {
         companyApi.fetchCompanyCount(
