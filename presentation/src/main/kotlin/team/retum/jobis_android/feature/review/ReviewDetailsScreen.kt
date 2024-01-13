@@ -32,15 +32,12 @@ import team.returm.jobisdesignsystem.theme.Caption
 internal fun ReviewDetailsScreen(
     reviewId: String,
     getString: (key: String) -> String?,
-    reviewViewModel: ReviewViewModel = hiltViewModel(),
+    reviewDetailsScreenViewModel: ReviewDetailsScreenViewModel = hiltViewModel(),
 ) {
-    val state by reviewViewModel.collectAsState()
+    val state by reviewDetailsScreenViewModel.collectAsState()
 
     LaunchedEffect(Unit) {
-        with(reviewViewModel) {
-            setReviewId(reviewId)
-            fetchReviewDetails()
-        }
+        reviewDetailsScreenViewModel.fetchReviewDetails(reviewId = reviewId)
     }
 
     Column(
