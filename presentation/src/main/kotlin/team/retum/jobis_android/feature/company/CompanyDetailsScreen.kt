@@ -41,7 +41,6 @@ import team.retum.domain.entity.review.ReviewEntity
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.recruitment.CompanyInformation
 import team.retum.jobis_android.feature.recruitment.Detail
-import team.retum.jobis_android.feature.review.ReviewViewModel
 import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -63,13 +62,12 @@ fun CompanyDetailsScreen(
     navigateToReviewDetails: (String) -> Unit,
     putString: (key: String, value: String) -> Unit,
     companyDetailsScreenViewModel: CompanyDetailsScreenViewModel = hiltViewModel(),
-    reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
     val appState = LocalAppState.current
     val context = LocalContext.current
     var detailButtonVisibility by remember { mutableStateOf(true) }
     val companyState by companyDetailsScreenViewModel.collectAsState()
-    val reviewState by reviewViewModel.collectAsState()
+    val reviews = companyDetailsScreenViewModel.reviews
 
     LaunchedEffect(Unit) {
         detailButtonVisibility =
@@ -77,11 +75,7 @@ fun CompanyDetailsScreen(
 
         with(companyDetailsScreenViewModel) {
             fetchCompanyDetails(companyId = companyId)
-        }
-
-        with(reviewViewModel) {
-            //setCompanyId(companyId)
-            fetchReviews()
+            fetchReviews(companyId = companyId)
         }
     }
 
@@ -117,7 +111,7 @@ fun CompanyDetailsScreen(
                 color = JobisColor.Gray400,
             )
             Spacer(modifier = Modifier.height(20.dp))
-            if (reviewState.reviews.isNotEmpty()) {
+            if (reviews.isNotEmpty()) {
                 Body2(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -127,7 +121,7 @@ fun CompanyDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Reviews(
-                    reviews = reviewState.reviews,
+                    reviews = reviews,
                     navigateToReviewDetails = navigateToReviewDetails,
                     putString = putString,
                 )
