@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,8 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.recruitment.CompanyInformation
 import team.retum.jobis_android.feature.recruitment.Detail
 import team.retum.jobis_android.feature.review.ReviewViewModel
@@ -54,30 +57,43 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 
 @Composable
 fun CompanyDetailsScreen(
-    companyId: Long,
+    companyId: Long?,
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
     putString: (key: String, value: String) -> Unit,
-    companyViewModel: CompanyViewModel = hiltViewModel(),
+    companyDetailsScreenViewModel: CompanyDetailsScreenViewModel = hiltViewModel(),
     reviewViewModel: ReviewViewModel = hiltViewModel(),
 ) {
+    val appState = LocalAppState.current
+    val context = LocalContext.current
     var detailButtonVisibility by remember { mutableStateOf(true) }
-    val companyState by companyViewModel.collectAsState()
+    val companyState by companyDetailsScreenViewModel.collectAsState()
     val reviewState by reviewViewModel.collectAsState()
 
     LaunchedEffect(Unit) {
         detailButtonVisibility =
             getPreviousDestination()?.getNavigationRoute() != MainDestinations.RecruitmentDetails.getNavigationRoute()
 
-        with(companyViewModel) {
-            setCompanyId(companyId)
-            fetchCompanyDetails()
+        with(companyDetailsScreenViewModel) {
+            fetchCompanyDetails(companyId = companyId)
         }
 
         with(reviewViewModel) {
-            setCompanyId(companyId)
+            //setCompanyId(companyId)
             fetchReviews()
+        }
+    }
+
+    companyDetailsScreenViewModel.collectSideEffect {
+        when (it) {
+            is CompanyDetailsSideEffect.NotFoundCompanyDetails -> {
+                appState.showErrorToast(context.getString(R.string.company_details_not_found))
+            }
+
+            is CompanyDetailsSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
+            }
         }
     }
 

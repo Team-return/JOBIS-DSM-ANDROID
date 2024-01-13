@@ -88,9 +88,8 @@ internal fun NavGraphBuilder.mainNavigation(
             popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
-            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
             CompanyDetailsScreen(
-                companyId = companyId ?: 0,
+                companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID),
                 getPreviousDestination = getPreviousDestination,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                 navigateToReviewDetails = navigateToReviewDetails,
