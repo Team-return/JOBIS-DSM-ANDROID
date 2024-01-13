@@ -45,10 +45,10 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun SignInScreen(
-    signInScreenViewModel: SignInScreenViewModel = hiltViewModel(),
     navigateToMainWithPopUpSignIn: () -> Unit,
     navigateToResetPasswordVerifyEmail: () -> Unit,
     navigateToSignUp: () -> Unit,
+    signInScreenViewModel: SignInScreenViewModel = hiltViewModel(),
 ) {
     val appState = LocalAppState.current
     val context = LocalContext.current

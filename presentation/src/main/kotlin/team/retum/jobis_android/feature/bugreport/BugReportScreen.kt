@@ -51,8 +51,8 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun BugReportScreen(
-    bugReportScreenViewModel: BugReportScreenViewModel = hiltViewModel(),
     navigatePopBackStack: () -> Unit,
+    bugReportScreenViewModel: BugReportScreenViewModel = hiltViewModel(),
 ) {
     val bugState by bugReportScreenViewModel.collectAsState()
     val focusManager = LocalFocusManager.current

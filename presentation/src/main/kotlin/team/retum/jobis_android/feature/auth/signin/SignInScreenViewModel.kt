@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.auth.signin
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,6 +14,8 @@ import team.retum.domain.exception.UnAuthorizationException
 import team.retum.domain.param.user.SignInParam
 import team.retum.domain.usecase.user.SignInUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -99,4 +102,18 @@ class SignInScreenViewModel @Inject constructor(
             }
         }
     }
+}
+
+data class SignInState(
+    val email: String = "",
+    val password: String = "",
+    val autoSignIn: Boolean = false,
+    val emailError: Boolean = false,
+    val passwordError: Boolean = false,
+    val signInButtonEnabled: Boolean = false,
+) : State
+
+sealed class SignInSideEffect : SideEffect {
+    object MoveToMain : SignInSideEffect()
+    class Exception(@StringRes val message: Int) : SignInSideEffect()
 }

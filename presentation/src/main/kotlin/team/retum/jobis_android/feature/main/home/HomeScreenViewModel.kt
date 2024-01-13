@@ -8,10 +8,16 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.data.remote.url.JobisUrl
+import team.retum.domain.entity.applications.AppliedCompanyEntity
+import team.retum.domain.entity.applications.StudentCountsEntity
+import team.retum.domain.entity.student.StudentInformationEntity
+import team.retum.domain.enums.Department
 import team.retum.domain.usecase.applications.FetchAppliedCompanyHistoriesUseCase
 import team.retum.domain.usecase.applications.FetchStudentCountsUseCase
 import team.retum.domain.usecase.student.FetchStudentInformationUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,3 +60,20 @@ internal class HomeScreenViewModel @Inject constructor(
         }
     }
 }
+
+data class HomeState(
+    val studentCounts: StudentCountsEntity = StudentCountsEntity(
+        totalStudentCount = 0L,
+        passCount = 0L,
+        approvedCount = 0L,
+    ),
+    val appliedCompanies: List<AppliedCompanyEntity> = emptyList(),
+    val studentInformation: StudentInformationEntity = StudentInformationEntity(
+        studentName = "",
+        studentGcn = "",
+        department = Department.DEFAULT,
+        profileImageUrl = "",
+    ),
+) : State
+
+sealed class HomeSideEffect : SideEffect

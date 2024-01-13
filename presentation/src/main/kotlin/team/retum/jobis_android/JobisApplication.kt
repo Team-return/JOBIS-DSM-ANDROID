@@ -1,4 +1,4 @@
-package team.retum.jobis_android.application
+package team.retum.jobis_android
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

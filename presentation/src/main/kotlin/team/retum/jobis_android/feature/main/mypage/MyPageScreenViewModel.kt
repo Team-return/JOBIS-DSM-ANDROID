@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.main.mypage
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,6 +11,9 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.FileType
+import team.retum.domain.entity.company.ReviewableCompanyEntity
+import team.retum.domain.entity.student.StudentInformationEntity
+import team.retum.domain.enums.Department
 import team.retum.domain.exception.BadRequestException
 import team.retum.domain.param.files.PresignedUrlParam
 import team.retum.domain.param.students.EditProfileImageParam
@@ -20,6 +24,8 @@ import team.retum.domain.usecase.student.EditProfileImageUseCase
 import team.retum.domain.usecase.student.FetchStudentInformationUseCase
 import team.retum.domain.usecase.user.SignOutUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import java.io.File
 import javax.inject.Inject
 
@@ -121,4 +127,21 @@ internal class MyPageScreenViewModel @Inject constructor(
             )
         }
     }
+}
+
+internal data class MyPageState(
+    val studentInformation: StudentInformationEntity = StudentInformationEntity(
+        studentName = "",
+        studentGcn = "",
+        department = Department.DEFAULT,
+        profileImageUrl = "",
+    ),
+    val reviewableCompanies: List<ReviewableCompanyEntity> = emptyList(),
+) : State
+
+internal sealed interface MyPageSideEffect : SideEffect {
+    object SuccessSignOut : MyPageSideEffect
+    object SuccessEditProfileImage : MyPageSideEffect
+    class Exception(@StringRes val message: Int) : MyPageSideEffect
+    object InvalidFileExtension : MyPageSideEffect
 }

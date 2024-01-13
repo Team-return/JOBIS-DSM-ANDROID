@@ -1,5 +1,7 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,10 +15,12 @@ import team.retum.domain.enums.Type
 import team.retum.domain.param.code.FetchCodesParam
 import team.retum.domain.usecase.code.FetchCodesUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
-internal class CodeViewModel @Inject constructor(
+internal class RecruitmentFilterViewModel @Inject constructor(
     private val fetchCodesUseCase: FetchCodesUseCase,
 ) : BaseViewModel<CodeState, CodeSideEffect>() {
 
@@ -145,3 +149,15 @@ internal class CodeViewModel @Inject constructor(
         )
     }
 }
+
+data class CodeState(
+    val jobs: List<CodeEntity> = emptyList(),
+    val techs: SnapshotStateList<CodeEntity> = mutableStateListOf(),
+    val businessAreas: List<CodeEntity> = emptyList(),
+    val selectedTechs: SnapshotStateList<Pair<Long, String>> = mutableStateListOf(),
+    val keyword: String? = null,
+    val type: Type = Type.JOB,
+    val selectedJobCode: Long? = null,
+) : State
+
+sealed class CodeSideEffect : SideEffect

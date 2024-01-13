@@ -1,6 +1,7 @@
 package team.retum.jobis_android.feature.bugreport
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
@@ -19,6 +20,8 @@ import team.retum.domain.usecase.bug.BugReportUseCase
 import team.retum.domain.usecase.file.CreatePresignedUrlUseCase
 import team.retum.domain.usecase.file.UploadPresignedUrlFileUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import java.io.File
 import javax.inject.Inject
 
@@ -133,4 +136,18 @@ internal class BugReportScreenViewModel @Inject constructor(
             }
         }
     }
+}
+
+internal data class BugState(
+    val title: String = "",
+    val content: String = "",
+    val titleError: Boolean = false,
+    val contentError: Boolean = false,
+    val selectedPosition: DevelopmentArea = DevelopmentArea.ALL,
+    val reportBugButtonState: Boolean = false,
+) : State
+
+sealed class BugSideEffect : SideEffect {
+    object SuccessReportBug : BugSideEffect()
+    class Exception(@StringRes val message: Int) : BugSideEffect()
 }

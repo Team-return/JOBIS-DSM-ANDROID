@@ -1,5 +1,6 @@
 package team.retum.jobis_android.feature.application
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,8 @@ import team.retum.domain.usecase.applications.ReApplyCompanyUseCase
 import team.retum.domain.usecase.file.CreatePresignedUrlUseCase
 import team.retum.domain.usecase.file.UploadPresignedUrlFileUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import java.io.File
 import javax.inject.Inject
 
@@ -154,4 +157,17 @@ internal class ApplicationDialogViewModel @Inject constructor(
             )
         }
     }
+}
+
+internal data class ApplicationState(
+    val recruitmentId: Long = 0,
+    val isReApply: Boolean = false,
+) : State
+
+internal sealed class ApplicationSideEffect : SideEffect {
+    object SuccessApplyCompany : ApplicationSideEffect()
+    object RecruitmentNotFound : ApplicationSideEffect()
+    object ApplyConflict : ApplicationSideEffect()
+    object InvalidFileExtension : ApplicationSideEffect()
+    class Exception(@StringRes val message: Int) : ApplicationSideEffect()
 }
