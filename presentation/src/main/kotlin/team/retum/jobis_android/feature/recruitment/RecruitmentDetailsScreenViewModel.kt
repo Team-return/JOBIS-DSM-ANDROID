@@ -1,8 +1,6 @@
 package team.retum.jobis_android.feature.recruitment
 
 import androidx.annotation.StringRes
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +11,6 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.data.remote.url.JobisUrl
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
-import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.domain.usecase.recruitment.FetchRecruitmentDetailsUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
 import team.retum.jobis_android.util.mvi.SideEffect
@@ -51,7 +48,6 @@ internal class RecruitmentDetailsScreenViewModel @Inject constructor(
 }
 
 data class RecruitmentDetailsState(
-    var recruitmentId: Long = 0L,
     var details: RecruitmentDetailsEntity = RecruitmentDetailsEntity(
         areas = emptyList(),
         benefits = null,
@@ -71,7 +67,6 @@ data class RecruitmentDetailsState(
         submitDocument = "",
         trainPay = 0,
     ),
-    val recruitments: SnapshotStateList<RecruitmentEntity> = mutableStateListOf(),
 ) : State
 
 sealed interface RecruitmentDetailsSideEffect : SideEffect {
