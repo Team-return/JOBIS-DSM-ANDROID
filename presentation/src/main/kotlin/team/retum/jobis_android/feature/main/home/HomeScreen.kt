@@ -51,7 +51,6 @@ import team.retum.domain.entity.applications.AppliedCompanyEntity
 import team.retum.domain.enums.ApplicationStatus
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
-import team.retum.jobis_android.feature.main.mypage.MyPageViewModel
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body1
@@ -80,19 +79,13 @@ internal fun HomeScreen(
     navigateToMyPage: () -> Unit,
     navigateToRecruitments: (isWinterIntern: Boolean) -> Unit,
     navigateToCompanies: () -> Unit,
-    navigateToNotifications: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
-    myPageViewModel: MyPageViewModel = hiltViewModel(),
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val homeState by homeViewModel.collectAsState()
-    val myPageState by myPageViewModel.collectAsState()
-
-    val studentCounts = homeState.studentCounts
-
+    val state by homeScreenViewModel.collectAsState()
+    val studentInformation = state.studentInformation
+    val studentCounts = state.studentCounts
     var showApplicationDialog by remember { mutableStateOf(false) }
-
     var applicationId: Long? by remember { mutableStateOf(null) }
-
     val viewModelStoreOwner = LocalViewModelStoreOwner.current?.viewModelStore
     val onDismissRequest: () -> Unit = {
         showApplicationDialog = false
@@ -129,12 +122,11 @@ internal fun HomeScreen(
         ) {
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
                 UserInformation(
-                    profileImageUrl = myPageState.profileImageUrl,
-                    name = myPageState.studentName,
-                    gcn = myPageState.studentGcn,
-                    department = myPageState.department,
+                    profileImageUrl = studentInformation.profileImageUrl,
+                    name = studentInformation.studentName,
+                    gcn = studentInformation.studentGcn,
+                    department = studentInformation.department,
                     navigateToMyPage = navigateToMyPage,
-                    navigateToNotifications = navigateToNotifications,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Caption(
@@ -143,7 +135,7 @@ internal fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 ApplyCompanies(
-                    appliedCompanies = homeState.appliedCompanyHistories,
+                    appliedCompanies = state.appliedCompanies,
                     showApplicationDialog = {
                         applicationId = it
                         showApplicationDialog = true
@@ -274,7 +266,6 @@ private fun UserInformation(
     gcn: String,
     department: Department,
     navigateToMyPage: () -> Unit,
-    navigateToNotifications: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -325,14 +316,6 @@ private fun UserInformation(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        // TODO fcm 구현 시 작업
-        /*Image(
-            modifier = Modifier
-                .size(24.dp)
-                .jobisClickable(onClick = navigateToNotifications),
-            painter = painterResource(R.drawable.ic_notification),
-            contentDescription = null,
-        )*/
     }
 }
 

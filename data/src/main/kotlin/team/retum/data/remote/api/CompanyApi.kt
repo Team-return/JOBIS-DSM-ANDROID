@@ -12,7 +12,7 @@ import team.retum.data.remote.url.JobisUrl
 interface CompanyApi {
     @GET(JobisUrl.Company.student)
     suspend fun fetchCompanies(
-        @Query("page") page: Int,
+        @Query("page") page: Long,
         @Query("name") name: String?,
     ): FetchCompaniesResponse
 
@@ -26,7 +26,7 @@ interface CompanyApi {
 
     @GET(JobisUrl.Company.companyCount)
     suspend fun fetchCompanyCount(
-        @Query("page") page: Int,
+        @Query("page") page: Long,
         @Query("name") name: String?,
     ): FetchCompanyCountResponse
 }

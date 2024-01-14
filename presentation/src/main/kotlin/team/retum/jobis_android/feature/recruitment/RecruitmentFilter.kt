@@ -58,16 +58,16 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentFilter(
+    recruitmentFilterViewModel: RecruitmentFilterViewModel = hiltViewModel(),
     sheetState: Boolean = false,
-    codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
+    setCode: (jobCode: Long?, techCode: String?) -> Unit,
 ) {
-    val state by codeViewModel.collectAsState()
+    val state by recruitmentFilterViewModel.collectAsState()
     val selectedTechs = state.selectedTechs
     var folded by remember { mutableStateOf(false) }
     val onKeywordChanged: (String) -> Unit = { keyword: String ->
         if (folded) folded = false
-        codeViewModel.setKeyword(keyword)
+        recruitmentFilterViewModel.setKeyword(keyword)
     }
     val selectedTech = StringBuilder().apply {
         selectedTechs.forEach {
@@ -89,14 +89,14 @@ internal fun RecruitmentFilter(
         label = "",
     )
     val onSelectJob: (jobCode: Long) -> Unit = {
-        with(codeViewModel) {
+        with(recruitmentFilterViewModel) {
             setType(Type.TECH)
             setParentCode(it)
             fetchCodes()
         }
     }
     val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
-        with(codeViewModel) {
+        with(recruitmentFilterViewModel) {
             onSelectTech(
                 code = code,
                 keyword = keyword,
@@ -107,7 +107,7 @@ internal fun RecruitmentFilter(
 
     LaunchedEffect(sheetState) {
         if (sheetState) {
-            with(codeViewModel) {
+            with(recruitmentFilterViewModel) {
                 fetchCodes()
                 setType(Type.TECH)
                 fetchCodes()
@@ -224,7 +224,7 @@ internal fun RecruitmentFilter(
                     color = JobisButtonColor.MainSolidColor,
                     enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
                     onClick = {
-                        onDismissDialog(
+                        setCode(
                             state.selectedJobCode,
                             getTechCodes(selectedTechs),
                         )
@@ -377,8 +377,12 @@ private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.densit
 
 private fun getTechCodes(
     techCodes: List<Pair<Long, String>>,
-): String {
-    return StringBuilder().apply {
-        techCodes.forEach { append("${it.first} ") }
-    }.toString().trim().replace(" ", ",")
+): String? {
+    return if (techCodes.isNotEmpty()) {
+        StringBuilder().apply {
+            techCodes.forEach { append("${it.first} ") }
+        }.toString().trim().replace(" ", ",")
+    } else {
+        null
+    }
 }

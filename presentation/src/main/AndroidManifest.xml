@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
-        android:name="team.retum.jobis_android.application.JobisApplication"
+        android:name="team.retum.jobis_android.JobisApplication"
         android:theme="@style/Theme.JobisAndroid"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

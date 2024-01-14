@@ -7,11 +7,7 @@ import javax.inject.Inject
 class VerifyEmailUseCase @Inject constructor(
     private val authRepository: AuthRepository,
 ) {
-    suspend operator fun invoke(
-        verifyEmailParam: VerifyEmailParam,
-    ) = kotlin.runCatching {
-        authRepository.verifyEmail(
-            verifyEmailParam = verifyEmailParam,
-        )
+    suspend operator fun invoke(verifyEmailParam: VerifyEmailParam) = runCatching {
+        authRepository.verifyEmail(verifyEmailParam = verifyEmailParam)
     }
 }

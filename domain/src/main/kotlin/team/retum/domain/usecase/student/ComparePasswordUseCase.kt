@@ -6,9 +6,7 @@ import javax.inject.Inject
 class ComparePasswordUseCase @Inject constructor(
     private val studentRepository: StudentRepository,
 ) {
-    suspend operator fun invoke(
-        password: String,
-    ) = runCatching {
+    suspend operator fun invoke(password: String) = runCatching {
         studentRepository.comparePassword(password = password)
     }
 }

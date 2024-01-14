@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,13 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jobis.jobis_android.R
-import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.code.CodeEntity
-import team.retum.domain.enums.Type
 import team.retum.domain.param.review.QnaElementParam
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.feature.recruitment.CodeViewModel
 import team.retum.jobis_android.util.compose.component.Header
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
@@ -44,34 +40,23 @@ import team.returm.jobisdesignsystem.theme.Heading6
 internal fun PostReviewScreen(
     companyId: Long,
     navigatePopBackStack: () -> Unit,
-    reviewViewModel: ReviewViewModel = hiltViewModel(),
-    codeViewModel: CodeViewModel = hiltViewModel(),
+    postReviewScreenViewModel: PostReviewScreenViewModel = hiltViewModel(),
 ) {
-    val codeState by codeViewModel.collectAsState()
-    val reviewState by reviewViewModel.collectAsState()
     val context = LocalContext.current
     val appState = LocalAppState.current
 
     LaunchedEffect(Unit) {
-        with(codeViewModel) {
-            setType(Type.TECH)
-            fetchCodes()
-        }
-
-        with(reviewViewModel) {
-            addQnaElement()
-            setCompanyId(companyId)
-        }
+        postReviewScreenViewModel.setCompanyId(companyId = companyId)
     }
 
-    reviewViewModel.collectSideEffect {
+    postReviewScreenViewModel.collectSideEffect {
         when (it) {
-            is ReviewSideEffect.SuccessPostReview -> {
+            is PostReviewSideEffect.Success -> {
                 appState.showSuccessToast(context.getString(R.string.post_review_success_toast_message))
                 navigatePopBackStack()
             }
 
-            is ReviewSideEffect.Exception -> {
+            is PostReviewSideEffect.Exception -> {
                 appState.showErrorToast(context.getString(it.message))
             }
         }
@@ -86,21 +71,23 @@ internal fun PostReviewScreen(
             Spacer(modifier = Modifier.height(48.dp))
             Header(text = stringResource(id = R.string.post_review_header))
             Spacer(modifier = Modifier.height(30.dp))
-            ReviewInputs(
-                qnaElements = reviewState.qnaElements,
-                codes = codeState.techs,
-                onAddButtonClicked = reviewViewModel::addQnaElement,
-                onQuestionChanged = reviewViewModel::setQuestion,
-                onAnswerChanged = reviewViewModel::setAnswer,
-                onItemSelected = reviewViewModel::setJobCode,
-            )
+            with(postReviewScreenViewModel) {
+                ReviewInputs(
+                    qnaElements = qnaElements,
+                    codes = postReviewScreenViewModel.techs,
+                    onAddButtonClicked = ::addQnaElement,
+                    onQuestionChanged = ::setQuestion,
+                    onAnswerChanged = ::setAnswer,
+                    onItemSelected = ::setJobCode,
+                )
+            }
         }
         Column {
             Spacer(modifier = Modifier.weight(1f))
             JobisLargeButton(
                 text = stringResource(id = R.string.complete),
                 color = JobisButtonColor.MainSolidColor,
-                onClick = reviewViewModel::postReview,
+                onClick = postReviewScreenViewModel::postReview,
             )
             Spacer(modifier = Modifier.height(44.dp))
         }
