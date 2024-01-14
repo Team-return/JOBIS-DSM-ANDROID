@@ -6,7 +6,7 @@ import javax.inject.Inject
 class FetchReviewDetailsUseCase @Inject constructor(
     private val reviewRepository: ReviewRepository,
 ) {
-    suspend operator fun invoke(reviewId: String) = kotlin.runCatching {
+    suspend operator fun invoke(reviewId: String) = runCatching {
         reviewRepository.fetchReviewDetails(reviewId = reviewId)
     }
 }

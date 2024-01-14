@@ -7,11 +7,7 @@ import javax.inject.Inject
 class ChangePasswordUseCase @Inject constructor(
     private val studentRepository: StudentRepository,
 ) {
-    suspend operator fun invoke(
-        changePasswordParam: ChangePasswordParam,
-    ) = runCatching {
-        studentRepository.changePassword(
-            changePasswordParam = changePasswordParam,
-        )
+    suspend operator fun invoke(changePasswordParam: ChangePasswordParam) = runCatching {
+        studentRepository.changePassword(changePasswordParam = changePasswordParam)
     }
 }

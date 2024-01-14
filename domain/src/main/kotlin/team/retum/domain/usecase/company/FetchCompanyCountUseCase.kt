@@ -7,11 +7,7 @@ import javax.inject.Inject
 class FetchCompanyCountUseCase @Inject constructor(
     private val companyRepository: CompanyRepository,
 ) {
-    suspend operator fun invoke(
-        fetchCompaniesParam: FetchCompaniesParam,
-    ) = runCatching {
-        companyRepository.fetchCompanyCount(
-            fetchCompaniesParam = fetchCompaniesParam,
-        )
+    suspend operator fun invoke(fetchCompaniesParam: FetchCompaniesParam) = runCatching {
+        companyRepository.fetchCompanyCount(fetchCompaniesParam = fetchCompaniesParam)
     }
 }

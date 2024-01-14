@@ -7,11 +7,7 @@ import javax.inject.Inject
 class FetchRecruitmentsUseCase @Inject constructor(
     private val recruitmentRepository: RecruitmentRepository,
 ) {
-    suspend operator fun invoke(
-        fetchRecruitmentsParam: FetchRecruitmentsParam,
-    ) = runCatching {
-        recruitmentRepository.fetchRecruitmentList(
-            fetchRecruitmentsParam = fetchRecruitmentsParam,
-        )
+    suspend operator fun invoke(fetchRecruitmentsParam: FetchRecruitmentsParam) = runCatching {
+        recruitmentRepository.fetchRecruitmentList(fetchRecruitmentsParam = fetchRecruitmentsParam)
     }
 }

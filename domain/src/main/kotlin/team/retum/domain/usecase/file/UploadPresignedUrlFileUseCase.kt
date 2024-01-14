@@ -10,7 +10,7 @@ class UploadPresignedUrlFileUseCase @Inject constructor(
     suspend operator fun invoke(
         presignedUrl: String,
         file: File,
-    ) = kotlin.runCatching {
+    ) = runCatching {
         fileRepository.uploadFile(
             presignedUrl = presignedUrl,
             file = file,
