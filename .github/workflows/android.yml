@@ -23,7 +23,8 @@ jobs:
           java-version: '18'
           distribution: 'temurin'
           cache: gradle
-
+      - name: Create local.properties
+        run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
       - name: Build with Gradle
         run: ./gradlew build
       - name: Run test
