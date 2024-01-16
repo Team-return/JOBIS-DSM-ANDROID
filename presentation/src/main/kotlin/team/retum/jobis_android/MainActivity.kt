@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = appState.scaffoldState,
                     snackbarHost = { JobisSnackBarHost(appState) },
                 ) {
-                    JobisApp(signInOption = signInOption)
+                    JobisApp(signInOption = state.autoSignInOption)
                 }
             }
         }
