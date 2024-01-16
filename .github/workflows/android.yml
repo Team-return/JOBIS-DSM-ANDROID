@@ -25,6 +25,12 @@ jobs:
           cache: gradle
       - name: Create local.properties
         run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
+      - name: Create google-services.json
+        run: cat /home/runner/work/JOBIS-DSM-ANDROID/JOBIS-DSM-ANDROID/presentation/google-services.json | base64
+      - name: Putting google-services.json data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/JOBIS-DSM-ANDROID/JOBIS-DSM-ANDROID/presentation/google-services.json
       - name: Build with Gradle
         run: ./gradlew build
       - name: Run test
