@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
 
-        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
+        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL", "\"\""))
     }
 
     buildTypes {
