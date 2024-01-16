@@ -4,7 +4,6 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
     id(BuildPlugins.HILT_PLUGIN)
     id(BuildPlugins.APP_DISTRIBUTION)
-    id(BuildPlugins.GOOGLE_SERVICES)
 }
 
 android {
