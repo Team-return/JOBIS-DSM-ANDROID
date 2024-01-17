@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
 
-        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
+        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL", "\"\""))
     }
 
     buildTypes {
@@ -33,8 +33,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
         jvmTarget = ProjectProperties.JVM_VERSION

@@ -4,7 +4,6 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
     id(BuildPlugins.HILT_PLUGIN)
     id(BuildPlugins.APP_DISTRIBUTION)
-    id(BuildPlugins.GOOGLE_SERVICES)
 }
 
 android {
@@ -39,8 +38,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
         jvmTarget = ProjectProperties.JVM_VERSION
