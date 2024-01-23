@@ -43,8 +43,8 @@ internal fun ResetPasswordScreen(
     val context = LocalContext.current
     val state by resetPasswordViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-    val newPassword = state.newPassword
-    val passwordRepeat = state.passwordRepeat
+    val newPassword = resetPasswordViewModel.newPassword
+    val passwordRepeat = resetPasswordViewModel.passwordRepeat
     val onClick: () -> Unit = {
         when (getPreviousDestination().toString()) {
             AuthDestinations.ResetPasswordVerifyEmail -> {
