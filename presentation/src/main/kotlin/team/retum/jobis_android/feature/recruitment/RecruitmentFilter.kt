@@ -151,7 +151,7 @@ internal fun RecruitmentFilter(
                     JobisBoxTextField(
                         color = JobisTextFieldColor.MainColor,
                         onValueChanged = onKeywordChanged,
-                        value = state.keyword ?: "",
+                        value = recruitmentFilterViewModel.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
                     )
