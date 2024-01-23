@@ -1,6 +1,9 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,12 +40,10 @@ class RecruitmentsScreenViewModel @Inject constructor(
     internal var recruitments: SnapshotStateList<RecruitmentEntity> = mutableStateListOf()
         private set
 
-    init {
-        fetchRecruitments()
-        fetchRecruitmentCount()
-    }
+    var name: String? by mutableStateOf(null)
+        private set
 
-    private fun fetchRecruitments(
+    internal fun fetchRecruitments(
         jobCode: Long? = null,
         techCode: String? = null,
     ) = intent {
@@ -51,7 +52,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
             fetchRecruitmentsUseCase(
                 fetchRecruitmentsParam = FetchRecruitmentsParam(
                     page = state.page,
-                    name = state.name,
+                    name = name,
                     jobCode = jobCode,
                     techCode = techCode,
                     winterIntern = state.isWinterIntern,
@@ -67,7 +68,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun fetchRecruitmentCount(
+    internal fun fetchRecruitmentCount(
         jobCode: Long? = null,
         techCode: String? = null,
     ) = intent {
@@ -75,7 +76,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
             fetchRecruitmentCountUseCase(
                 FetchRecruitmentsParam(
                     page = state.page,
-                    name = state.name,
+                    name = name,
                     jobCode = jobCode,
                     techCode = techCode,
                     winterIntern = state.isWinterIntern,
@@ -135,8 +136,8 @@ class RecruitmentsScreenViewModel @Inject constructor(
         reduce { state.copy(isWinterIntern = isWinterIntern) }
     }
 
-    internal fun setName(name: String) = intent {
-        reduce { state.copy(name = name) }
+    internal fun setName(name: String) {
+        this.name = name
     }
 
     internal fun setCodes(
@@ -165,7 +166,6 @@ class RecruitmentsScreenViewModel @Inject constructor(
 
 data class RecruitmentsState(
     val page: Long = 0,
-    val name: String? = null,
     val jobCode: Long? = null,
     val techCode: String? = null,
     val isWinterIntern: Boolean = false,

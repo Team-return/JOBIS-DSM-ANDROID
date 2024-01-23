@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -52,13 +50,15 @@ internal fun CompaniesScreen(
     navigateToCompanyDetails: (Long) -> Unit,
     companiesScreenViewModel: CompaniesScreenViewModel = hiltViewModel(),
 ) {
-    val state by companiesScreenViewModel.collectAsState()
-    val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
+    val searchResultTextAlpha = if (companiesScreenViewModel.name.isNullOrBlank()) 0f else 1f
     val lazyListState = rememberLazyListState()
+    val name = companiesScreenViewModel.name
 
     LaunchedEffect(Unit) {
         with(companiesScreenViewModel) {
             snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
+            fetchCompanies()
+            fetchCompanyCount()
         }
     }
 
@@ -75,10 +75,10 @@ internal fun CompaniesScreen(
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
         CompanyInput(
-            companyName = state.name,
+            companyName = name,
             onCompanyNameChanged = companiesScreenViewModel::setName,
         )
-        Animated(!state.name.isNullOrBlank()) {
+        Animated(!name.isNullOrBlank()) {
             Caption(
                 modifier = Modifier.alpha(alpha = searchResultTextAlpha),
                 text = stringResource(id = R.string.search_result),
@@ -93,7 +93,7 @@ internal fun CompaniesScreen(
                     text = stringResource(id = R.string.search_result),
                     color = JobisColor.Gray600,
                 )
-                Caption(text = state.name ?: "")
+                Caption(text = name ?: "")
             }
         }
         Companies(

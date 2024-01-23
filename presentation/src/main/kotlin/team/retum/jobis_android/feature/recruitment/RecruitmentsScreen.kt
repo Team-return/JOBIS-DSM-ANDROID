@@ -86,6 +86,8 @@ internal fun RecruitmentsScreen(
         with(recruitmentsScreenViewModel) {
             setWinterIntern(isWinterIntern)
             snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
+            fetchRecruitments()
+            fetchRecruitmentCount()
         }
     }
 
@@ -129,7 +131,7 @@ internal fun RecruitmentsScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
             RecruitmentInput(
-                name = state.name,
+                name = recruitmentsScreenViewModel.name,
                 jobCode = state.jobCode,
                 techCode = state.techCode,
                 onFilterClicked = onFilterClicked,

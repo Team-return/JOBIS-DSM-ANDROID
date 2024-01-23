@@ -1,6 +1,9 @@
 package team.retum.jobis_android.feature.company
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,24 +34,20 @@ internal class CompaniesScreenViewModel @Inject constructor(
     internal var companies: SnapshotStateList<CompanyEntity> = mutableStateListOf()
         private set
 
-    init {
-        fetchCompanies()
-        fetchCompanyCount()
+    var name: String? by mutableStateOf(null)
+        private set
+
+    internal fun setName(name: String) {
+        this.name = name
     }
 
-    internal fun setName(name: String) = intent {
-        reduce {
-            state.copy(name = name)
-        }
-    }
-
-    private fun fetchCompanies() = intent {
+    internal fun fetchCompanies() = intent {
         reduce { state.copy(page = state.page + 1) }
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompaniesUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
                     page = state.page,
-                    name = state.name,
+                    name = name,
                 ),
             ).onSuccess { response ->
                 companies.addAll(
@@ -94,12 +93,12 @@ internal class CompaniesScreenViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCompanyCount() = intent {
+    internal fun fetchCompanyCount() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCompanyCountUseCase(
                 fetchCompaniesParam = FetchCompaniesParam(
                     page = state.page,
-                    name = state.name,
+                    name = name,
                 ),
             ).onSuccess {
                 reduce { state.copy(totalPage = it.totalPageCount) }
@@ -110,7 +109,6 @@ internal class CompaniesScreenViewModel @Inject constructor(
 
 internal data class CompaniesState(
     val page: Long = 0,
-    val name: String? = null,
     val totalPage: Long = 0,
 ) : State
 
