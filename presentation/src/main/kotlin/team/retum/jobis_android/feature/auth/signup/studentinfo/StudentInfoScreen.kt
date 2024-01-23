@@ -46,9 +46,9 @@ internal fun StudentInfoScreen(
             focusManager.moveFocus(FocusDirection.Next)
         }
     }
-    val onClassChanged: (String) -> Unit = { `class`: String ->
-        signUpViewModel.setClass(`class` = `class`.take(2))
-        if (`class`.length == 1) {
+    val onClassChanged: (String) -> Unit = { classRoom: String ->
+        signUpViewModel.setClass(classRoom = classRoom.take(2))
+        if (classRoom.length == 1) {
             focusManager.moveFocus(FocusDirection.Next)
         }
     }
@@ -60,7 +60,7 @@ internal fun StudentInfoScreen(
     }
 
     LaunchedEffect(Unit) {
-        with(state) {
+        with(signUpViewModel) {
             val signUpValidation =
                 name.isNotBlank() && grade.isNotBlank() && classRoom.isNotBlank() && number.isNotBlank()
             signUpViewModel.setSignUpButtonEnabled(signUpValidation)
@@ -78,10 +78,10 @@ internal fun StudentInfoScreen(
         )
         Spacer(modifier = Modifier.height(28.dp))
         InformationFields(
-            name = state.name,
-            grade = state.grade,
-            classRoom = state.classRoom,
-            number = state.number,
+            name = signUpViewModel.name,
+            grade = signUpViewModel.grade,
+            classRoom = signUpViewModel.classRoom,
+            number = signUpViewModel.number,
             studentNotFound = state.studentNotFound,
             onNameChanged = signUpViewModel::setName,
             onGradeChanged = onGradeChanged,
