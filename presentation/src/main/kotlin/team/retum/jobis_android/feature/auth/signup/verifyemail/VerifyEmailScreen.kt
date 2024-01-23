@@ -44,7 +44,7 @@ fun VerifyEmailScreen(
         JobisBoxTextField(
             color = JobisTextFieldColor.MainColor,
             onValueChanged = signUpViewModel::setEmail,
-            value = state.email,
+            value = signUpViewModel.email,
             hint = stringResource(id = R.string.please_enter_email),
             helperText = stringResource(id = R.string.email_verification_email_hint),
             errorText = stringResource(id = R.string.email_verification_email_hint),
@@ -57,7 +57,7 @@ fun VerifyEmailScreen(
                 JobisBoxTextField(
                     color = JobisTextFieldColor.MainColor,
                     onValueChanged = onVerifyCodeChanged,
-                    value = state.verifyCode,
+                    value = signUpViewModel.verifyCode,
                     hint = stringResource(id = R.string.email_verification_verify_code_hint),
                     keyboardActions = KeyboardActions { focusManager.clearFocus() },
                     enabled = state.authCodeEnabled,

@@ -111,8 +111,8 @@ internal fun SignInScreen(
             }
             Spacer(modifier = Modifier.height(80.dp))
             SignInInputs(
-                email = state.email,
-                password = state.password,
+                email = signInScreenViewModel.email,
+                password = signInScreenViewModel.password,
                 onEmailChanged = signInScreenViewModel::setEmail,
                 onPasswordChanged = signInScreenViewModel::setPassword,
                 emailError = state.emailError,

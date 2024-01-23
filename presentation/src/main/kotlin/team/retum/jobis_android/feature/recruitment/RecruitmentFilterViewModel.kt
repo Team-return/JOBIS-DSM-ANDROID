@@ -1,6 +1,9 @@
 package team.retum.jobis_android.feature.recruitment
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
@@ -28,13 +31,16 @@ internal class RecruitmentFilterViewModel @Inject constructor(
 
     private val _techs = mutableListOf<CodeEntity>()
 
+    var keyword: String? by mutableStateOf(null)
+        private set
+
     internal fun fetchCodes() = intent {
         val type = state.type
 
         viewModelScope.launch(Dispatchers.IO) {
             fetchCodesUseCase(
                 fetchCodesParam = FetchCodesParam(
-                    keyword = state.keyword,
+                    keyword = keyword,
                     type = type,
                     parentCode = state.selectedJobCode,
                 ),
@@ -82,14 +88,8 @@ internal class RecruitmentFilterViewModel @Inject constructor(
         }
     }
 
-    internal fun setKeyword(
-        keyword: String,
-    ) = intent {
-        reduce {
-            state.copy(
-                keyword = keyword,
-            )
-        }
+    internal fun setKeyword(keyword: String) {
+        this.keyword = keyword
         searchTechCode(keyword)
     }
 
@@ -155,7 +155,6 @@ data class CodeState(
     val techs: SnapshotStateList<CodeEntity> = mutableStateListOf(),
     val businessAreas: List<CodeEntity> = emptyList(),
     val selectedTechs: SnapshotStateList<Pair<Long, String>> = mutableStateListOf(),
-    val keyword: String? = null,
     val type: Type = Type.JOB,
     val selectedJobCode: Long? = null,
 ) : State

@@ -2,7 +2,10 @@ package team.retum.jobis_android.feature.bugreport
 
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +41,11 @@ internal class BugReportScreenViewModel @Inject constructor(
         private set
     private val files: SnapshotStateList<File> = mutableStateListOf()
 
+    var title by mutableStateOf("")
+        private set
+    var content by mutableStateOf("")
+        private set
+
     internal fun addFile(
         file: File,
         uri: Uri,
@@ -54,8 +62,8 @@ internal class BugReportScreenViewModel @Inject constructor(
     private suspend fun reportBug(attachmentUrls: List<String>) = intent {
         bugReportUseCase(
             BugReportParam(
-                title = state.title,
-                content = state.content,
+                title = title,
+                content = content,
                 developmentArea = state.selectedPosition,
                 attachmentUrls = attachmentUrls,
             ),
@@ -99,22 +107,22 @@ internal class BugReportScreenViewModel @Inject constructor(
         )
     }
 
-    internal fun setTitle(title: String) = intent {
-        reduce {
-            state.copy(
-                title = title,
-                titleError = title.isBlank(),
-            )
+    internal fun setTitle(title: String) {
+        this.title = title
+        intent {
+            reduce {
+                state.copy(titleError = title.isBlank())
+            }
         }
         setReportBugButtonState()
     }
 
-    internal fun setContent(content: String) = intent {
-        reduce {
-            state.copy(
-                content = content,
-                contentError = content.isBlank(),
-            )
+    internal fun setContent(content: String) {
+        this.content = content
+        intent {
+            reduce {
+                state.copy(contentError = content.isBlank())
+            }
         }
         setReportBugButtonState()
     }
@@ -139,8 +147,6 @@ internal class BugReportScreenViewModel @Inject constructor(
 }
 
 internal data class BugState(
-    val title: String = "",
-    val content: String = "",
     val titleError: Boolean = false,
     val contentError: Boolean = false,
     val selectedPosition: DevelopmentArea = DevelopmentArea.ALL,

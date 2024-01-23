@@ -1,6 +1,9 @@
 package team.retum.jobis_android.feature.auth.signup
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,7 +41,22 @@ class SignUpViewModel @Inject constructor(
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
 
-    internal val state = container.stateFlow.value
+    var email by mutableStateOf("")
+        private set
+    var verifyCode by mutableStateOf("")
+        private set
+    var password by mutableStateOf("")
+        private set
+    var repeatPassword by mutableStateOf("")
+        private set
+    var grade by mutableStateOf("")
+        private set
+    var name by mutableStateOf("")
+        private set
+    var classRoom by mutableStateOf("")
+        private set
+    var number by mutableStateOf("")
+        private set
 
     internal fun setGender(
         gender: Gender,
@@ -46,68 +64,60 @@ class SignUpViewModel @Inject constructor(
         reduce { state.copy(gender = gender) }
     }
 
-    internal fun setName(
-        name: String,
-    ) = intent {
-        reduce { state.copy(name = name.trim()) }
+    internal fun setName(name: String) {
+        this.name = name.trim()
         setSignUpButtonEnabled(
             checkAvailableValues(
                 name = name,
-                grade = state.grade,
-                `class` = state.classRoom,
-                number = state.number,
-            ),
-        )
-    }
-
-    internal fun setGrade(
-        grade: String,
-    ) = intent {
-        reduce { state.copy(grade = grade) }
-        setSignUpButtonEnabled(
-            checkAvailableValues(
-                name = state.name,
-                grade = state.grade,
-                `class` = state.classRoom,
-                number = state.number,
-            ),
-        )
-    }
-
-    internal fun setClass(
-        `class`: String,
-    ) = intent {
-        reduce { state.copy(classRoom = `class`) }
-        setSignUpButtonEnabled(
-            checkAvailableValues(
-                name = state.name,
-                grade = state.grade,
-                `class` = `class`,
-                number = state.number,
-            ),
-        )
-    }
-
-    internal fun setNumber(
-        number: String,
-    ) = intent {
-        reduce { state.copy(number = number) }
-        setSignUpButtonEnabled(
-            checkAvailableValues(
-                name = state.name,
-                grade = state.grade,
-                `class` = state.classRoom,
+                grade = grade,
+                classRoom = classRoom,
                 number = number,
             ),
         )
     }
 
-    internal fun setEmail(
-        email: String,
-    ) = intent {
-        reduce { state.copy(email = email) }
+    internal fun setGrade(grade: String) {
+        this.grade = grade
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = name,
+                grade = grade,
+                classRoom = classRoom,
+                number = number,
+            ),
+        )
+    }
+
+    internal fun setClass(classRoom: String) {
+        this.classRoom = classRoom
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = name,
+                grade = grade,
+                classRoom = classRoom,
+                number = number,
+            ),
+        )
+    }
+
+    internal fun setNumber(number: String) {
+        this.number = number
+        setSignUpButtonEnabled(
+            checkAvailableValues(
+                name = name,
+                grade = grade,
+                classRoom = classRoom,
+                number = number,
+            ),
+        )
+    }
+
+    internal fun setEmail(email: String) {
+        this.email = email
         setEmailError(!Pattern.matches(Regex.EMAIL, email) || email.isBlank())
-        setSignUpButtonEnabled(email.isNotBlank() && state.verifyCode.isNotBlank() && !state.emailError && !state.verifyCodeError)
+        intent {
+            setSignUpButtonEnabled(email.isNotBlank() && verifyCode.isNotBlank() && !state.emailError && !state.verifyCodeError)
+        }
     }
 
     private fun setEmailError(
@@ -117,12 +127,12 @@ class SignUpViewModel @Inject constructor(
         setSendVerifyCodeButtonEnabled(!emailError)
     }
 
-    internal fun setVerifyCode(
-        verifyCode: String,
-    ) = intent {
-        reduce { state.copy(verifyCode = verifyCode) }
+    internal fun setVerifyCode(verifyCode: String) {
+        this.verifyCode = verifyCode
         setVerifyCodeError(false)
-        setSignUpButtonEnabled(state.email.isNotBlank() || verifyCode.isNotBlank() || !state.emailError || !state.verifyCodeError)
+        intent {
+            setSignUpButtonEnabled(email.isNotBlank() || verifyCode.isNotBlank() || !state.emailError || !state.verifyCodeError)
+        }
     }
 
     private fun setVerifyCodeError(
@@ -132,10 +142,8 @@ class SignUpViewModel @Inject constructor(
         setSignUpButtonEnabled(!verifyCodeError)
     }
 
-    internal fun setPassword(
-        password: String,
-    ) = intent {
-        reduce { state.copy(password = password) }
+    internal fun setPassword(password: String) {
+        this.password = password
         setPasswordError(!Pattern.matches(Regex.PASSWORD, password))
     }
 
@@ -146,11 +154,9 @@ class SignUpViewModel @Inject constructor(
         setSignUpButtonEnabled(!passwordError)
     }
 
-    internal fun setRepeatPassword(
-        repeatPassword: String,
-    ) = intent {
-        reduce { state.copy(repeatPassword = repeatPassword) }
-        setRepeatPasswordError(state.password != repeatPassword)
+    internal fun setRepeatPassword(repeatPassword: String) {
+        this.repeatPassword = repeatPassword
+        setRepeatPasswordError(password != repeatPassword)
     }
 
     private fun setRepeatPasswordError(
@@ -189,11 +195,11 @@ class SignUpViewModel @Inject constructor(
     private fun checkAvailableValues(
         name: String,
         grade: String,
-        `class`: String,
+        classRoom: String,
         number: String,
     ): Boolean {
         setStudentNotFound(false)
-        return name.isNotBlank() && grade.isNotBlank() && `class`.isNotBlank() && number.isNotBlank()
+        return name.isNotBlank() && grade.isNotBlank() && classRoom.isNotBlank() && number.isNotBlank()
     }
 
     internal fun checkStudentExists() = intent {
@@ -201,11 +207,11 @@ class SignUpViewModel @Inject constructor(
             checkStudentExistUseCase(
                 checkStudentExistsParam = CheckStudentExistsParam(
                     gcn = returnGcn(
-                        grade = state.grade,
-                        `class` = state.classRoom,
-                        number = state.number,
+                        grade = grade,
+                        `class` = classRoom,
+                        number = number,
                     ),
-                    name = container.stateFlow.value.name,
+                    name = name,
                 ),
             ).onSuccess {
                 postSideEffect(SignUpSideEffect.StudentInfo.CheckStudentExistsSuccess)
@@ -236,7 +242,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
-                    email = state.email,
+                    email = email,
                     authCodeType = AuthCodeType.SIGN_UP,
                 ),
             ).onSuccess {
@@ -266,8 +272,8 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             verifyEmailUseCase(
                 verifyEmailParam = VerifyEmailParam(
-                    email = state.email,
-                    authCode = state.verifyCode,
+                    email = email,
+                    authCode = verifyCode,
                 ),
             ).onSuccess {
                 postSideEffect(SignUpSideEffect.VerifyEmail.VerifyEmailSuccess)
@@ -301,19 +307,19 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             if (
                 !checkPassword(
-                    password = state.password,
-                    repeatPassword = state.repeatPassword,
+                    password = password,
+                    repeatPassword = repeatPassword,
                 )
             ) {
                 signUpUseCase(
                     signUpParam = SignUpParam(
-                        email = state.email,
-                        password = state.password,
-                        grade = state.grade.toLong(),
-                        name = state.name,
+                        email = email,
+                        password = password,
+                        grade = grade.toLong(),
+                        name = name,
                         gender = state.gender,
-                        classRoom = state.classRoom.toLong(),
-                        number = state.number.toLong(),
+                        classRoom = classRoom.toLong(),
+                        number = number.toLong(),
                     ),
                 ).onSuccess {
                     postSideEffect(
@@ -363,19 +369,11 @@ class SignUpViewModel @Inject constructor(
 }
 
 data class SignUpState(
-    val email: String = "",
     val emailError: Boolean = false,
-    val verifyCode: String = "",
     val verifyCodeError: Boolean = false,
-    val password: String = "",
     val passwordError: Boolean = false,
-    val repeatPassword: String = "",
     val repeatPasswordError: Boolean = false,
-    val grade: String = "",
-    val name: String = "",
     val gender: Gender = Gender.MAN,
-    val classRoom: String = "",
-    val number: String = "",
     val studentNotFound: Boolean = false,
     val sendVerifyCodeButtonEnabled: Boolean = false,
     val authCodeEnabled: Boolean = false,

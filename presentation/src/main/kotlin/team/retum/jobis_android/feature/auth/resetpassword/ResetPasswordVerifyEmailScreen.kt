@@ -41,8 +41,8 @@ internal fun ResetPasswordVerifyEmailScreen(
     val context = LocalContext.current
     val state by resetPasswordViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-    val email = state.email
-    val authCode = state.authCode
+    val email = resetPasswordViewModel.email
+    val authCode = resetPasswordViewModel.authCode
     val sendAuthCodeState = state.sendAuthCodeState
 
     resetPasswordViewModel.collectSideEffect {

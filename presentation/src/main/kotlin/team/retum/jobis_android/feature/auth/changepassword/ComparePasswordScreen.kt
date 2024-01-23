@@ -37,6 +37,7 @@ internal fun ComparePasswordScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val state by resetPasswordViewModel.collectAsState()
+    val currentPassword = resetPasswordViewModel.currentPassword
 
     resetPasswordViewModel.collectSideEffect {
         when (it) {
@@ -58,7 +59,7 @@ internal fun ComparePasswordScreen(
 
     val onPasswordChanged = { password: String ->
         resetPasswordViewModel.setCurrentPassword(password)
-        if (state.currentPassword.length != password.length) {
+        if (currentPassword.length != password.length) {
             resetPasswordViewModel.setComparePasswordErrorState(
                 comparePasswordErrorState = false,
             )
@@ -85,7 +86,7 @@ internal fun ComparePasswordScreen(
         }
         Spacer(modifier = Modifier.height(28.dp))
         JobisBoxTextField(
-            value = state.currentPassword,
+            value = currentPassword,
             onValueChanged = onPasswordChanged,
             hint = stringResource(id = R.string.hint_original_password),
             textFieldType = TextFieldType.PASSWORD,
@@ -96,7 +97,7 @@ internal fun ComparePasswordScreen(
         Spacer(modifier = Modifier.weight(1f))
         JobisLargeButton(
             text = stringResource(id = R.string.complete),
-            enabled = state.currentPassword.isNotEmpty() && !state.comparePasswordErrorState,
+            enabled = currentPassword.isNotEmpty() && !state.comparePasswordErrorState,
             onClick = resetPasswordViewModel::comparePassword,
         )
         Spacer(modifier = Modifier.height(32.dp))

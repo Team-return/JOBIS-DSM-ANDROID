@@ -111,9 +111,9 @@ internal fun BugReportScreen(
             Header(text = stringResource(id = R.string.bug_report))
             ContentInputs(
                 onTitleChanged = bugReportScreenViewModel::setTitle,
-                title = bugState.title,
+                title = bugReportScreenViewModel.title,
                 onContentChanged = bugReportScreenViewModel::setContent,
-                content = bugState.content,
+                content = bugReportScreenViewModel.content,
                 titleError = bugState.titleError,
                 contentError = bugState.contentError,
             )

@@ -1,6 +1,9 @@
 package team.retum.jobis_android.feature.auth.signin
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,12 +28,17 @@ class SignInScreenViewModel @Inject constructor(
 
     override val container = container<SignInState, SignInSideEffect>(SignInState())
 
+    var email by mutableStateOf("")
+        private set
+    var password by mutableStateOf("")
+        private set
+
     internal fun postLogin() = intent {
         viewModelScope.launch {
             signInUseCase(
                 param = SignInParam(
-                    accountId = state.email,
-                    password = state.password,
+                    accountId = email,
+                    password = password,
                     isAutoLogin = state.autoSignIn,
                 ),
             ).onSuccess {
@@ -69,23 +77,23 @@ class SignInScreenViewModel @Inject constructor(
         }
     }
 
-    internal fun setEmail(email: String) = intent {
+    internal fun setEmail(email: String) {
+        this.email = email
         setSignInButtonEnabled()
-        reduce {
-            state.copy(
-                email = email,
-                emailError = false,
-            )
+        intent {
+            reduce {
+                state.copy(emailError = false)
+            }
         }
     }
 
-    internal fun setPassword(password: String) = intent {
+    internal fun setPassword(password: String) {
+        this.password = password
         setSignInButtonEnabled()
-        reduce {
-            state.copy(
-                password = password,
-                passwordError = false,
-            )
+        intent {
+            reduce {
+                state.copy(passwordError = false)
+            }
         }
     }
 
@@ -105,8 +113,6 @@ class SignInScreenViewModel @Inject constructor(
 }
 
 data class SignInState(
-    val email: String = "",
-    val password: String = "",
     val autoSignIn: Boolean = false,
     val emailError: Boolean = false,
     val passwordError: Boolean = false,
