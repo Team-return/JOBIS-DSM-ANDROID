@@ -1,6 +1,5 @@
 package team.retum.data.remote.api
 
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -26,17 +25,17 @@ interface StudentApi {
     @PATCH(JobisUrl.Student.password)
     suspend fun changePassword(
         @Body changePasswordRequest: ChangePasswordRequest,
-    ): Response<Void>
+    )
 
     @PATCH(JobisUrl.Student.forgottenPassword)
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
-    ): Response<Void>
+    )
 
     @PATCH(JobisUrl.Student.profile)
     suspend fun editProfileImage(
         @Body editProfileImageRequest: EditProfileImageRequest,
-    ): Response<Void>
+    )
 
     @GET(JobisUrl.Student.exists)
     suspend fun checkStudentExists(
