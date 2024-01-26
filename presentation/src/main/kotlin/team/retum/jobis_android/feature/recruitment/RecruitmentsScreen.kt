@@ -88,6 +88,7 @@ internal fun RecruitmentsScreen(
             snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
             fetchRecruitments()
             fetchRecruitmentCount()
+            observeName()
         }
     }
 
@@ -135,7 +136,15 @@ internal fun RecruitmentsScreen(
                 jobCode = state.jobCode,
                 techCode = state.techCode,
                 onFilterClicked = onFilterClicked,
-                onNameChanged = recruitmentsScreenViewModel::setName,
+                onNameChanged = {
+                    recruitmentsScreenViewModel.setName(it)
+                    coroutineScope.launch {
+                        lazyListState.scrollToItem(
+                            index = 0,
+                            scrollOffset = 0,
+                        )
+                    }
+                },
             )
             Recruitments(
                 lazyListState = lazyListState,

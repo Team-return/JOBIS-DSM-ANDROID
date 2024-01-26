@@ -4,12 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -27,6 +30,8 @@ import team.retum.jobis_android.util.mvi.SideEffect
 import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
+const val SEARCH_DEBOUNCE_MILLIS = 500L
+
 @HiltViewModel
 class RecruitmentsScreenViewModel @Inject constructor(
     private val fetchRecruitmentsUseCase: FetchRecruitmentsUseCase,
@@ -42,6 +47,20 @@ class RecruitmentsScreenViewModel @Inject constructor(
 
     var name: String? by mutableStateOf(null)
         private set
+
+    @OptIn(FlowPreview::class)
+    internal suspend fun observeName() {
+        snapshotFlow { name }.debounce(SEARCH_DEBOUNCE_MILLIS).collect {
+            if (it != null) {
+                intent {
+                    postSideEffect(RecruitmentsSideEffect.StartFetchNextPage)
+                    reduce { state.copy(page = 0) }
+                }
+                fetchRecruitments()
+                fetchRecruitmentCount()
+            }
+        }
+    }
 
     internal fun fetchRecruitments(
         jobCode: Long? = null,
@@ -88,11 +107,12 @@ class RecruitmentsScreenViewModel @Inject constructor(
     }
 
     internal fun Flow<Int?>.callNextPageByPosition() = intent {
+        var isStop = false
         viewModelScope.launch(Dispatchers.IO) {
             val fetchNextPage = async {
                 this@callNextPageByPosition.collect {
                     it?.run {
-                        if (this == recruitments.lastIndex - 2) {
+                        if (this == recruitments.lastIndex - 2 && !isStop) {
                             fetchRecruitments()
                         }
                     }
@@ -103,7 +123,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
                 launch {
                     stateFlow.collect {
                         if (it.page == state.totalPage && state.totalPage != 0L) {
-                            fetchNextPage.cancel()
+                            isStop = true
                         }
                     }
                 }
@@ -111,7 +131,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
                     sideEffectFlow.collect { sideEffect: SideEffect ->
                         when (sideEffect) {
                             is RecruitmentsSideEffect.StartFetchNextPage -> {
-                                fetchNextPage.start()
+                                isStop = false
                             }
                         }
                     }
@@ -137,6 +157,7 @@ class RecruitmentsScreenViewModel @Inject constructor(
     }
 
     internal fun setName(name: String) {
+        recruitments.clear()
         this.name = name
     }
 

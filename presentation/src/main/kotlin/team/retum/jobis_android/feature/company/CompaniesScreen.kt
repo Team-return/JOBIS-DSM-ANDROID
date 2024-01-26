@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.launch
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -53,12 +55,14 @@ internal fun CompaniesScreen(
     val searchResultTextAlpha = if (companiesScreenViewModel.name.isNullOrBlank()) 0f else 1f
     val lazyListState = rememberLazyListState()
     val name = companiesScreenViewModel.name
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         with(companiesScreenViewModel) {
             snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
             fetchCompanies()
             fetchCompanyCount()
+            observeName()
         }
     }
 
@@ -76,7 +80,15 @@ internal fun CompaniesScreen(
         Spacer(modifier = Modifier.height(12.dp))
         CompanyInput(
             companyName = name,
-            onCompanyNameChanged = companiesScreenViewModel::setName,
+            onCompanyNameChanged = {
+                companiesScreenViewModel.setName(it)
+                coroutineScope.launch {
+                    lazyListState.scrollToItem(
+                        index = 0,
+                        scrollOffset = 0,
+                    )
+                }
+            },
         )
         Animated(!name.isNullOrBlank()) {
             Caption(
