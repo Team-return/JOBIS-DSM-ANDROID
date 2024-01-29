@@ -138,7 +138,7 @@ internal class ResetPasswordViewModel @Inject constructor(
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessChangePassword)
             }.onFailure {
                 postSideEffect(
-                    sideEffect = when (it) {
+                    when (it) {
                         is KotlinNullPointerException -> ResetPasswordSideEffect.SuccessChangePassword
                         else -> ResetPasswordSideEffect.Exception(getStringFromException(it))
                     },
@@ -158,10 +158,10 @@ internal class ResetPasswordViewModel @Inject constructor(
                 postSideEffect(ResetPasswordSideEffect.SuccessResetPassword)
             }.onFailure {
                 postSideEffect(
-                    sideEffect = when (it) {
+                    when (it) {
                         is KotlinNullPointerException -> ResetPasswordSideEffect.SuccessResetPassword
                         else -> ResetPasswordSideEffect.Exception(getStringFromException(it))
-                    }
+                    },
                 )
             }
         }
