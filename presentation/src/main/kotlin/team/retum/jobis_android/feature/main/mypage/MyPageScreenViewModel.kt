@@ -71,7 +71,12 @@ internal class MyPageScreenViewModel @Inject constructor(
                 fetchStudentInformation()
                 postSideEffect(MyPageSideEffect.SuccessEditProfileImage)
             }.onFailure {
-                postSideEffect(MyPageSideEffect.Exception(getStringFromException(it)))
+                postSideEffect(
+                    when (it) {
+                        is KotlinNullPointerException -> MyPageSideEffect.SuccessEditProfileImage
+                        else -> MyPageSideEffect.Exception(getStringFromException(it))
+                    },
+                )
             }
         }
     }
