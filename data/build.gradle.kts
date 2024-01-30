@@ -19,15 +19,22 @@ android {
 
         testInstrumentationRunner = ProjectProperties.TEST_RUNNER
 
-        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL", "\"\""))
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile(ProjectProperties.PROGUARD),
-                ProjectProperties.PROGUARD_RULES,
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = properties.getProperty("PROD_URL", "\"\"")
+            )
+        }
+        debug{
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = properties.getProperty("DEV_URL", "\"\"")
             )
         }
     }
