@@ -16,28 +16,30 @@ class AuthorizationInterceptor @Inject constructor(
     private val userDataStorage: UserDataStorage,
 ) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val path = request.url.encodedPath
-
-        val ignorePath = arrayListOf(
+    private val ignorePath by lazy {
+        listOf(
             JobisUrl.User.login,
-            JobisUrl.User.reissue,
+            JobisUrl.Auth.reissue,
             JobisUrl.Student.signup,
             JobisUrl.Auth.code,
             JobisUrl.Student.exists,
             JobisUrl.Student.forgottenPassword,
         )
+    }
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val path = request.url.encodedPath
 
         val accessExpiresAt = userDataStorage.fetchAccessTokenExpiresAt()
 
         if (accessExpiresAt.isNotBlank() && LocalDateTime.now()
-                .isAfter(LocalDateTime.parse(accessExpiresAt))
+                .isAfter(LocalDateTime.parse(accessExpiresAt)) && !path.isIgnorePath()
         ) {
             tokenReissue()
         }
 
-        if (ignorePath.contains(path)) {
+        if (path.isIgnorePath() || request.url.toString().contains(JobisUrl.imageUrl)) {
             return chain.proceed(request)
         }
 
@@ -46,6 +48,10 @@ class AuthorizationInterceptor @Inject constructor(
         return chain.proceed(
             request.newBuilder().addHeader("Authorization", "Bearer $accessToken").build(),
         )
+    }
+
+    private fun String.isIgnorePath(): Boolean {
+        return ignorePath.contains(this)
     }
 
     private fun tokenReissue() {

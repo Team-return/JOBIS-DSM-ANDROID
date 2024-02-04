@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ResetPasswordUseCase @Inject constructor(
     private val studentRepository: StudentRepository,
 ) {
-    suspend operator fun invoke(resetPasswordParam: ResetPasswordParam) = kotlin.runCatching {
+    suspend operator fun invoke(resetPasswordParam: ResetPasswordParam) = runCatching {
         studentRepository.resetPassword(resetPasswordParam = resetPasswordParam)
     }
 }

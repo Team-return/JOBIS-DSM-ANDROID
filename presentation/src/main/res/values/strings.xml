@@ -102,6 +102,7 @@
     <string name="recruitment_details_hiring_progress">채용절차</string>
     <string name="recruitment_details_required_documents">제출서류</string>
     <string name="recruitment_details_etc">기타사항</string>
+    <string name="recruitment_details_not_found">존재하지 않는 모집의뢰서 입니다</string>
 
     <string name="recruitment_details_do_apply">지원하기</string>
 
@@ -136,6 +137,8 @@
     <string name="company_details_review_interview">면접 후기</string>
 
     <string name="company_details_company_profile">기업 프로필 이미지</string>
+
+    <string name="company_details_not_found">존재하지 않는 기업 입니다</string>
 
     <!--    Reviews-->
     <string name="reviews_writer">%s님의 후기</string>
@@ -191,6 +194,7 @@
     <string name="recruitment_application_conflict">이미 지원한 이력이 있습니다</string>
 
     <string name="recruitment_application_file_too_large">파일의 용량을 초과했습니다</string>
+    <string name="recruitment_application_invalid_file_extension">지원하지 않는 형식의 파일입니다</string>
 
     <string name="recruitment_application_success">성공적으로 지원되었습니다!</string>
 

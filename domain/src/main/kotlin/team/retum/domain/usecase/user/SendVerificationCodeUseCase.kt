@@ -7,11 +7,7 @@ import javax.inject.Inject
 class SendVerificationCodeUseCase @Inject constructor(
     private val authRepository: AuthRepository,
 ) {
-    suspend operator fun invoke(
-        sendVerificationCodeParam: SendVerificationCodeParam,
-    ) = kotlin.runCatching {
-        authRepository.sendVerificationCode(
-            sendVerificationCodeParam = sendVerificationCodeParam,
-        )
+    suspend operator fun invoke(sendVerificationCodeParam: SendVerificationCodeParam) = runCatching {
+        authRepository.sendVerificationCode(sendVerificationCodeParam = sendVerificationCodeParam)
     }
 }

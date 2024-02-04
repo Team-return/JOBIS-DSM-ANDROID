@@ -8,13 +8,13 @@ object ProjectProperties {
     const val COMPILE_SDK = 33
     const val MIN_SDK = 24
 
-    const val VERSION_CODE = 23
-    const val VERSION_NAME = "1.2.3"
+    const val VERSION_CODE = 24
+    const val VERSION_NAME = "1.2.4"
 
     const val TEST_RUNNER = "androidx.test.runner.AndroidJUnitRunner"
 
     const val PROGUARD = "proguard-android-optimize.txt"
     const val PROGUARD_RULES = "proguard-rules.pro"
 
-    const val JVM_VERSION = "1.8"
+    const val JVM_VERSION = "18"
 }

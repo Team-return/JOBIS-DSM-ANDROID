@@ -1,7 +1,10 @@
 package team.retum.data.remote.datasource.file
 
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import team.retum.data.remote.api.FileApi
+import team.retum.data.remote.request.files.CreatePresignedUrlRequest
+import team.retum.data.remote.request.files.CreatePresignedUrlResponse
 import team.retum.data.remote.response.file.UploadFileResponse
 import team.retum.data.util.HttpHandler
 import team.retum.domain.entity.FileType
@@ -17,6 +20,21 @@ class FileDataSourceImpl @Inject constructor(
         fileApi.uploadFile(
             type = type,
             file = files,
+        )
+    }.sendRequest()
+
+    override suspend fun createPresignedUrl(createPresignedUrlRequest: CreatePresignedUrlRequest) =
+        HttpHandler<CreatePresignedUrlResponse>().httpRequest {
+            fileApi.createPresignedUrl(createPresignedUrlRequest = createPresignedUrlRequest)
+        }.sendRequest()
+
+    override suspend fun uploadFile(
+        presignedUrl: String,
+        file: RequestBody,
+    ) = HttpHandler<Unit>().httpRequest {
+        fileApi.uploadFile(
+            presignedUrl = presignedUrl,
+            file = file,
         )
     }.sendRequest()
 }

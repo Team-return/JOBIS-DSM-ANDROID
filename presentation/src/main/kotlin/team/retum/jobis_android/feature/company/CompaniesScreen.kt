@@ -20,10 +20,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,9 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import kotlinx.coroutines.launch
 import team.retum.domain.entity.company.CompanyEntity
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
 import team.retum.jobis_android.util.compose.animation.skeleton
@@ -49,29 +48,22 @@ import team.returm.jobisdesignsystem.util.Animated
 import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
-fun CompaniesScreen(
+internal fun CompaniesScreen(
     navigateToCompanyDetails: (Long) -> Unit,
-    companyViewModel: CompanyViewModel = hiltViewModel(),
+    companiesScreenViewModel: CompaniesScreenViewModel = hiltViewModel(),
 ) {
-    val state by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
-    val searchResultTextAlpha = if (state.name.isNullOrBlank()) 0f else 1f
-
+    val searchResultTextAlpha = if (companiesScreenViewModel.name.isNullOrBlank()) 0f else 1f
     val lazyListState = rememberLazyListState()
-    var checkCompany by remember { mutableStateOf(false) }
-
-    LaunchedEffect(checkCompany) {
-        if (checkCompany) {
-            with(companyViewModel) {
-                setPage()
-                fetchCompanies()
-            }
-        }
-    }
+    val name = companiesScreenViewModel.name
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        companyViewModel.resetPage()
-        companyViewModel.addCompaniesDummy()
+        with(companiesScreenViewModel) {
+            snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
+            fetchCompanies()
+            fetchCompanyCount()
+            observeName()
+        }
     }
 
     Column(
@@ -87,10 +79,18 @@ fun CompaniesScreen(
         Header(text = stringResource(id = R.string.company_list_search_company))
         Spacer(modifier = Modifier.height(12.dp))
         CompanyInput(
-            companyName = state.name,
-            onCompanyNameChanged = companyViewModel::setCompanyName,
+            companyName = name,
+            onCompanyNameChanged = {
+                companiesScreenViewModel.setName(it)
+                coroutineScope.launch {
+                    lazyListState.scrollToItem(
+                        index = 0,
+                        scrollOffset = 0,
+                    )
+                }
+            },
         )
-        Animated(!state.name.isNullOrBlank()) {
+        Animated(!name.isNullOrBlank()) {
             Caption(
                 modifier = Modifier.alpha(alpha = searchResultTextAlpha),
                 text = stringResource(id = R.string.search_result),
@@ -105,20 +105,17 @@ fun CompaniesScreen(
                     text = stringResource(id = R.string.search_result),
                     color = JobisColor.Gray600,
                 )
-                Caption(text = state.name ?: "")
+                Caption(text = name ?: "")
             }
         }
         Companies(
             lazyListState = lazyListState,
-            companies = state.companies,
+            companies = companiesScreenViewModel.companies,
             navigateToCompanyDetails = {
                 if (it != 0L) {
                     navigateToCompanyDetails(it)
                 }
             },
-            checkCompanies = { checkCompany = it },
-            companyCount = state.companyCount,
-            pageCount = state.page,
         )
     }
 }
@@ -146,11 +143,8 @@ private fun CompanyInput(
 @Composable
 private fun Companies(
     lazyListState: LazyListState,
-    companies: List<CompanyEntity>,
+    companies: SnapshotStateList<CompanyEntity>,
     navigateToCompanyDetails: (companyId: Long) -> Unit,
-    checkCompanies: (Boolean) -> Unit,
-    companyCount: Long,
-    pageCount: Int,
 ) {
     if (companies.isNotEmpty()) {
         LazyColumn(
@@ -167,15 +161,9 @@ private fun Companies(
                     onClick = { navigateToCompanyDetails(item.id) },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                if (item == companies.last() && pageCount.toLong() != companyCount) {
-                    checkCompanies(true)
-                }
             }
         }
-    } else {
-        checkCompanies(true)
     }
-    checkCompanies(false)
 }
 
 @Composable

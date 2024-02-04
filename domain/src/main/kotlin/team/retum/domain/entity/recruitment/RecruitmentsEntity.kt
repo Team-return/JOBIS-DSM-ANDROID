@@ -11,6 +11,6 @@ data class RecruitmentEntity(
     val trainPay: Long,
     val military: Boolean,
     val totalHiring: Long,
-    val jobCodeList: String,
+    val hiringJobs: String,
     val bookmarked: Boolean,
 )

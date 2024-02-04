@@ -6,9 +6,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
 import team.retum.jobis_android.feature.root.RootScreen
 import team.retum.jobis_android.feature.splash.SplashScreen
 import team.retum.jobis_android.navigation.AuthDestinations
@@ -35,15 +37,12 @@ import team.retum.jobis_android.navigation.navigateToSignInPopUpWithMain
 import team.retum.jobis_android.navigation.navigateToSignUp
 import team.retum.jobis_android.navigation.putString
 import team.retum.jobis_android.navigation.userNavigation
-import team.retum.jobis_android.feature.auth.resetpassword.ResetPasswordViewModel
-import team.retum.jobis_android.feature.auth.signup.SignUpViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun JobisApp(
     signInOption: Boolean,
-    signUpViewModel: SignUpViewModel,
-    resetPasswordViewModel: ResetPasswordViewModel,
+    resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
     val navController = rememberAnimatedNavController()
 
@@ -67,7 +66,6 @@ internal fun JobisApp(
         startDestination = NavigationRoute.Splash,
     ) {
         authNavigation(
-            signUpViewModel = signUpViewModel,
             resetPasswordViewModel = resetPasswordViewModel,
             navigateToMainWithPopUpSignIn = navController::navigateToRootWithPopUpSignIn,
             navigateToResetPasswordVerifyEmail = navController::navigateToResetPasswordVerifyEmail,

@@ -11,6 +11,8 @@ import team.retum.domain.entity.bookmark.BookmarkedRecruitmentEntity
 import team.retum.domain.usecase.bookmark.BookmarkRecruitmentUseCase
 import team.retum.domain.usecase.bookmark.FetchBookmarkedRecruitmentsUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,3 +66,10 @@ internal class BookmarkViewModel @Inject constructor(
         }
     }
 }
+
+data class BookmarkState(
+    val bookmarkedRecruitments: List<BookmarkedRecruitmentEntity> = emptyList(),
+    val bookmarkExists: Boolean = true,
+) : State
+
+sealed class BookmarkSideEffect : SideEffect

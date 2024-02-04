@@ -7,6 +7,8 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import team.retum.domain.usecase.user.FetchAutoSignInOptionUseCase
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,3 +40,9 @@ class MainViewModel @Inject constructor(
         }
     }
 }
+
+data class MainState(
+    val autoSignInOption: Boolean = false,
+) : State
+
+sealed class MainSideEffect : SideEffect

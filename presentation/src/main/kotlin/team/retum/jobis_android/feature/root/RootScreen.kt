@@ -51,7 +51,6 @@ fun RootScreen(
                     navigateToMyPage = navHostController::navigateToMyPage,
                     navigateToRecruitments = navigateToRecruitments,
                     navigateToCompanies = navigateToCompanies,
-                    navigateToNotifications = navigateToNotifications,
                 )
             }
             composable(route = NavigationRoute.BottomNavigation.BookmarkRecruitments) {

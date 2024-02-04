@@ -23,7 +23,6 @@ object JobisUrl {
 
     object User {
         const val login = "$users/login"
-        const val reissue = "$users/reissue"
     }
 
     object Student {
@@ -79,5 +78,9 @@ object JobisUrl {
         const val recruitmentId = "{recruitment-id}"
         const val companyId = "{company-id}"
         const val reviewId = "{review-id}"
+    }
+
+    object Files {
+        const val presigned = "$files/pre-signed"
     }
 }

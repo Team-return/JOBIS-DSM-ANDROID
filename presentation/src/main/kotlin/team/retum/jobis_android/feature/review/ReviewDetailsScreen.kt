@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.review.ReviewDetailEntity
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.component.Header
@@ -32,15 +32,12 @@ import team.returm.jobisdesignsystem.theme.Caption
 internal fun ReviewDetailsScreen(
     reviewId: String,
     getString: (key: String) -> String?,
-    reviewViewModel: ReviewViewModel = hiltViewModel(),
+    reviewDetailsScreenViewModel: ReviewDetailsScreenViewModel = hiltViewModel(),
 ) {
-    val state by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val state by reviewDetailsScreenViewModel.collectAsState()
 
     LaunchedEffect(Unit) {
-        with(reviewViewModel) {
-            setReviewId(reviewId)
-            fetchReviewDetails()
-        }
+        reviewDetailsScreenViewModel.fetchReviewDetails(reviewId = reviewId)
     }
 
     Column(

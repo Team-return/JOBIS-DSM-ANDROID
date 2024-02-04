@@ -28,10 +28,9 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,15 +41,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
+import team.retum.domain.entity.recruitment.RecruitmentEntity
 import team.retum.jobis_android.feature.main.home.ApplyCompaniesItemShape
-import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.main.bookmark.BookmarkViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisMediumIconButton
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -66,66 +64,44 @@ import java.text.DecimalFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun RecruitmentsScreen(
-    putString: (String, String) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
     isWinterIntern: Boolean,
-    recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
-    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
+    recruitmentsScreenViewModel: RecruitmentsScreenViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(Unit) {
-        recruitmentViewModel.setIsWinterIntern(isWinterIntern)
-        with(recruitmentViewModel) {
-            resetPage()
-            fetchRecruitments()
-            fetchRecruitmentCount()
-        }
-    }
-
-    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by recruitmentsScreenViewModel.collectAsState()
+    val recruitments = recruitmentsScreenViewModel.recruitments
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
     )
-
-    val recruitments = state.recruitments
-
-    val coroutineScope = rememberCoroutineScope()
-
     val onFilterClicked: () -> Unit = {
         coroutineScope.launch {
             sheetState.show()
         }
     }
 
-    val lazyListState = rememberLazyListState()
-    var checkRecruitment by remember { mutableStateOf(false) }
-
-    LaunchedEffect(checkRecruitment) {
-        if (checkRecruitment) {
-            with(recruitmentViewModel) {
-                setPage()
-                fetchRecruitments()
-            }
-        }
-    }
-
     LaunchedEffect(Unit) {
-        recruitmentViewModel.addRecruitmentsDummy()
+        with(recruitmentsScreenViewModel) {
+            setWinterIntern(isWinterIntern)
+            snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.callNextPageByPosition()
+            fetchRecruitments()
+            fetchRecruitmentCount()
+            observeName()
+        }
     }
 
     ModalBottomSheetLayout(
         sheetContent = {
-            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode: Long?, techCodes: String ->
+            RecruitmentFilter(sheetState = sheetState.isVisible) { jobCode: Long?, techCode: String? ->
+                recruitmentsScreenViewModel.setCodes(
+                    jobCode = jobCode,
+                    techCode = techCode,
+                )
                 coroutineScope.launch {
-                    with(recruitmentViewModel) {
-                        setJobCode(jobCode)
-                        setTechCode(techCodes)
-                        initRecruitments()
-                        fetchRecruitmentCount()
-                        fetchRecruitments()
-                    }
                     sheetState.hide()
+                    lazyListState.animateScrollToItem(0)
                 }
             }
         },
@@ -146,26 +122,35 @@ internal fun RecruitmentsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Header(
-                text = if (!isWinterIntern) stringResource(id = R.string.recruitments_header)
-                else stringResource(id = R.string.recruitments_winter_interns)
+                text = stringResource(
+                    id = if (isWinterIntern) {
+                        R.string.recruitments_winter_interns
+                    } else {
+                        R.string.recruitments_header
+                    },
+                ),
             )
             Spacer(modifier = Modifier.height(12.dp))
             RecruitmentInput(
-                name = state.name,
+                name = recruitmentsScreenViewModel.name,
                 jobCode = state.jobCode,
                 techCode = state.techCode,
                 onFilterClicked = onFilterClicked,
-                onKeywordChanged = recruitmentViewModel::setName,
+                onNameChanged = {
+                    recruitmentsScreenViewModel.setName(it)
+                    coroutineScope.launch {
+                        lazyListState.scrollToItem(
+                            index = 0,
+                            scrollOffset = 0,
+                        )
+                    }
+                },
             )
             Recruitments(
                 lazyListState = lazyListState,
-                recruitmentUiModels = recruitments,
-                bookmarkViewModel = bookmarkViewModel,
-                putString = putString,
+                recruitments = recruitments,
+                onBookmarked = recruitmentsScreenViewModel::bookmark,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
-                checkRecruitment = { checkRecruitment = it },
-                recruitmentCount = state.recruitmentCount,
-                pageCount = state.page,
             )
         }
     }
@@ -177,7 +162,7 @@ private fun ColumnScope.RecruitmentInput(
     jobCode: Long?,
     techCode: String?,
     onFilterClicked: () -> Unit,
-    onKeywordChanged: (String) -> Unit,
+    onNameChanged: (String) -> Unit,
 ) {
     val searchResultTextAlpha = if (name.isNullOrBlank()) 0f else 1f
     val filterAppliedTextAlpha = if (jobCode != null || techCode != null) 1f else 0f
@@ -185,16 +170,16 @@ private fun ColumnScope.RecruitmentInput(
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Box(modifier = Modifier.weight(0.9f)) {
             JobisBoxTextField(
                 color = JobisTextFieldColor.MainColor,
-                onValueChanged = onKeywordChanged,
+                onValueChanged = onNameChanged,
                 value = name ?: "",
                 hint = stringResource(id = R.string.recruitments_filter_hint),
             )
         }
-        Spacer(modifier = Modifier.width(10.dp))
         JobisMediumIconButton(
             drawable = R.drawable.ic_filter,
             color = JobisButtonColor.MainSolidColor,
@@ -211,12 +196,12 @@ private fun ColumnScope.RecruitmentInput(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Caption(
-                modifier = Modifier.alpha(alpha = searchResultTextAlpha),
-                text = stringResource(id = R.string.search_result),
+                modifier = Modifier
+                    .weight(1f)
+                    .alpha(alpha = searchResultTextAlpha),
+                text = "${stringResource(id = R.string.search_result)} ${name ?: ""}",
                 color = JobisColor.Gray600,
             )
-            Caption(text = name ?: "")
-            Spacer(modifier = Modifier.weight(1f))
             Caption(
                 modifier = Modifier.alpha(alpha = filterAppliedTextAlpha),
                 text = stringResource(id = R.string.filter_applied),
@@ -229,82 +214,44 @@ private fun ColumnScope.RecruitmentInput(
 @Composable
 private fun Recruitments(
     lazyListState: LazyListState,
-    recruitmentUiModels: List<RecruitmentUiModel>,
-    bookmarkViewModel: BookmarkViewModel,
-    putString: (String, String) -> Unit,
+    recruitments: SnapshotStateList<RecruitmentEntity>,
+    onBookmarked: (recruitmentEntity: RecruitmentEntity, index: Int) -> Unit,
     navigateToRecruitmentDetails: (Long) -> Unit,
-    checkRecruitment: (Boolean) -> Unit,
-    recruitmentCount: Long,
-    pageCount: Int,
 ) {
-    val onBookmarked = { index: Int, recruitmentId: Long, setBookmark: () -> Unit ->
-        recruitmentUiModels[index].bookmarked = !recruitmentUiModels[index].bookmarked
-        bookmarkViewModel.bookmarkRecruitment(recruitmentId = recruitmentId)
-        setBookmark()
-    }
-
-    val onRecruitmentClicked = { recruitment: RecruitmentUiModel ->
-        putString(
-            NavigationProperties.COMPANY_NAME,
-            recruitment.companyName,
-        )
-        navigateToRecruitmentDetails(recruitment.recruitId)
-    }
-
-    if (recruitmentUiModels.isNotEmpty()) {
+    if (recruitments.isNotEmpty()) {
         LazyColumn(
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(vertical = 20.dp),
         ) {
-            itemsIndexed(recruitmentUiModels) { index, recruitment ->
-                val position = recruitment.jobCodeList.replace(',', '/')
+            itemsIndexed(recruitments) { index, recruitment ->
                 val trainPay = DecimalFormat("#,###").format(recruitment.trainPay)
-
-                var isBookmarked by remember { mutableStateOf(recruitment.bookmarked) }
-
-                val setBookmark = {
-                    isBookmarked = !isBookmarked
-                }
-
-                Recruitment(
-                    recruitId = recruitment.recruitId,
-                    imageUrl = recruitment.companyProfileUrl,
-                    position = position,
-                    isBookmarked = isBookmarked,
-                    companyName = recruitment.companyName,
-                    trainPay = if (recruitment.trainPay != 0L) {
-                        stringResource(
+                with(recruitment) {
+                    Recruitment(
+                        recruitId = recruitId,
+                        imageUrl = companyProfileUrl,
+                        hiringJobs = hiringJobs,
+                        isBookmarked = bookmarked,
+                        companyName = companyName,
+                        trainPay = stringResource(
                             id = R.string.recruitments_train_pay,
                             trainPay,
-                        )
-                    } else {
-                        ""
-                    },
-                    isMilitarySupported = recruitment.military,
-                    onBookmarked = { onBookmarked(index, recruitment.recruitId, setBookmark) },
-                    onItemClicked = {
-                        if (recruitment.recruitId != 0L) {
-                            onRecruitmentClicked(recruitment)
-                        }
-                    },
-                )
-                if (recruitment == recruitmentUiModels.last() && pageCount.toLong() != recruitmentCount && recruitmentCount != 1L) {
-                    checkRecruitment(true)
+                        ),
+                        isMilitarySupported = military,
+                        onBookmarked = { onBookmarked(recruitment, index) },
+                        onItemClicked = { navigateToRecruitmentDetails(recruitId) },
+                    )
                 }
             }
         }
-    } else {
-        checkRecruitment(true)
     }
-    checkRecruitment(false)
 }
 
 @Composable
 private fun Recruitment(
     recruitId: Long,
     imageUrl: String,
-    position: String,
+    hiringJobs: String,
     isBookmarked: Boolean,
     companyName: String,
     trainPay: String,
@@ -312,7 +259,6 @@ private fun Recruitment(
     onBookmarked: () -> Unit,
     onItemClicked: () -> Unit,
 ) {
-    var bookmarked = isBookmarked
     val bookmarkIcon = if (isBookmarked) {
         R.drawable.ic_bookmarked_filled
     } else {
@@ -323,11 +269,6 @@ private fun Recruitment(
         R.drawable.ic_military_filled
     } else {
         R.drawable.ic_military_outlined
-    }
-
-    val onBookmarkClicked = {
-        onBookmarked()
-        bookmarked = !bookmarked
     }
 
     Column(
@@ -349,10 +290,10 @@ private fun Recruitment(
                 end = 20.dp,
                 top = 8.dp,
                 bottom = 8.dp,
+                start = 8.dp,
             ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.width(8.dp))
             AsyncImage(
                 modifier = Modifier
                     .size(80.dp)
@@ -371,8 +312,8 @@ private fun Recruitment(
                     Body2(
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
-                            .skeleton(position.isBlank()),
-                        text = position,
+                            .skeleton(hiringJobs.isBlank()),
+                        text = hiringJobs,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -380,7 +321,7 @@ private fun Recruitment(
                         Image(
                             modifier = Modifier
                                 .size(18.dp)
-                                .jobisClickable(onClick = onBookmarkClicked),
+                                .jobisClickable(onClick = onBookmarked),
                             painter = painterResource(id = bookmarkIcon),
                             contentDescription = stringResource(id = R.string.content_description_bookmark),
                         )
@@ -415,7 +356,6 @@ private fun Recruitment(
                     }
                 }
             }
-            Spacer(modifier = Modifier.width(20.dp))
         }
     }
 }

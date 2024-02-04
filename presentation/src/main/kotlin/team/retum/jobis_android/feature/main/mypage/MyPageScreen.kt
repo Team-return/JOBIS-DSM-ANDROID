@@ -25,9 +25,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,24 +43,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
-import team.retum.domain.entity.FileType
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.enums.Department
 import team.retum.jobis_android.LocalAppState
-import team.retum.jobis_android.feature.common.FileSideEffect
 import team.retum.jobis_android.util.FileUtil
 import team.retum.jobis_android.util.compose.animation.skeleton
 import team.retum.jobis_android.util.compose.component.Header
-import team.retum.jobis_android.feature.company.CompanyViewModel
-import team.retum.jobis_android.feature.common.FileViewModel
 import team.returm.jobisdesignsystem.colors.JobisColor
 import team.returm.jobisdesignsystem.theme.Body2
 import team.returm.jobisdesignsystem.theme.Body4
 import team.returm.jobisdesignsystem.theme.Caption
 import team.returm.jobisdesignsystem.theme.Heading6
 import team.returm.jobisdesignsystem.util.jobisClickable
+import java.io.File
 
 @Composable
 internal fun MyPageScreen(
@@ -69,71 +67,53 @@ internal fun MyPageScreen(
     navigateToComparePassword: () -> Unit,
     navigateToPostReview: (Long) -> Unit,
     navigateToNotifications: () -> Unit,
-    fileViewModel: FileViewModel = hiltViewModel(),
-    myPageViewModel: MyPageViewModel = hiltViewModel(),
-    companyViewModel: CompanyViewModel = hiltViewModel(),
+    myPageScreenViewModel: MyPageScreenViewModel = hiltViewModel(),
 ) {
-    val appState = LocalAppState.current
-
-    val state by myPageViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewableCompanies by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by myPageScreenViewModel.collectAsState()
+    val studentInformation = state.studentInformation
+    val reviewableCompanies = state.reviewableCompanies
     val context = LocalContext.current
+    val files = remember { mutableStateListOf<File>() }
+    var showSignOutDialog by remember { mutableStateOf(false) }
+    val activityResultLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+            if (uri != null) {
+                files.add(
+                    FileUtil.toFile(
+                        context = context,
+                        uri = uri,
+                    ),
+                )
+                myPageScreenViewModel.createPresignedUrl(files = files)
+            }
+        }
 
-    LaunchedEffect(Unit) {
-        myPageViewModel.container.sideEffectFlow.collect {
+    val editProfileImage: () -> Unit = {
+        val request = PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        activityResultLauncher.launch(request)
+    }
+
+    LocalAppState.current.run {
+        myPageScreenViewModel.collectSideEffect {
             when (it) {
                 is MyPageSideEffect.SuccessSignOut -> {
                     navigateToSignInPopUpWithMain()
                 }
 
                 is MyPageSideEffect.SuccessEditProfileImage -> {
-                    appState.showSuccessToast(context.getString(R.string.success_edit_profile_image))
+                    showSuccessToast(context.getString(R.string.success_edit_profile_image))
+                    files.clear()
+                }
+
+                is MyPageSideEffect.InvalidFileExtension -> {
+                    showErrorToast(context.getString(R.string.recruitment_application_invalid_file_extension))
                 }
 
                 is MyPageSideEffect.Exception -> {
-                    appState.showErrorToast(message = it.message)
+                    showErrorToast(context.getString(it.message))
                 }
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        fileViewModel.container.sideEffectFlow.collect {
-            when (it) {
-                is FileSideEffect.SuccessUploadFile -> {
-                    myPageViewModel.setEditProfileImageUrl(it.fileUrls.first())
-                    myPageViewModel.editProfileImage()
-                }
-
-                else -> {}
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        companyViewModel.fetchReviewableCompanies()
-    }
-
-    val activityResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-    ) { uri: Uri? ->
-        if (uri != null) {
-            fileViewModel.addFile(
-                FileUtil.toFile(
-                    context = context,
-                    uri = uri,
-                ),
-            )
-            fileViewModel.uploadFile()
-        }
-    }
-
-    var showSignOutDialog by remember { mutableStateOf(false) }
-
-    val editProfileImage: () -> Unit = {
-        activityResultLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        fileViewModel.setType(FileType.LOGO_IMAGE)
     }
 
     if (showSignOutDialog) {
@@ -142,7 +122,7 @@ internal fun MyPageScreen(
                 title = stringResource(id = R.string.sign_out_dialog_title),
                 mainBtnText = stringResource(id = R.string.check),
                 subBtnText = stringResource(id = R.string.cancel),
-                onMainBtnClick = myPageViewModel::signOut,
+                onMainBtnClick = myPageScreenViewModel::signOut,
                 onSubBtnClick = { showSignOutDialog = false },
             )
         }
@@ -162,15 +142,15 @@ internal fun MyPageScreen(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Spacer(modifier = Modifier.height(50.dp))
             UserProfile(
-                profileImageUrl = state.profileImageUrl,
+                profileImageUrl = studentInformation.profileImageUrl,
                 editProfileImage = editProfileImage,
-                name = state.studentName,
-                department = state.department,
-                studentGcn = state.studentGcn,
+                name = studentInformation.studentName,
+                department = studentInformation.department,
+                studentGcn = studentInformation.studentGcn,
             )
             Spacer(modifier = Modifier.height(32.dp))
-            if (reviewableCompanies.reviewableCompanies.isNotEmpty()) {
-                val reviewableCompany = reviewableCompanies.reviewableCompanies[0]
+            if (reviewableCompanies.isNotEmpty()) {
+                val reviewableCompany = reviewableCompanies[0]
                 AvailablePostReviewCompany(
                     companyName = reviewableCompany.name,
                     companyId = reviewableCompany.id,
@@ -180,7 +160,6 @@ internal fun MyPageScreen(
             Spacer(modifier = Modifier.height(36.dp))
             UserMenu(
                 navigateBugReport = navigateToBugReport,
-                onInterestClicked = {},
                 navigateToComparePassword = navigateToComparePassword,
                 onSignOutClicked = { showSignOutDialog = true },
             )
@@ -324,7 +303,6 @@ private fun AvailablePostReviewCompany(
 @Composable
 private fun UserMenu(
     navigateBugReport: () -> Unit,
-    onInterestClicked: () -> Unit,
     navigateToComparePassword: () -> Unit,
     onSignOutClicked: () -> Unit,
 ) {
@@ -335,10 +313,6 @@ private fun UserMenu(
     Menu(
         content = stringResource(id = R.string.bug_report),
         onClick = navigateBugReport,
-    )
-    Menu(
-        content = stringResource(id = R.string.choose_interests),
-        onClick = onInterestClicked,
     )
     Menu(
         content = stringResource(id = R.string.change_password),

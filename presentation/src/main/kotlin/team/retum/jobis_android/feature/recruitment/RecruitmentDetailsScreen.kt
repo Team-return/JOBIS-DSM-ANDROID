@@ -30,17 +30,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.recruitment.AreasEntity
 import team.retum.domain.entity.recruitment.RecruitmentDetailsEntity
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.application.RecruitmentApplicationDialog
 import team.retum.jobis_android.feature.company.getNavigationRoute
 import team.retum.jobis_android.navigation.MainDestinations
@@ -63,28 +66,35 @@ internal fun RecruitmentDetailsScreen(
     recruitmentId: Long?,
     getPreviousDestination: () -> String?,
     navigateToCompanyDetails: (Long) -> Unit,
-    recruitmentViewModel: RecruitmentViewModel = hiltViewModel(),
+    recruitmentDetailsScreenViewModel: RecruitmentDetailsScreenViewModel = hiltViewModel(),
 ) {
-    val state by recruitmentViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val appState = LocalAppState.current
+    val state by recruitmentDetailsScreenViewModel.collectAsState()
+    val context = LocalContext.current
     val details = state.details
     val areas = state.details.areas
-
     var companyDetailsButtonVisibility by remember { mutableStateOf(true) }
+    var applicationDialogState by remember { mutableStateOf(false) }
+    val onApplyButtonClicked = {
+        applicationDialogState = true
+    }
 
     LaunchedEffect(Unit) {
         companyDetailsButtonVisibility =
             getPreviousDestination()?.getNavigationRoute() != MainDestinations.CompanyDetails.getNavigationRoute()
-
-        if (recruitmentId != null) {
-            recruitmentViewModel.setRecruitmentId(recruitmentId)
-        }
+        recruitmentDetailsScreenViewModel.fetchRecruitmentDetails(recruitmentId)
     }
 
-    var applicationDialogState by remember { mutableStateOf(false) }
+    recruitmentDetailsScreenViewModel.collectSideEffect {
+        when (it) {
+            is RecruitmentDetailsSideEffect.RecruitmentNotFound -> {
+                appState.showErrorToast(context.getString(R.string.recruitment_details_not_found))
+            }
 
-    val onApplyButtonClicked = {
-        applicationDialogState = true
+            is RecruitmentDetailsSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
+            }
+        }
     }
 
     if (applicationDialogState) {

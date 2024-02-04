@@ -37,10 +37,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import team.retum.domain.entity.code.CodeEntity
 import team.retum.domain.enums.Type
 import team.retum.jobisui.colors.JobisButtonColor
@@ -58,40 +58,24 @@ import team.returm.jobisdesignsystem.util.jobisClickable
 
 @Composable
 internal fun RecruitmentFilter(
+    recruitmentFilterViewModel: RecruitmentFilterViewModel = hiltViewModel(),
     sheetState: Boolean = false,
-    codeViewModel: CodeViewModel = hiltViewModel(),
-    onDismissDialog: (jobCode: Long?, techCodes: String) -> Unit,
+    setCode: (jobCode: Long?, techCode: String?) -> Unit,
 ) {
-    val state by codeViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val state by recruitmentFilterViewModel.collectAsState()
     val selectedTechs = state.selectedTechs
-
     var folded by remember { mutableStateOf(false) }
-
     val onKeywordChanged: (String) -> Unit = { keyword: String ->
         if (folded) folded = false
-        codeViewModel.setKeyword(keyword)
+        recruitmentFilterViewModel.setKeyword(keyword)
     }
-
     val selectedTech = StringBuilder().apply {
         selectedTechs.forEach {
             append(it.second)
             append(" ")
         }
     }.toString().trim().replace(" ", " | ")
-
-    LaunchedEffect(sheetState) {
-        if (sheetState) {
-            with(codeViewModel) {
-                fetchCodes()
-                setType(Type.TECH)
-                fetchCodes()
-            }
-        }
-    }
-
     var positionsHeight by remember { mutableStateOf(0.dp) }
-
     val foldedOffset by animateDpAsState(
         targetValue = if (folded) {
             (positionsHeight + 12.dp)
@@ -104,25 +88,32 @@ internal fun RecruitmentFilter(
         ),
         label = "",
     )
-
     val onSelectJob: (jobCode: Long) -> Unit = {
-        with(codeViewModel) {
+        with(recruitmentFilterViewModel) {
             setType(Type.TECH)
             setParentCode(it)
             fetchCodes()
         }
     }
-
     val onSelectTech: (Long, String) -> Unit = { code: Long, keyword: String ->
-        with(codeViewModel) {
+        with(recruitmentFilterViewModel) {
             onSelectTech(
                 code = code,
                 keyword = keyword,
             )
         }
     }
-
     val setOnPositionsHeight: (Int) -> Unit = { positionsHeight = it.dp }
+
+    LaunchedEffect(sheetState) {
+        if (sheetState) {
+            with(recruitmentFilterViewModel) {
+                fetchCodes()
+                setType(Type.TECH)
+                fetchCodes()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -160,7 +151,7 @@ internal fun RecruitmentFilter(
                     JobisBoxTextField(
                         color = JobisTextFieldColor.MainColor,
                         onValueChanged = onKeywordChanged,
-                        value = state.keyword ?: "",
+                        value = recruitmentFilterViewModel.keyword ?: "",
                         hint = stringResource(id = R.string.search_tech_code),
                         textFieldType = TextFieldType.SEARCH,
                     )
@@ -233,7 +224,7 @@ internal fun RecruitmentFilter(
                     color = JobisButtonColor.MainSolidColor,
                     enabled = (state.selectedJobCode != null || selectedTech.isNotEmpty()),
                     onClick = {
-                        onDismissDialog(
+                        setCode(
                             state.selectedJobCode,
                             getTechCodes(selectedTechs),
                         )
@@ -386,8 +377,12 @@ private val Int.toDp get() = (this / Resources.getSystem().displayMetrics.densit
 
 private fun getTechCodes(
     techCodes: List<Pair<Long, String>>,
-): String {
-    return StringBuilder().apply {
-        techCodes.forEach { append("${it.first} ") }
-    }.toString().trim().replace(" ", ",")
+): String? {
+    return if (techCodes.isNotEmpty()) {
+        StringBuilder().apply {
+            techCodes.forEach { append("${it.first} ") }
+        }.toString().trim().replace(" ", ",")
+    } else {
+        null
+    }
 }

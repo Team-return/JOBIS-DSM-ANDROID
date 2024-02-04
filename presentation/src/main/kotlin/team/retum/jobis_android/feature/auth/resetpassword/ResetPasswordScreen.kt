@@ -13,12 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.navigation.AuthDestinations
@@ -39,14 +40,11 @@ internal fun ResetPasswordScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
 ) {
     val appState = LocalAppState.current
-
-    val state by resetPasswordViewModel.container.stateFlow.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
+    val state by resetPasswordViewModel.collectAsState()
     val focusManager = LocalFocusManager.current
-
-    val newPassword = state.newPassword
-    val passwordRepeat = state.passwordRepeat
-
+    val newPassword = resetPasswordViewModel.newPassword
+    val passwordRepeat = resetPasswordViewModel.passwordRepeat
     val onClick: () -> Unit = {
         when (getPreviousDestination().toString()) {
             AuthDestinations.ResetPasswordVerifyEmail -> {
@@ -61,22 +59,20 @@ internal fun ResetPasswordScreen(
         }
     }
 
-    val successMessage = stringResource(id = R.string.reset_password_success)
-
     resetPasswordViewModel.collectSideEffect {
         when (it) {
             is ResetPasswordSideEffect.SuccessChangePassword -> {
-                appState.showSuccessToast(message = successMessage)
+                appState.showSuccessToast(context.getString(R.string.reset_password_success))
                 navigateToMain()
             }
 
             is ResetPasswordSideEffect.SuccessResetPassword -> {
-                appState.showSuccessToast(message = successMessage)
+                appState.showSuccessToast(context.getString(R.string.reset_password_success))
                 navigateToSignIn()
             }
 
             is ResetPasswordSideEffect.Exception -> {
-                appState.showErrorToast(message = it.message)
+                appState.showErrorToast(context.getString(it.message))
             }
 
             else -> {}

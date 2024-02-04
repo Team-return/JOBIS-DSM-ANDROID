@@ -27,21 +27,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jobis.jobis_android.R
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import team.retum.domain.entity.company.CompanyDetailsEntity
 import team.retum.domain.entity.review.ReviewEntity
+import team.retum.jobis_android.LocalAppState
 import team.retum.jobis_android.feature.recruitment.CompanyInformation
 import team.retum.jobis_android.feature.recruitment.Detail
 import team.retum.jobis_android.navigation.MainDestinations
 import team.retum.jobis_android.navigation.NavigationProperties
 import team.retum.jobis_android.util.compose.animation.skeleton
-import team.retum.jobis_android.feature.review.ReviewViewModel
 import team.retum.jobisui.colors.JobisButtonColor
 import team.returm.jobisdesignsystem.button.JobisLargeButton
 import team.returm.jobisdesignsystem.colors.JobisColor
@@ -54,31 +56,38 @@ val ReviewItemShape = RoundedCornerShape(size = 14.dp)
 
 @Composable
 fun CompanyDetailsScreen(
-    companyId: Long,
+    companyId: Long?,
     getPreviousDestination: () -> String?,
     navigateToRecruitmentDetails: (Long) -> Unit,
     navigateToReviewDetails: (String) -> Unit,
     putString: (key: String, value: String) -> Unit,
-    companyViewModel: CompanyViewModel = hiltViewModel(),
-    reviewViewModel: ReviewViewModel = hiltViewModel(),
+    companyDetailsScreenViewModel: CompanyDetailsScreenViewModel = hiltViewModel(),
 ) {
+    val appState = LocalAppState.current
+    val context = LocalContext.current
     var detailButtonVisibility by remember { mutableStateOf(true) }
-
-    val companyState by companyViewModel.container.stateFlow.collectAsStateWithLifecycle()
-    val reviewState by reviewViewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val companyState by companyDetailsScreenViewModel.collectAsState()
+    val reviews = companyDetailsScreenViewModel.reviews
 
     LaunchedEffect(Unit) {
         detailButtonVisibility =
             getPreviousDestination()?.getNavigationRoute() != MainDestinations.RecruitmentDetails.getNavigationRoute()
 
-        with(companyViewModel) {
-            setCompanyId(companyId)
-            fetchCompanyDetails()
+        with(companyDetailsScreenViewModel) {
+            fetchCompanyDetails(companyId = companyId)
+            fetchReviews(companyId = companyId)
         }
+    }
 
-        with(reviewViewModel) {
-            setCompanyId(companyId)
-            fetchReviews()
+    companyDetailsScreenViewModel.collectSideEffect {
+        when (it) {
+            is CompanyDetailsSideEffect.NotFoundCompanyDetails -> {
+                appState.showErrorToast(context.getString(R.string.company_details_not_found))
+            }
+
+            is CompanyDetailsSideEffect.Exception -> {
+                appState.showErrorToast(context.getString(it.message))
+            }
         }
     }
 
@@ -102,7 +111,7 @@ fun CompanyDetailsScreen(
                 color = JobisColor.Gray400,
             )
             Spacer(modifier = Modifier.height(20.dp))
-            if (reviewState.reviews.isNotEmpty()) {
+            if (reviews.isNotEmpty()) {
                 Body2(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -112,7 +121,7 @@ fun CompanyDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Reviews(
-                    reviews = reviewState.reviews,
+                    reviews = reviews,
                     navigateToReviewDetails = navigateToReviewDetails,
                     putString = putString,
                 )

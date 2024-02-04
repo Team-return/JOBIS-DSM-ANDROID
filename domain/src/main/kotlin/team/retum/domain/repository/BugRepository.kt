@@ -1,7 +1,7 @@
 package team.retum.domain.repository
 
-import team.retum.domain.param.bugreport.ReportBugParam
+import team.retum.domain.param.bugreport.BugReportParam
 
 interface BugRepository {
-    suspend fun reportBug(reportBugParam: ReportBugParam)
+    suspend fun reportBug(bugReportParam: BugReportParam)
 }

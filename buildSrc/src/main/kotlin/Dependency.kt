@@ -37,6 +37,10 @@ object Dependency {
             "androidx.lifecycle:lifecycle-runtime-compose:${Version.COLLECT_AS_STATE_WITH_LIFECYCLE}"
     }
 
+    object GOOGLE {
+        const val APP_UPDATE = "com.google.android.play:app-update-ktx:${Version.APP_UPDATE}"
+    }
+
     object SPLASH {
         const val SPLASH_SCREEN = "androidx.core:core-splashscreen:${Version.SPLASH_SCREEN}"
     }
@@ -52,6 +56,6 @@ object Dependency {
 
     object DESIGNSYSTEM {
         const val JOBIS =
-            "com.github.Team-return.JOBIS-DESIGN-SYSTEM-ANDROID:designsystem:${Version.DESIGN_SYSTEM}"
+            "com.github.Team-return:JOBIS-DESIGN-SYSTEM-ANDROID:${Version.DESIGN_SYSTEM}"
     }
 }

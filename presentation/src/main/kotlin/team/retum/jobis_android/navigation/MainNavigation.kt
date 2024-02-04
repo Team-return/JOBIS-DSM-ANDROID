@@ -36,14 +36,13 @@ internal fun NavGraphBuilder.mainNavigation(
                 getArgument(
                     name = NavigationProperties.IS_WINTER_INTERN,
                     type = NavType.BoolType,
-                )
+                ),
             ),
             exitTransition = slideOutLeft(),
             popEnterTransition = slideInRight(),
             popExitTransition = fadeOut(tween(300)),
         ) {
             RecruitmentsScreen(
-                putString = putString,
                 isWinterIntern = it.arguments?.getBoolean(NavigationProperties.IS_WINTER_INTERN)
                     ?: false,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
@@ -89,9 +88,8 @@ internal fun NavGraphBuilder.mainNavigation(
             popEnterTransition = slideInRight(),
             popExitTransition = slideOutRight(),
         ) {
-            val companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID)
             CompanyDetailsScreen(
-                companyId = companyId ?: 0,
+                companyId = it.arguments?.getLong(NavigationProperties.COMPANY_ID),
                 getPreviousDestination = getPreviousDestination,
                 navigateToRecruitmentDetails = navigateToRecruitmentDetails,
                 navigateToReviewDetails = navigateToReviewDetails,

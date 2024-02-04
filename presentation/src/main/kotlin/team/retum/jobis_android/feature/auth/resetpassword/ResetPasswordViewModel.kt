@@ -1,5 +1,9 @@
 package team.retum.jobis_android.feature.auth.resetpassword
 
+import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +24,10 @@ import team.retum.domain.usecase.student.ComparePasswordUseCase
 import team.retum.domain.usecase.student.ResetPasswordUseCase
 import team.retum.domain.usecase.user.SendVerificationCodeUseCase
 import team.retum.domain.usecase.user.VerifyEmailUseCase
-import team.retum.jobis_android.util.Regex
 import team.retum.jobis_android.feature.root.BaseViewModel
+import team.retum.jobis_android.util.Regex
+import team.retum.jobis_android.util.mvi.SideEffect
+import team.retum.jobis_android.util.mvi.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,11 +43,22 @@ internal class ResetPasswordViewModel @Inject constructor(
         initialState = ResetPasswordState(),
     )
 
+    var email by mutableStateOf("")
+        private set
+    var currentPassword by mutableStateOf("")
+        private set
+    var authCode by mutableStateOf("")
+        private set
+    var newPassword by mutableStateOf("")
+        private set
+    var passwordRepeat by mutableStateOf("")
+        private set
+
     internal fun sendVerificationCode() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             sendVerificationCodeUseCase(
                 sendVerificationCodeParam = SendVerificationCodeParam(
-                    email = state.email,
+                    email = email,
                     authCodeType = AuthCodeType.PASSWORD,
                 ),
             ).onSuccess {
@@ -66,8 +83,8 @@ internal class ResetPasswordViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             verifyEmailUseCase(
                 verifyEmailParam = VerifyEmailParam(
-                    email = state.email,
-                    authCode = state.authCode,
+                    email = email,
+                    authCode = authCode,
                 ),
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
@@ -88,7 +105,7 @@ internal class ResetPasswordViewModel @Inject constructor(
     internal fun comparePassword() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             comparePasswordUseCase(
-                password = state.currentPassword,
+                password = currentPassword,
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessVerification)
             }.onFailure {
@@ -114,13 +131,18 @@ internal class ResetPasswordViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             changePasswordUseCase(
                 changePasswordParam = ChangePasswordParam(
-                    currentPassword = state.currentPassword,
-                    newPassword = state.newPassword,
+                    currentPassword = currentPassword,
+                    newPassword = newPassword,
                 ),
             ).onSuccess {
                 postSideEffect(sideEffect = ResetPasswordSideEffect.SuccessChangePassword)
             }.onFailure {
-                postSideEffect(ResetPasswordSideEffect.Exception(getStringFromException(it)))
+                postSideEffect(
+                    when (it) {
+                        is KotlinNullPointerException -> ResetPasswordSideEffect.SuccessChangePassword
+                        else -> ResetPasswordSideEffect.Exception(getStringFromException(it))
+                    },
+                )
             }
         }
     }
@@ -129,75 +151,64 @@ internal class ResetPasswordViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             resetPasswordUseCase(
                 resetPasswordParam = ResetPasswordParam(
-                    email = state.email,
-                    password = state.newPassword,
+                    email = email,
+                    password = newPassword,
                 ),
             ).onSuccess {
                 postSideEffect(ResetPasswordSideEffect.SuccessResetPassword)
             }.onFailure {
-                postSideEffect(ResetPasswordSideEffect.Exception(getStringFromException(it)))
+                postSideEffect(
+                    when (it) {
+                        is KotlinNullPointerException -> ResetPasswordSideEffect.SuccessResetPassword
+                        else -> ResetPasswordSideEffect.Exception(getStringFromException(it))
+                    },
+                )
             }
         }
     }
 
-    internal fun setEmail(
-        email: String,
-    ) = intent {
-        reduce {
-            setEmailErrorState(emailErrorState = false)
-            state.copy(email = email)
-        }
+    internal fun setEmail(email: String) {
+        this.email = email
+        setEmailErrorState(emailErrorState = false)
     }
 
-    internal fun setAuthCode(
-        authCode: String,
-    ) = intent {
+    internal fun setAuthCode(authCode: String) {
         authCode.take(6)
+        this.authCode = authCode
         if (authCode.length == 6) {
-            postSideEffect(ResetPasswordSideEffect.ClearFocus)
-        }
-        reduce {
-            state.copy(authCode = authCode)
-        }
-    }
-
-    internal fun setCurrentPassword(
-        currentPassword: String,
-    ) = intent {
-        reduce {
-            state.copy(
-                currentPassword = currentPassword,
-            )
-        }
-    }
-
-    internal fun setNewPassword(
-        newPassword: String,
-    ) = intent {
-        reduce {
-            with(state) {
-                copy(
-                    newPassword = newPassword,
-                    passwordFormatErrorState = !Regex(Regex.PASSWORD).matches(newPassword),
-                    passwordRepeatErrorState = newPassword != passwordRepeat && passwordRepeat.isNotBlank(),
-                )
+            intent {
+                postSideEffect(ResetPasswordSideEffect.ClearFocus)
             }
         }
-        setButtonEnabled()
     }
 
-    internal fun setPasswordRepeat(
-        passwordRepeat: String,
-    ) = intent {
-        reduce {
-            with(state) {
-                copy(
-                    passwordRepeat = passwordRepeat,
-                    passwordRepeatErrorState = newPassword != passwordRepeat,
-                )
+    internal fun setCurrentPassword(currentPassword: String) {
+        this.currentPassword = currentPassword
+    }
+
+    internal fun setNewPassword(newPassword: String) {
+        this.newPassword = newPassword
+        intent {
+            reduce {
+                with(state) {
+                    copy(
+                        passwordFormatErrorState = !Regex(Regex.PASSWORD).matches(newPassword),
+                        passwordRepeatErrorState = newPassword != passwordRepeat && passwordRepeat.isNotBlank(),
+                    )
+                }
             }
+            setButtonEnabled()
         }
-        setButtonEnabled()
+    }
+
+    internal fun setPasswordRepeat(passwordRepeat: String) {
+        this.passwordRepeat = passwordRepeat
+        intent {
+            reduce {
+                state.copy(passwordRepeatErrorState = newPassword != passwordRepeat)
+            }
+            setButtonEnabled()
+        }
     }
 
     private fun setButtonEnabled() = intent {
@@ -245,4 +256,23 @@ internal class ResetPasswordViewModel @Inject constructor(
             )
         }
     }
+}
+
+data class ResetPasswordState(
+    val emailErrorState: Boolean = false,
+    val authCodeErrorState: Boolean = false,
+    val sendAuthCodeState: Boolean = false,
+    val passwordFormatErrorState: Boolean = false,
+    val passwordRepeatErrorState: Boolean = false,
+    val comparePasswordErrorState: Boolean = false,
+    val buttonEnabled: Boolean = false,
+) : State
+
+sealed class ResetPasswordSideEffect : SideEffect {
+    object SuccessVerification : ResetPasswordSideEffect()
+    object SuccessChangePassword : ResetPasswordSideEffect()
+    object SuccessResetPassword : ResetPasswordSideEffect()
+    object PasswordMismatch : ResetPasswordSideEffect()
+    object ClearFocus : ResetPasswordSideEffect()
+    class Exception(@StringRes val message: Int) : ResetPasswordSideEffect()
 }

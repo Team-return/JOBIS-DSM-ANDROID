@@ -7,7 +7,7 @@ import team.retum.data.remote.response.company.FetchReviewableCompaniesResponse
 
 interface CompanyDataSource {
     suspend fun fetchCompanies(
-        page: Int,
+        page: Long,
         name: String?,
     ): FetchCompaniesResponse
 
@@ -18,7 +18,7 @@ interface CompanyDataSource {
     suspend fun fetchReviewableCompanies(): FetchReviewableCompaniesResponse
 
     suspend fun fetchCompanyCount(
-        page: Int,
+        page: Long,
         name: String?,
     ): FetchCompanyCountResponse
 }

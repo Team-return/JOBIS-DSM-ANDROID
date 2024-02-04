@@ -4,12 +4,11 @@ plugins {
     id(BuildPlugins.KOTLIN_KAPT)
     id(BuildPlugins.HILT_PLUGIN)
     id(BuildPlugins.APP_DISTRIBUTION)
-    id(BuildPlugins.GOOGLE_SERVICES)
 }
 
 android {
     namespace = ProjectProperties.NAME_SPACE
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = ProjectProperties.NAME_SPACE
@@ -39,11 +38,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = ProjectProperties.JVM_VERSION
     }
     buildFeatures {
         compose = true
@@ -72,6 +71,7 @@ dependencies {
     implementation(Dependency.COIL.COIL)
 
     implementation(Dependency.HILT.HILT)
+    implementation(Dependency.GOOGLE.APP_UPDATE)
     kapt(Dependency.HILT.HILT_COMPILER)
 
     implementation(Dependency.SPLASH.SPLASH_SCREEN)
